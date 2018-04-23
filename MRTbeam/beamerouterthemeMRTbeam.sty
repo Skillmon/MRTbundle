@@ -1,0 +1,196 @@
+\mode<presentation>
+
+\setbeamertemplate{background}{%>>>
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle(\paperwidth,\paperheight);
+    \ifwhiteframes
+      %\fill[white,opacity=1] (0,0) rectangle(\paperwidth,\paperheight);
+    \else%>>>
+      %% logos
+      \ifx\MRTbeam@llogo\@empty\else
+        \node at (0.085\paperwidth,0.878\paperheight) {%
+          \rlap{\MRTbeam@putlogo{l}}%
+        };
+      \fi
+      \ifx\MRTbeam@clogo\@empty\else
+        \node at (0.5\paperwidth,0.878\paperheight) {%
+          \makebox[0pt][c]{\MRTbeam@putlogo{c}}%
+        };
+      \fi
+      \ifx\MRTbeam@rlogo\@empty\else
+        \node at (0.915\paperwidth,0.878\paperheight) {%
+          \llap{\MRTbeam@putlogo{r}}%
+        };
+      \fi
+      %% those ugly lines
+      \draw[line width=1.5pt,color=white!75!black]
+        (0.085\paperwidth,0.867\paperheight) --
+          (0.915\paperwidth,0.867\paperheight)
+        (0.085\paperwidth,0.137\paperheight) --
+          (0.915\paperwidth,0.137\paperheight);
+      \ifOnlyOneTopRule%
+      \else%
+        \draw[line width=1.5pt,color=white!75!black]
+          (0.085\paperwidth,0.731\paperheight) --
+            (0.915\paperwidth,0.731\paperheight);
+      \fi%
+    \fi%<<< whiteframes
+    \if@MRTbeam@Grid@
+      \draw[MRTbeam@Grid@options] (0,0) grid (\paperwidth,\paperheight);
+    \fi
+    \begin{scope}[x=\paperwidth,y=\paperheight]
+      \MRT@PlacedStuff
+    \end{scope}
+  \end{tikzpicture}\MRT@PlacedStuff@clear%
+}
+%<<<
+
+\setbeamertemplate{headline}{%>>>
+  \vskip0.215\paperheight%
+}
+%<<<
+
+\defbeamertemplate*{frametitle}{MRTbeam}[1][]{%>>>
+  \MRTbeam@frametitle{\insertframetitle}%
+}
+%<<<
+
+\setbeamertemplate{noframetitle}{%>>>
+  \MRTbeam@frametitle{\cursec}%
+}
+%<<<
+
+%% Invoke `noframetitle` if no frametitle was given >>>
+%% Code based on https://tex.stackexchange.com/a/389258/117050
+\renewenvironment{beamer@frameslide}{%
+  \ifbeamer@autobreak\else%
+    \ifx\beamer@againname\@empty%
+      {\let\@elt\beamer@restorecounter\beamer@overlaycounterresets}%
+    \else%
+      {\let\@elt\beamer@labelrestorecounter\beamer@overlaycounterresets}%
+    \fi%
+  \fi%
+  \global\c@beamerpauses=1\relax%
+  \expandafter\ifblank\expandafter{\beamer@framestartpage}{%
+    \stepcounter{subsectionslide}%
+    \xdef\beamer@framestartpage{\the\c@page}% only first time
+  }{\clearpage\beamer@notesactions}% cleanup from previous slide
+  \hypersetup{pdfpagetransition=R}%
+  \hypersetup{pdfpageduration=}%
+  \@ifundefined{thispdfpagelabel}{}{%
+  \thispdfpagelabel{\insertframenumber}}%
+  \xdef\beamer@frameendpage{\the\c@page}% every time
+  \beamer@setuplinks%
+  \beamer@displaybreak%
+  \global\setbox\beamer@zoombox=\box\voidb@x%
+  \def\beamer@zoomer{}%
+  \beamer@slidehaszoomfalse%
+  \gdef\insertframetitle{}%
+  \gdef\insertframesubtitle{}%
+  \gdef\beamer@frametitle{}%
+  \gdef\beamer@shortframetitle{}%
+  \gdef\beamer@framesubtitle{}%
+  \let\beamer@startcomment=\beamer@startcommentinframe%
+  % Start slide:
+  \beamer@framenotesbegin%
+    \global\setbox\beamer@framebox=\vbox\bgroup%
+    \beamer@inframetrue%
+    \let\frame=\framelatex% inside frames, use LaTeX's \frame command
+    \begin{beamer@framepauses}%
+      \refcounter{framenumber}%use frame number for  \label
+      \ifbeamer@shrink%
+        \hsize=\beamer@shrinkfactorinv\hsize%
+        \textwidth=\beamer@shrinkfactorinv\textwidth%
+        \linewidth=\beamer@shrinkfactorinv\linewidth%
+      \fi%
+      % Insert labels if necessary:
+      \ifx\beamer@againname\@empty\else%
+        \nointerlineskip\vbox to0pt{\vss%
+        \label<\the\beamer@slideinframe>{\beamer@againname<\the\beamer@slideinframe>}%
+        \ifnum\beamer@slideinframe=1\relax%
+          \label<1>{\beamer@againname}%
+        \fi%
+        }\nointerlineskip%
+      \fi%
+      \ifx\beamer@framehypertargets\@empty\else%
+        \nointerlineskip\vbox to0pt{\vss%
+          \beamer@framehypertargets%
+          \global\let\beamer@framehypertargets\@empty%
+        }\nointerlineskip%
+      \fi%
+      \vskip-\parskip\vbox{}%
+      \ifbeamer@plainframe\nointerlineskip\fi%
+    \beamer@checkframetitle}%
+    {\par
+    \end{beamer@framepauses}%
+  \egroup%
+  \ifx\beamer@frametitle\@empty%
+    \setbox\beamer@frametitlebox=\vbox{%
+      \vbox{}%
+      {\parskip0pt\usebeamertemplate***{noframetitle}\vskip0.25em}%
+    }%
+  \else%
+    \def\MRTbeam@temp{*}%
+    \ifx\beamer@frametitle\MRTbeam@temp%
+      \def\insertframetitle{}%
+    \fi%
+    \setbox\beamer@frametitlebox=\vbox{%
+      \vbox{}%
+      {\parskip0pt\usebeamertemplate***{frametitle}\vskip0.25em}%
+    }%
+  \fi%
+  \ifbeamer@plainframe%
+    \beamer@frametextheight=\paperheight%
+  \else%
+    \beamer@frametextheight=\textheight%
+  \fi%
+  \advance\beamer@frametextheight by-\ht\beamer@frametitlebox%
+  \advance\beamer@frametextheight by-\dp\beamer@frametitlebox%
+  \advance\beamer@frametextheight by-\beamer@frametopskip%
+  \ifbeamer@shrink%
+    \beamer@shrinkframebox%
+  \fi%
+  \ifx\beamer@zoomer\@empty
+    \setbox\beamer@framebox=\vbox{%
+      \nobreak\vbox{}\nobreak\par\nobreak\beamer@entrycode\nobreak%
+      \nointerlineskip\unvbox\beamer@frametitlebox%
+      \nobreak%
+      \ifbeamer@autobreak%
+        \vskip\beamer@frametopskipautobreak%
+      \else%
+        \vskip\beamer@frametopskip%
+      \fi%
+      \nobreak%
+      \nointerlineskip\box\beamer@zoombox\nointerlineskip%
+      \nobreak%
+      \ifbeamer@slidehaszoom\box\beamer@framebox\else\unvbox\beamer@framebox\fi%
+      % bottom skip is added in autobreakframebox
+    }%
+    \beamer@autobreakframebox%
+  \else%
+    \beamer@zoomer%
+  \fi%
+  \beamer@undolabels%
+  \beamer@framenotesend%
+  \box\beamer@framebox}
+%<<<
+
+\setbeamertemplate{footline}{%>>>
+  \begin{tikzpicture}%
+    \useasboundingbox (0,0) rectangle(\paperwidth,.13\paperheight);%
+    \ifwhiteframes%
+    \else%
+      \node[anchor=south west,xshift=0.080407\paperwidth,yshift=0.091\paperheight]%
+        at (current page.south west)%
+        {\smash{\rlap{\parbox[t]{\textwidth}{\raggedright\@leftfooter}}}};%
+      \node[anchor=south,yshift=0.008\paperheight]%
+        at (current page.south)%
+        {\smash{\makebox[0pt][c]{\parbox[t]{\textwidth}{%
+          \centering\@centerfooter}}}};%
+    \fi%
+  \end{tikzpicture}%
+  %\vskip0.115\paperheight%
+}
+%<<<
+
+\mode<all>

@@ -1,0 +1,176 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{MRTif}[2018/04/21 some if tests for MRTbeam and mrtarbeit]
+
+\newcommand*\MRTIf@groupify@TF[1]% >>>
+  {%
+    \expandafter\newcommand\csname MRTIf#1GTF\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTIf#1GTF\endcsname##1%
+      {%
+        \unexpanded{\MRTIfGroupTF}{##1}%
+        {\unexpanded\expandafter{\csname MRTIf#1GTF\endcsname}##1}%
+        {\unexpanded\expandafter{\csname MRTIf#1TF\endcsname}{##1}}%
+      }%
+  }% <<<
+% MRTIfEmpty >>>
+\newcommand\MRTIfEmptyTF[1]{% >>>
+  \if\relax\detokenize{#1}\relax
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi}
+% <<<
+\newcommand\MRTIfEmptyT[1]{% >>>
+  \if\relax\detokenize{#1}\relax
+    \expandafter\@firstofone
+  \else
+    \expandafter\@gobble
+  \fi}
+% <<<
+\newcommand\MRTIfEmptyF[1]{% >>>
+  \if\relax\detokenize{#1}\relax
+    \expandafter\@gobble
+  \else
+    \expandafter\@firstofone
+  \fi}
+% <<<
+\newcommand\MRTIfEmptyNTF[1]% >>>
+  {\expandafter\MRTIfEmptyTF\expandafter{#1}}% <<<
+\newcommand\MRTIfEmptyNT[1]% >>>
+  {\expandafter\MRTIfEmptyT\expandafter{#1}}% <<<
+\newcommand\MRTIfEmptyNF[1]% >>>
+  {\expandafter\MRTIfEmptyF\expandafter{#1}}% <<<
+% <<<
+% MRTIfGroup >>>
+\newcommand\MRTIfGroupTF[1]% >>>
+  {\expandafter\MRTIfGroup@a\romannumeral-`\.#1.{}\end}% <<<
+\long\def\MRTIfGroup@a#1#% >>>
+  {\MRTIfEmptyTF{#1}{\MRTIfGroup@b}{\MRTIfGroup@c}}% <<<
+\long\def\MRTIfGroup@b#1#2#3\end% >>>
+  {\MRTIfEmptyTF{#3}{\@firstoftwo}{\@secondoftwo}}% <<<
+\long\def\MRTIfGroup@c#1\end% >>>
+  {\@secondoftwo}% <<<
+% <<<
+% MRTIfGroupNoSpaces >>>
+\newcommand\MRTIfGroupNoSpacesTF[1]% >>>
+  {%
+    \expandafter\MRTIfStringsMatchTF\expandafter
+      {\MRTIfGroupNoSpaces@a#1\end@MRTIfGroupNoSpaces@a}{#1}
+      {\@secondoftwo}
+      {\@firstoftwo}
+  }% <<<
+\long\def\MRTIfGroupNoSpaces@a#1\end@MRTIfGroupNoSpaces@a{#1}
+% <<<
+% MRTIfStringsMatch >>>
+\newcommand\MRTIfStringsMatchTF[2]% >>>
+  {%
+    \ifnum\pdfstrcmp{#1}{#2}=0
+      \expandafter\@firstoftwo
+    \else
+      \expandafter\@secondoftwo
+    \fi
+  }% <<<
+\newcommand\MRTIfStringsMatchGTF[2]% >>>
+  {%
+    \MRTIfGroupTF{#1}
+      {\MRTIfStringsMatchGTF#1{#2}}
+      {%
+        \MRTIfGroupTF{#2}
+          {\MRTIfStringsMatchGTF#2{#1}}
+          {\MRTIfStringsMatchTF{#1}{#2}}
+      }%
+  }% <<<
+% <<<
+% MRTIfOneToken >>>
+\newcommand\MRTIfOneTokenTF[1]% >>>
+  {%
+    \MRTIfEmptyTF{#1}{\@secondoftwo}
+      {%
+        \MRTIfOneToken@a#1.\end@MRTIfOneTokenTF
+      }%
+  }% <<<
+\long\def\MRTIfOneToken@a#1#2#3\end@MRTIfOneTokenTF% >>>
+  {\MRTIfEmptyTF{#3}}% <<<
+% <<<
+% MRTIfLetter >>>
+\newcommand\MRTIfLetterTF[1]% >>>
+  {%
+    \MRTIfGroupTF{#1}
+      {\@secondoftwo}
+      {%
+        \MRTIfOneTokenTF{#1}
+          {\MRTIfLetter@core{#1}}
+          {\@secondoftwo}%
+      }%
+  }% <<<
+\newcommand\MRTIfLetterGTF[1]% >>>
+  {%
+    \MRTIfGroupTF{#1}
+      {\MRTIfLetterGTF#1}
+      {%
+        \MRTIfOneTokenTF{#1}
+          {\MRTIfLetter@core{#1}}
+          {\@secondoftwo}%
+      }%
+  }% <<<
+\newcommand\MRTIfLetter@core[1]% >>>
+  {%
+    \bgroup
+    \catcode`z=11
+    \ifcat\noexpand#1z%
+      \egroup
+      \expandafter\@firstoftwo
+    \else
+      \egroup
+      \expandafter\@secondoftwo
+    \fi
+  }% <<<
+% <<<
+\MRTIf@groupify@TF{Empty}
+\MRTIf@groupify@TF{OneToken}
+%\MRTIf@groupify@TF{Letter}% possible but results in unnecessary group test
+% MRTIfTokensMatch >>>
+\newcommand\MRTIfTokensMatchTF[2]% >>>
+  {%
+    \MRTIfGroupTF{#1}
+      {\@secondoftwo}
+      {%
+        \MRTIfGroupTF{#2}
+          {\@secondoftwo}
+          {\MRTIfTokensMatch@a{#1}{#2}}%
+      }%
+  }% <<<
+\newcommand\MRTIfTokensMatchGTF[2]% >>>
+  {%
+    \MRTIfGroupTF{#1}
+      {\MRTIfTokensMatchGTF#1{#2}}
+      {%
+        \MRTIfGroupTF{#2}
+          {\MRTIfTokensMatchGTF#2{#1}}
+          {\MRTIfTokensMatch@a{#1}{#2}}%
+      }%
+  }% <<<
+\newcommand\MRTIfTokensMatch@a[2]% >>>
+  {%
+    \MRTIfOneTokenTF{#1}
+      {%
+        \MRTIfOneTokenTF{#2}
+          {%
+            \ifx#1#2%
+              \expandafter\@firstoftwo
+            \else
+              \expandafter\@secondoftwo
+            \fi
+          }
+          {\@secondoftwo}%
+      }
+      {\@secondoftwo}%
+  }% <<<
+% <<<
+%\newcommand\MRTIfTokenInTF[2]%>>>
+  %{%
+    %\
+  %}%<<<
+%
+
+\endinput
+% vim: fdm=marker foldmarker=>>>,<<< ft=tex

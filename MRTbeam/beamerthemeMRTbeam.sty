@@ -1,0 +1,539 @@
+\mode<presentation>
+
+%% Notes>>>
+% condensed/narrow helvet: \fontseries{mc}
+% condensed/narrow bold helvet: \fontseries{bc}
+%<<<
+
+% Requirement >>>
+\RequirePackage{tikz}
+\usetikzlibrary{math}
+\RequirePackage{xparse}
+\RequirePackage[%>>> biblatex
+  ,sorting=none%
+  ,backend=biber%
+  ,style=numeric%
+  ,citecounter=true%
+  ,citetracker=true%
+  ,sortcites=true%
+]{biblatex}%<<<
+%<<<
+
+% Settings/Inner Macros >>>
+% Conditionals >>>
+\newif\ifwhiteframes
+\newif\ifTabularNotes
+\newif\ifPrependSubsections
+\newif\ifExplicitCiteOnce
+\newif\ifNoExplicitCite
+\newif\ifProgressBar
+\newif\ifOnlyOneTopRule
+\newif\if@MRTbeam@Grid@
+\newif\if@MRTbeam@bibliography@
+\newif\if@MRTbeam@StarredSection@
+\newif\if@MRTbeam@StarredSubsection@
+%<<<
+% Footnotes related >>>
+\NewDocumentCommand{\MRT@process@visibility}{m}{%
+  \if\relax\detokenize{#1}\relax%
+    \def\ProcessedArgument{}%
+  \else%
+    \def\ProcessedArgument{<#1>}%
+  \fi%
+}
+\newcommand*{\MRT@ftn}{}% ordinary MRT-footnotes
+\newcommand*{\MRT@ftn@p}{}% persistent MRT-footnotes
+\newcommand*{\MRT@ftn@c}{}% citation MRT-footnotes
+%<<<
+\newcommand*{\@leftfooter}{%>>>
+  \footnotesize%
+  \ifx\@occasion\@empty\else\@occasion\newline\fi
+  \ifx\beamer@shorttitle\@empty
+    \ifx\inserttitle\@empty\else\inserttitle\newline\fi
+  \else
+    \def\MRTbeam@temp{*}%
+    \ifx\beamer@shorttitle\MRTbeam@temp
+    \else
+      \beamer@shorttitle\newline
+    \fi
+  \fi
+  \ifx\beamer@shortauthor\@empty
+    \insertauthor
+  \else
+    \def\MRTbeam@temp{*}%
+    \ifx\beamer@shortauthor\MRTbeam@temp
+    \else
+      \beamer@shortauthor
+    \fi
+  \fi
+}%<<<
+\newcommand*{\@centerfooter}{%>>>
+  \normalsize\ifProgressBar\ProgressBar\fi%
+  \makebox[0pt][c]{\insertframenumber}}%<<<
+\newcommand*{\@rightfooter}{%>>>
+  \csuse{MRT@ftn@p}%
+  \csuse{MRT@ftn}%
+  \csuse{MRT@ftn@c}%
+}%<<<
+\newcommand*{\MRTbeam@putlogo}[1]%>>>
+  {%
+    \expandafter\MRTbeam@putlogo@a\expandafter
+      {\csname MRTbeam@#1logo@options\endcsname}
+      {\csname MRTbeam@#1logo\endcsname}%
+  }%<<<
+\newcommand*\MRTbeam@putlogo@a[2]%>>>
+  {%
+    % #1 options (macro)
+    % #2 file (csname)
+    \expandafter\MRTbeam@putlogo@b\expandafter{#2}{#1}%
+  }%<<<
+\newcommand*\MRTbeam@putlogo@b[2]%>>>
+  {%
+    % #1 file (macro)
+    % #2 options (macro)
+    \expandafter\MRTbeam@putlogo@c\expandafter{#1}{#2}%
+  }%<<<
+\newcommand*\MRTbeam@putlogo@c[2]%>>>
+  {%
+    % #1 file (string)
+    % #2 options (macro)
+    \smash{\expandafter\includegraphics\expandafter[#2]{#1}}%
+  }%<<<
+\newcommand*{\MRT@tabularT}{\begin{tabular}[t]}
+\let\footnoterule\relax
+\gdef\MRTbeam@Grid@defaults{xstep={0.05\paperwidth},ystep=0.1\paperheight,help lines}
+\tikzset{MRTbeam@Grid@options/.style={xstep={0.05\paperwidth},ystep={0.1\paperheight},help lines}}
+\newcommand*{\MRT@expandonce}[1]{%
+  \edef\ProcessedArgument{\unexpanded\expandafter{#1}}}
+\newcommand*{\MRTbeam@frametitle}[1]{%>>>
+  \parbox[t][0pt][t]{\textwidth}{%
+    \usebeamerfont{frametitle}%
+    \vskip-0.103\paperheight%TODO adjust the skip
+    \raggedright%
+    {\LARGE#1}\mbox{}\\%
+    \hskip 0.4pt\parbox[t]{\dimexpr\textwidth-0.8pt\relax}{{%
+      \fontseries{mc}\selectfont%
+      \ifPrependSubsections%
+        \UseAndIfEmptyTF{\curssec}{}{\ifx\insertframesubtitle\@empty\else:~\fi}%
+      \fi%
+      \insertframesubtitle%
+    }}%
+  }%
+}
+%<<<
+\AtBeginSection[%>>>
+  \global\@MRTbeam@StarredSection@true%
+]{%
+  \global\@MRTbeam@StarredSection@false%
+}%<<<
+\AtBeginSubsection[%>>>
+  \global\@MRTbeam@StarredSubsection@true%
+]{%
+  \global\@MRTbeam@StarredSubsection@false%
+}%<<<
+%<<<
+
+%% Macros >>>
+%\RenewDocumentCommand{\footnote}{o m}{%
+\NewDocumentCommand{\UseAndIfEmptyTF}{O{} m}{%>>>
+  \setbox0\hbox{#2}%
+  \ifdim\wd0=0pt\relax%
+    \expandafter\@firstoftwo%
+  \else%
+    #1\usebox0%
+    \expandafter\@secondoftwo%
+  \fi}%
+%<<<
+\NewDocumentCommand{\cursec}{s}{%>>>
+  \IfBooleanF{#1}%
+    {%
+      \if@MRTbeam@StarredSection@%
+      \else%
+        \makebox[24pt][l]{\the\beamer@tocsectionnumber.}%
+      \fi%
+    }%
+  \insertsection}
+%<<<
+\NewDocumentCommand{\curssec}{s}{%>>>
+  \IfBooleanF{#1}%
+    {%
+      \if@MRTbeam@StarredSubsection@%
+      \else%
+        \ifnum\c@subsection>0\relax%
+          \makebox[24pt][l]{\the\beamer@tocsectionnumber.\thesubsection}%
+        \fi%
+      \fi%
+    }%
+  \insertsubsection}
+%<<<
+\newcommand*{\ColumnsTabularNotes}[1]{\gdef\MRT@ColTabNotes{#1}}
+\newenvironment*{whiteframes}{\whiteframestrue}{\whiteframesfalse}
+\NewDocumentCommand{\advisor}{s o m}{%>>>
+  \IfNoValueTF{#2}%
+    {%
+      \def\@advisor{Betreuer}%
+      \IfBooleanTF{#1}%
+        {\edef\@advisor{\@advisor in}}%
+        {}%
+    }%
+    {%
+      \def\@advisor{#2}%
+    }%
+  \xdef\@advisor{\UseAndIfEmptyTF{\@advisor}{}{ }#3}%
+  \gdef\advisor{#3}}%<<<
+\NewDocumentCommand{\occasion}{m}{\gdef\@occasion{#1}}
+\gdef\@occasion{}
+% Footnotes related >>>
+\NewDocumentCommand{\AddToRightFoot}{s t+ >{\MRT@process@visibility}D<>{} o m}{%>>>
+  \bgroup
+  \ifTabularNotes
+    \IfNoValueTF{#4}%
+      {\def\MRTbeam@temp{&#5}}%
+      {\def\MRTbeam@temp{#4&#5}}%
+  \else
+    \IfNoValueTF{#4}%
+      {\def\MRTbeam@temp{#5}}%
+      {\def\MRTbeam@temp{#4\hskip0.5\tabcolsep\relax#5}}%
+  \fi
+  \setbox0\hbox{%
+    \ifTabularNotes
+      \begin{tabular}{@{}c@{}c@{}}\MRTbeam@temp\end{tabular}%
+    \else
+      \MRTbeam@temp%
+    \fi
+  }%
+  \ifdim\wd0>0pt\relax
+    \IfBooleanTF{#1}% persistent or not
+      {\xdef\MRT@ftn@p{\MRT@ftn@p${}$\uncover#3{\MRTbeam@temp}\\}}%
+      {\IfBooleanTF{#2}%
+        {\xdef\MRT@ftn@c{\MRT@ftn@c${}$\uncover#3{\MRTbeam@temp}\\}}%
+        {\xdef\MRT@ftn{\MRT@ftn${}$\uncover#3{\MRTbeam@temp}\\}}%
+      }%
+  \fi
+  \egroup
+}%<<<
+\NewDocumentCommand{\ClearRightFoot}{s}{%>>>
+  \IfBooleanF{#1}{\gdef\MRT@ftn@p{}}%
+  \gdef\MRT@ftn{}%
+  \gdef\MRT@ftn@c{}}
+%<<<
+%<<<
+\NewDocumentCommand{\uselogo}{m O{height=0.056\paperwidth} m}%>>>
+  {%
+    \def\MRTbeam@tempa{#1}%
+    \def\MRTbeam@tempb{l}%
+    \ifx\MRTbeam@tempa\MRTbeam@tempb
+      \gdef\MRTbeam@llogo@options{#2}%
+      \gdef\MRTbeam@llogo{#3}%
+    \else
+      \def\MRTbeam@tempb{c}%
+      \ifx\MRTbeam@tempa\MRTbeam@tempb
+        \gdef\MRTbeam@clogo@options{#2}%
+        \gdef\MRTbeam@clogo{#3}%
+      \else
+        \def\MRTbeam@tempb{r}%
+        \ifx\MRTbeam@tempa\MRTbeam@tempb
+          \gdef\MRTbeam@rlogo@options{#2}%
+          \gdef\MRTbeam@rlogo{#3}%
+        \else
+          \PackageError{MRTbeam}{'#1' is not an accepted argument}
+            {%
+              \protect\uselogo\space accepts one of 'l', 'c', and 'r' as first
+              argument.%
+            }%
+    \fi\fi\fi
+  }%<<<
+\uselogo{l}{MRTbeam_logo_UBT2.pdf}
+\uselogo{c}{}
+\uselogo{r}{MRTbeam_logo_MRT2.pdf}
+\NewDocumentCommand{\ShowGrid}{>{\MRT@expandonce}O{\MRTbeam@Grid@defaults}}{%>>>
+  \global\@MRTbeam@Grid@true%
+  \tikzset{MRTbeam@Grid@options/.style={#1}}
+}
+%<<<
+\NewDocumentCommand{\HideGrid}{s}{%>>>
+  \IfBooleanF{#1}{\ShowGrid}% restores defaults
+  \global\@MRTbeam@Grid@false%
+}
+%<<<
+% Progressbar >>>
+\definecolor{noprogress}{gray}{0.85}
+\definecolor{progressed}{gray}{0.65}
+\NewDocumentCommand{\ProgressBar}%>>>
+  { O{\MRT@pbar@o} D<>{\MRT@pbar@l} O{\MRT@pbar@h} O{\MRT@pbar@k} }{%
+  \bgroup%
+  \makebox[0pt][#1]{\parbox[t][0pt][t]{#2}{%
+    \@tempdimb=#2\relax%
+    \kern#4\relax%
+    \pgfmathparse{%
+      \MRT@pbar@end == \MRT@pbar@start ? 0 :
+      (\insertframenumber-\MRT@pbar@start)%
+      /(\MRT@pbar@end == \MRT@pbar@start ? 1 : \MRT@pbar@end-\MRT@pbar@start)}%
+    \@tempdimb=\pgfmathresult\@tempdimb\relax%
+      {\color{progressed}\rule{\@tempdimb}{ #3 }}%
+      {\color{noprogress}%
+        \rule{\dimexpr #2 -\@tempdimb\relax}{ #3 }}%
+  }}%
+  \egroup%
+}%<<<
+\NewDocumentCommand{\SetProgressBar}{ s m m m m }{%>>>
+  \IfBooleanTF{#1}{\let\MRT@temp\def}{\let\MRT@temp\gdef}%
+  \def\MRT@tempb{*}%
+  \def\MRT@tempa{#2}%
+  \ifx\MRT@tempa\MRT@tempb%
+  \else%
+    \MRT@temp\MRT@pbar@o{#2}%
+  \fi%
+  \def\MRT@tempa{#3}%
+  \ifx\MRT@tempa\MRT@tempb%
+  \else%
+    \MRT@temp\MRT@pbar@l{#3}%
+  \fi%
+  \def\MRT@tempa{#4}%
+  \ifx\MRT@tempa\MRT@tempb%
+  \else%
+    \MRT@temp\MRT@pbar@h{#4}%
+  \fi%
+  \def\MRT@tempa{#5}%
+  \ifx\MRT@tempa\MRT@tempb%
+  \else%
+    \MRT@temp\MRT@pbar@k{#5}%
+  \fi%
+}%<<<
+\def\MRT@pbar@start{0}
+\newcommand*{\StartOfProgress}{%>>>
+  \xdef\MRT@pbar@start{\insertframenumber}%
+  \immediate\write\@auxout{%
+    \gdef\noexpand\MRT@pbar@start{\insertframenumber}%
+  }%
+}%<<<
+\def\MRT@pbar@end{\inserttotalframenumber}
+\newcommand*{\EndOfProgress}{%>>>
+  \xdef\MRT@pbar@end{\insertframenumber}%
+  \immediate\write\@auxout{%
+    \gdef\noexpand\MRT@pbar@end{\insertframenumber}%
+  }%
+}%<<<
+\SetProgressBar{c}{30pt}{\f@size pt}{-1.65ex}% default
+%<<<
+\NewDocumentCommand{\PlaceAt}{ s >{\SplitArgument{1}{,}}r() O{} +m }{%>>>
+  \IfBooleanTF{#1}%
+    {\MRTbeam@PlaceAt@s#2{#3}{#4}}%
+    {\MRTbeam@PlaceAt#2{#3}{#4}}%
+}%<<<
+\NewDocumentCommand{\MRTbeam@PlaceAt@s}{ m m m +m }{%>>>
+  \smash{\makebox[0pt]{%
+    \begin{tikzpicture}[overlay,remember picture]%
+      \node[xshift=#1\paperwidth,yshift=#2\paperheight,#3]%
+        at (current page.south west) {#4};%
+    \end{tikzpicture}}}%
+}%<<<
+\NewDocumentCommand{\MRTbeam@PlaceAt}{ m m m +m }%>>>
+  {%
+    \xdef\MRT@PlacedStuff%
+      {\unexpanded\expandafter{\MRT@PlacedStuff \node[#3] at (#1,#2) {#4};}}%
+  }%<<<
+\NewDocumentCommand{\AddToPlaced}{ +m }%>>>
+  {%
+    \xdef\MRT@PlacedStuff{\unexpanded\expandafter{\MRT@PlacedStuff #1}}%
+  }%<<<
+\def\MRT@PlacedStuff{}
+\def\MRT@PlacedStuff@clear{\gdef\MRT@PlacedStuff{}}
+%<<<
+
+% Sizes >>>
+\newdimen\MRTbeam@paperwidth
+\newdimen\MRTbeam@paperheight
+\newdimen\contentwidth
+\newdimen\contentheight
+\MRTbeam@paperwidth=16.81057cm\relax% 10.83in * 11 / 18 (so that 11pt looks like 18pt)
+\MRTbeam@paperheight=11.64167cm\relax% 7.5in * 11 / 18 (same aspect ratio)
+\setbeamersize{% resets paperwidth and heigh
+  sidebar width left=0pt,%
+  sidebar width right=0pt,%
+  text margin left=0.0939\MRTbeam@paperwidth,%
+  text margin right=0.0939\MRTbeam@paperwidth,%
+}
+\setlength{\paperwidth}{\MRTbeam@paperwidth}
+\setlength{\paperheight}{\MRTbeam@paperheight}
+\setlength{\textwidth}{0.8122\paperwidth}
+\setlength{\textheight}{0.58\paperheight}
+\contentwidth=\textwidth\relax
+\contentheight=0.58\paperheight\relax
+%<<<
+
+% Other themes >>>
+\useinnertheme{MRTbeam}
+\useoutertheme{MRTbeam}
+\usecolortheme{MRTbeam}
+\usefonttheme{MRTbeam}
+%<<<
+
+% Bibliography >>>
+\let\svthefootnote\thefootnote
+
+% based on https://tex.stackexchange.com/a/386708/117050
+\DeclareCiteCommand{\insertframecite}%>>>
+  {\usebibmacro{prenote}}%
+  {%
+    \begingroup%
+    %\usebibmacro{citeindex}%
+    \mkbibbrackets{%
+      \textcolor{gray}{[\usebibmacro{cite}]}%
+      \setunit{\addnbspace}%
+      \printnames{labelname}%
+      \UseAndIfEmptyTF[, ]{\emph{\printfield{shortjournal}}}%
+        {\UseAndIfEmptyTF[, ]{\emph{\printfield{journaltitle}}}{}{}}%
+        {}%
+      \UseAndIfEmptyTF[, ]{\printfield{year}}%
+        {\UseAndIfEmptyTF[, ]{\printfield{eventyear}}{}{}}%
+        {}%
+    }%
+    \endgroup%
+  }%
+  {\addsemicolon\space}
+  {\usebibmacro{postnote}}
+%<<<
+\DeclareCiteCommand{\insertcite}%>>>
+  {\usebibmacro{prenote}}%
+  {%  
+    \begingroup%
+    %\usebibmacro{citeindex}%
+    \mkbibbrackets{%
+      \textcolor{gray}{[\usebibmacro{cite}]}%
+      \setunit{\addnbspace}%
+      \printnames{labelname}%
+      \UseAndIfEmptyTF[, ]{\emph{\printfield{shortjournal}}}%
+        {\UseAndIfEmptyTF[, ]{\emph{\printfield{journaltitle}}}{}{}}%
+        {}%
+      \UseAndIfEmptyTF[, ]{\printfield{year}}%
+        {\UseAndIfEmptyTF[, ]{\printfield{eventyear}}{}{}}%
+        {}%
+    }%
+    \endgroup%
+  }%
+  {\addsemicolon\space}%
+  {\usebibmacro{postnote}}
+%<<<
+\DeclareCiteCommand{\inlinecite}%>>>
+  {}%\usebibmacro{prenote}}%
+  {%
+    \autocite{\thefield{entrykey}}%
+  }%
+  {\addsemicolon\space}%
+  {}%\usebibmacro{postnote}}%
+%<<<
+% Untested whether the new version works -- legacy >>>
+%\newcommand*{\MRTbeam@ifciteseen@old}{%>>>
+%  \ifNoExplicitCite%
+%    \expandafter\@firstoftwo%
+%  \else%
+%    \let\MRTbeam@temp@if\ifciteseen%
+%    \expandafter\MRTbeam@ifanyseen@old%
+%  \fi}%
+%%<<<
+%\newcommand*{\MRTbeam@ifanyseen@old}{%>>>
+%  \ifExplicitCiteOnce%
+%    \expandafter\MRTbeam@temp@if%
+%  \else%
+%    \expandafter\@secondoftwo%
+%  \fi}
+%%<<<
+%<<<
+\newcommand*{\MRTbeam@ifciteseen}{%>>>
+  \ifciteseen%
+    {\MRTbeam@ifanyseen@a}%
+    {\MRTbeam@ifanyseen@b}%
+}
+%<<<
+\newcommand*{\MRTbeam@ifentryseen}[1]{%>>>
+  \blx@ifentryseen@global{#1}%
+    {\MRTbeam@ifanyseen@a}%
+    {\MRTbeam@ifanyseen@b}%
+}
+%<<<
+\newcommand*{\MRTbeam@ifanyseen@a}{%>>>
+  \ifExplicitCiteOnce%
+    \expandafter\@firstoftwo%
+  \else%
+    \expandafter\MRTbeam@ifanyseen@b%
+  \fi}
+%<<<
+\newcommand*{\MRTbeam@ifanyseen@b}{%>>>
+  \ifNoExplicitCite%
+    \expandafter\@firstoftwo%
+  \else%
+    \expandafter\@secondoftwo%
+  \fi}
+%<<<
+\NewDocumentCommand{\citefieldIfExistent}{m m}{%>>>
+  \IfFileExists{\jobname.bbl}{% \blx@getdata@cite doesn't work without
+    \expandafter\let\csname abx@field@#2\endcsname\relax%
+      \blx@getdata@cite{#1}%
+    \expandafter\ifx\csname abx@field@#2\endcsname\relax%
+    \else%
+        \expandafter\citefield{#1}{#2}%
+    \fi%
+  }{}%
+}
+%<<<
+\NewDocumentCommand{\framecite}{s >{\MRT@process@visibility}D<>{} o m o}{%>>>
+  \MRTbeam@ifentryseen{#4}%
+    {%
+      \IfBooleanTF{#1}{\AddToRightFoot*}{\AddToRightFoot}#2{%
+        \IfNoValueTF{#3}{}{#3\,}%
+        \inlinecite{#4}%
+        \IfNoValueTF{#5}{}{\,#5}}%
+    }{%
+      \IfBooleanTF{#1}{\AddToRightFoot*}{\AddToRightFoot}#2{%
+        \IfNoValueTF{#3}{}{#3\,}%
+        \insertframecite{#4}%
+        \IfNoValueTF{#5}{}{\,#5}}%
+    }%
+  }%
+%<<<
+\RenewDocumentCommand{\cite}{>{\MRT@process@visibility}D<>{} O{} O{} m}{%>>>
+  \MRTbeam@ifentryseen{#4}{}{\AddToRightFoot+#1{\insertcite{#4}}}%
+  \textcolor{gray}{\inlinecite[#2][#3]{#4}}}
+%<<<
+\NewDocumentCommand{\bibliographyframe}{s t! O{\small} G{Quellen} G{}}{%>>>
+  \bgroup%
+  \PrependSubsectionsfalse%
+  \if\relax\detokenize{#3}\relax%
+  \else%
+    \renewcommand*{\bibfont}{#3}%
+  \fi%
+  \IfBooleanT{#1}{\whiteframestrue}%
+  \@MRTbeam@bibliography@true%
+  \IfBooleanTF{#2}%
+    {\begin{frame}{#4}{#5}}
+    {\begin{frame}[allowframebreaks]{#4}{#5}}
+    \printbibliography%
+  \end{frame}%
+  \egroup}
+%<<<
+%\DeclareCiteCommand{\framecite}
+%{\usebibmacro{prenote}}%
+%{%  
+%  \ifciteseen{}{%
+%    \usebibmacro{citeindex}%
+%    \let\thefootnote\relax%
+%    \footnotetext{%
+%        \mkbibbrackets{%
+%          \setunit{\addnbspace}%
+%          \printnames{labelname},%
+%          \printfield{journaltitle},
+%          %\setunit{\labelnamepunct}
+%          %\printfield[citetitle]{title}%
+%          \newunit%
+%          \printfield[]{year}%
+%      }%
+%    }%
+%    \let\thefootnote\svthefootnote%
+%  }%
+%}%
+%{\addsemicolon\space}
+%{\usebibmacro{postnote}}
+%<<<
+
+\mode<all>

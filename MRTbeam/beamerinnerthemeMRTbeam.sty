@@ -1,0 +1,142 @@
+\mode<presentation>
+
+% itemize symbols >>>
+\defbeamertemplate{itemize item}{small circle}{%
+  \scalebox{0.69}{$\bullet$}}
+\setbeamertemplate{itemize items}[circle]
+%\setbeamertemplate{itemize item}[small circle]
+%\setbeamertemplate{itemize subitem}[circle]
+%\setbeamertemplate{itemize subsubitem}[circle]
+%<<<
+
+% ToC >>>
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+%<<<
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded][shadow=true]  
+
+\setbeamertemplate{bibliography item}{%>>>
+  \insertbiblabel%
+}
+%<<<
+
+\setbeamertemplate{footnote}{%>>>
+  \llap{%
+    \parindent 1em%
+    \noindent\raggedleft\insertfootnotemark%
+    \insertfootnotetext}%
+  \par%
+}
+%<<<
+
+% footnote placement >>>
+% based on https://tex.stackexchange.com/a/388811/117050
+\def\MRT@place@ftn{%>>>
+  \makebox[0pt][l]{%
+    \hspace*{0.82109\paperwidth}%
+    \begin{minipage}[b][0pt][l]{0pt}%
+      \vskip0.0225\paperheight\relax%
+      \usebeamercolor*[fg]{footnote}%
+      \usebeamerfont*{footnote}%
+      \setbox0\hbox{%
+        \ifTabularNotes%
+          \parbox[t]{\textwidth}{%
+            \llap{\tabcolsep=0.25\tabcolsep\relax%
+              \expandafter\MRT@tabularT\expandafter{\MRT@ColTabNotes}%
+              \@rightfooter\end{tabular}}}%
+        \else%
+          \parbox[t]{\textwidth}{\llap{\parbox[t]{0.8122\paperwidth}{%
+            \raggedleft\@rightfooter}}}%
+        \fi}%
+      \@tempdima=\dimexpr\ht\beamer@footins+\dp\beamer@footins\relax%
+      \@tempdimb=\dimexpr\ht0+\dp0\relax%
+      \advance\@tempdima by \@tempdimb\relax%
+      \ifdim\@tempdima>0.11\paperheight\relax%
+        \pgfmathparse{0.11*\paperheight/\@tempdima}%
+        \scalebox{\pgfmathresult}{\parbox{0pt}{%
+          \ifdim\@tempdimb>0pt\relax%
+            \unhbox0%
+          \fi%
+          \unvbox\beamer@footins%
+        }}%
+      \else%
+        \ifdim\@tempdimb>0pt\relax%
+          \unhbox0%
+          \ifTabularNotes%
+          \else%
+            \vskip 1pt\relax%
+          \fi%
+        \else%
+          \vskip-1pt\relax%
+        \fi%
+        \unvbox\beamer@footins%
+      \fi%
+      \global\setbox\beamer@footins=\box\voidb@x%
+      \ClearRightFoot*%
+    \end{minipage}%
+  }%
+}
+%<<<
+\def\beamer@autobreakframebox{%>>>
+  \global\setbox\beamer@splitbox=\box\voidb@x%
+  \ifbeamer@autobreak%
+    % Ok, frame was overful -> split it!
+    \setbox\@tempboxa=\vsplit\beamer@framebox to\beamer@autobreakfactor\textheight%
+    \global\setbox\beamer@splitbox=\box\beamer@framebox%
+    \@tempdima=\ht\beamer@splitbox%
+    \ifdim\@tempdima<\beamer@autobreaklastheight%
+      \global\beamer@autobreaklastheight=\@tempdima\relax%
+    \else%
+      \setbox\@tempboxa=\vbox{\unvbox\@tempboxa\unvbox\beamer@splitbox}%
+      \global\setbox\beamer@splitbox=\box\voidb@x%
+    \fi%
+    \setbox\beamer@framebox=\vbox to\textheight{\unvbox\@tempboxa%
+      \vskip\beamer@framebottomskipautobreak%
+      \if@MRTbeam@bibliography@% for future use
+      \fi%
+      \begingroup
+        \MRT@place@ftn%
+      \endgroup  
+      \beamer@exitcode%
+    }%
+  \else%
+    \setbox\beamer@framebox=\vbox to\textheight{\unvbox\beamer@framebox%
+      \vskip\beamer@framebottomskip%
+      \begingroup
+        \MRT@place@ftn%
+      \endgroup 
+      \beamer@exitcode}%
+    \global\setbox\beamer@footins=\box\voidb@x%
+  \fi%
+  }
+%<<<
+%<<<
+
+% Title page >>>
+\defbeamertemplate*{title page}{MRTbeam}[1][]
+{% 
+  \LARGE%
+  \centering%
+  \vfill%
+  \vfill%
+  \inserttitle%
+  \vfill%
+  \Large\insertsubtitle%
+  \vfill%
+  \vfill%
+  \normalsize\insertauthor%
+  \ifcsname @advisor\endcsname%
+    \\\@advisor%
+  \fi%
+  \UseAndIfEmptyTF[\vfill]{\footnotesize\insertinstitute}{}{}%
+  \vfill%
+  \UseAndIfEmptyTF{\inserttitlegraphic}{}{\vfill}%
+  \small\insertdate
+  \par%
+}
+%<<<
+
+\mode
+<all>
