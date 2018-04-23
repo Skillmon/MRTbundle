@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
 
-\RequirePackage{expl3,xparse,MRTif} % absolutely necessary packages
+\RequirePackage{expl3,xparse,MRTif,MRTsfacc} % absolutely necessary packages
 \ProvidesExplClass
   {MRTthesis} {2018/04/22}
   {v0.1}      {thesis template for MRT - University of Bayreuth}

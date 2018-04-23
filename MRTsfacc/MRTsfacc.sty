@@ -1,0 +1,55 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{MRTsfacc}[2018/04/23 fixes accents for sf-math with helvet]
+
+\RequirePackage{MRTif}
+
+% stupid package for math font is stupid. Have to cure the sickness >>>
+\newbox\MRTsfacc@box
+\newcommand*\MRTsfacc@patch@mathaccentV
+  {%
+    \let\mathaccentV@orig\mathaccentV
+    \renewcommand*\mathaccentV[4]% >>>
+      {%
+        \def\mathaccentV@args{{##1}{##2}{##3}{##4}}%
+        \futurelet\next\mathaccentV@a
+      }% <<<
+    \newcommand*\mathaccentV@a[1]% >>>
+      {%
+        \expandafter\ifx\next!%
+          \expandafter\@firstofthree
+        \else
+          \expandafter\ifx\next*%
+            \expandafter\expandafter\expandafter\@secondofthree
+          \else
+            \expandafter\expandafter\expandafter\@thirdofthree
+          \fi
+        \fi
+        {\expandafter\mathaccentV@orig\mathaccentV@args}
+        {\expandafter\mathaccentV@shifted\mathaccentV@args}
+        {\expandafter\mathaccentV@b\mathaccentV@args{##1}}%
+      }% <<<
+    \newcommand*\mathaccentV@b[5]% >>>
+      {%
+        \MRTIfLetterGTF{##5}
+          {\mathaccentV@shifted{##1}{##2}{##3}{##4}{##5}}
+          {\mathaccentV@orig{##1}{##2}{##3}{##4}{##5}}%
+      }% <<<
+    \newcommand*\mathaccentV@shifted[5]% >>>
+      {%
+        \mathchoice%
+          {\mathaccentV@shifted@a{display}{##1}{##2}{##3}{##4}{##5}}%
+          {\mathaccentV@shifted@a{text}{##1}{##2}{##3}{##4}{##5}}%
+          {\mathaccentV@shifted@a{script}{##1}{##2}{##3}{##4}{##5}}%
+          {\mathaccentV@shifted@a{scriptscript}{##1}{##2}{##3}{##4}{##5}}%
+      }% <<<
+    \newcommand*\mathaccentV@shifted@a[6]% >>>
+      {%
+        \setbox\MRTsfacc@box\hbox{$\csname ##1style\endcsname##6$}%
+        \mathaccentV@orig{##2}{##3}{##4}{##5}
+          {##6\kern0.36\ht\MRTsfacc@box}\kern-0.36\ht\MRTsfacc@box
+      }% <<<
+  }
+\AtBeginDocument{\MRTsfacc@patch@mathaccentV}
+% <<<
+
+\endinput
