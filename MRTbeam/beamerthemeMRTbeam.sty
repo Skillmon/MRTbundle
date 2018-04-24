@@ -34,7 +34,7 @@
 \newif\if@MRTbeam@StarredSubsection@
 %<<<
 % Footnotes related >>>
-\NewDocumentCommand{\MRT@process@visibility}{m}{%
+\NewDocumentCommand{\MRT@process@visibility}{+m}{%
   \if\relax\detokenize{#1}\relax%
     \def\ProcessedArgument{}%
   \else%
@@ -106,19 +106,23 @@
 \newcommand*{\MRT@expandonce}[1]{%
   \edef\ProcessedArgument{\unexpanded\expandafter{#1}}}
 \newcommand*{\MRTbeam@frametitle}[1]{%>>>
-  \parbox[t][0pt][t]{\textwidth}{%
-    \usebeamerfont{frametitle}%
-    \vskip-0.103\paperheight%TODO adjust the skip
-    \raggedright%
-    {\LARGE#1}\mbox{}\\%
-    \hskip 0.4pt\parbox[t]{\dimexpr\textwidth-0.8pt\relax}{{%
-      \fontseries{mc}\selectfont%
-      \ifPrependSubsections%
-        \UseAndIfEmptyTF{\curssec}{}{\ifx\insertframesubtitle\@empty\else:~\fi}%
-      \fi%
-      \insertframesubtitle%
-    }}%
-  }%
+  \ifOnlyOneTopRule% no title if only one top rule
+    \vskip-.101\paperheight
+  \else
+    \parbox[t][0pt][t]{\textwidth}{%
+      \usebeamerfont{frametitle}%
+      \vskip-0.103\paperheight%TODO adjust the skip
+      \raggedright%
+      {\LARGE#1}\mbox{}\\%
+      \hskip 0.4pt\parbox[t]{\dimexpr\textwidth-0.8pt\relax}{{%
+        \fontseries{mc}\selectfont%
+        \ifPrependSubsections%
+          \UseAndIfEmptyTF{\curssec}{}{\ifx\insertframesubtitle\@empty\else:~\fi}%
+        \fi%
+        \insertframesubtitle%
+      }}%
+    }%
+  \fi
 }
 %<<<
 \AtBeginSection[%>>>

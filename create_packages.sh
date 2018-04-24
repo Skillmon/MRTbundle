@@ -37,9 +37,9 @@ echo "\nmoving old archives to '$OLD'"
 mv $OUTP/*.zip $OLD
 mv $OUTP/*.tar.xz $OLD
 
-if [ -d ./doc ];then
-    if [ -f ./doc/Makefile ];then
-        cd doc
+if [ -d ./Doc ];then
+    if [ -f ./Doc/Makefile ];then
+        cd Doc
         make all
         cd ..
     fi
