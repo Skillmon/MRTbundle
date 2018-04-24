@@ -48,9 +48,8 @@ fi
 cp readme.txt readme_bak
 unix2dos -q -n readme_bak readme.txt
 
-echo "\nbuilding zip-archive..."
-zip -u $OUTP/mrt_template-$(date +'%Y-%m-%d').zip img template_img mrtarbeit.tex mrtarbeit.sty tex works-cited.bib Makefile img/* template_img/* tex/*.tex readme.txt mrtarbeit.pdf
 cd $BDIR
+echo "\nbuilding zip-archive..."
 zip -ur $OUTP/MRTbundle-$(date +'%Y-%m-%d').zip $INPUT
 
 cd $BDIR/$WDIR
