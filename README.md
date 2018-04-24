@@ -24,11 +24,11 @@ project.
 
 The perhaps best way would be local user wide install. This is done by placing
 the bundle's folder in your local TeX-tree. For TeX Live on Unix this would by
-default be `/home/texmf/` therein the package should belong in
+default be `/home/<user>/texmf/` therein the package should belong in
 `tex/latex/MRTbundle`. The documentation should be placed in
-`/home/texmf/doc/latex/MRTbundle` but this is optional. For other OSes and TeX
-distributions the paths may vary. You can get the correct path to your user
-specific folder by running `kpsewhich -var TEXMFHOME` in your terminal.
+`/home/<user>/texmf/doc/latex/MRTbundle` but this is optional. For other OSes
+and TeX distributions the paths may vary. You can get the correct path to your
+user specific folder by running `kpsewhich -var TEXMFHOME` in your terminal.
 
 The third option would be a system wide installation. For this you need admin
 rights. Place the files in the system wide TeX-tree (again in Unix with TeX Live
