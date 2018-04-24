@@ -28,7 +28,8 @@ default be `/home/<user>/texmf/` therein the package should belong in
 `tex/latex/MRTbundle`. The documentation should be placed in
 `/home/<user>/texmf/doc/latex/MRTbundle` but this is optional. For other OSes
 and TeX distributions the paths may vary. You can get the correct path to your
-user specific folder by running `kpsewhich -var TEXMFHOME` in your terminal.
+user specific folder by running `kpsewhich -var TEXMFHOME` in your terminal (at
+least if you're runnig TeX Live).
 
 The third option would be a system wide installation. For this you need admin
 rights. Place the files in the system wide TeX-tree (again in Unix with TeX Live

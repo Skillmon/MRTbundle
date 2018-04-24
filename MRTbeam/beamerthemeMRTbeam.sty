@@ -325,17 +325,18 @@
     {\MRTbeam@PlaceAt@s{#2}{#3}{#4}}%
     {\MRTbeam@PlaceAt{#2}{#3}{#4}}%
 }%<<<
-\NewDocumentCommand{\MRTbeam@PlaceAt@s}{ m m +m }{%>>>
-  \smash{\makebox[0pt]{%
-    \begin{tikzpicture}[overlay,remember picture]%
-      \node
-        [%
-          ,xshift=\MRTbeam@PlaceAt@s@split@a#1\end@MRTbeam@argument\paperwidth
-          ,yshift=\MRTbeam@PlaceAt@s@split@b#1\end@MRTbeam@argument\paperheigh
-          ,#2%
-        ] at (current page.south west) {#3};%
-    \end{tikzpicture}}}%
-}%<<<
+\NewDocumentCommand{\MRTbeam@PlaceAt@s}{ >{\SplitArgument{1}{,}}m m +m }%>>>
+  {%
+    \MRTbeam@PlaceAt@s@b#1{#2}{#3}%
+  }%<<<
+\NewDocumentCommand{\MRTbeam@PlaceAt@s@b}{ m m m +m }%>>>
+  {%
+    \smash{\makebox[0pt]{%
+      \begin{tikzpicture}[overlay,remember picture]%
+        \node [xshift=#1\paperwidth,yshift=#2\paperheight,#3]
+          at (current page.south west) {#4};%
+      \end{tikzpicture}}}%
+  }%<<<
 \def\MRTbeam@PlaceAt@s@split@a#1,#2\end@MRTbeam@argument%>>>
   {%
     #1%
