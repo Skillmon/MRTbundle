@@ -1,10 +1,10 @@
 ### About ###
 
-This TeX bundle contains two classes, one for thesis and the like, one for
+This TeX bundle contains two classes, one for thesises and the like, one for
 presentations. Both classes aim to recreate the corresponding MS Office
 templates in use at the institute Mess- und Regeltechnik (MRT) of the University
 of Bayreuth. Along those classes there are several other small packages
-contained, which provide shared macros, used by both of the classes, or are
+contained, which provide shared macros used by both of the classes, or are
 interesting on their own.
 
 Furthermore there are small example projects included, which show a basic usage

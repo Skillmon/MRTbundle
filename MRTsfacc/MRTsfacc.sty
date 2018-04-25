@@ -8,7 +8,7 @@
 \newcommand*\MRTsfacc@patch@mathaccentV
   {%
     \let\mathaccentV@orig\mathaccentV
-    \renewcommand*\mathaccentV[4]% >>>
+    \protected\long\def\mathaccentV##1##2##3##4% >>>
       {%
         \def\mathaccentV@args{{##1}{##2}{##3}{##4}}%
         \futurelet\next\mathaccentV@a
