@@ -34,80 +34,10 @@ the institution where possible and as a result, this is non-optimal typography.
 Of course this documentation is created with one of the provided classes, namely
 \cls{MRTthesis}, in use.
 
-\chapter{The \cls{MRTthesis} class}
-\chapter{The \cls{MRTbeam} class}
-\chapter{The \pkg{MRTif} package}
-\chapter{The \pkg{MRTsfacc} package}
-This package is provided to remedy an issue related with sans serif maths, to be
-more precise to fix the placement of \cs{mathaccentV}, which is internally used
-by macros such as \cs{hat} and \cs{dot}. It is therefore loaded by both,
-\cls{MRTthesis} and \cls{MRTbeam}. The \cls{beamer} class provides a fix for the
-same issue which is unfortunately only working for \cls{beamer}'s default font
-by fixing the font metrics.
-
-\cls{MRTsfacc} has a different approach by patching \cs{mathaccentV} to move the
-accent horizontally depending on the height of the accented character.
-Furthermore it is tested whether the character is an alphabetic one by checking
-the category code. If it is not an alphabetic character the shift isn't applied.
-
-One can use \texttt{*} to enforce the shift and \texttt{!} to enforce the
-omitting of that shift. Consider the following example:
-\verb$\hat!{m}$ produces $\hat!{m}$, \verb$\hat*{m}$ produces $\hat*{m}$, and
-\verb$\hat{m}$ produces $\hat{m}$, which is the same as \verb$\hat*{m}$ since
-\texttt{m} has by default the category code of an alphabetic character.
-
-The tokens \texttt{*} and \texttt{!} must not be enclosed by braces if you want
-to specify the behaviour of \cs{mathaccentV}, so \verb$\hat{*}\hat{!}$ results
-in $\hat{*}\hat{!}$.
-
-\begin{table}
-  \centering
-  \setstretch{1.408}%
-  \newcommand\hatex[1]{$\hat!{#1}$}%
-  \newcommand\hatst[1]{$\hat*{#1}$}%
-  \begin{tabular}
-    {%
-      *2{>{\collectcell\hatex}c<{\endcollectcell}}
-      *2{>{\collectcell\hatst}c<{\endcollectcell}}
-    }
-    \hline
-    \rowcolor{tablegray}
-    \multicolumn{2}{c}{original} & \multicolumn{2}{c}{shifted} \\ 
-    \hline
-    a & A & a & A \\
-    b & B & b & B \\
-    c & C & c & C \\
-    d & D & d & D \\
-    e & E & e & E \\
-    f & F & f & F \\
-    g & G & g & G \\
-    h & H & h & H \\
-    i & I & i & I \\
-    j & J & j & J \\
-    k & K & k & K \\
-    l & L & l & L \\
-    m & M & m & M \\
-    n & N & n & N \\
-    o & O & o & O \\
-    p & P & p & P \\
-    q & Q & q & Q \\
-    r & R & r & R \\
-    s & S & s & S \\
-    t & T & t & T \\
-    u & U & u & U \\
-    v & V & v & V \\
-    w & W & w & W \\
-    x & X & x & X \\
-    y & Y & y & Y \\
-    z & Z & z & Z \\
-    \hline
-  \end{tabular}
-  \caption{Comparison of shifted accents against original placement}
-  \label{tab:sfacc}
-\end{table}
-
-The resulting \cs{mathaccentV} macro is not expandable and therefore created
-\cs{protected}. You can take a look at the results at table \ref{tab:sfacc}.
+\include{tex/doc_MRTthesis}
+\include{tex/doc_MRTbeam}
+\include{tex/doc_MRTif}
+\include{tex/doc_MRTsfacc}
 
 \chapter{Bug reports}
 You can report bugs if you find some via email:
