@@ -935,7 +935,7 @@ Zustimmung des Lehrstuhls publizieren werde.
   }% <<<
 \cs_new_protected_nopar:Nn \MRTthesis_sort_authors:% >>>
   {
-    \seq_gset_split:NnV \g_MRTthesis_authors_seq { AND } \l_MRTthesis_authors_tl
+    \seq_gset_split:NnV \g_MRTthesis_authors_seq { \and } \l_MRTthesis_authors_tl
     \bool_if:NF \l_MRTthesis_no_author_sort_bool
       {
         \seq_gsort:Nn \g_MRTthesis_authors_seq
