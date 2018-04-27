@@ -1,6 +1,6 @@
 ### About ###
 
-This TeX bundle contains two classes, one for thesises and the like, one for
+This TeX bundle contains two classes, one for theses and the like, one for
 presentations. Both classes aim to recreate the corresponding MS Office
 templates in use at the institute Mess- und Regeltechnik (MRT) of the University
 of Bayreuth. Along those classes there are several other small packages
