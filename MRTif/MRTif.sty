@@ -1,67 +1,163 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{MRTif}[2018/04/21 some if tests for MRTbeam and mrtarbeit]
 
-\newcommand*\MRTIf@groupify@TF[1]% >>>
+\newcommand*\MRTif@groupify@TF[1]% >>>
   {%
-    \expandafter\newcommand\csname MRTIf#1GTF\endcsname{}%
-    \expandafter\long\expandafter\edef\csname MRTIf#1GTF\endcsname##1%
+    \expandafter\newcommand\csname MRTif#1GTF\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTif#1GTF\endcsname##1%
       {%
-        \unexpanded{\MRTIfGroupTF}{##1}%
-        {\unexpanded\expandafter{\csname MRTIf#1GTF\endcsname}##1}%
-        {\unexpanded\expandafter{\csname MRTIf#1TF\endcsname}{##1}}%
+        \unexpanded{\MRTifGroupTF}{##1}%
+        {\unexpanded\expandafter{\csname MRTif#1GTF\endcsname}##1}%
+        {\unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}}%
       }%
   }% <<<
-% MRTIfEmpty >>>
-\newcommand\MRTIfEmptyTF[1]{% >>>
+\newcommand*\MRTif@create@TandF[1]% >>>
+  {%
+    \expandafter\newcommand\csname MRTif#1T\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTif#1T\endcsname##1%
+      {%
+        \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}%
+          {\noexpand\@firstofone}
+          {\noexpand\@gobble}%
+      }%
+    \expandafter\newcommand\csname MRTif#1F\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTif#1F\endcsname##1%
+      {%
+        \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}%
+          {\noexpand\@gobble}
+          {\noexpand\@firstofone}%
+      }%
+  }% <<<
+\newcommand*\MRTif@create@TandF@twoargs[1]% >>>
+  {%
+    \expandafter\newcommand\csname MRTif#1T\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTif#1T\endcsname##1##2%
+      {%
+        \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}{##2}%
+          {\noexpand\@firstofone}
+          {\noexpand\@gobble}%
+      }%
+    \expandafter\newcommand\csname MRTif#1F\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTif#1F\endcsname##1##2%
+      {%
+        \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}{##2}%
+          {\noexpand\@gobble}
+          {\noexpand\@firstofone}%
+      }%
+  }% <<<
+\newcommand*\MRTif@create@N@TandF[1]% >>>
+  {%
+    \expandafter\newcommand\csname MRTif#1NTF\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTif#1NTF\endcsname##1%
+      {%
+        \noexpand\expandafter
+        \expandafter\noexpand\csname MRTif#1TF\endcsname
+        \noexpand\expandafter{##1}%
+      }%
+    \MRTif@create@TandF{#1N}%
+  }% <<<
+\newcommand*\MRTif@create@N@TandF@twoargs[1]% >>>
+  {%
+    \expandafter\newcommand\csname MRTif#1NNTF\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTif#1NNTF\endcsname##1##2%
+      {%
+        \noexpand\expandafter
+        \expandafter\noexpand\csname MRTif#1NNTF@a\endcsname
+        \noexpand\expandafter{##2}{##1}%
+      }%
+    \expandafter\long\expandafter\edef\csname MRTif#1NNTF@a\endcsname##1##2%
+      {%
+        \noexpand\expandafter
+        \expandafter\noexpand\csname MRTif#1TF\endcsname
+        \noexpand\expandafter{##2}{##1}%
+      }%
+    \MRTif@create@TandF@twoargs{#1NN}%
+    \expandafter\newcommand\csname MRTif#1NnTF\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTif#1NnTF\endcsname##1##2%
+      {%
+        \noexpand\expandafter
+        \expandafter\noexpand\csname MRTif#1TF\endcsname
+        \noexpand\expandafter{##1}{##2}%
+      }%
+    \MRTif@create@TandF@twoargs{#1Nn}%
+    \expandafter\newcommand\csname MRTif#1nNTF\endcsname{}%
+    \expandafter\long\expandafter\edef\csname MRTif#1nNTF\endcsname##1##2%
+      {%
+        \noexpand\expandafter
+        \expandafter\noexpand\csname MRTif#1nNTF@a\endcsname
+        \noexpand\expandafter{##2}{##1}%
+      }%
+    \expandafter\long\expandafter\edef\csname MRTif#1nNTF@a\endcsname##1##2%
+      {%
+        \expandafter\noexpand\csname MRTif#1TF\endcsname{##2}{##1}
+      }%
+    \MRTif@create@TandF@twoargs{#1nN}%
+  }% <<<
+\newcommand*\MRTif@create@TandF@N@TandF[1]% >>>
+  {%
+    \MRTif@create@TandF{#1}%
+    \MRTif@create@N@TandF{#1}%
+  }% <<<
+\newcommand*\MRTif@create@TandF@N@TandF@twoargs[1]% >>>
+  {%
+    \MRTif@create@TandF@twoargs{#1}%
+    \MRTif@create@N@TandF@twoargs{#1}%
+  }% <<<
+% MRTifEmpty >>>
+\newcommand\MRTifEmptyTF[1]{% >>>
   \if\relax\detokenize{#1}\relax
     \expandafter\@firstoftwo
   \else
     \expandafter\@secondoftwo
   \fi}
 % <<<
-\newcommand\MRTIfEmptyT[1]{% >>>
+\newcommand\MRTifEmptyT[1]{% >>>
   \if\relax\detokenize{#1}\relax
     \expandafter\@firstofone
   \else
     \expandafter\@gobble
   \fi}
 % <<<
-\newcommand\MRTIfEmptyF[1]{% >>>
+\newcommand\MRTifEmptyF[1]{% >>>
   \if\relax\detokenize{#1}\relax
     \expandafter\@gobble
   \else
     \expandafter\@firstofone
   \fi}
 % <<<
-\newcommand\MRTIfEmptyNTF[1]% >>>
-  {\expandafter\MRTIfEmptyTF\expandafter{#1}}% <<<
-\newcommand\MRTIfEmptyNT[1]% >>>
-  {\expandafter\MRTIfEmptyT\expandafter{#1}}% <<<
-\newcommand\MRTIfEmptyNF[1]% >>>
-  {\expandafter\MRTIfEmptyF\expandafter{#1}}% <<<
+\newcommand\MRTifEmptyNTF[1]% >>>
+  {\expandafter\MRTifEmptyTF\expandafter{#1}}% <<<
+\newcommand\MRTifEmptyNT[1]% >>>
+  {\expandafter\MRTifEmptyT\expandafter{#1}}% <<<
+\newcommand\MRTifEmptyNF[1]% >>>
+  {\expandafter\MRTifEmptyF\expandafter{#1}}% <<<
+\MRTif@groupify@TF{Empty}
+\MRTif@create@TandF@N@TandF{EmptyG}
 % <<<
-% MRTIfGroup >>>
-\newcommand\MRTIfGroupTF[1]% >>>
-  {\expandafter\MRTIfGroup@a\romannumeral-`\.#1.{}\end}% <<<
-\long\def\MRTIfGroup@a#1#% >>>
-  {\MRTIfEmptyTF{#1}{\MRTIfGroup@b}{\MRTIfGroup@c}}% <<<
-\long\def\MRTIfGroup@b#1#2#3\end% >>>
-  {\MRTIfEmptyTF{#3}{\@firstoftwo}{\@secondoftwo}}% <<<
-\long\def\MRTIfGroup@c#1\end% >>>
+% MRTifGroup >>>
+\newcommand\MRTifGroupTF[1]% >>>
+  {\expandafter\MRTifGroup@a\romannumeral-`\.#1.{}\end}% <<<
+\long\def\MRTifGroup@a#1#% >>>
+  {\MRTifEmptyTF{#1}{\MRTifGroup@b}{\MRTifGroup@c}}% <<<
+\long\def\MRTifGroup@b#1#2#3\end% >>>
+  {\MRTifEmptyTF{#3}{\@firstoftwo}{\@secondoftwo}}% <<<
+\long\def\MRTifGroup@c#1\end% >>>
   {\@secondoftwo}% <<<
+\MRTif@create@TandF@N@TandF{Group}
 % <<<
-% MRTIfGroupNoSpaces >>>
-\newcommand\MRTIfGroupNoSpacesTF[1]% >>>
+% MRTifGroupNoSpaces >>>
+\newcommand\MRTifGroupNoSpacesTF[1]% >>>
   {%
-    \expandafter\MRTIfStringsMatchTF\expandafter
-      {\MRTIfGroupNoSpaces@a#1\end@MRTIfGroupNoSpaces@a}{#1}
+    \expandafter\MRTifStringsMatchTF\expandafter
+      {\MRTifGroupNoSpaces@a#1\end@MRTifGroupNoSpaces@a}{#1}
       {\@secondoftwo}
       {\@firstoftwo}
   }% <<<
-\long\def\MRTIfGroupNoSpaces@a#1\end@MRTIfGroupNoSpaces@a{#1}
+\long\def\MRTifGroupNoSpaces@a#1\end@MRTifGroupNoSpaces@a{#1}
+\MRTif@create@TandF@N@TandF{GroupNoSpaces}
 % <<<
-% MRTIfStringsMatch >>>
-\newcommand\MRTIfStringsMatchTF[2]% >>>
+% MRTifStringsMatch >>>
+\newcommand\MRTifStringsMatchTF[2]% >>>
   {%
     \ifnum\pdfstrcmp{#1}{#2}=0
       \expandafter\@firstoftwo
@@ -69,50 +165,56 @@
       \expandafter\@secondoftwo
     \fi
   }% <<<
-\newcommand\MRTIfStringsMatchGTF[2]% >>>
+\newcommand\MRTifStringsMatchGTF[2]% >>>
   {%
-    \MRTIfGroupTF{#1}
-      {\MRTIfStringsMatchGTF#1{#2}}
+    \MRTifGroupTF{#1}
+      {\MRTifStringsMatchGTF#1{#2}}
       {%
-        \MRTIfGroupTF{#2}
-          {\MRTIfStringsMatchGTF#2{#1}}
-          {\MRTIfStringsMatchTF{#1}{#2}}
+        \MRTifGroupTF{#2}
+          {\MRTifStringsMatchGTF#2{#1}}
+          {\MRTifStringsMatchTF{#1}{#2}}
       }%
   }% <<<
+\MRTif@create@TandF@N@TandF@twoargs{StringsMatch}
+\MRTif@create@TandF@N@TandF@twoargs{StringsMatchG}
 % <<<
-% MRTIfOneToken >>>
-\newcommand\MRTIfOneTokenTF[1]% >>>
+% MRTifOneToken >>>
+\newcommand\MRTifOneTokenTF[1]% >>>
   {%
-    \MRTIfEmptyTF{#1}{\@secondoftwo}
+    \MRTifEmptyTF{#1}{\@secondoftwo}
       {%
-        \MRTIfOneToken@a#1.\end@MRTIfOneTokenTF
+        \MRTifOneToken@a#1.\end@MRTifOneTokenTF
       }%
   }% <<<
-\long\def\MRTIfOneToken@a#1#2#3\end@MRTIfOneTokenTF% >>>
-  {\MRTIfEmptyTF{#3}}% <<<
+\long\def\MRTifOneToken@a#1#2#3\end@MRTifOneTokenTF% >>>
+  {\MRTifEmptyTF{#3}}% <<<
+\MRTif@groupify@TF{OneToken}
+\MRTif@create@TandF@N@TandF{OneToken}
+\MRTif@create@TandF@N@TandF{OneTokenG}
 % <<<
-% MRTIfLetter >>>
-\newcommand\MRTIfLetterTF[1]% >>>
+% MRTifLetter >>>
+\newcommand\MRTifLetterTF[1]% >>>
   {%
-    \MRTIfGroupTF{#1}
+    \MRTifGroupTF{#1}
       {\@secondoftwo}
       {%
-        \MRTIfOneTokenTF{#1}
-          {\MRTIfLetter@core{#1}}
+        \MRTifOneTokenTF{#1}
+          {\MRTifLetter@core{#1}}
           {\@secondoftwo}%
       }%
   }% <<<
-\newcommand\MRTIfLetterGTF[1]% >>>
+%\MRTif@groupify@TF{Letter}% possible but results in unnecessary group test
+\newcommand\MRTifLetterGTF[1]% >>>
   {%
-    \MRTIfGroupTF{#1}
-      {\MRTIfLetterGTF#1}
+    \MRTifGroupTF{#1}
+      {\MRTifLetterGTF#1}
       {%
-        \MRTIfOneTokenTF{#1}
-          {\MRTIfLetter@core{#1}}
+        \MRTifOneTokenTF{#1}
+          {\MRTifLetter@core{#1}}
           {\@secondoftwo}%
       }%
   }% <<<
-\newcommand\MRTIfLetter@core[1]% >>>
+\newcommand\MRTifLetter@core[1]% >>>
   {%
     \bgroup
     \catcode`z=11
@@ -124,36 +226,35 @@
       \expandafter\@secondoftwo
     \fi
   }% <<<
+\MRTif@create@TandF@N@TandF{Letter}
+\MRTif@create@TandF@N@TandF{LetterG}
 % <<<
-\MRTIf@groupify@TF{Empty}
-\MRTIf@groupify@TF{OneToken}
-%\MRTIf@groupify@TF{Letter}% possible but results in unnecessary group test
-% MRTIfTokensMatch >>>
-\newcommand\MRTIfTokensMatchTF[2]% >>>
+% MRTifTokensMatch >>>
+\newcommand\MRTifTokensMatchTF[2]% >>>
   {%
-    \MRTIfGroupTF{#1}
+    \MRTifGroupTF{#1}
       {\@secondoftwo}
       {%
-        \MRTIfGroupTF{#2}
+        \MRTifGroupTF{#2}
           {\@secondoftwo}
-          {\MRTIfTokensMatch@a{#1}{#2}}%
+          {\MRTifTokensMatch@a{#1}{#2}}%
       }%
   }% <<<
-\newcommand\MRTIfTokensMatchGTF[2]% >>>
+\newcommand\MRTifTokensMatchGTF[2]% >>>
   {%
-    \MRTIfGroupTF{#1}
-      {\MRTIfTokensMatchGTF#1{#2}}
+    \MRTifGroupTF{#1}
+      {\MRTifTokensMatchGTF#1{#2}}
       {%
-        \MRTIfGroupTF{#2}
-          {\MRTIfTokensMatchGTF#2{#1}}
-          {\MRTIfTokensMatch@a{#1}{#2}}%
+        \MRTifGroupTF{#2}
+          {\MRTifTokensMatchGTF#2{#1}}
+          {\MRTifTokensMatch@a{#1}{#2}}%
       }%
   }% <<<
-\newcommand\MRTIfTokensMatch@a[2]% >>>
+\newcommand\MRTifTokensMatch@a[2]% >>>
   {%
-    \MRTIfOneTokenTF{#1}
+    \MRTifOneTokenTF{#1}
       {%
-        \MRTIfOneTokenTF{#2}
+        \MRTifOneTokenTF{#2}
           {%
             \ifx#1#2%
               \expandafter\@firstoftwo
@@ -165,8 +266,10 @@
       }
       {\@secondoftwo}%
   }% <<<
+\MRTif@create@TandF@N@TandF@twoargs{TokensMatch}
+\MRTif@create@TandF@N@TandF@twoargs{TokensMatchG}
 % <<<
-%\newcommand\MRTIfTokenInTF[2]%>>>
+%\newcommand\MRTifTokenInTF[2]%>>>
   %{%
     %\
   %}%<<<
