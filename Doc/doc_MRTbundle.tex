@@ -1,5 +1,21 @@
 \documentclass[oneside,UKenglish]{MRTthesis}
 
+\MRTthesisSetup
+  {
+    ,no advisor
+    ,no author sort
+    ,no citation
+    ,no degree
+    ,no examinor
+    ,no institute
+    ,no thesis
+    ,with subtitle
+  }
+
+\ExplSyntaxOn
+\tl_set:Nn \l_MRTthesis_titlepage_von_tl { from }
+\ExplSyntaxOff
+
 \input{preamble/doc_macros.tex}
 
 \usepackage{collcell}
@@ -12,7 +28,7 @@
 
 \title{The \cls{MRTbundle}}
 \subtitle
-  {A distribution of templates for the institution MRT, University of Bayreuth}
+  {A distribution of templates for the MRT, University of Bayreuth}
 \author{Jonathan P. Spratte}
 
 \begin{document}

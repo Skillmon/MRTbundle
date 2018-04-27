@@ -32,7 +32,7 @@ in $\hat{*}\hat{!}$.
   \newcommand\hatex[1]{$\hat!{#1}$}%
   \newcommand\hatst[1]{$\hat*{#1}$}%
   \def\multfillcnt{6}%
-  \multfill[h]{\multfillcnt}\begin{tabular}
+  \hfillmult{\multfillcnt}\begin{tabular}
     {%
       *2{>{\collectcell\hatex}c<{\endcollectcell}}
       *2{>{\collectcell\hatst}c<{\endcollectcell}}
@@ -79,7 +79,7 @@ in $\hat{*}\hat{!}$.
     y & Y & y & Y \\
     z & Z & z & Z \\
     \hline
-  \end{tabular}\multfill[h]{\multfillcnt}%
+  \end{tabular}\hfillmult{\multfillcnt}%
   \caption{Comparison of shifted accents against original placement}
   \label{tab:sfacc}
 \end{table}
