@@ -33,6 +33,7 @@
 \newif\if@MRTbeam@StarredSection@
 \newif\if@MRTbeam@StarredSubsection@
 %<<<
+\newbox\MRTbeam@box
 % Footnotes related >>>
 \NewDocumentCommand{\MRT@process@visibility}{+m}{%
   \if\relax\detokenize{#1}\relax%
@@ -140,12 +141,12 @@
 %% Macros >>>
 %\RenewDocumentCommand{\footnote}{o m}{%
 \NewDocumentCommand{\UseAndIfEmptyTF}{O{} m}{%>>>
-  \setbox0\hbox{#2}%
-  \ifdim\wd0=0pt\relax%
-    \expandafter\@firstoftwo%
-  \else%
-    #1\usebox0%
-    \expandafter\@secondoftwo%
+  \setbox\MRTbeam@box\hbox{#2}%
+  \ifdim\wd\MRTbeam@box=0pt\relax
+    \expandafter\@firstoftwo
+  \else
+    #1\usebox\MRTbeam@box
+    \expandafter\@secondoftwo
   \fi}%
 %<<<
 \NewDocumentCommand{\cursec}{s}{%>>>
@@ -199,14 +200,14 @@
       {\def\MRTbeam@temp{#5}}%
       {\def\MRTbeam@temp{#4\hskip0.5\tabcolsep\relax#5}}%
   \fi
-  \setbox0\hbox{%
+  \setbox\MRTbeam@box\hbox{%
     \ifTabularNotes
       \begin{tabular}{@{}c@{}c@{}}\MRTbeam@temp\end{tabular}%
     \else
       \MRTbeam@temp%
     \fi
   }%
-  \ifdim\wd0>0pt\relax
+  \ifdim\wd\MRTbeam@box>0pt\relax
     \IfBooleanTF{#1}% persistent or not
       {\xdef\MRT@ftn@p{\MRT@ftn@p${}$\uncover#3{\MRTbeam@temp}\\}}%
       {\IfBooleanTF{#2}%
