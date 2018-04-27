@@ -27,6 +27,7 @@
 \newif\ifMRTthesis@longtabs@
 \newif\ifMRTthesis@mathsizes@
 \newif\ifMRTthesis@tikzuline@
+\newif\ifMRTthesis@UKenglish@
 \newif\ifMRTbibliography
 % <<<
 %%==========================================================================<<<
@@ -36,9 +37,12 @@
 \DeclareOption{minimal}{\MRTthesis@minimal@true}
 \DeclareOption{longtabs}{\MRTthesis@longtabs@true}
 \DeclareOption{mathsizes}{\MRTthesis@mathsizes@true}
+\DeclareOption{no mathsizes}{\MRTthesis@mathsizes@false}
 \DeclareOption{tikzunderline}{\MRTthesis@tikzuline@true}
-\DeclareOption{tUline}{\ExecuteOption{tikzunderline}}
+\DeclareOption{tUline}{\ExecuteOptions{tikzunderline}}
+\DeclareOption{UKenglish}{\MRTthesis@UKenglish@true}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrreprt}}
+\ExecuteOptions{mathsizes}
 \PassOptionsToClass
   {twoside,fontsize=11pt,paper=a4,toc=listof,toc=bib,fleqn,ngerman}
   {scrreprt}
@@ -61,7 +65,11 @@
 \RequirePackage{helvet}
 \renewcommand\familydefault{\sfdefault}
 \RequirePackage{textcomp}
-\RequirePackage[ngerman]{babel}
+\ifMRTthesis@UKenglish@
+  \RequirePackage[main=UKenglish,ngerman]{babel}
+\else
+  \RequirePackage[ngerman]{babel}
+\fi
 \RequirePackage{scrlayer-scrpage}
 \RequirePackage[left=25mm,right=25mm,top=8.4mm,bottom=10.7mm%
     ,includeheadfoot,headsep=15.4mm,marginparwidth=18mm,marginparsep=4mm]
@@ -137,7 +145,8 @@
     ,no~thesis       .default:n  = { true }
     ,number          .tl_set:N   = \l_MRTthesis_number_tl
     ,pos~figure      .tl_set:N   = \fps@figure
-    ,pos~float       .meta:n     = { pos~figure, pos~table }
+    ,pos~float       .code:n     = 
+      \keys_set:nn { MRTthesis/setup } { pos~figure=#1, pos~table=#1 }
     ,pos~MRTtab      .tl_set:N   = \l_MRTthesis_MRTtab_pos_tl
     ,pos~table       .tl_set:N   = \fps@table
     ,short~advisor   .tl_set:N   = \l_MRTthesis_s_advisor_tl
@@ -186,7 +195,7 @@
   {
     ,advisor = {\textcolor{blue}{Mein~Betreuer}}
     ,examinor = {Univ.-Professor~Dr.-Ing.~Gerhard~Fischerauer}
-    ,pos~float = {tbp}
+    ,pos~float = tbp
     ,number = {\textcolor{blue}{XX-00-00-0}}
     ,sadvisor = {\textcolor{blue}{M.~Betreuer}}
     ,sauthor  = {\textcolor{blue}{A.~Student}}
@@ -257,7 +266,7 @@
   }% <<<
 \newcommand*\MRTthesis@display@logo[2]% >>>
   {%
-    \MRTIfEmptyNF{#2}{\includegraphics[height=#1]{#2}}%
+    \MRTifEmptyNF{#2}{\includegraphics[height=#1]{#2}}%
   }% <<<
 % <<<
 % \MRTafterhyperref >>>
@@ -314,7 +323,7 @@
   \tikzset{MRTthesis@tUline/.style={line width=\MRTthesis@tUline@width}}
   \newcommand*\MRTthesis@EmptyOProcessor[2]% >>>
     {%
-      \MRTIfEmptyTF{#2}%
+      \MRTifEmptyTF{#2}%
         {\def\ProcessedArgument{#1}}%
         {\def\ProcessedArgument{#2}}%
     }% <<<
@@ -404,7 +413,7 @@
   }% <<<
 \newcommand*\MRTthesis@nostar@WUline[2][]% >>>
   {%
-    \MRTIfEmptyTF{#1}
+    \MRTifEmptyTF{#1}
       {\MRTthesis@WUline@setheight}
       {\MRTthesis@WUline@height=#1}%
     \MRTthesis@typeout@WUline{\MRTthesis@WUline@phantomp#2}%
@@ -447,6 +456,10 @@
         \gdef\figureautorefname{Bild}%
         \gdef\equationautorefname{Gl.}%
       }%
+    \addto\extrasUKenglish
+      {%
+        \gdef\equationautorefname{eq.}%
+      }%
   }% <<<
 \MRTafterhyperref{\MRTthesis@setautorefnames}
 \addto\captionsngerman% >>>
@@ -454,6 +467,11 @@
     \renewcommand*\figurename{\bfseries Bild}%
     \renewcommand*\tablename{\bfseries Tabelle}%
     \renewcommand*\listfigurename{Bildverzeichnis}%
+  }% <<<
+\addto\captionsUKenglish% >>>
+  {%
+    \renewcommand*\figurename{\bfseries Figure}%
+    \renewcommand*\tablename{\bfseries Table}%
   }% <<<
 %correctly set the equation labels
 \def\tagform@#1{\maketag@@@{\ignorespaces#1\unskip\@@italiccorr}\hspace{6.7mm}}
@@ -615,7 +633,7 @@
   %\if@mrtarbeit@bibfileused\else%
       %\def\@mrtarbeit@bibfile{works-cited.bib;}%
   %\fi%
-  %\MRTIfEmptyNF\@mrtarbeit@bibfile{
+  %\MRTifEmptyNF\@mrtarbeit@bibfile{
       %\expandafter\@mrtarbeit@parsebibfiles\@mrtarbeit@bibfile;
   %}
   % changing the order of units in article-entries. >>>
