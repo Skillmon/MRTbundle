@@ -1,9 +1,10 @@
 *.aux
 *.bcf
+*.fmt
 *.glo
 *.idx
 *.log
 *.out
-Doc/doc_MRTbundle.pdf
 *.run.xml
 *.toc
+Doc/doc_MRTbundle.pdf

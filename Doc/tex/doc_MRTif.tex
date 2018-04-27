@@ -1,1 +1,48 @@
 \chapter{The \pkg{MRTif} package}
+The \pkg{MRTif} package provides a number of expandable tests. In the following
+macros \tfarg\ is used to specify that the macros exist with the endings
+\texttt{T}, \texttt{F}, and \texttt{TF}. The \texttt{T} ending stands for a
+\meta{true} branch, \texttt{F} for the \meta{false} branch.
+
+If a macro name contains a \texttt{G} prior to \tfarg, it strips any outermost
+groups prior to the test using \cs{MRTifGroupTF}. An \texttt{N} denotes that the
+first token in the argument is expanded once prior to any test. If a macro which
+takes two arguments ends with \texttt{NN} prior to the \tfarg\ in both arguments
+the first token is expanded once, \texttt{Nn} and \texttt{nN} mean that only for
+the first and second argument, respectively, an expansion is made.
+
+\section{Macros}
+\begin{describemacroTF}[G,N,GN]{MRTifEmpty}[\marg{arg}]
+  Tests if \meta{arg} is completely empty.
+\end{describemacroTF}
+
+\begin{describemacroTF}[N]{MRTifGroup}[\marg{arg}]
+  Tests if \meta{arg} is a single group no matter what the contents of that
+  group are. It ignores spaces around the group.
+\end{describemacroTF}
+
+\begin{describemacroTF}[N]{MRTifGroupNoSpaces}[\marg{arg}]
+  Tests if \meta{arg} is a single group no matter what the contents of that
+  group are. It doesn't ignore spaces around the group.
+\end{describemacroTF}
+
+\begin{describemacroTF}[NN,Nn,nN,G,GNN,GNn,GnN]{MRTifStringsMatch}%
+  [\marg{string1}\marg{string2}]
+  Tests if \meta{string1} and \meta{string2} match.
+\end{describemacroTF}
+
+\begin{describemacroTF}[G,N,GN]{MRTifOneToken}[\marg{arg}]
+  Tests if \meta{arg} is only a single token.
+\end{describemacroTF}
+
+\begin{describemacroTF}[G,N,GN]{MRTifLetter}[\marg{arg}]
+  Tests if \meta{arg} is a letter, meaning of category code 11.
+\end{describemacroTF}
+
+\begin{describemacroTF}[NN,Nn,nN,G,GNN,GNn,GnN]{MRTifTokensMatch}%
+  [\marg{arg1}\marg{arg2}]
+  Tests if \meta{arg1} and \meta{arg2} are single tokens and if so compares
+  them if both tokens match. The variants without \texttt{G} test if one of the
+  arguments is contained in a group. If that's the case the \meta{false} branch
+  is executed.
+\end{describemacroTF}

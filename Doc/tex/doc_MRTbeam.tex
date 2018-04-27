@@ -1,1 +1,105 @@
 \chapter{The \cls{MRTbeam} class}
+The \cls{MRTbeam} class is a class build upon \cls{beamer}. It should mimic the
+style of the MS Powerpoint template of the MRT which was in use when I held my
+Bachelor's presentation. I heard the requirements to match a specific
+template are less strict today, but at least I'll still use this template.
+
+Many of the features described here are also available if one uses
+\cs{usetheme{MRTbeam}} within a document using the \cls{beamer} class. There
+however is no dedicated documentation for that possibility provided. You're
+encouraged to also use the corresponding \cls{MRTbeam} class if your using the
+eponymous theme.
+
+If there is a new institution template which should be matched that doesn't
+match this \cls{beamer} template please contact me as mentioned in
+\autoref{sec:bugs}.
+
+\section{Options}
+The class passes all options given to it on to \cls{beamer}. There are still
+some options which you can set with some macros. The macros in this section are
+only provided to set specific options, other macros are described in
+\autoref{sec:beam:macros}.
+
+\section{Macros}\label{sec:beam:macros}
+\begin{describemacro}{PlaceAt}%
+  [\meta{*}\barg{pos}\oarg{node options}\marg{content}]
+  The starred version differs fundamentally from the unstarred one. The
+  unstarred one places \meta{content} at the specified position \meta{pos} in
+  the background inside a \TikZ\ node with the optionally specified \meta{node
+  options}. The coordinates default to multiples of \cs{pagewidth} and
+  \cs{pageheight} for \texttt{x} and \texttt{y}, respectively. You can use
+  anything \TikZ\ understands as coordinates for \meta{pos}.
+
+  The starred version places the \env{tikzpicture} where you currently are. It
+  uses \texttt{remember picture} and \texttt{overlay} as options. The \meta{pos}
+  must match the pattern \carg{x}{y}. \meta{x} is in multiples of \cs{pagewidth}
+  and \meta{y} in multiples of \cs{pageheight} and you can't change that. The
+  node still gets \meta{node options}.
+
+  In both cases \texttt{(0,0)} is the bottom left corner of the slide.
+\end{describemacro}
+
+\begin{describemacro}{AddToPlaced}[\marg{tikz code}]
+  Adds the specified \meta{tikz code} to the background of the current slide.
+  \texttt{(0,0)} is the bottom left corner of the slide. Coordinates are by
+  default in multiples of \cs{pagewidth} and \cs{pageheight}. It uses the same
+  \env{tikzpicture} like \cs{PlaceAt} and is stored in the same macro.
+\end{describemacro}
+
+\begin{describemacro}{UseAndIfEmptyTF}%
+  [\oarg{pre}\marg{arg}\marg{true}\marg{false}]
+  The \meta{arg} is expanded inside a box. If that box has a width not equal 0pt
+  \meta{pre} is used followed by the contents of the box. Then the \meta{false}
+  branch is executed. If the box's width equals 0pt the \meta{true} branch is
+  used instead and neither \meta{pre} is used nor the box containing \meta{arg}
+  placed.
+\end{describemacro}
+
+\begin{describemacro}{cursec}[\meta{*}]
+  If the current section is starred or you used the optional \texttt{*} for
+  \cs{cursec}, this macro inserts the current sections name, else the name is
+  prepended by the current sections number.
+\end{describemacro}
+
+\begin{describemacro}{curssec}[\meta{*}]
+  This macro is very similar to \cs{cursec}. If you used the starred version of
+  it or the current subsection is starred, this macro inserts the current
+  subsections name, else the name is prepended by the current subsections
+  number.
+\end{describemacro}
+
+\begin{describeenv}{whiteframes}
+  In this environment \cs{ifwhiteframes} is set true.
+\end{describeenv}
+
+\subsection{Footnote related}
+\begin{describemacro}{AddToRightFoot}%
+  [\meta{*}\meta{+}\sarg{overlay}\oarg{pre}\marg{note}]
+  This macro adds stuff to the right footer. If \meta{*} is given, the content
+  is added to the persistent footnotes, else if \meta{+} is given added to the
+  cite related footnotes, else to the ordinary ones. \meta{overlay} is used for
+  any overlay specifications using \cs{uncover}. \meta{pre} is added left to
+  \meta{note}. If tabular footnotes are used \meta{pre} is in the left,
+  \meta{note} in the right column. If tabular footnotes are not used the
+  distance between \meta{pre} and \meta{note} is \texttt{0.5}\cs{tabcolsep}. The
+  starred variant should only be used outside of the \env{frame} environment. If
+  you get strange errors during compilation a \cs{noexpand} in front of some
+  macros (e.g. stuff like \cs{href}) you give as arguments might help.
+\end{describemacro}
+
+\begin{describemacro}{ClearRightFoot}[\meta{*}]
+  Clears the footnotes. If the \texttt{*} is given only the volatile footnotes
+  are cleared, else all of them.
+\end{describemacro}
+
+\subsection{Bibliography related}
+\begin{describemacro}{cite}[\sarg{overlay}\oarg{opt1}\oarg{opt2}\meta{key}]
+  \meta{overlay} is handled by \cs{uncover}, which affects only the footnote not
+  the footnote mark. The usage of the two optional arguments and \meta{key}
+  match those known from \pkg{biblatex}'s \cs{cite}.
+\end{describemacro}
+
+\begin{describemacro}{framecite}%
+  [\meta{*}\sarg{overlay}\oarg{pre}\marg{key}\oarg{after}]
+  Places a citation in 
+\end{describemacro}

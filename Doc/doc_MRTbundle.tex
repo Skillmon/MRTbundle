@@ -1,27 +1,12 @@
-\documentclass[oneside]{MRTthesis}
+\documentclass[oneside,UKenglish]{MRTthesis}
+
+\input{preamble/doc_macros.tex}
 
 \usepackage{collcell}
+\usepackage{booktabs}
+\usepackage{microtype}
 
 \MRTthesisSetup{stretches=1,stretch tab=1.408}
-
-% documentation macros >>>
-\newcommand*\pkg[1]{\textrm{#1}}
-\newcommand*\cls[1]{\textrm{#1}}
-\newcommand*\env[1]{\texttt{#1}}
-\long\def\eatspace#1 #2{#1#2}
-\newcommand*\cs{\texorpdfstring{\csTeXString}{\csPDFString}}
-\protected\def\csTeXString#1%>>>
-  {%
-    \texttt{\expandafter\eatspace\string\ \detokenize{#1}}%
-  }%<<<
-\def\csPDFString#1{(macro #1)}
-\protected\def\meta#1{\texttt{$\langle$\textit{#1}$\rangle$}}
-\newcommand*\metaEnclosed[3]{\texttt{#1}\meta{#2}\texttt{#3}}
-\newcommand*\marg[1]{\metaEnclosed{\{}{#1}{\}}}
-\newcommand*\oarg[1]{\metaEnclosed{[}{#1}{]}}
-\newcommand*\barg[1]{\metaEnclosed{(}{#1}{)}}
-\newcommand*\carg[2]{\texttt{(}\meta{#1},\meta{#2}\texttt{)}}
-% <<<
 
 \begin{document}
 \tableofcontents
@@ -39,7 +24,7 @@ Of course this documentation is created with one of the provided classes, namely
 \include{tex/doc_MRTif}
 \include{tex/doc_MRTsfacc}
 
-\chapter{Bug reports}
+\chapter{Bug reports}\label{sec:bugs}
 You can report bugs if you find some via email:
 \href{mailto:mrt_depp@yahoo.de?subject=MRTbundle -- bug report}
   {mrt\_depp@yahoo.de}

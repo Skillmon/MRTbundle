@@ -11,6 +11,11 @@ accent horizontally depending on the height of the accented character.
 Furthermore it is tested whether the character is an alphabetic one by checking
 the category code. If it is not an alphabetic character the shift isn't applied.
 
+You can specify the shift based on the multiple of the height as the package
+option. This is the only option the package takes and is not checked to be a
+valid float. The default is \makeatletter\texttt{\MRTsfacc@shift}\makeatother.
+Alternatively you can use \cs{MRTsfaccSet} to set the coefficient.
+
 One can use \texttt{*} to enforce the shift and \texttt{!} to enforce the
 omitting of that shift. Consider the following example:
 \verb$\hat!{m}$ produces $\hat!{m}$, \verb$\hat*{m}$ produces $\hat*{m}$, and
@@ -80,5 +85,5 @@ in $\hat{*}\hat{!}$.
 \end{table}
 
 The resulting \cs{mathaccentV} macro is not expandable and therefore created
-\cs{protected}. You can take a look at the results at table \ref{tab:sfacc}.
+\cs{protected}. You can take a look at the results at \autoref{tab:sfacc}.
 
