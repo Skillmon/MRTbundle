@@ -28,6 +28,10 @@
 \newif\ifNoExplicitCite
 \newif\ifProgressBar
 \newif\ifOnlyOneTopRule
+\def\OnlyOneTopRulefalse
+  {\let\ifOnlyOneTopRule\iffalse\contentheight=.58\paperheight}
+\def\OnlyOneTopRuletrue
+  {\let\ifOnlyOneTopRule\iftrue\contentheight=.71\paperheight}
 \newif\if@MRTbeam@Grid@
 \newif\if@MRTbeam@bibliography@
 \newif\if@MRTbeam@StarredSection@
@@ -104,8 +108,12 @@
 \let\footnoterule\relax
 \gdef\MRTbeam@Grid@defaults{xstep={0.05\paperwidth},ystep=0.1\paperheight,help lines}
 \tikzset{MRTbeam@Grid@options/.style={xstep={0.05\paperwidth},ystep={0.1\paperheight},help lines}}
-\newcommand*{\MRT@expandonce}[1]{%
-  \edef\ProcessedArgument{\unexpanded\expandafter{#1}}}
+\ExplSyntaxOn
+\NewDocumentCommand \MRT@expandonce { +m }% >>>
+  {
+    \tl_set:No \ProcessedArgument { #1 }
+  }% <<<
+\ExplSyntaxOff
 \newcommand*{\MRTbeam@frametitle}[1]{%>>>
   \ifOnlyOneTopRule% no title if only one top rule
     \vskip-.101\paperheight
@@ -177,9 +185,8 @@
   \IfNoValueTF{#2}%
     {%
       \def\@advisor{Betreuer}%
-      \IfBooleanTF{#1}%
+      \IfBooleanT{#1}%
         {\edef\@advisor{\@advisor in}}%
-        {}%
     }%
     {%
       \def\@advisor{#2}%

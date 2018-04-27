@@ -1,9 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{beamer}}
 \ProcessOptions\relax
-\RequirePackage{helvet}
-\RequirePackage{MRTsfacc}
-\RequirePackage{xparse}
+\RequirePackage{helvet,MRTsfacc,xparse}
 \LoadClass{beamer}
 \ProvidesClass{MRTbeam}
   [2018/04/21 beamer template for MRT - University of Bayreuth]
