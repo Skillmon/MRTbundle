@@ -16,15 +16,15 @@ option. This is the only option the package takes and is not checked to be a
 valid float. The default is \makeatletter\texttt{\MRTsfacc@shift}\makeatother.
 Alternatively you can use \cs{MRTsfaccSet} to set the coefficient.
 
-One can use \texttt{*} to enforce the shift and \texttt{!} to enforce the
+One can use \texttt{*} to enforce the shift and \texttt{!}\@ to enforce the
 omitting of that shift. Consider the following example:
 \verb$\hat!{m}$ produces $\hat!{m}$, \verb$\hat*{m}$ produces $\hat*{m}$, and
 \verb$\hat{m}$ produces $\hat{m}$, which is the same as \verb$\hat*{m}$ since
 \texttt{m} has by default the category code of an alphabetic character.
 
-The tokens \texttt{*} and \texttt{!} must not be enclosed by braces if you want
-to specify the behaviour of \cs{mathaccentV}, so \verb$\hat{*}\hat{!}$ results
-in $\hat{*}\hat{!}$.
+The tokens \texttt{*} and \texttt{!}\@ must not be enclosed by braces if you
+want to specify the behaviour of \cs{mathaccentV}, so \verb$\hat{*}\hat{!}$
+results in $\hat{*}\hat{!}$.
 
 \begin{table}[!bp]
   \centering

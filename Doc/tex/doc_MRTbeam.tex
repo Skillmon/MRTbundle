@@ -139,7 +139,7 @@ only provided to set specific options, other macros are described in
 \begin{describemacro}{ifProgressBar,ProgressBartrue,ProgressBarfalse}
   If set true a progress bar will be shown in the middle of the slides foot at
   the frame number. You can customize the progress bar shown using
-  \cs{SetProgressBar}.
+  \cs{SetProgressBar} or \cs{ProgressBarStyle}.
 \end{describemacro}
 
 \begin{describemacro}{SetProgressBar}%
@@ -149,6 +149,24 @@ only provided to set specific options, other macros are described in
   at the description of \cs{ProgressBar} for an explanation what each of the
   parameters mean. If you use a \texttt{*} as one of the arguments the
   corresponding default value will remain unchanged.
+\end{describemacro}
+
+\begin{describemacro}{ProgressBarStyle}[\meta{*}\marg{style}]
+  This sets the progress bar options to a predefined \meta{style} using the
+  unstarred version of \cs{SetProgressBar}. If the starred version of
+  \cs{ProgressBarStyle} is used \cs{ProgressBartrue} is issued. Currently there
+  is only one style available:\par
+  \bigskip
+  \noindent
+  \small
+  \begin{tabularx}{\textwidth}{l*4cX}
+    \toprule
+    style & align & length & height & voffset & description\\
+    \midrule
+    Spratte & c & \cs{paperwidth} & 2pt & 3pt
+      & A thin line spanning the whole page width at the bottom of the frame\\
+    \bottomrule
+  \end{tabularx}
 \end{describemacro}
 
 \subsection{Footnote related}

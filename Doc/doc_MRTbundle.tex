@@ -3,13 +3,16 @@
 \MRTthesisSetup
   {
     ,no advisor
-    ,no author sort
     ,no citation
+    ,no logos
     ,no degree
     ,no examinor
     ,no institute
     ,no thesis
     ,with subtitle
+    ,number=00-00-00-0
+    ,stretches=1
+    ,stretch tab=1.408
   }
 
 \ExplSyntaxOn
@@ -18,17 +21,17 @@
 
 \input{preamble/doc_macros.tex}
 
+\usepackage{tabularx}
 \usepackage{collcell}
 \usepackage{booktabs}
 \usepackage{microtype}
 \usepackage{tikz}
 \usepackage{multicol}
-
-\MRTthesisSetup{stretches=1,stretch tab=1.408}
+\usepackage{enumitem}
 
 \title{The \cls{MRTbundle}}
 \subtitle{\LaTeX\ Templates for the MRT, University of Bayreuth}
-\author{Jonathan P. Spratte}
+\author[J. P. Spratte, T. von Günther]{Spratte, Jonathan P. \and von Günther, Theodor}
 
 \begin{document}
 \maketitle
