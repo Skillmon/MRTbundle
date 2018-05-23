@@ -32,15 +32,12 @@ results in $\hat{*}\hat{!}$.
   \newcommand\hatex[1]{$\hat!{#1}$}%
   \newcommand\hatst[1]{$\hat*{#1}$}%
   \def\multfillcnt{6}%
-  \hfillmult{\multfillcnt}\begin{tabular}
+  \hfillmult{\multfillcnt}\begin{MRTtabular}[][1]
     {%
       *2{>{\collectcell\hatex}c<{\endcollectcell}}
       *2{>{\collectcell\hatst}c<{\endcollectcell}}
     }
-    \hline
-    \rowcolor{tablegray}
     \multicolumn{2}{c}{original} & \multicolumn{2}{c}{shifted} \\ 
-    \hline
     a & A & a & A \\
     b & B & b & B \\
     c & C & c & C \\
@@ -54,17 +51,13 @@ results in $\hat{*}\hat{!}$.
     k & K & k & K \\
     l & L & l & L \\
     m & M & m & M \\
-    \hline
-  \end{tabular}\hfill
-  \begin{tabular}
+  \end{MRTtabular}\hfill
+  \begin{MRTtabular}[][1]
     {%
       *2{>{\collectcell\hatex}c<{\endcollectcell}}
       *2{>{\collectcell\hatst}c<{\endcollectcell}}
     }
-    \hline
-    \rowcolor{tablegray}
     \multicolumn{2}{c}{original} & \multicolumn{2}{c}{shifted} \\ 
-    \hline
     n & N & n & N \\
     o & O & o & O \\
     p & P & p & P \\
@@ -78,8 +71,7 @@ results in $\hat{*}\hat{!}$.
     x & X & x & X \\
     y & Y & y & Y \\
     z & Z & z & Z \\
-    \hline
-  \end{tabular}\hfillmult{\multfillcnt}%
+  \end{MRTtabular}\hfillmult{\multfillcnt}%
   \caption{Comparison of shifted accents against original placement}
   \label{tab:sfacc}
 \end{table}

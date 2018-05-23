@@ -1,0 +1,826 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\RequirePackage{expl3,xparse,setspace,array}
+\RequirePackage[table]{xcolor}
+\ProvidesExplClass
+  {MRTtab} {2018/05/22}
+  {0.1}    {tables matching the style in MRT scripts}
+
+%% package variables >>>
+%%=============================================================================
+\newcolumntype{?}{!{\d@llarend&\span\@gobbletwo}}
+\definecolor{tablegray}{gray}{0.85}
+\tl_new:N  \l_MRTtab_tmpa_tl
+\int_new:N \l_MRTtab_tmpa_int
+\int_new:N \l_MRTtab_tmpb_int
+\int_new:N \g__MRTtab_current_row_int
+\int_new:N \g__MRTtab_color_upto_int
+\int_gset:Nn \g__MRTtab_color_upto_int { -100 }
+\bool_new:N \l_MRTtab_longtable_bool
+\bool_new:N \g__MRTtab_komaoptions_defined_bool%>>>
+\bool_gset:Nn \g__MRTtab_komaoptions_defined_bool
+  { \cs_if_exist_p:N \KOMAoptions }%<<<
+\bool_new:N \l_MRTtab_caption_above_bool
+\bool_new:N \g__MRTtab_head_bool
+\tl_new:N \l_MRTtab_table_lable_tl
+\tl_new:N \g__MRTtab_bol_hook_private_tl
+\tl_new:N \g__MRTtab_eol_hook_private_tl
+\tl_new:N \l__MRTtab_bol_hook_public_tl
+\tl_new:N \l__MRTtab_eol_hook_public_tl
+\tl_new:N \l__MRTtab_table_pre_hook_tl
+\tl_new:N \l__MRTtab_table_post_hook_tl
+% messages >>>
+\msg_new:nnn { MRTtab } { patch~failed } { Patching~of~\string#1~failed. }
+\msg_new:nnn { MRTtab } { KOMA~not~loaded }
+  { It~seems~like~KOMA~is~not~loaded.#1 } 
+\bool_if:NF \l_MRTtab_longtable_bool
+  {
+    \msg_new:nnn { MRTtab } { option~longtable~not~used }
+      {
+        You~have~not~used~the~option~longtable~during~package~load~time,~
+        therefore~the~key~#1~is~not~defined.
+      }
+  }
+% <<<
+%%==========================================================================<<<
+
+\DeclareOption { longtable } { \bool_set_true:N \l_MRTtab_longtable_bool }
+\ProcessOptions\relax
+
+\bool_if:NT \l_MRTtab_longtable_bool { \RequirePackage{longtable} }
+
+%% options >>>
+%%=============================================================================
+\cs_new:Nn \__MRTtab_caption_above:%>>>
+  {
+    \bool_if:NT \g__MRTtab_komaoptions_defined_bool
+      { \KOMAoptions{captions=tableheading} }
+    \bool_set_true:N \l_MRTtab_caption_above_bool
+  }%<<<
+\cs_new:Nn \__MRTtab_caption_below:%>>>
+  {
+    \bool_if:NT \g__MRTtab_komaoptions_defined_bool
+      { \KOMAoptions{captions=tablesignature} }
+    \bool_set_false:N \l_MRTtab_caption_above_bool
+  }%<<<
+\cs_new:Nn \__MRTtab_stretch_caption:n%>>>
+  {
+    \__MRTtab_setkomafont:nn { caption }      { \setstretch { #1 } \normalfont }
+    \__MRTtab_setkomafont:nn { captionlabel } { \setstretch { #1 } \normalfont }
+  }%<<<
+\cs_new:Nn \__MRTtab_setkomafont:nn%>>>
+  {
+    \bool_if:NTF \g__MRTtab_komaoptions_defined_bool
+      { \setkomafont { #1 } { #2 } }
+      {
+        \msg_warning:nnn { MRTtab } { KOMA~not~loaded }
+          { ~Therefore~\setkomafont~is~not~available. }
+      }
+  }%<<<
+\cs_new:Nn \__MRTtab_table_stripe_invert:%>>>
+  {
+    \tl_set_eq:NN \l_MRTtab_tmpa_tl             \l_MRTtab_table_scolor_one_tl
+    \tl_set_eq:NN \l_MRTtab_table_scolor_one_tl \l_MRTtab_table_scolor_two_tl
+    \tl_set_eq:NN \l_MRTtab_table_scolor_two_tl \l_MRTtab_tmpa_tl
+  }%<<<
+\cs_new_protected:Nn \__MRTtab_table_label_key:n%>>>
+  {
+    \tl_if_blank:nTF { #1 }
+      { \tl_set:Nn \l_MRTtab_table_lable_tl {} }
+      { \tl_set:Nn \l_MRTtab_table_lable_tl { \label{#1} } }
+  }%<<<
+\keys_define:nn { MRTtab }%>>>
+  {
+    ,caption~above   .code:n             = { \__MRTtab_caption_above: }
+    ,caption~above   .value_forbidden:n  = true
+    ,above           .meta:n             = { caption~above }
+    ,above           .value_forbidden:n  = true
+    ,BoL             .code:n             = { \MRTtabAddtoBoLHook { #1 } }
+    ,caption~below   .code:n             = { \__MRTtab_caption_below: }
+    ,caption~below   .value_forbidden:n  = true
+    ,below           .meta:n             = { caption~below }
+    ,below           .value_forbidden:n  = true
+    ,EoL             .code:n             = { \MRTtabAddtoEoLHook { #1 } }
+    ,stretch~tabular .tl_set:N           = \l_MRTtab_stretch_tl
+    ,stretch~tabular .initial:n          = { 1 }
+    ,stretch~tab     .meta:n             = { stretch~tabular = { #1 } }
+    ,stretch         .meta:n             = { stretch~tabular = { #1 } }
+    ,stretch~caption .code:n             = \__MRTtab_stretch_caption:n { #1 }
+    ,stretch~cap     .meta:n             = { stretch~caption = { #1 } }
+    ,cstretch        .meta:n             = { stretch~caption = { #1 } }
+    % for MRTtable
+    ,caption         .tl_set:N           = \l_MRTtab_table_cap_tl
+    ,cap             .meta:n             = { caption = { #1 } }
+    ,columns         .tl_set:N           = \l_MRTtab_table_col_tl
+    ,columns         .initial:n          = { l?c }
+    ,col             .meta:n             = { columns = { #1 } }
+    ,float           .bool_set:N         = \l_MRTtab_table_float_bool
+    ,float           .default:n          = { true }
+    ,float           .initial:n          = { true }
+    ,head~rows       .int_set:N          = \g__MRTtab_color_upto_int
+    ,head~rows       .initial:n          = { 1 }
+    ,head            .meta:n             = { head~rows = { #1 } }
+    ,label           .code:n             = { \__MRTtab_table_label_key:n #1 }
+    ,no~float        .bool_set_inverse:N = \l_MRTtab_table_float_bool
+    ,no~float        .default:n          = { true }
+    ,pos             .tl_set:N           = \l_MRTtab_table_pos_tl
+    ,pos             .initial:n          = { tbp }
+    ,post~tab        .code:n             = { \MRTtabAddtoPostHook { #1 } }
+    ,pre~tab         .code:n             = { \MRTtabAddtoPreHook  { #1 } }
+    ,short caption   .tl_set:N           = \l_MRTtab_table_scap_tl
+    ,short cap       .meta:n             = { short caption = { #1 } }
+    ,scap            .meta:n             = { short caption = { #1 } }
+    ,striped         .bool_set:N         = \l_MRTtab_table_striped_bool
+    ,stripe~color~1  .tl_set:N           = \l_MRTtab_table_scolor_one_tl
+    ,stripe~color~1  .initial:n          = { tablegray!50 }
+    ,stripe~1        .meta:n             = { stripe~color~1 = { #1 } }
+    ,scolor~1        .meta:n             = { stripe~color~1 = { #1 } }
+    ,scolor1         .meta:n             = { stripe~color~1 = { #1 } }
+    ,stripe~color~2  .tl_set:N           = \l_MRTtab_table_scolor_two_tl
+    ,stripe~color~2  .initial:n          = { white }
+    ,stripe~2        .meta:n             = { stripe~color~2 = { #1 } }
+    ,scolor~2        .meta:n             = { stripe~color~2 = { #1 } }
+    ,scolor2         .meta:n             = { stripe~color~2 = { #1 } }
+    ,stripe~invert   .code:n             = \__MRTtab_table_stripe_invert:
+    ,stripe~invert   .value_forbidden:n  = true
+    ,sinvert         .meta:n             = { stripe~invert }
+    ,sinvert         .value_forbidden:n  = true
+    ,stripe~start    .tl_set:N           = \l_MRTtab_table_stripe_start_tl
+    ,stripe~start    .initial:n          = { 2 }
+    ,sstart          .meta:n             = { stripe~start = { #1 } }
+  }%<<<
+\bool_if:NTF \l_MRTtab_longtable_bool%>>>
+  {
+    \keys_define:nn { MRTtab }%>>>
+      {
+        ,long                  .bool_set:N = \l_MRTtab_table_long_bool
+        ,long                  .default:n  = { true }
+        ,continue~caption      .tl_set:N   = \l_MRTtab_contcap_tl
+        ,cont~cap              .meta:n     = { continue~caption }
+        ,continue~with~caption .bool_set:N = \l_MRTtab_contwcap_bool
+        ,continue~with~caption .default:n  = { true }
+        ,cont~with~cap         .meta:n     = { continue~with~caption = { #1 } }
+        ,cont~with~cap         .default:n  = { true }
+        ,cont~w~cap            .meta:n     = { continue~with~caption = { #1 } }
+        ,cont~w~cap            .default:n  = { true }
+      }%<<<
+  }
+  {
+    \bool_new:N \l_MRTtab_table_long_bool
+    \clist_map_inline:nn%>>>
+      {
+        long, continue~caption, cont~cap, continue~with~caption, cont~with~cap,
+        cont~w~cap
+      }
+      {
+        \keys_define:nn { MRTtab }
+          {
+            #1.code:n =
+              { \msg_error:nnn { MRTtab } { option~longtable~not~used } { #1 } }
+          }
+      }%<<<
+  }%<<<
+%%==========================================================================<<<
+
+%% package macros >>>
+%%=============================================================================
+\NewDocumentCommand \MRTtabSetup { +m }%>>>
+  {
+    \keys_set:nn { MRTtab } { #1 }
+  }%<<<
+%%==========================================================================<<<
+
+%% MRTtabular >>>
+%%=============================================================================
+\cs_new:Npn \MRTtab@BoLHook%>>>
+  {
+    \g__MRTtab_bol_hook_private_tl
+    \l__MRTtab_bol_hook_public_tl
+  }%<<<
+\cs_new:Npn \MRTtab@EoLHook%>>>
+  {
+    \g__MRTtab_eol_hook_private_tl
+    \l__MRTtab_eol_hook_public_tl
+  }%<<<
+\cs_new_protected:Npn \MRTtab@@arraystarthook%>>>
+  {
+    \int_gset:Nn \g__MRTtab_current_row_int { \c_zero }
+  }%<<<
+\cs_new_protected:Nn \MRTtab_step_row:%>>>
+  {
+    \int_gincr:N \g__MRTtab_current_row_int
+  }%<<<
+\cs_new_protected:Nn \MRTtab_addto_private_bol_hook:n%>>>
+  {
+    \tl_gput_right:Nn \g__MRTtab_bol_hook_private_tl { #1 }
+  }%<<<
+\cs_new_protected:Nn \MRTtab_addto_private_eol_hook:n%>>>
+  {
+    \tl_gput_right:Nn \g__MRTtab_eol_hook_private_tl { #1 }
+  }%<<<
+\cs_new_protected:Nn \MRTtab_clear_private_bol_hook:%>>>
+  {
+    \tl_gclear:N \g__MRTtab_bol_hook_private_tl
+  }%<<<
+\cs_new_protected:Nn \MRTtab_clear_private_eol_hook:%>>>
+  {
+    \tl_gclear:N \g__MRTtab_eol_hook_private_tl
+  }%<<<
+\cs_new_protected:Nn \MRTtab_addto_public_bol_hook:n%>>>
+  {
+    \tl_put_right:Nn \l__MRTtab_bol_hook_public_tl { #1 }
+  }%<<<
+\cs_new_protected:Nn \MRTtab_addto_public_eol_hook:n%>>>
+  {
+    \tl_put_right:Nn \l__MRTtab_eol_hook_public_tl { #1 }
+  }%<<<
+\cs_new_protected:Nn \MRTtab_clear_public_bol_hook:%>>>
+  {
+    \tl_clear:N \l__MRTtab_bol_hook_public_tl
+  }%<<<
+\cs_new_protected:Nn \MRTtab_clear_public_eol_hook:%>>>
+  {
+    \tl_clear:N \l__MRTtab_eol_hook_public_tl
+  }%<<<
+\cs_new_protected:Nn \MRTtab_patchcmd:Nnn%>>>
+  {
+    \patchcmd #1 { #2 } { #3 } {} 
+      { \msg_error:nnn { MRTtab } { patch~failed} { #1 } }
+  }%<<<
+\cs_new_protected:Nn \MRTtab_pretocmd:Nn%>>>
+  {
+    \pretocmd #1 { #2 } {} { \msg_error:nnn { MRTtab } { patch~failed } { #1 } }
+  }%<<<
+\cs_new_protected:Nn \MRTtab_apptocmd:Nn%>>>
+  {
+    \apptocmd #1 { #2 } {} { \msg_error:nnn { MRTtab } { patch~failed } { #1 } }
+  }%<<<
+\cs_new_protected:Npn \MRTtab@unpatcharray%>>>
+  {
+    \cs_set_eq:NN \@@array      \@@array_original
+    \cs_set_eq:NN \@arraycr     \@arraycr_original
+    \cs_set_eq:NN \@xarraycr    \@xarraycr_original
+    \cs_set_eq:NN \@xargarraycr \@xargarraycr_original
+    \cs_set_eq:NN \@yargarraycr \@yargarraycr_original
+    \cs_set_eq:NN \tabular      \tabular_original
+    \cs_set_eq:NN \endtabular   \endtabular_original
+  }%<<<
+\cs_new_protected:Nn \MRTtab_patch_array:%>>>
+  {
+    \cs_set_eq:NN \@@array_original      \@@array
+    \cs_set_eq:NN \@arraycr_original     \@arraycr
+    \cs_set_eq:NN \@xarraycr_original    \@xarraycr
+    \cs_set_eq:NN \@xargarraycr_original \@xargarraycr
+    \cs_set_eq:NN \@yargarraycr_original \@yargarraycr
+    \cs_set_eq:NN \tabular_original      \tabular
+    \cs_set_eq:NN \endtabular_original   \endtabular
+    \MRTtab_pretocmd:Nn  \tabular      { \MRTtab@unpatcharray }
+    \MRTtab_pretocmd:Nn  \@@array      { \MRTtab@@arraystarthook }
+    \MRTtab_pretocmd:Nn  \@arraycr     { \MRTtab@EoLHook }
+    \MRTtab_apptocmd:Nn  \@yargarraycr { \MRTtab@BoLHook }
+    \MRTtab_patchcmd:Nnn \@xarraycr    { \cr } { \cr \MRTtab@BoLHook }
+    \MRTtab_patchcmd:Nnn \@xargarraycr { \cr } { \cr \MRTtab@BoLHook }
+    \MRTtab_patchcmd:Nnn \@@array      { \cr } { \cr \noexpand \MRTtab@BoLHook }
+  }%<<<
+\cs_new:Nn \MRTtab_head_start_inner:%>>>
+  {
+    \int_compare:nNnF \g__MRTtab_current_row_int = \c_one
+      { \MRTtab_surround_lines: }
+    \headR
+  }%<<<
+\cs_new:Nn \MRTtab_declare_head_macro:%>>>
+  {
+    \DeclareExpandableDocumentCommand \head { m }
+      {
+        \headS
+        \noalign
+          {
+            \int_gset:Nn \g__MRTtab_color_upto_int
+              { \g__MRTtab_current_row_int + ##1 - \c_one }
+          }
+      }
+    \MRTtab_declare_head_macrosSRE:
+  }%<<<
+\cs_new:Nn \MRTtab_declare_head_macrosSRE:%>>>
+  {
+    \DeclareExpandableDocumentCommand \headS { }
+      {
+        \noalign { \bool_gset_true:N \g__MRTtab_head_bool }
+        \MRTtab_head_start_inner:
+      }
+    \DeclareExpandableDocumentCommand \headR { }
+      {
+        \rowcolor { tablegray }
+      }
+    \DeclareExpandableDocumentCommand \headE { }
+      {
+        \noalign { \bool_gset_false:N \g__MRTtab_head_bool }
+        \MRTtab_surround_lines:
+      }
+  }%<<<
+\cs_new:Nn \MRTtab_surround_lines:%>>>
+  {
+    \int_compare:nNnF
+      { \g__MRTtab_color_upto_int + 1 } = { \g__MRTtab_current_row_int }
+      { \crcr \hline }
+  }%<<<
+\cs_new:Nn \MRTtab_head_hook:%>>>
+  {
+    \int_compare:nNnTF \g__MRTtab_current_row_int > \g__MRTtab_color_upto_int
+      {
+        \int_compare:nNnT
+          { \g__MRTtab_color_upto_int + \c_one } = \g__MRTtab_current_row_int
+          { \headE\hline }
+      }
+      {
+        \headR
+      }
+  }%<<<
+\MRTtab_addto_private_bol_hook:n { \noalign { \MRTtab_step_row: } }
+\MRTtab_addto_private_bol_hook:n { \MRTtab_head_hook: }
+\NewDocumentEnvironment { MRTtabular } { O{} o +m }% >>>
+  {% begin >>>
+    \MRTtab_patch_array:
+    \MRTtab_declare_head_macro:
+    \bool_gset_false:N \g__MRTtab_head_bool
+    \IfValueT { #2 } { \int_gset:Nn \g__MRTtab_color_upto_int { #2 } }
+    \setstretch { \l_MRTtab_stretch_tl }
+    \begin{tabular_original}[#1]{#3}
+      \MRTtab_surround_lines:
+  }%<<<
+  {% end >>>
+      \MRTtab_surround_lines:
+      %\crcr\hline
+    \end{tabular_original}
+    \int_gset:Nn \g__MRTtab_color_upto_int { -100 }
+  }%<<<
+  % <<<
+\NewDocumentCommand \MRTtabAddtoBoLHook { +m }%>>>
+  {
+    \MRTtab_addto_public_bol_hook:n { #1 }
+  }%<<<
+\NewDocumentCommand \MRTtabAddtoEoLHook { +m }%>>>
+  {
+    \MRTtab_addto_public_eol_hook:n { #1 }
+  }%<<<
+\NewDocumentCommand \MRTtabClearBoLHook {}%>>>
+  {
+    \MRTtab_clear_public_bol_hook:
+  }%<<<
+\NewDocumentCommand \MRTtabClearEoLHook {}%>>>
+  {
+    \MRTtab_clear_public_eol_hook:
+  }%<<<
+\NewExpandableDocumentCommand \MRTtabCurrentRow {}%>>>
+  {
+    \int_use:N \g__MRTtab_current_row_int
+  }%<<<
+\NewDocumentCommand \MRTtabDeclareHeadMacros {}%>>>
+  {
+    \MRTtab_declare_head_macrosSRE:
+  }%<<<
+%%==========================================================================<<<
+
+%% MRTcline >>>
+%%=============================================================================
+\tl_new:N \l__MRTtab_cline_output_tl
+\cs_new:Nn \MRTtab_cline_output_single:nNnnnn%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    % #4 right skip
+    % #5 start column
+    % #6 end column
+    \tl_put_right:Nn \l__MRTtab_cline_output_tl
+      {
+        \@multicnt#5
+        \advance\@multispan\m@ne
+        \ifnum\@multicnt=\@ne
+          \@firstofone{&\omit}
+        \fi
+        \@multicnt#6
+        \advance\@multicnt -#5
+        \advance\@multispan\@ne
+        \group_begin:
+          \color{#1}\rule{#3}\arrayrulewidth
+        \group_end:
+        \group_begin:
+          \bool_if:NTF #2 { \color { #1 } } { \CT@arc@ }
+          \leaders\hrule\@height\arrayrulewidth\hfill
+        \group_end:
+        \group_begin:
+          \color{#1}\rule{#4}\arrayrulewidth
+        \group_end:
+        \cr
+        \noalign{\vskip-\arrayrulewidth}
+      }
+  }%<<<
+\cs_generate_variant:Nn \MRTtab_cline_output_single:nNnnnn { xNxxxx }
+\cs_new:Nn \MRTtab_cline_output_strip:nNnnnn%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    % #4 right skip
+    % #5 start column
+    % #6 end column
+    \MRTtab_cline_output_single:xNxxxx
+      { \tl_trim_spaces:n { #1 } }
+      #2
+      { \tl_trim_spaces:n { #3 } }
+      { \tl_trim_spaces:n { #4 } }
+      { \tl_trim_spaces:n { #5 } }
+      { \tl_trim_spaces:n { #6 } }
+  }%<<<
+\cs_new:Npn \MRTtab_cline_split_columns:nNnnw #1 #2 #3 #4 #5 - #6 \q_stop%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    % #4 right skip
+    % #5 start column
+    % #6 end column
+    \MRTtab_cline_output_strip:nNnnnn { #1 } #2 { #3 } { #4 } { #5 } { #6 }
+  }%<<<
+\cs_new:Npn \MRTtab_cline_get_columns:nNnnw #1 #2 #3 #4 #5 \q_stop%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    % #4 right skip
+    % #5 columns
+    %\tl_analysis_show:n { #5 }
+    \tl_if_in:nnTF { #5 } { , }
+      { \MRTtab_cline_column_group:nNnnn { #1 } #2 { #3 } { #4 } { #5 } }
+      {
+        \tl_if_in:nnTF { #5 } { - }
+          {
+            \MRTtab_cline_split_columns:nNnnw { #1 } #2 { #3 } { #4 } #5 \q_stop
+          }
+          {
+            \MRTtab_cline_output_strip:nNnnnn { #1 } #2 { #3 } { #4 } { #5 }
+            { #5 }
+          }
+      }
+  }%<<<
+\cs_new:Nn \MRTtab_cline_column_group:nNnnn%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    % #4 right skip
+    % #5 column group
+    %\tl_analysis_show:n { #5 }
+    %\tl_analysis_show:n { #6 }
+    \int_set:Nn \l_MRTtab_tmpb_int { \clist_count:n { #5 } }
+    \clist_map_inline:nn { #5 }
+      {
+        \int_decr:N \l_MRTtab_tmpb_int
+        \MRTtab_cline_get_columns:nNnnw { #1 } #2 { #3 } { #4 } ##1 \q_stop
+        \int_compare:nNnT \l_MRTtab_tmpb_int > 0
+          { \tl_put_right:Nn \l__MRTtab_cline_output_tl { \omit } }
+      }
+  }%<<<
+\cs_new:Nn \MRTtab_cline_peek_column_group:nNnn%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    % #4 right skip
+    \peek_meaning_ignore_spaces:NTF \c_group_begin_token
+      { \MRTtab_cline_column_group:nNnnw { #1 } #2 { #3 } { #4 } }
+      { \MRTtab_cline_get_columns:nNnnw { #1 } #2 { #3 } { #4 } }
+  }%<<<
+\cs_new:Npn \MRTtab_cline_get_right_skip:nNnw #1 #2 #3 [ #4 ]%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    % #4 right skip
+    %\MRTtab_cline_peek_column_group:nNnn { #1 } #2 { #3 } { #4 }
+    \MRTtab_cline_get_columns:nNnnw { #1 } #2 { #3 } { #4 }
+  }%<<<
+\cs_new:Nn \MRTtab_cline_peek_right_skip:nNn%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    \peek_meaning_ignore_spaces:NTF [%]
+      { \MRTtab_cline_get_right_skip:nNnw { #1 } #2 { #3 } }
+      { \MRTtab_cline_get_columns:nNnnw { #1 } #2 { #3 } { .5\tabcolsep } }
+  }%<<<
+\cs_new:Nn \MRTtab_cline_peek_right:nNn%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    \peek_meaning_remove_ignore_spaces:NTF >
+      { \MRTtab_cline_peek_right_skip:nNn { #1 } #2 { #3 } }
+      { \MRTtab_cline_get_columns:nNnnw { #1 } #2 { #3 } { 0pt } }
+  }%<<<
+\cs_new:Npn \MRTtab_cline_get_left_skip:nNw #1 #2 [ #3 ]%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    % #3 left skip
+    \MRTtab_cline_peek_right:nNn { #1 } #2 { #3 }
+  }%<<<
+\cs_new:Nn \MRTtab_cline_peek_left_skip:nN%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    \peek_meaning_ignore_spaces:NTF [%]
+      { \MRTtab_cline_get_left_skip:nNw { #1 } #2 }
+      { \MRTtab_cline_peek_right:nNn { #1 } #2 { .5\tabcolsep } }
+  }%<<<
+\cs_new:Nn \MRTtab_cline_peek_left:nN%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    \peek_meaning_remove_ignore_spaces:NTF <
+      { \MRTtab_cline_peek_left_skip:nN { #1 } #2 }
+      { \MRTtab_cline_peek_right:nNn { #1 } #2 { 0pt } }
+  }%<<<
+\cs_new:Npn \MRTtab_cline_individual_color:Nw #1 [ #2 ]%>>>
+  {
+    % #1 if star
+    % #2 fill color
+    \MRTtab_cline_peek_left:nN { #2 } #1
+  }%<<<
+\cs_new:Nn \MRTtab_cline_peek_color:nN%>>>
+  {
+    % #1 fill color
+    % #2 if star
+    \peek_meaning_ignore_spaces:NTF [%]
+      { \MRTtab_cline_individual_color:Nw #2 }
+      { \MRTtab_cline_peek_left:nN { #1 } #2 }
+  }%<<<
+\cs_new:Nn \MRTtab_cline_peek_star:n%>>>
+  {
+    % #1 fill color
+    \peek_meaning_remove_ignore_spaces:NTF *
+      { \MRTtab_cline_peek_color:nN { #1 } \c_true_bool }
+      { \MRTtab_cline_peek_color:nN { #1 } \c_false_bool }
+  }%<<<
+\cs_new:Nn \MRTtab_cline_arg_parser:nn%>>>
+  {
+    % #1 fill color
+    \int_set:Nn \l_MRTtab_tmpa_int { \clist_count:n { #2 } }
+    \clist_map_inline:nn { #2 }
+      {
+        \int_decr:N \l_MRTtab_tmpa_int
+        \MRTtab_cline_peek_star:n { #1 } ##1 \q_stop
+        \int_compare:nNnT \l_MRTtab_tmpa_int > 0
+          { \tl_put_right:Nn \l__MRTtab_cline_output_tl { \omit } }
+      }
+  }%<<<
+\cs_generate_variant:Nn \MRTtab_cline_arg_parser:nn { xn }
+\NewExpandableDocumentCommand \clineReveal { }%>>>
+  {
+    \noalign { \vskip \arrayrulewidth }
+  }%<<<
+\NewExpandableDocumentCommand \MRTcline { }%>>>
+  {
+    \omit
+    \MRTtab@cline
+  }%<<<
+\NewDocumentCommand \MRTtab@cline { o m }%>>>
+  {
+    \tl_clear:N \l__MRTtab_cline_output_tl
+    \MRTtab_cline_arg_parser:xn
+      {
+        \IfNoValueTF { #1 }
+          {
+            \bool_if:NTF \g__MRTtab_head_bool { tablegray }
+              {
+                \int_compare:nNnTF
+                  \g__MRTtab_current_row_int > \g__MRTtab_color_upto_int
+                  { white }
+                  { tablegray }
+              }
+          }
+          { #1 }
+      }
+      { #2 }
+    \l__MRTtab_cline_output_tl
+    \clineReveal
+    \bool_if:nT
+      {
+        \g__MRTtab_head_bool ||
+        !\int_compare_p:nNn
+          \g__MRTtab_current_row_int > \g__MRTtab_color_upto_int
+      }
+      { \headR }
+  }%<<<
+%%==========================================================================<<<
+
+%% MRTtable >>>
+%%=============================================================================
+%\cs_generate_variant:Nn \exp_last_unbraced:NNNV { NnNV }
+\cs_new:Nn \MRTtab_table_addto_pre_hook:n%>>>
+  {
+    \tl_put_right:Nn \l__MRTtab_table_pre_hook_tl { #1 }
+  }%<<<
+\cs_new:Nn \MRTtab_table_clear_pre_hook:%>>>
+  {
+    \tl_clear:N \l__MRTtab_table_pre_hook_tl
+  }%<<<
+\cs_new:Nn \MRTtab_table_addto_post_hook:n%>>>
+  {
+    \tl_put_right:Nn \l__MRTtab_table_post_hook_tl { #1 }
+  }%<<<
+\cs_new:Nn \MRTtab_table_clear_post_hook:%>>>
+  {
+    \tl_clear:N \l__MRTtab_table_post_hook_tl
+  }%<<<
+\cs_new:Nn \__MRTtab_table_caption:%>>>
+  {
+    \tl_if_blank:VF \l_MRTtab_table_cap_tl
+      {
+        \tl_if_blank:VTF \l_MRTtab_table_scap_tl
+          {
+            \caption { \l_MRTtab_table_cap_tl \l_MRTtab_table_lable_tl }
+          }
+          {
+            \caption
+              [ \l_MRTtab_table_scap_tl ]
+              { \l_MRTtab_table_cap_tl \l_MRTtab_table_lable_tl }
+          }
+      }
+  }%<<<
+\cs_new:Nn \__MRTtab_table_normal_start:%>>>
+  {
+    \bool_if:NTF \l_MRTtab_table_float_bool
+      {
+        \def\MRTtab@tmpa{\begin{table}}
+        \exp_last_unbraced:NNV \MRTtab@tmpa [ \l_MRTtab_table_pos_tl ]
+      }
+      {
+        \def \@captype { table }% make \caption work
+        \vskip \intextsep
+        \noindent
+        \begin { minipage } { \textwidth }
+      }
+    \centering
+    \bool_if:NT \l_MRTtab_caption_above_bool { \__MRTtab_table_caption: }
+    \l__MRTtab_table_pre_hook_tl
+    \exp_args:NnV \begin { MRTtabular } \l_MRTtab_table_col_tl
+  }%<<<
+\cs_new:Nn \__MRTtab_table_normal_end:%>>>
+  {
+    \end{MRTtabular}
+    \l__MRTtab_table_post_hook_tl
+    \bool_if:NF \l_MRTtab_caption_above_bool { \__MRTtab_table_caption: }
+    \bool_if:NTF \l_MRTtab_table_float_bool
+      { \end { table } }
+      {
+        \end { minipage }
+        \vskip \intextsep
+      }
+  }%<<<
+\cs_new:Nn \__MRTtab_table_long_start:%>>>
+  {
+    \msg_if_exist:nnF { MRTtab } { long~not~implemented }
+      {
+        \msg_new:nnn { MRTtab } { long~not~implemented } 
+          {
+            Sorry,~the~option~long~is~currently~not~implemented.~Using~normal~
+            version~and~ignoring~long~as~fallback.
+          }
+      }
+    \msg_error:nn { MRTtab } { long~not~implemented }
+    \cs_gset_eq:NN \__MRTtab_table_long_end: \__MRTtab_table_normal_end:
+    \__MRTtab_table_normal_start:
+  }%<<<
+\cs_new:Nn \__MRTtab_table_long_end:%>>>
+  {
+    \end { longtable }
+    \l__MRTtab_table_post_hook_tl
+  }%<<<
+\NewDocumentEnvironment { MRTtable } { O{} }%>>>
+  {% begin >>>
+    \MRTtabSetup { head = 1 }
+    \MRTtabSetup { #1 }
+    \bool_if:NT \l_MRTtab_table_striped_bool
+      {
+        \rowcolors { \l_MRTtab_table_stripe_start_tl }
+          { \l_MRTtab_table_scolor_one_tl } { \l_MRTtab_table_scolor_two_tl }
+      }
+    \bool_if:NTF \l_MRTtab_table_long_bool
+      { \__MRTtab_table_long_start: }
+      { \__MRTtab_table_normal_start: }
+  }%<<<
+  {% end >>>
+    \bool_if:NTF \l_MRTtab_table_long_bool
+      { \__MRTtab_table_long_end: }
+      { \__MRTtab_table_normal_end: }
+  }%<<<
+  %<<<
+\NewDocumentCommand \MRTtabAddtoPreHook { +m }%>>>
+  {
+    \MRTtab_table_addto_pre_hook:n { #1 }
+  }%<<<
+\NewDocumentCommand \MRTtabAddtoPostHook { +m }%>>>
+  {
+    \MRTtab_table_addto_post_hook:n { #1 }
+  }%<<<
+\NewDocumentCommand \MRTtabClearPreHook {}%>>>
+  {
+    \MRTtab_table_clear_pre_hook:
+  }%<<<
+\NewDocumentCommand \MRTtabClearPostHook {}%>>>
+  {
+    \MRTtab_table_clear_post_hook:
+  }%<<<
+%%==========================================================================<<<
+
+%% \endfirstfoot addition to longtable >>>
+%%=============================================================================
+% code from: https://tex.stackexchange.com/questions/68439/
+% it should allow a \endfirstfoot in longtable
+\newbox\LT@firstfoot
+\def\endfirstfoot{\LT@end@hd@ft\LT@firstfoot}
+\newdimen\LT@footdiff
+\def\LT@start{%
+    \let\LT@start\endgraf
+    \endgraf\penalty\z@
+    \vskip\LTpre
+    \LT@footdiff-\ht\LT@foot
+    \advance\LT@footdiff\ht\LT@firstfoot
+    \dimen@\pagetotal
+    \advance\dimen@ \ht\ifvoid\LT@firsthead\LT@head\else\LT@firsthead\fi
+    \advance\dimen@ \dp\ifvoid\LT@firsthead\LT@head\else\LT@firsthead\fi
+    \advance\dimen@ \ht\ifvoid\LT@firstfoot\LT@foot\else\LT@firstfoot\fi
+    \dimen@ii\vfuzz
+    \vfuzz\maxdimen
+    \setbox\tw@\copy\z@
+    \setbox\tw@\vsplit\tw@ to \ht\@arstrutbox
+    \setbox\tw@\vbox{\unvbox\tw@}%
+    \vfuzz\dimen@ii
+    \advance\dimen@ \ht
+        \ifdim\ht\@arstrutbox>\ht\tw@\@arstrutbox\else\tw@\fi
+    \advance\dimen@\dp
+        \ifdim\dp\@arstrutbox>\dp\tw@\@arstrutbox\else\tw@\fi
+    \advance\dimen@ -\pagegoal
+    \ifdim \dimen@>\z@\vfil\break\fi
+    \global\@colroom\@colht
+    \ifvoid\LT@firstfoot
+    \ifvoid\LT@foot
+    \else
+        \advance\vsize-\ht\LT@foot
+        \global\advance\@colroom-\ht\LT@foot
+        \dimen@\pagegoal\advance\dimen@-\ht\LT@foot\pagegoal\dimen@
+        \maxdepth\z@
+    \fi
+    \else
+    \advance\vsize-\ht\LT@firstfoot
+    \global\advance\@colroom-\ht\LT@firstfoot
+    \dimen@\pagegoal\advance\dimen@-\ht\LT@firstfoot\pagegoal\dimen@
+    \maxdepth\z@
+    \fi
+    \ifvoid\LT@firsthead\copy\LT@head\else\box\LT@firsthead\fi\nobreak
+    \output{\LT@output}%
+}
+\def\LT@output{%
+    \ifnum\outputpenalty <-\@Mi
+        \ifnum\outputpenalty > -\LT@end@pen
+            \LT@err{floats and marginpars not allowed in a longtable}\@ehc
+        \else
+            \setbox\z@\vbox{\unvbox\@cclv}%
+            \ifdim \ht\LT@lastfoot>\ht\LT@foot
+                \dimen@\pagegoal
+                \advance\dimen@-\ht\LT@lastfoot
+                \ifdim\dimen@<\ht\z@
+                    \setbox\@cclv\vbox{\unvbox\z@\copy\LT@foot\vss}%
+                    \@makecol
+                    \@outputpage
+                    \setbox\z@\vbox{\box\LT@head}%
+                \fi
+            \fi    
+            \global\@colroom\@colht
+            \global\vsize\@colht     
+            \vbox
+                {\unvbox\z@\box\ifvoid\LT@lastfoot\LT@foot\else\LT@lastfoot\fi}%
+        \fi
+    \else
+        \ifvoid\LT@firstfoot
+            \setbox\@cclv\vbox{\unvbox\@cclv\copy\LT@foot\vss}%
+            \@makecol
+            \@outputpage
+            \global\vsize\@colroom
+        \else
+            \setbox\@cclv\vbox{\unvbox\@cclv\box\LT@firstfoot\vss}%
+            \@makecol
+            \@outputpage
+            \global\advance\@colroom\LT@footdiff
+            \global\vsize\@colroom
+        \fi
+        \copy\LT@head\nobreak
+    \fi
+}
+%%==========================================================================<<<
+
+\endinput
+
+% vim: ft=tex fdm=marker fmr=>>>,<<< sw=2 ts=2 tw=80

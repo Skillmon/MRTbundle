@@ -1,0 +1,267 @@
+\chapter{The \pkg{MRTtab} package}
+The \pkg{MRTtab} provides means to typeset tables in a style similar to the ones
+in the scripts of the MRT. This includes:
+\begin{itemize}
+  \item delimited by horizontal rules on both ends
+  \item head rows are light grey and delimited by horizontal rules
+  \item all horizontal rules have the same thickness
+  \item no vertical rules (though not enforced)
+\end{itemize}
+
+The package provides an environment similar to \env{tabular}
+(\autoref{sec:tab:tabular}), an enhanced version of \cs{cline}
+(\autoref{sec:tab:cline}), and an environment to typeset displayed tables with
+many options available (\autoref{sec:tab:table}).
+
+\section{The \env{MRTtabular} environment}\label{sec:tab:tabular}%>>>
+The \env{MRTtabular} environment calls a patched \env{tabular} environment. The
+following differences exist:
+\begin{itemize}
+  \item a hook is provided at the beginning and the end of each line 
+  \item above and below of it a \cs{hline} is placed
+  \item it has an additional optional argument specifying the number of rows to
+    be formatted as head rows.
+  \item you can access the current row number
+\end{itemize}
+An ordinary description as done with other environments in this documentation:
+\begin{describeenv}{MRTtabular}%>>>
+  [\oarg{valign}\oarg{head rows}\marg{preamble}]
+  The first optional argument as well as the mandatory argument match the ones
+  of a regular \env{tabular} environment. \meta{head rows} specifies how many
+  rows at the beginning of the environment should be formatted as head rows. If
+  \meta{head rows} is not specified, no head row will be formatted. No
+  further markup is required for this formatting to take place. You should end
+  your rows only with \texttt{\string\\} to make the hook mechanism work (on
+  which the head row markup relies).
+\end{describeenv}%<<<
+
+\begin{describemacro}{head}[\marg{num}]%>>>
+  Additionally to the optional argument of \env{MRTtabular} to set the first $n$
+  rows as head rows, you can use \cs{head} to set the next \meta{num} rows as
+  head rows. This does not only work at the beginning of the environment but
+  anywhere you want. Alternatively you can use the macros described in
+  \autoref{sec:tab:explicit}.
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTtabAddtoBoLHook}[\marg{content}]%>>>
+  You can add \meta{content} to the Begin-of-Line hook with this macro. Bear in
+  mind that the \meta{content} should be fully expandable and not produce any
+  text, if you want to use stuff like \cs{multicolumn}, \cs{rowcolor}, or
+  \cs{cline} at the beginning of the line -- as this hook will be executed prior
+  to that and \cs{noalign} and \cs{omit} won't work in that case. If you need
+  something unexpandable you can enclose it in \cs{noalign}. The addition is
+  made locally.
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTtabClearBoLHook}%>>>
+  Clears the Begin-of-Line hook locally.
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTtabAddtoEoLHook}[\marg{content}]%>>>
+  You can also add \meta{content} to the End-of-Line hook. Here it should not
+  matter whether the contents are expandable or not, as it is impossible that
+  something follows in the same row which can't follow something unexpandable.
+  The addition is made locally.
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTtabClearEoLHook}%>>>
+  Clears the End-of-Line hook locally.
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTtabCurrentRow}%>>>
+  Returns the current row in an \env{MRTtabular} expandably.
+\end{describemacro}%<<<
+
+\subsection{Known Bugs}
+Currently only one bug is known: If after the last head row there is only one
+additional row the bottom \cs{hline} will only be drawn if you end that last row
+with \texttt{\string\\}. If you have more rows following the last head row,
+it won't matter whether you end the last row with \texttt{\string\\} or not.
+%<<<
+
+\section{The \cs{MRTcline} macro}\label{sec:tab:cline}%>>>
+\begin{describemacro}{MRTcline}%>>>
+  [\oarg{color}\{\meta{*}\oarg{color}%
+  \meta{<\oarg{left skip}}\meta{>\oarg{right skip}}\meta{cols}\}]
+  Sets something like a \cs{cline} in the specified \meta{cols}.
+
+  In the mandatory argument the only mandatory element is the affected
+  \meta{cols}.
+  
+  The mandatory argument can include a comma separated list in which you can
+  repeat every optional argument you like as many times as you like.
+  Additionally you can enclose the \meta{cols} in curly braces and give another
+  comma separated list there which then can only contain column specifications
+  and none of the optional arguments using the optional arguments specified
+  before that list. A valid column specification is a single column, or a column
+  range separated by a \texttt{-}, so something like \meta{start-end}.
+
+  Both \meta{color} arguments have the same effect, but the first applies to
+  every specification in the list, while the second only affects the current
+  list item. The \meta{color} doesn't change the color of the line, but the
+  color of the optional fill arguments. It defaults to either
+  \texttt{tabulargray} if used inside the scope of head rows, or \texttt{white}
+  else. If you give a \meta{*} the current list item will be completely in the
+  specified \meta{color}.
+
+  You can introduce a small skip on the left side if you specify a \meta{<}
+  which defaults to \verb|.5\tabcolsep|, with the optional \meta{left skip} you
+  can customize that length. A small skip to the right can be introduced with
+  \meta{>}, again of customizable width using \meta{right skip}.
+
+  You should only use one \cs{MRTcline} per line and specify every column you
+  want in that.
+\end{describemacro}%<<<
+
+I hope you got that rather cryptic description (if you can supply a better
+description, message me as noted in \autoref{sec:bugs}).
+
+Here are a few examples of usage with comparison to a correct \cs{cline} usage.
+The source of each table is printed below it. The last example of \cs{MRTcline}
+is not possible with the standard \cs{cline} as far as I know.
+\begin{multicols}{2}%>>>
+  \MRTthesisSetup{stretch tab=1}
+  \noindent
+  Using \cs{MRTcline}\\[1ex]
+  \begin{MRTtabular}{lll}
+    a & b & c\\
+    \MRTcline{1-2}
+    d & e & f\\
+    g & h & i\\
+    j & k & l\\
+  \end{MRTtabular}
+  \begin{verbatim}
+\begin{MRTtabular}{lll}
+  a & b & c\\
+  \MRTcline{1-2}
+  d & e & f\\
+  g & h & i\\
+  j & k & l\\
+\end{MRTtabular}
+  \end{verbatim}
+  \columnbreak
+  Using \cs{cline}\\[1ex]
+  \begin{MRTtabular}{lll}
+    a & b & c\\
+    \cline{1-2}
+    \clineReveal
+    d & e & f\\
+    g & h & i\\
+    j & k & l\\
+  \end{MRTtabular}
+  \begin{verbatim}
+\begin{MRTtabular}{lll}
+  a & b & c\\
+  \cline{1-2}
+  \clineReveal
+  d & e & f\\
+  g & h & i\\
+  j & k & l\\
+\end{MRTtabular}
+  \end{verbatim}
+\end{multicols}%<<<
+\begin{multicols}{2}%>>>
+  \MRTthesisSetup{stretch tab=1}
+  \noindent
+  \begin{MRTtabular}[][2]{lll}
+    a & b & c\\
+    \MRTcline{1-2,*3}
+    d & e & f\\
+    g & h & i\\
+    j & k & l\\
+  \end{MRTtabular}
+  \begin{verbatim}
+\begin{MRTtabular}[][2]{lll}
+  a & b & c\\
+  \MRTcline{1-2,*3}
+  d & e & f\\
+  g & h & i\\
+  j & k & l\\
+\end{MRTtabular}
+  \end{verbatim}
+  \begin{MRTtabular}[][2]{lll}
+    a & b & c\\
+    \MRTcline{<>1-2,*3}
+    d & e & f\\
+    g & h & i\\
+    j & k & l\\
+  \end{MRTtabular}
+  \begin{verbatim}
+\begin{MRTtabular}[][2]{lll}
+  a & b & c\\
+  \MRTcline{<>1-2,*3}
+  d & e & f\\
+  g & h & i\\
+  j & k & l\\
+\end{MRTtabular}
+  \end{verbatim}
+  \columnbreak
+  \begin{MRTtabular}[][2]{lll}
+    a & b & c\\
+    \cline{1-2}
+    \arrayrulecolor{tablegray}
+    \cline{3-3}
+    \arrayrulecolor{black}
+    \clineReveal
+    \rowcolor{tablegray}
+    d & e & f\\
+    g & h & i\\
+    j & k & l\\
+  \end{MRTtabular}
+  \begin{verbatim}
+\begin{MRTtabular}[][2]{lll}
+  a & b & c\\
+  \cline{1-2}
+  \arrayrulecolor{tablegray}
+  \cline{3-3}
+  \arrayrulecolor{black}
+  \clineReveal
+  \rowcolor{tablegray}
+  d & e & f\\
+  g & h & i\\
+  j & k & l\\
+\end{MRTtabular}
+  \end{verbatim}
+\end{multicols}%<<<
+
+\begin{describemacro}{clineReveal}
+  As you can see above the macro \cs{clineReveal} is used. This is done because
+  a \cs{cline} doesn't take up any vertical space (by issuing
+  \verb|\noalign{\vskip-\arrayrulewidth}|) as opposed to a \cs{hline}. This is
+  done so that multiple \cs{cline}s can be used in the same row. As a result the
+  spacing is inconsistent and a \cs{cline} is overlapped by a following
+  \cs{rowcolor} or \cs{cellcolor}. \cs{clineReveal} does introduce a vertical
+  skip which reveals the lines (issuing \verb|\noalign{\vskip\arrayrulewidth}|).
+  It is also used by \cs{MRTcline}.
+\end{describemacro}
+%<<<
+
+\section{The \env{MRTtable} environment}\label{sec:tab:table}%>>>
+%<<<
+
+\section{Explicit head rows}\label{sec:tab:explicit}%>>>
+It is possible to mark head rows explicitly. For this the following macros are
+provided:
+
+\begin{describemacro}{headS}%>>>
+  Start of the head rows. Sets a \cs{hline} above the current row except if the
+  current row is the first row in a \env{MRTtabular} environment. Additionally
+  the current row is coloured with \cs{rowcolor{tablegray}}.
+\end{describemacro}%<<<
+
+\begin{describemacro}{headR}%>>>
+  An additional head row should be started with this macro. It sets the current
+  row's colour to \texttt{tablegray}.
+\end{describemacro}%<<<
+
+\begin{describemacro}{headE}%>>>
+  The end of the head rows. Should be used after the last row of the table's
+  head but prior to the next row (immediately after \texttt{\string\\}).
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTtabDeclareHeadMacros}%>>>
+  By default the above macros are only available inside of \env{MRTtabular} (and
+  therefore also in the body of \env{MRTtable}). You can make them locally
+  available with \cs{MRTtabDeclareHead}.
+\end{describemacro}%<<<
+%<<<

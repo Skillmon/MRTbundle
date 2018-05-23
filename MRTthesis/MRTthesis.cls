@@ -24,7 +24,6 @@
 % <<<
 % ifs >>>
 \newif\ifMRTthesis@minimal@
-\newif\ifMRTthesis@longtabs@
 \newif\ifMRTthesis@mathsizes@
 \newif\ifMRTthesis@tikzuline@
 \newif\ifMRTthesis@UKenglish@
@@ -33,6 +32,7 @@
 % l3 variables >>>
 % tl >>>
 \tl_new:N \l_MRTthesis_tmpa_tl
+\tl_new:N \l_MRTthesis_tmpb_tl
 \tl_new:N \l_MRTthesis_titlepage_von_tl
 \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
 % <<<
@@ -40,13 +40,19 @@
 \seq_new:N \g_MRTthesis_authors_seq
 \seq_new:N \l_MRTthesis_tmpa_seq
 % <<<
+% clist >>>
+\clist_new:N \l_MRTthesis_tmpa_clist
+% <<<
+% box >>>
+\box_new:N \l_MRTthesis_tmpa_box
+% <<<
 % <<<
 %%==========================================================================<<<
 
 %% Class options and loading scrreprt >>>
 %%=============================================================================
 \DeclareOption{minimal}{\MRTthesis@minimal@true}
-\DeclareOption{longtabs}{\MRTthesis@longtabs@true}
+\DeclareOption{longtable}{\PassOptionsToPackage{longtable}{MRTtab}}
 \DeclareOption{mathsizes}{\MRTthesis@mathsizes@true}
 \DeclareOption{no mathsizes}{\MRTthesis@mathsizes@false}
 \DeclareOption{tikzunderline}{\MRTthesis@tikzuline@true}
@@ -63,6 +69,7 @@
 
 %% additional packages to achieve template formatting >>>
 %%=============================================================================
+\RequirePackage{MRTtab}
 \bool_if:nTF { \sys_if_engine_luatex_p: || \sys_if_engine_xetex_p: }
   {
     \RequirePackage{fontspec}
@@ -99,9 +106,6 @@
 \fi
 % 
 \AtBeginDocument{\RequirePackage{hyperref}\MRTthesis@after@hyperref}
-\ifMRTthesis@longtabs@
-  \RequirePackage{longtable}
-\fi
 \ifMRTthesis@minimal@
 \else
   \RequirePackage{siunitx}
@@ -131,18 +135,10 @@
     ,advisor         .tl_set:N   = \l_MRTthesis_advisor_tl
     ,author          .tl_set:N   = \l_MRTthesis_authors_tl
     ,degree          .tl_set:N   = \l_MRTthesis_degree_tl
-    ,caption~above   .multichoice:% >>>
-    ,caption~above/true  .code:n  =
-      {% >>>
-        \KOMAoptions{captions=tableheading}
-        \bool_set_true:N \l_MRTthesis_caption_above_bool
-      }% <<<
-    ,caption~above/false .code:n  =
-      {% >>>
-        \KOMAoptions{captions=tablesignature}
-        \bool_set_false:N \l_MRTthesis_caption_above_bool
-      }% <<<
-    % <<<
+    ,caption~above   .code:n     = { \MRTtabSetup { caption~above } }
+    ,caption~above   .value_forbidden:n = true
+    ,caption~below   .code:n     = { \MRTtabSetup { caption~below } }
+    ,caption~below   .value_forbidden:n = true
     ,examinor        .tl_set:N   = \l_MRTthesis_examinor_tl
     ,logoL           .tl_set:N   = \l_MRTthesis_logoL_tl
     ,logoL~height    .dim_set:N  = \l_MRTthesis_logoL_height_dim
@@ -150,8 +146,6 @@
     ,logoR~height    .dim_set:N  = \l_MRTthesis_logoR_height_dim
     ,no~advisor      .bool_set:N = \l_MRTthesis_no_advisor_bool
     ,no~advisor      .default:n  = { true }
-    ,no~author~sort  .bool_set:N = \l_MRTthesis_no_author_sort_bool
-    ,no~author~sort  .default:n  = { true }
     ,no~citation     .bool_set:N = \l_MRTthesis_no_citation_bool
     ,no~citation     .default:n  = { true }
     ,no~degree       .bool_set:N = \l_MRTthesis_no_degree_bool
@@ -160,33 +154,35 @@
     ,no~examinor     .default:n  = { true }
     ,no~institute    .bool_set:N = \l_MRTthesis_no_institute_bool 
     ,no~institute    .default:n  = { true } 
+    ,no~logos        .meta:n     = { logoL={},logoR={} }
     ,no~thesis       .bool_set:N = \l_MRTthesis_no_thesis_bool
     ,no~thesis       .default:n  = { true }
+    ,no~usage        .bool_set:N = \l_MRTthesis_no_usage_bool
+    ,no~usage        .default:n  = { true }
     ,number          .tl_set:N   = \l_MRTthesis_number_tl
     ,pos~figure      .tl_set:N   = \fps@figure
-    ,pos~float       .code:n     = 
-      \keys_set:nn { MRTthesis/setup } { pos~figure=#1, pos~table=#1 }
-    ,pos~MRTtab      .tl_set:N   = \l_MRTthesis_MRTtab_pos_tl
+    ,pos~float       .meta:n     = { pos~figure={#1}, pos~table={#1} }
+    ,pos~MRTtable    .code:n     = { \MRTtabSetup { pos = { #1 } } }
     ,pos~table       .tl_set:N   = \fps@table
     ,short~advisor   .tl_set:N   = \l_MRTthesis_s_advisor_tl
-    ,sadvisor        .meta:n     = { short~advisor }
+    ,sadvisor        .meta:n     = { short~advisor={#1} }
     ,short~author    .tl_set:N   = \l_MRTthesis_s_author_tl
-    ,sauthor         .meta:n     = { short~author }
+    ,sauthor         .meta:n     = { short~author={#1} }
     ,short~examinor  .tl_set:N   = \l_MRTthesis_s_examinor_tl
-    ,sexaminor       .meta:n     = { short~examinor }
+    ,sexaminor       .meta:n     = { short~examinor={#1} }
     ,sign~height     .dim_set:N  = \l_MRTthesis_sign_height_dim
     ,sign~seperation .dim_set:N  = \l_MRTthesis_sign_seperation_dim
-    ,sign~sep        .meta:n     = { sign~seperation }
+    ,sign~sep        .meta:n     = { sign~seperation={#1} }
     ,sign~width~max  .dim_set:N  = \l_MRTthesis_sign_width_max_dim
-    ,sign~width~min  .dim_set:N  = \l_MRTthesis_sign_width_min_dim
+    ,sign~width~min  .dim_set:N  = \l_MRTthesis_sign_width_dim
     ,stretch~caption .code:n     =
       {% >>>
         \setkomafont { caption }      { \setstretch { #1 } \normalfont }
         \setkomafont { captionlabel } { \setstretch { #1 } \normalfont }
       }% <<<
-    ,stretch~cap     .meta:n     = { stretch~caption }
-    ,stretch~tabular .tl_set:N   = \l_MRTthesis_stretch_tabular_tl
-    ,stretch~tab     .meta:n     = { stretch~tabular }
+    ,stretch~cap     .meta:n     = { stretch~caption={#1} }
+    ,stretch~tabular .code:n     = { \MRTtabSetup { stretch~tab={#1} } }
+    ,stretch~tab     .meta:n     = { stretch~tabular={#1} }
     ,stretch~text    .code:n     = 
       {% >>>
         \dimen0=-4.08541473pt
@@ -200,9 +196,13 @@
           }
         \setstretch{#1}
       }% <<<
-    ,stretches       .meta:n     = { stretch~cap, stretch~tab, stretch~text }
+    ,stretches       .meta:n     =
+      { stretch~cap={#1}, stretch~tab={#1}, stretch~text={#1} }
     ,subtitle        .tl_set:N   = \l_MRTthesis_subtitle_tl
     ,table~spacing   .bool_set:N = \l_MRTthesis_table_spacing_bool
+    ,table~spacing   .default:n  = { true }
+    ,tab~spacing     .meta:n     = { table~spacing={#1} }
+    ,tab~spacing     .default:n  = { true }
     ,thesis          .tl_set:N   = \l_MRTthesis_thesis_tl
     ,title           .tl_set:N   = \l_MRTthesis_title_tl
     ,toc~ChapIndent  .tl_set:N   = \l_MRTthesis_toc_chapter_indent_tl
@@ -216,30 +216,30 @@
   {
     ,advisor = {\textcolor{blue}{Mein~Betreuer}}
     ,examinor = {Univ.-Professor~Dr.-Ing.~Gerhard~Fischerauer}
-    ,pos~float = tbp
-    ,number = {\textcolor{blue}{XX-00-00-0}}
-    ,sadvisor = {\textcolor{blue}{M.~Betreuer}}
-    ,sauthor  = {\textcolor{blue}{A.~Student}}
-    ,sexaminor = {G.~Fischerauer}
-    ,stretch~cap = 1.408
-    ,stretch~tab = 1.408
-    ,stretch~text = 1.408
-    ,thesis = {\textcolor{blue}{Meine~Arbeit}}
-    ,title  = {\textcolor{blue}{UNTERSUCHUNG~ZU ...}}
-    ,caption~above = false
-    ,table~spacing = false
-    ,toc~ChapIndent = 0.01em
-    ,toc~SecIndent  = 1.32em
-    ,toc~sSecIndent = 3.38em
-    ,toc~ssSecIndent = 6.38em
-    ,sign~height = 9mm
-    ,sign~width~min = 7cm
-    ,sign~width~max = 0pt
-    %,sign~sep = 2em
+    ,caption~below
     ,logoL = {MRTthesis_logo_UBT2.pdf}
     ,logoR = {MRTthesis_logo_MRT2.pdf}
     ,logoL~height = 10.85mm
     ,logoR~height = 11.9mm
+    ,number = {\textcolor{blue}{XX-00-00-0}}
+    ,pos~float = tbp
+    ,sadvisor = {\textcolor{blue}{M.~Betreuer}}
+    ,sauthor  = {\textcolor{blue}{A.~Student}}
+    ,sexaminor = {G.~Fischerauer}
+    ,sign~height = 9mm
+    ,sign~width~min = 7cm
+    ,sign~width~max = 0pt
+    ,sign~seperation = 2em
+    ,stretch~cap = 1.408
+    ,stretch~tab = 1.408
+    ,stretch~text = 1.408
+    ,tab~spacing
+    ,thesis = {\textcolor{blue}{Meine~Arbeit}}
+    ,title  = {\textcolor{blue}{UNTERSUCHUNG~ZU ...}}
+    ,toc~ChapIndent = 0.01em
+    ,toc~SecIndent  = 1.32em
+    ,toc~sSecIndent = 3.38em
+    ,toc~ssSecIndent = 6.38em
   }% <<<
 % <<<
 %%==========================================================================<<<
@@ -256,7 +256,6 @@
 
 %% macros >>>
 %%=============================================================================
-\definecolor{tablegray}{gray}{0.85}
 % auxiliary like>>>
 \long\def\@firstofthree#1#2#3{#1}
 \long\def\@secondofthree#1#2#3{#2}
@@ -472,8 +471,65 @@
 % title, author, ... >>>
 \renewcommand\title[1]{\keys_set:nn { MRTthesis/setup } { title={#1} }}
 \renewcommand\subtitle[1]{\keys_set:nn { MRTthesis/setup } { subtitle={#1} }}
-\renewcommand\author[1]{\keys_set:nn { MRTthesis/setup } { author={#1} }}
+\RenewDocumentCommand\author { o m }
+  {
+    \keys_set:nn { MRTthesis/setup } { author = { #2 } }
+    \IfNoValueF { #1 }
+      {
+        \keys_set:nn { MRTthesis/setup } { short~author = { #1 } }
+      }
+  }
 % <<<
+\newcommand\sethead[1]{\markboth{#1}{#1}}
+%% MRTtable
+%\NewDocumentEnvironment { MRTtable } { O{} }% >>>
+  %{% >>>
+    %\MRTthesis_provide_head:
+  %}% <<<
+  %{% >>>
+  %}% <<<
+%% <<<
+%\cs_new_protected_nopar:Nn \MRTthesis_provide_head:% >>>
+  %{
+    %\DeclareExpandableDocumentCommand \head { +m }
+      %{
+        %\l__MRTthesis_table_head_start_tl
+        %\tl_set:Nn \l_MRTthesis_head_cont_tl { ##1 }
+        %\tl_if_in:NnT \l_MRTthesis_head_cont_tl { \\ }
+          %{
+            %\exp_args:NnV \regex_match:nnTF { \c{\\}\s*\[.*?\] }
+              %\l_MRTthesis_head_cont_tl
+              %{
+                %\regex_replace_all:nnN { (\c{\\}\s*\[.*?\]) }
+                  %{ \1 \c{l__MRTthesis_table_head_start_tl} }
+                  %\l_MRTthesis_head_cont_tl
+              %}
+              %{
+                %\regex_replace_all:nnN { (\c{\\}) }
+                  %{ \1 \c{l__MRTthesis_table_head_start_tl} }
+                  %\l_MRTthesis_head_cont_tl
+              %}
+          %}
+        %\l_MRTthesis_head_cont_tl \\
+        %\hline
+      %}
+  %}% <<<
+%\tl_new:N \l__MRTthesis_table_head_start_tl
+%\tl_set:Nn \l__MRTthesis_table_head_start_tl
+  %{
+    %\rowcolor{tablegray}
+    %\bool_if:NT \l_MRTthesis_table_spacing_bool { \l__MRTthesis_table_strut }
+  %}
+%\tl_new:N \l_MRTthesis_strut_add_tl
+%\tl_set:Nn \l_MRTthesis_strut_add_tl { .8ex }
+%\tl_new:N \l__MRTthesis_table_strut
+%\tl_set:Nn \l__MRTthesis_table_strut% >>>
+  %{
+    %\vrule height \dimexpr 1ex + \l_MRTthesis_strut_add_tl \relax
+           %depth \l_MRTthesis_strut_add_tl
+           %width 0pt
+  %}% <<<
+%
 %%==========================================================================<<<
 
 %% labels and other ngerman stuff >>>
@@ -795,70 +851,106 @@
 
 %% affidavit >>>
 %%=============================================================================
-\ExplSyntaxOff
-\newcommand*{\affidavittext}{% >>>
-Hiermit versichere ich an Eides statt, dass ich die vorliegende Arbeit
-selbständig und unter Angabe aller Hilfsmittel und Referenzen angefertigt habe.
-Eine Ausnahme bilden die persönlichen Mitteilungen der Betreuer der Arbeit, die
-ständig eingeflossen sind und daher nicht im Einzelnen nachgewiesen werden.
-
-Der Universität Bayreuth, vertreten durch den Lehrstuhl für Mess- und
-Regeltechnik (Prof. Dr.-Ing. Fischerauer), habe ich das Nutzungs- und
-Verwertungsrecht an dieser Arbeit zu Zwecken der Lehre und Forschung, für
-Gutachten und Publikationen erteilt. Bei einer Veröffentlichung von Inhalten
-oder Auszügen der Arbeit ist in angemessener Weise auf meinen Beitrag
-hinzuweisen. Mit der Veröffentlichung meines Namens und des Themas der Arbeit
-in der Liste der am Lehrstuhl angefertigten Arbeiten bin ich einverstanden. Ich
-erkläre ferner, dass ich die Inhalte der Arbeit meinerseits nicht ohne
-Zustimmung des Lehrstuhls publizieren werde.
-
-\if@mrtarbeit@nodegree\else
-    Hiermit erkläre ich, dass ich die vorliegende Arbeit mit dem Thema
-    „\@mrtarbeit@title“ noch nicht anderweitig zur Erlangung eines akademischen
-    Grades eingereicht habe.
-\fi
-}% <<<
-\newcommand*{\affidavit}{% >>>
-    \clearpage%
-    \chapter*{Eidesstattliche Erklärung}%
-    \sethead{Eidesstattliche Erklärung}%
-    \strut%\par
-    %\vspace{-2.5pt}
-    \noindent\affidavittext%
-    \par%
-    \vspace{2.38cm}%
-    \noindent%
-    \setbox\MRTthesis@TestBoxA\hbox{Bayreuth, den \@date}%
-    \ifdim\MRT@signatureMaxWidth=0pt%
-        \MRT@signatureMaxWidth=\dimexpr\textwidth-\wd\MRTthesis@TestBoxA-\MRT@signatureSep\relax%
-    \else\ifdim\MRT@signatureMaxWidth<\MRT@signaturewidth\relax%
-        \MRT@signaturewidth=\MRT@signatureMaxWidth\relax%
-    \fi\fi%
-    \unhbox\MRTthesis@TestBoxA%
-    \MRTthesis@rewindauthors%
-    \loop%
-        \setbox\MRTthesis@TestBoxA\hbox{\footnotesize\getauthor}%
-        \ifdim\wd\MRTthesis@TestBoxA>\MRT@signatureMaxWidth\relax%
-            \global\MRT@signaturewidth=\MRT@signatureMaxWidth\relax%
-        \else\ifdim\wd\MRTthesis@TestBoxA>\MRT@signaturewidth\relax%
-            \global\MRT@signaturewidth=\wd\MRTthesis@TestBoxA\relax%
-        \fi\fi%
-        \ifMRTthesis@otherauthor@%
-    \repeat%
-    \MRTthesis@rewindauthors%
-    \loop%
-        \hfill\parbox[t]{\MRT@signaturewidth}{%
-            \vskip0.4pt\rule{\MRT@signaturewidth}{0.4pt}%
-            \vskip -1em%
-            \hfill\parbox[t]{\MRT@signaturewidth}{%
-                \footnotesize\setstretch{1}\getauthor\hfill%
-            }%
-        }%
-        \ifMRTthesis@otherauthor@%
-        \vskip\MRT@signatureheight%
-    \repeat}
-% <<<
-\ExplSyntaxOn
+\ExplSyntaxOff%>>>
+\newcommand*\affidavittext@base% >>>
+  {%
+    Hiermit versichere ich an Eides statt, dass ich die vorliegende Arbeit
+    selbst\"andig und unter Angabe aller Hilfsmittel und Referenzen angefertigt
+    habe. Eine Ausnahme bilden die pers\"onlichen Mitteilungen der Betreuer der
+    Arbeit, die st\"andig eingeflossen sind und daher nicht im Einzelnen
+    nachgewiesen werden.%
+  }% <<<
+\newcommand*\affidavittext@usagerights% >>>
+  {%
+    Der Universit\"at Bayreuth, vertreten durch den Lehrstuhl f\"ur Mess- und
+    Regeltechnik (Prof. Dr.-Ing. Fischerauer), habe ich das Nutzungs- und
+    Verwertungsrecht an dieser Arbeit zu Zwecken der Lehre und Forschung, f\"ur
+    Gutachten und Publikationen erteilt. Bei einer Ver\"offentlichung von
+    Inhalten oder Ausz\"ugen der Arbeit ist in angemessener Weise auf meinen
+    Beitrag hinzuweisen. Mit der Ver\"offentlichung meines Namens und des Themas
+    der Arbeit in der Liste der am Lehrstuhl angefertigten Arbeiten bin ich
+    einverstanden. Ich erkl\"are ferner, dass ich die Inhalte der Arbeit
+    meinerseits nicht ohne Zustimmung des Lehrstuhls publizieren werde.%
+  }% <<<
+\newcommand*\affidavittext@degree% >>>
+  {%
+    Hiermit erkl\"are ich, dass ich die vorliegende Arbeit mit dem Thema
+    „\csname l_MRTthesis_title_tl\endcsname“ noch nicht anderweitig zur
+    Erlangung eines akademischen Grades eingereicht habe.%
+  }% <<<
+\ExplSyntaxOn%<<<
+\newcommand*\affidavittext% >>>
+  {
+    \affidavittext@base
+    \bool_if:NF \l_MRTthesis_no_usage_bool { \par \affidavittext@usagerights }
+    \bool_if:NF \l_MRTthesis_no_degree_bool { \par \affidavittext@degree }
+  }% <<<
+\newcommand*\affidavit% >>>
+  {
+    \cleardoublepage
+    \chapter*{Eidesstattliche~Erkl\"arung}
+    \sethead{Eidesstattliche~Erkl\"arung}
+    \strut
+    \noindent\affidavittext
+    \par
+    \vspace{2.38cm}
+    \noindent
+    \hbox_set:Nn \l_MRTthesis_tmpa_box { Bayreuth,~den~\@date }
+    \dim_compare:nNnTF { \l_MRTthesis_sign_width_max_dim } = { 0pt }
+      {
+        \dim_set:Nn \l_MRTthesis_sign_width_max_dim
+          { \box_wd:N \l_MRTthesis_tmpa_box }
+      }
+      {
+        \dim_compare:nNnT
+          \l_MRTthesis_sign_width_max_dim < \l_MRTthesis_sign_width_dim
+          {
+            \dim_set_eq:NN \l_MRTthesis_sign_width_dim
+              \l_MRTthesis_sign_width_max_dim
+          }
+      }
+    \hbox_unpack_clear:N \l_MRTthesis_tmpa_box
+    \MRTthesis_affidavit_get_sign_width:
+    \seq_map_function:NN \g_MRTthesis_authors_seq
+      \MRTthesis_affidavit_sign_authors:n
+  }% <<<
+\cs_new_protected:Nn \MRTthesis_affidavit_sign_authors:n% >>>
+  {
+    \mbox{}\hfill
+    \parbox[t]{\l_MRTthesis_sign_width_dim}
+      {
+        \setstretch{1}
+        \vskip.4pt\rule{\l_MRTthesis_sign_width_dim}{.4pt}
+        \vskip-.5em
+        \hfill
+        \parbox[t]{\l_MRTthesis_sign_width_dim}
+          {
+            \footnotesize
+            \MRTthesis_typeout_author:n { #1 }
+            \hfill
+          }
+      }
+    \vskip\l_MRTthesis_sign_height_dim
+  }% <<<
+\cs_new:Nn \MRTthesis_affidavit_get_sign_width:% >>>
+  {
+    \seq_map_inline:Nn \g_MRTthesis_authors_seq
+      {
+        \hbox_set:Nn \l_MRTthesis_tmpa_box
+          {
+            \footnotesize
+            \MRTthesis_typeout_author:n { ##1 }
+          }
+        \dim_set:Nn \l_MRTthesis_sign_width_dim
+          {
+            \dim_min:nn { \l_MRTthesis_sign_width_max_dim }
+              {
+                \dim_max:nn { \l_MRTthesis_sign_width_dim }
+                  { \box_wd:N \l_MRTthesis_tmpa_box }
+              }
+          }
+      }
+  }% <<<
 %%==========================================================================<<<
 
 %% title page >>>
@@ -867,7 +959,7 @@ Zustimmung des Lehrstuhls publizieren werde.
   {%
     \thispagestyle{empty}
     \newgeometry{left=25mm,right=25mm,top=9mm,bottom=23.4mm}
-    \MRTthesis_sort_authors:
+    \MRTthesis_parse_authors:
     \setbox\MRTthesis@TestBoxA\vbox
       {% >>>
         \setstretch{1}
@@ -915,8 +1007,8 @@ Zustimmung des Lehrstuhls publizieren werde.
             {
               \group_begin:
                 \MRTthesis@fntsel{12}{16}
-                Lehrstuhl~für~Mess-~und~Regeltechnik\\
-                Fakultät~für~Ingenieurwissenschaften,~Universität~Bayreuth\\
+                Lehrstuhl~f\"ur~Mess-~und~Regeltechnik\\
+                Fakult\"at~f\"ur~Ingenieurwissenschaften,~Universität~Bayreuth\\
               \group_end:
             }% <<<
           \vfillmult{2}
@@ -933,19 +1025,54 @@ Zustimmung des Lehrstuhls publizieren werde.
     \cleardoublepage
     \restoregeometry
   }% <<<
-\cs_new_protected_nopar:Nn \MRTthesis_sort_authors:% >>>
+\cs_new_protected_nopar:Nn \MRTthesis_parse_authors:% >>>
   {
-    \seq_gset_split:NnV \g_MRTthesis_authors_seq { \and } \l_MRTthesis_authors_tl
-    \bool_if:NF \l_MRTthesis_no_author_sort_bool
+    \seq_gset_split:NnV \g_MRTthesis_authors_seq
+      { \and } \l_MRTthesis_authors_tl
+    \tl_if_empty:NTF \l_MRTthesis_s_author_tl
       {
-        \seq_gsort:Nn \g_MRTthesis_authors_seq
+        \seq_set_eq:NN \l_MRTthesis_tmpa_seq \g_MRTthesis_authors_seq
+        \tl_gset:Nn \g_MRTthesis_s_author_tl
           {
+            \bool_while_do:nn { !\seq_if_empty_p:N \l_MRTthesis_tmpa_seq }
+              {
+                \seq_pop:NN \l_MRTthesis_tmpa_seq \l_MRTthesis_tmpa_tl
+                \tl_if_in:NnTF \l_MRTthesis_tmpa_tl { , }
+                  {
+                    \clist_set:NV \l_MRTthesis_tmpa_clist \l_MRTthesis_tmpa_tl
+                    \tl_set:Nx \l_MRTthesis_tmpb_tl
+                      {
+                        \clist_item:Nn \l_MRTthesis_tmpa_clist { \c_two }
+                      }
+                    \seq_set_split:NnV \l_MRTthesis_tmpb_seq
+                      { ~ } \l_MRTthesis_tmpb_tl
+                    \seq_map_inline:Nn \l_MRTthesis_tmpb_seq
+                      {
+                        \MRTthesis_only_first_token:w ##1\q_nil.~
+                      }
+                    \clist_item:Nn \l_MRTthesis_tmpa_clist { \c_one }
+                  }
+                  {
+                    \seq_set_split:NnV \l_MRTthesis_tmpb_seq
+                      { ~ } \l_MRTthesis_tmpa_tl
+                    \int_step_inline:nnnn { \c_one } { \c_one }
+                      { \seq_count:N \l_MRTthesis_tmpb_seq - \c_one }
+                      {
+                        \tl_set:Nx \l_MRTthesis_tmpb_tl
+                          { \seq_item:Nn \l_MRTthesis_tmpb_seq { ##1 } }
+                        \exp_after:wN \MRTthesis_only_first_token:w
+                          \l_MRTthesis_tmpb_tl \q_nil.~
+                      }
+                    \seq_item:Nn \l_MRTthesis_tmpb_seq
+                      { \seq_count:N \l_MRTthesis_tmpb_seq }
+                  }
+                  \seq_if_empty:NF \l_MRTthesis_tmpa_seq { ,~ }
+              }
           }
       }
-    \tl_if_empty:NTF \l_MRTthesis_s_author_tl
-      { \tl_gset:Nn \g_MRTthesis_s_author_tl { stupid } }
       { \tl_gset_eq:NN \g_MRTthesis_s_author_tl \l_MRTthesis_s_author_tl }
   }% <<<
+\cs_new:Npn \MRTthesis_only_first_token:w #1#2\q_nil { #1 }
 \cs_new_nopar:Nn \MRTthesis_titlepage_place_title:% >>>
   {
     \MRTthesis@fntsel{20}{34.5}
@@ -970,7 +1097,7 @@ Zustimmung des Lehrstuhls publizieren werde.
     \bool_while_do:nn { !\seq_if_empty_p:N \l_MRTthesis_tmpa_seq }
       {
         \seq_pop:NN \l_MRTthesis_tmpa_seq \l_MRTthesis_tmpa_tl
-        \l_MRTthesis_tmpa_tl
+        \MRTthesis_typeout_author:V \l_MRTthesis_tmpa_tl
         \\\vfill
       }
   }% <<<
@@ -1015,22 +1142,42 @@ Zustimmung des Lehrstuhls publizieren werde.
           {
             \MRTthesis@fntsel{10}{13.24}
             Zitierhinweis:\\
-            \g_MRTthesis_s_author_tl
+            \group_begin:
+              \cs_set:Npn \and { \unskip,~ }
+              \g_MRTthesis_s_author_tl
+            \group_end:
             \bool_if:nF
               {
                 \l_MRTthesis_no_advisor_bool
                 || \tl_if_empty_p:N \l_MRTthesis_s_advisor_tl
                 || \tl_if_empty_p:N \l_MRTthesis_advisor_tl
               }
-              { ,\l_MRTthesis_s_advisor_tl }
-            \tl_if_empty:NF \l_MRTthesis_s_examinor_tl
-              { ,\l_MRTthesis_s_examinor_tl }
+              { ,~\l_MRTthesis_s_advisor_tl }
+            \bool_if:nF
+              {
+                \l_MRTthesis_no_examinor_bool
+                || \tl_if_empty_p:N \l_MRTthesis_s_examinor_tl
+              }
+              { ,~\l_MRTthesis_s_examinor_tl }
             \c_colon_str\\
             \l_MRTthesis_title_tl;\\
             MRT-Bericht~Nr.~\l_MRTthesis_number_tl;~Bayreuth~(\the\year)
           }
       }
   }% <<<
+\cs_new:Nn \MRTthesis_typeout_author:n%>>>
+  {
+    \tl_if_in:nnTF { #1 } { , }
+      {
+        \clist_set:Nn \l_MRTthesis_tmpa_clist { #1 }
+        \clist_item:Nn \l_MRTthesis_tmpa_clist { 2 }~
+        \clist_item:Nn \l_MRTthesis_tmpa_clist { 1 }
+      }
+      {
+        #1
+      }
+  }%<<<
+\cs_generate_variant:Nn \MRTthesis_typeout_author:n { V }
 %%==========================================================================<<<
 
 \endinput

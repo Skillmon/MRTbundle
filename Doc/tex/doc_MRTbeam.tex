@@ -159,13 +159,15 @@ only provided to set specific options, other macros are described in
   \bigskip
   \noindent
   \small
-  \begin{tabularx}{\textwidth}{l*4cX}
-    \toprule
+  \MRTtabDeclareHeadMacros
+  \setstretch{1.408}
+  \begin{tabularx}{\textwidth}{l*4c>{\setstretch{1}}X}
+    \headS
     style & align & length & height & voffset & description\\
-    \midrule
+    \headE
     Spratte & c & \cs{paperwidth} & 2pt & 3pt
       & A thin line spanning the whole page width at the bottom of the frame\\
-    \bottomrule
+    \hline
   \end{tabularx}
 \end{describemacro}
 
