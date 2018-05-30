@@ -1,5 +1,11 @@
+\newcommand*\MRTif@version{0.1}
+\newcommand*\MRTif@date{2018/04/21}
+
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{MRTif}[2018/04/21 some if tests for MRTbeam and mrtarbeit]
+
+\ProvidesPackage{MRTif}%
+  [\MRTif@date\ v\MRTif@version\ some if tests originally for MRTbeam and mrtarbeit]
+\RequirePackage{pdftexcmds}
 
 \newcommand*\MRTif@groupify@TF[1]% >>>
   {%
@@ -159,7 +165,7 @@
 % MRTifStringsMatch >>>
 \newcommand\MRTifStringsMatchTF[2]% >>>
   {%
-    \ifnum\pdfstrcmp{#1}{#2}=0
+    \ifnum\pdf@strcmp{#1}{#2}=0
       \expandafter\@firstoftwo
     \else
       \expandafter\@secondoftwo
