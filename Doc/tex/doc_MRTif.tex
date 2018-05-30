@@ -15,6 +15,7 @@ the first and second argument, respectively, an expansion is made.
 \begin{describemacroTF}[G,N,GN]{MRTifEmpty}[\marg{arg}]
   Tests if \meta{arg} is completely empty.
 \end{describemacroTF}
+\dscremaininglines{3}
 
 \begin{describemacroTF}[N]{MRTifGroup}[\marg{arg}]
   Tests if \meta{arg} is a single group no matter what the contents of that
@@ -30,14 +31,17 @@ the first and second argument, respectively, an expansion is made.
   [\marg{string1}\marg{string2}]
   Tests if \meta{string1} and \meta{string2} match.
 \end{describemacroTF}
+\dscremaininglines{7}
 
 \begin{describemacroTF}[G,N,GN]{MRTifOneToken}[\marg{arg}]
   Tests if \meta{arg} is only a single token.
 \end{describemacroTF}
+\dscremaininglines{3}
 
 \begin{describemacroTF}[G,N,GN]{MRTifLetter}[\marg{arg}]
   Tests if \meta{arg} is a letter, meaning of category code 11.
 \end{describemacroTF}
+\dscremaininglines{3}
 
 \begin{describemacroTF}[NN,Nn,nN,G,GNN,GNn,GnN]{MRTifTokensMatch}%
   [\marg{arg1}\marg{arg2}]
@@ -46,3 +50,8 @@ the first and second argument, respectively, an expansion is made.
   arguments is contained in a group. If that's the case the \meta{false} branch
   is executed.
 \end{describemacroTF}
+\dscremaininglines{6}
+
+\section{Dependencies}
+\pkg{MRTif} loads the \pkg{pdftexcmds} package to make the \hologo{pdfTeX}
+primitive \cs{pdfstrcmp} available as \cs{pdf@strcmp} for \hologo{LuaTeX}.

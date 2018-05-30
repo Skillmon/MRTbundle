@@ -4,20 +4,16 @@
   {
     ,no advisor
     ,no citation
-    ,no logos
     ,no degree
     ,no examinor
     ,no institute
+    ,no logos
     ,no thesis
     ,with subtitle
     ,number=00-00-00-0
     ,stretches=1
     ,stretch tab=1.408
   }
-
-\ExplSyntaxOn
-\tl_set:Nn \l_MRTthesis_titlepage_von_tl { from }
-\ExplSyntaxOff
 
 \input{preamble/doc_macros.tex}
 
@@ -28,10 +24,12 @@
 \usepackage{tikz}
 \usepackage{multicol}
 \usepackage{enumitem}
+\usepackage{hologo}
 
 \title{The \cls{MRTbundle}}
 \subtitle{\LaTeX\ Templates for the MRT, University of Bayreuth}
-\author[J. P. Spratte, T. von Günther]{Spratte, Jonathan P. \and von Günther, Theodor}
+\author{Spratte, Jonathan P.\and zu Guttenberg, Karl-Theodor}
+\AtBeginDocument{\edef\today{\unexpanded\expandafter{\today\\v0.0.1}}}
 
 \begin{document}
 \maketitle

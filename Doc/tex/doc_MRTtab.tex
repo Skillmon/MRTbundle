@@ -22,7 +22,13 @@ following differences exist:
   \item it has an additional optional argument specifying the number of rows to
     be formatted as head rows.
   \item you can access the current row number
+  \item automatic application of a stretch factor based on the \opt{stretch
+    tabular} key in \autoref{sec:tab:options:setup}.
 \end{itemize}
+Any \env{tabular} environments inside of an \env{MRTtabular} are ordinary
+\env{tabular}s which neither have hooks nor row numbers. They might be affected
+by an outer \cs{rowcolor} or similar, though.
+
 An ordinary description as done with other environments in this documentation:
 \begin{describeenv}{MRTtabular}%>>>
   [\oarg{valign}\oarg{head rows}\marg{preamble}]
@@ -84,10 +90,10 @@ it won't matter whether you end the last row with \texttt{\string\\} or not.
   [\oarg{color}\{\meta{*}\oarg{color}%
   \meta{<\oarg{left skip}}\meta{>\oarg{right skip}}\meta{cols}\}]
   Sets something like a \cs{cline} in the specified \meta{cols}.
-
+  \\[\parskip]
   In the mandatory argument the only mandatory element is the affected
   \meta{cols}.
-  
+  \\[\parskip]
   The mandatory argument can include a comma separated list in which you can
   repeat every optional argument you like as many times as you like.
   Additionally you can enclose the \meta{cols} in curly braces and give another
@@ -95,7 +101,7 @@ it won't matter whether you end the last row with \texttt{\string\\} or not.
   and none of the optional arguments using the optional arguments specified
   before that list. A valid column specification is a single column, or a column
   range separated by a \texttt{-}, so something like \meta{start-end}.
-
+  \\[\parskip]
   Both \meta{color} arguments have the same effect, but the first applies to
   every specification in the list, while the second only affects the current
   list item. The \meta{color} doesn't change the color of the line, but the
@@ -103,12 +109,12 @@ it won't matter whether you end the last row with \texttt{\string\\} or not.
   \texttt{tabulargray} if used inside the scope of head rows, or \texttt{white}
   else. If you give a \meta{*} the current list item will be completely in the
   specified \meta{color}.
-
+  \\[\parskip]
   You can introduce a small skip on the left side if you specify a \meta{<}
   which defaults to \verb|.5\tabcolsep|, with the optional \meta{left skip} you
   can customize that length. A small skip to the right can be introduced with
   \meta{>}, again of customizable width using \meta{right skip}.
-
+  \\[\parskip]
   You should only use one \cs{MRTcline} per line and specify every column you
   want in that.
 \end{describemacro}%<<<
@@ -122,8 +128,7 @@ is not possible with the standard \cs{cline} as far as I know.
 \begin{multicols}{2}%>>>
   \MRTthesisSetup{stretch tab=1}
   \noindent
-  Using \cs{MRTcline}\\[1ex]
-  \begin{MRTtabular}{lll}
+  \vbox{\begin{MRTtabular}{lll}
     a & b & c\\
     \MRTcline{1-2}
     d & e & f\\
@@ -138,10 +143,8 @@ is not possible with the standard \cs{cline} as far as I know.
   g & h & i\\
   j & k & l\\
 \end{MRTtabular}
-  \end{verbatim}
-  \columnbreak
-  Using \cs{cline}\\[1ex]
-  \begin{MRTtabular}{lll}
+  \end{verbatim}}
+  \vbox{\begin{MRTtabular}{lll}
     a & b & c\\
     \cline{1-2}
     \clineReveal
@@ -158,11 +161,12 @@ is not possible with the standard \cs{cline} as far as I know.
   g & h & i\\
   j & k & l\\
 \end{MRTtabular}
-  \end{verbatim}
+  \end{verbatim}}
 \end{multicols}%<<<
 \begin{multicols}{2}%>>>
   \MRTthesisSetup{stretch tab=1}
   \noindent
+  \vbox{%
   \begin{MRTtabular}[][2]{lll}
     a & b & c\\
     \MRTcline{1-2,*3}
@@ -178,8 +182,8 @@ is not possible with the standard \cs{cline} as far as I know.
   g & h & i\\
   j & k & l\\
 \end{MRTtabular}
-  \end{verbatim}
-  \begin{MRTtabular}[][2]{lll}
+  \end{verbatim}}
+  \vbox{\begin{MRTtabular}[][2]{lll}
     a & b & c\\
     \MRTcline{<>1-2,*3}
     d & e & f\\
@@ -194,9 +198,9 @@ is not possible with the standard \cs{cline} as far as I know.
   g & h & i\\
   j & k & l\\
 \end{MRTtabular}
-  \end{verbatim}
+  \end{verbatim}}
   \columnbreak
-  \begin{MRTtabular}[][2]{lll}
+  \vbox{\begin{MRTtabular}[][2]{lll}
     a & b & c\\
     \cline{1-2}
     \arrayrulecolor{tablegray}
@@ -221,22 +225,22 @@ is not possible with the standard \cs{cline} as far as I know.
   g & h & i\\
   j & k & l\\
 \end{MRTtabular}
-  \end{verbatim}
+  \end{verbatim}}
 \end{multicols}%<<<
-
-\begin{describemacro}{clineReveal}
-  As you can see above the macro \cs{clineReveal} is used. This is done because
-  a \cs{cline} doesn't take up any vertical space (by issuing
-  \verb|\noalign{\vskip-\arrayrulewidth}|) as opposed to a \cs{hline}. This is
-  done so that multiple \cs{cline}s can be used in the same row. As a result the
-  spacing is inconsistent and a \cs{cline} is overlapped by a following
-  \cs{rowcolor} or \cs{cellcolor}. \cs{clineReveal} does introduce a vertical
-  skip which reveals the lines (issuing \verb|\noalign{\vskip\arrayrulewidth}|).
-  It is also used by \cs{MRTcline}.
-\end{describemacro}
 %<<<
 
 \section{The \env{MRTtable} environment}\label{sec:tab:table}%>>>
+The \env{MRTtable} environment is a wrapper around an \env{MRTtabular} inside of
+a \env{table} environment. There might be a severe difference in the
+implementation of the \texttt{long} version, but as of now it is not
+implemented.
+
+\begin{describeenv}{MRTtable}[\oarg{key=value}]
+  \env{MRTtable} sets its contents in an \env{MRTtabular} environment. It
+  features several \meta{key}s you are encouraged to use.
+  \\[\parskip]
+  All available \meta{key}s are listed in \autoref{sec:tab:options:setup}.
+\end{describeenv}
 %<<<
 
 \section{Explicit head rows}\label{sec:tab:explicit}%>>>
@@ -260,8 +264,181 @@ provided:
 \end{describemacro}%<<<
 
 \begin{describemacro}{MRTtabDeclareHeadMacros}%>>>
-  By default the above macros are only available inside of \env{MRTtabular} (and
-  therefore also in the body of \env{MRTtable}). You can make them locally
-  available with \cs{MRTtabDeclareHead}.
+  By default the above macros are only available inside of \env{MRTtabular} and
+  in the body of \env{MRTtable}. You can make them locally available with
+  \cs{MRTtabDeclareHead}.
 \end{describemacro}%<<<
 %<<<
+
+\section{Other package macros}%>>>
+\begin{describemacro}{MRTtabSetup}[\marg{key=value}]
+  This is the interface to set the options listed in
+  \autoref{sec:tab:options:setup} outside of \env{MRTtable}.
+\end{describemacro}
+
+\begin{describemacro}{clineReveal}
+  As you can see in \autoref{sec:tab:cline} the macro \cs{clineReveal} is used.
+  This is done because a \cs{cline} doesn't take up any vertical space (by
+  issuing \verb|\noalign{\vskip-\arrayrulewidth}|) as opposed to a \cs{hline}.
+  This is done so that multiple \cs{cline}s can be used in the same row. As a
+  result the spacing is inconsistent and a \cs{cline} is overlapped by a
+  following \cs{rowcolor} or \cs{cellcolor}. \cs{clineReveal} does introduce a
+  vertical skip which reveals the lines (issuing
+  \verb|\noalign{\vskip\arrayrulewidth}|).  It is also used by \cs{MRTcline}.
+\end{describemacro}
+%<<<
+
+\section{Options}%>>>
+The package only features one load time option, which is \texttt{longtable}. If
+it is specified the \pkg{longtable} package is loaded and some more options of
+\env{MRTtable} become available which are focused around the usage of
+\env{longtable} inside of \env{MRTtable}.
+
+\subsection{Setup Options}\label{sec:tab:options:setup}
+The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
+
+\begin{describeopt}{caption above,above}%>>>
+  If specified the caption will be put above the \env{MRTtabular} in
+  \env{MRTtable}. If \cs{KOMAoptions} is available the KOMA option
+  \opt{captions=tableheading} is used.
+\end{describeopt}%<<<
+\begin{describeopt}{caption below,below}%>>>
+  If specified the caption will be put below the \env{MRTtabular} in
+  \env{MRTtable}. If \cs{KOMAoptions} is available the KOMA option
+  \opt{captions=tablesignature} is used.
+\end{describeopt}%<<<
+\begin{describeopt}{BoL}[\meta{content}]%>>>
+  Sets the \env{MRTtabular} Begin-of-Line hook using \cs{MRTtabAddtoBoLHook}
+\end{describeopt}%<<<
+\begin{describeopt}{EoL}[\meta{content}]%>>>
+  Sets the \env{MRTtabular} End-of-Line hook using \cs{MRTtabAddtoEoLHook}
+\end{describeopt}%<<<
+\begin{describeopt}{stretch tabular, stretch tab, stretch}[\meta{float}]%>>>
+  Sets the stretch in \env{MRTtabular} to the specified \meta{float} using
+  \cs{setstretch}.
+\end{describeopt}%<<<
+\begin{describeopt}{stretch caption, stretch cap, cstretch}[\meta{float}]%>>>
+  Sets the stretch in the caption using \cs{setkomafont} and \cs{setstretch}.
+  Doesn't work if KOMA script is not used but issues a warning in that case.
+\end{describeopt}%<<<
+\begin{describeopt}{caption, cap}[\meta{caption}]%>>>
+  Specifies the content of the caption in an \env{MRTtable}. If it is blank, no
+  caption will be used.
+\end{describeopt}%<<<
+\begin{describeopt}{columns, col}[\meta{preamble}]%>>>
+  Specifies the \env{MRTtabular} preamble (the column specifications). Defaults
+  to first column \texttt{l}, others \texttt{c}.
+\end{describeopt}%<<<
+\begin{describeopt}{env}[\meta{name}]%>>>
+  Uses the tabular like environment \meta{name} instead of \env{MRTtabular}.
+\end{describeopt}%<<<
+\begin{describeopt}{env begin}[\meta{begin}]%>>>
+  Uses \meta{begin} as the start of the tabular like environment. This way you
+  can specify some options. Note that any outer braces are stripped. If you want
+  to use an environment you have to include \cs{begin} in the argument. Note
+  that if the argument you provide is not empty, the column specification as
+  defined with \opt{columns} is inserted in braces after \meta{begin}.
+\end{describeopt}%<<<
+\begin{describeopt}{env end}[\meta{end}]%>>>
+  Uses \meta{end} as the end of the tabular like environment. This way you can
+  specify some options. Note that any outer braces are stripped. If you want to
+  use an environment you have to include \cs{end} in the argument.
+\end{describeopt}%<<<
+\begin{describeopt}{float}[\meta{bool}]%>>>
+  If set true (the default and initial value) the \env{MRTtable} floats.
+\end{describeopt}%<<<
+\begin{describeopt}{head rows, head}[\meta{num}]%>>>
+  The number of rows which should be formatted as head rows as in
+  \env{MRTtabular}. In each \env{MRTtable} it is initially \texttt{1} -- this is
+  different from a stand alone \env{MRTtabular} which by defaults to \texttt{0}
+  rows.
+\end{describeopt}%<<<
+\begin{describeopt}{label}[\meta{label}]%>>>
+  If \opt{caption} is used the \env{MRTtable} will get the specified
+  \meta{label}.
+\end{describeopt}%<<<
+\begin{describeopt}{no float}[\meta{bool}]%>>>
+  The opposite of \opt{float}. If set true the \env{MRTtable} will not float
+  which is the default (but not initial) value.
+\end{describeopt}%<<<
+\begin{describeopt}{no inner env}%>>>
+  Same result as \opt{env~begin=\{\},env~end=\{\}}, so no tabular like
+  environment is used at all.
+\end{describeopt}%<<<
+\begin{describeopt}{pos}[\meta{pos}]%>>>
+  The placement of a floating \env{MRTtable}. Initially \texttt{tbp}.
+\end{describeopt}%<<<
+\begin{describeopt}{post tab, post}[\meta{content}]%>>>
+  A hook which is executed right after the \cs{end} of the inner
+  \env{MRTtabular}.
+\end{describeopt}%<<<
+\begin{describeopt}{pre tab, pre}[\meta{content}]%>>>
+  A hook which is executed right before the \cs{begin} of the inner
+  \env{MRTtabular}.
+\end{describeopt}%<<<
+\begin{describeopt}{short caption, short cap, scap}%>>>
+  If caption and this option are used the list of tables will get this short
+  caption instead of the caption.
+\end{describeopt}%<<<
+\begin{describeopt}{striped}[\meta{bool}]%>>>
+  If set to true the inner \env{MRTtabular} will be striped with \opt{stripe
+  color 1} and \opt{stripe color 2}, beginning in line \opt{stripe start}. It
+  uses \cs{rowcolors} internally.
+\end{describeopt}%<<<
+\begin{describeopt}{stripe color 1, stripe 1, scolor 1, scolor1}%>>>
+  [\meta{color}]
+  Defines the \meta{color} of the first color argument of \cs{rowcolors} if
+  \opt{striped} is true. Initially set to \texttt{tablegray!50}.
+\end{describeopt}%<<<
+\begin{describeopt}{stripe color 2, stripe 2, scolor 2, scolor2}%>>>
+  [\meta{color}]
+  Defines the \meta{color} of the second color argument of \cs{rowcolors} if
+  \opt{striped} is true. Initially set to \texttt{white}.
+\end{describeopt}%<<<
+\begin{describeopt}{stripe invert, sinvert}%>>>
+  Exchanges the current values of \opt{stripe color 1} and \opt{stripe color 2}.
+\end{describeopt}%<<<
+\begin{describeopt}{stripe start, sstart}[\meta{row}]%>>>
+  Defines the starting row of a potentially striped \env{MRTtabular}. Initially
+  set to \texttt{2}.
+\end{describeopt}%<<<
+
+\subsubsection{\pkg{longtable} related options}%>>>
+The following options are only available if the \opt{longtable} was used during
+package load time.
+
+\begin{describeopt}{long}[\meta{bool}]
+  If set true the \env{MRTtable} uses \env{longtable} internally. It doesn't
+  float and gets page breakable. You should specify the \opt{columns} of
+  \env{MRTtable} manually as the automatic detection might fail terribly in
+  conjunction with \env{longtable}.
+\end{describeopt}
+\begin{describeopt}{continue caption, cont cap}[\meta{caption}]
+  If specified following pages use this \meta{caption} instead of the \opt{short
+  caption} or the normal \opt{caption}.
+\end{describeopt}
+\begin{describeopt}{continue with caption, cont with cap, cont w cap}%
+  [\meta{bool}]
+  If set true, the following pages use the \opt{caption} and not the \opt{short
+  caption} or \opt{continue caption}. Defaults to true and initially is set to
+  false.
+\end{describeopt}%<<<
+%<<<
+
+\section{Dependencies}
+The package requires the following packages and their dependencies:
+\vspace*{-\multicolsep}%
+\begin{multicols}{3}
+  \begin{itemize}
+    \item \pkg{expl3}
+    \item \pkg{xparse}
+    \item \pkg{array}
+    \item \pkg{setspace}
+    \item \pkg{xcolor} with option \opt{table}
+    \item potentially \pkg{longtable}
+  \end{itemize}
+\end{multicols}
+\vspace*{-\multicolsep}%
+
+\section{A very long caption that has to be line broken because it is way to
+long for a single line in the resulting document.}

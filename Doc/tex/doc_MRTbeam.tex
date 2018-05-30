@@ -83,9 +83,9 @@ overlap if you specify really long contents.
 
 \section{Options}
 The class passes all options given to it on to \cls{beamer}. There are still
-some options which you can set with some macros. The macros in this section are
-only provided to set specific options, other macros are described in
-\autoref{sec:beam:macros}.
+some class specific options which you can set with some macros. The macros in
+this section are only provided to set specific options, other macros are
+described in \autoref{sec:beam:macros}.
 
 \begin{describemacro}{advisor}[\meta{*}\oarg{title}\marg{name}]
   Sets \meta{name} as the current advisor. It also redefines itself, any
@@ -132,8 +132,8 @@ only provided to set specific options, other macros are described in
 \begin{describemacro}{ifOnlyOneTopRule,OnlyOneTopRuletrue,OnlyOneTopRulefalse}
   If set true in each \env{frame} the title and subtitle will not be displayed
   and the lower top rule will be omitted, significantly enlarging the content
-  area. \cs{contentheight} will be adjusted if you use \cs{OnlyOneTopRuletrue}
-  or \cs{OnlyOneTopRulefalse}.
+  area. If you use \cs{OnlyOneTopRuletrue} or \cs{OnlyOneTopRulefalse}
+  \cs{contentheight} will be adjusted.
 \end{describemacro}
 
 \begin{describemacro}{ifProgressBar,ProgressBartrue,ProgressBarfalse}
@@ -154,18 +154,19 @@ only provided to set specific options, other macros are described in
 \begin{describemacro}{ProgressBarStyle}[\meta{*}\marg{style}]
   This sets the progress bar options to a predefined \meta{style} using the
   unstarred version of \cs{SetProgressBar}. If the starred version of
-  \cs{ProgressBarStyle} is used \cs{ProgressBartrue} is issued. Currently there
-  is only one style available:\par
+  \cs{ProgressBarStyle} is used \cs{ProgressBartrue} is issued.\par
   \bigskip
   \noindent
   \small
   \MRTtabDeclareHeadMacros
-  \setstretch{1.408}
+  \setstretch{1.408}%
   \begin{tabularx}{\textwidth}{l*4c>{\setstretch{1}}X}
     \headS
     style & align & length & height & voffset & description\\
     \headE
-    Spratte & c & \cs{paperwidth} & 2pt & 3pt
+    default & c & 30pt            & font size & -1.65ex
+      & a thick and relatively short bar around the frame number\\
+    Spratte & c & \cs{paperwidth} & 2pt       & 3pt
       & A thin line spanning the whole page width at the bottom of the frame\\
     \hline
   \end{tabularx}
@@ -203,14 +204,12 @@ only provided to set specific options, other macros are described in
   the background inside a \TikZ\ node with the optionally specified \meta{node
   options}. The coordinates default to multiples of \cs{pagewidth} and
   \cs{pageheight} for \texttt{x} and \texttt{y}, respectively. You can use
-  anything \TikZ\ understands as coordinates for \meta{pos}.
-
+  anything \TikZ\ understands as coordinates for \meta{pos}.\\[\parskip]
   The starred version places the \env{tikzpicture} where you currently are. It
   uses \texttt{remember picture} and \texttt{overlay} as options. The \meta{pos}
   must match the pattern \carg{x}{y}. \meta{x} is in multiples of \cs{pagewidth}
   and \meta{y} in multiples of \cs{pageheight} and you can't change that. The
-  node still gets \meta{node options}.
-
+  node still gets \meta{node options}.\\[\parskip]
   In both cases \texttt{(0,0)} is the bottom left corner of the slide.
 \end{describemacro}
 
@@ -218,7 +217,7 @@ only provided to set specific options, other macros are described in
   Adds the specified \meta{tikz code} to the background of the current slide.
   \texttt{(0,0)} is the bottom left corner of the slide. Coordinates are by
   default in multiples of \cs{pagewidth} and \cs{pageheight}. It uses the same
-  \env{tikzpicture} like \cs{PlaceAt} and is stored in the same macro.
+  \env{tikzpicture} as \cs{PlaceAt} and is stored in the same macro.
 \end{describemacro}
 
 \begin{describemacro}{ProgressBar}%
@@ -344,7 +343,7 @@ The term footnotes relates to the special MRT footnotes in this section.
   fact \cs{framecite} uses this internally.
 \end{describemacro}
 
-\section{Requirements}
+\section{Dependencies}
 The class uses \cls{beamer} as its basis. Additional the following packages are
 loaded:
 \vspace*{-\multicolsep}%

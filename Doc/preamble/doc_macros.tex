@@ -3,6 +3,7 @@
 \newcommand*\cls[1]{\textrm{#1}}
 \newcommand*\TikZ{\pkg{Ti\textit{k}Z}}
 \newcommand*\env[1]{\texttt{#1}}
+\newcommand*\opt[1]{\texttt{#1}}
 \newcommand*\file[1]{\texttt{\detokenize{#1}}}
 \long\def\eatspace#1 #2{#1#2}
 \newcommand*\cs{\texorpdfstring{\cs@TeXString}{\cs@PDFString}}
@@ -20,7 +21,21 @@
 \newcommand*\carg[2]{\texttt{(}\meta{#1},\meta{#2}\texttt{)}}
 \newcommand*\tfarg{\texttt{\textit{TF}}}
 \ExplSyntaxOn
+\int_new:N \g_docMRTbundle_dsctable_lines_int
 \dim_new:N \l_docMRTbundle_dscmac_widest_dim
+\cs_new:Nn \__docMRTbundle_dscmac_end:%>>>
+  {
+    \par
+    \int_compare:nNnT { \prevgraf } < { \g_docMRTbundle_dsctable_lines_int }
+      {
+        \expandafter\dscremaininglines\expandafter
+          {
+            \expandafter \numexpr 
+              \int_use:N \g_docMRTbundle_dsctable_lines_int - \prevgraf
+            \relax
+          }
+      }
+  }%<<<
 \MRTafterhyperref%>>>
   {
     \hbox_set:Nn \l_tmpa_box { \cs{PrependSubsectionsfalse} }
@@ -43,13 +58,15 @@
   }% <<<
 \NewDocumentEnvironment { describemacroTF } { o m O{} }% >>>
   {
-    \par\smallskip\noindent\hspace*{-\dimexpr\marginparwidth+\marginparsep\relax}
+    \par\noindent
+    \int_gzero:N \g_docMRTbundle_dsctable_lines_int
+    \hspace*{-\dimexpr\marginparwidth+\marginparsep\relax}
     \IfNoValueTF { #1 }
       { \seq_set_split:Nnn \l_tmpa_seq { , } { } }
       { \seq_set_split:Nnn \l_tmpa_seq { , } { ,#1 } }
     \tl_set:Nn \l_docMRTbundle_macro_name_tl { #2 }
     \seq_map_function:NN \l_tmpa_seq \docMRTbundle_dscmacTF_widest:n
-    \begin{minipage}[t]{\l_docMRTbundle_dscmac_widest_dim}
+    \begin{minipage}[t][0pt]{\l_docMRTbundle_dscmac_widest_dim}
       \raggedleft
       \noindent
       \begin{tabular}[t]{@{}l@{}}
@@ -57,7 +74,6 @@
       \seq_map_function:NN \l_tmpa_seq \docMRTbundle_dscmacTF_table_element:n
         \bottomrule
       \end{tabular}
-      \vspace*{-.5\baselineskip}
     \end{minipage}
     \hspace*{\marginparsep} 
     \begin{minipage}[t]
@@ -69,15 +85,21 @@
       \vspace*{.5\baselineskip}
       \@hangfrom{Usage:~}\cs{#2}\tfarg\texttt{#3}\marg{true}\marg{false}
       \vspace*{.5\baselineskip}
-      \par
+    \end{minipage}\\
+    \hangindent
+      \dimexpr \l_docMRTbundle_dscmac_widest_dim - \marginparwidth \relax
+    \noindent
+    \ignorespaces
   }
-  {\end{minipage}}% <<<
+  {\__docMRTbundle_dscmac_end:}% <<<
 \cs_new:Nn \docMRTbundle_dscmac_table_element:n% >>>
   {
+    \int_gincr:N \g_docMRTbundle_dsctable_lines_int
     \exp_args:Nx \cs{\l_docMRTbundle_macro_name_tl #1}\\
   }% <<<
 \cs_new:Nn \docMRTbunndle_dscmac_multiple_mac:n% >>>
   {
+    \int_gincr:N \g_docMRTbundle_dsctable_lines_int
     \cs { #1 } \\
   }% <<<
 \cs_new_protected:Nn \docMRTbundle_dscmac_widest:n% >>>
@@ -93,14 +115,16 @@
   }% <<<
 \NewDocumentEnvironment { describemacro } { o m O{} }% >>>
   {
-    \par\smallskip\noindent\hspace*{-\dimexpr\marginparwidth+\marginparsep\relax}
+    \par\noindent
+    \int_gzero:N \g_docMRTbundle_dsctable_lines_int
+    \hspace*{-\dimexpr\marginparwidth+\marginparsep\relax}
     \IfNoValueTF { #1 }
       { \seq_set_split:Nnn \l_tmpa_seq { , } { } }
       { \seq_set_split:Nnn \l_tmpa_seq { , } { ,#1 } }
     \tl_if_in:nnTF { #2 } { , }
       {
         \seq_set_split:Nnn \l_tmpb_seq { , } { #2 }
-        \tl_set:Nn \l_docMRTbundle_macro_name_tl {}
+        \tl_clear:N \l_docMRTbundle_macro_name_tl
         \seq_map_function:NN \l_tmpb_seq \docMRTbundle_dscmac_widest:n
         \tl_set:Nn \l_docMRTbundle_macro_name_tl { \seq_item:Nn \l_tmpb_seq 1 }
       }
@@ -108,7 +132,7 @@
         \tl_set:Nn \l_docMRTbundle_macro_name_tl { #2 }
         \seq_map_function:NN \l_tmpa_seq \docMRTbundle_dscmac_widest:n
       }
-    \begin{minipage}[t]{\l_docMRTbundle_dscmac_widest_dim}
+    \begin{minipage}[t][0pt]{\l_docMRTbundle_dscmac_widest_dim}
       \raggedleft
       \noindent
       \begin{tabular}[t]{@{}l@{}}
@@ -125,6 +149,7 @@
       \vspace*{-.5\baselineskip}
     \end{minipage}
     \hspace*{\marginparsep} 
+    \hangindent\l_docMRTbundle_dscmac_widest_dim
     \begin{minipage}[t]
       {
         \dimexpr
@@ -135,11 +160,16 @@
       \@hangfrom{Usage:~}
       \exp_args:Nx \cs{\l_docMRTbundle_macro_name_tl}\texttt{#3}
       \vspace*{.5\baselineskip}
-      \par
+    \end{minipage}\\
+    \hangindent
+      \dimexpr \l_docMRTbundle_dscmac_widest_dim - \marginparwidth \relax
+    \noindent
+    \ignorespaces
   }
-  {\end{minipage}}% <<<
+  {\__docMRTbundle_dscmac_end:}% <<<
 \cs_new:Nn \docMRTbundle_dscenv_table_element:n% >>>
   {
+    \int_gincr:N \g_docMRTbundle_dsctable_lines_int
     \exp_args:Nx \env{\l_docMRTbundle_macro_name_tl #1}\\
   }% <<<
 \cs_new_protected:Nn \docMRTbundle_dscenv_widest:n% >>>
@@ -155,13 +185,15 @@
   }% <<<
 \NewDocumentEnvironment { describeenv } { o m O{} }% >>>
   {
-    \par\smallskip\noindent\hspace*{-\dimexpr\marginparwidth+\marginparsep\relax}
+    \par\noindent
+    \int_gzero:N \g_docMRTbundle_dsctable_lines_int
+    \hspace*{-\dimexpr\marginparwidth+\marginparsep\relax}
     \IfNoValueTF { #1 }
       { \seq_set_split:Nnn \l_tmpa_seq { , } { } }
       { \seq_set_split:Nnn \l_tmpa_seq { , } { ,#1 } }
     \tl_set:Nn \l_docMRTbundle_macro_name_tl { #2 }
     \seq_map_function:NN \l_tmpa_seq \docMRTbundle_dscenv_widest:n
-    \begin{minipage}[t]{\l_docMRTbundle_dscmac_widest_dim}
+    \begin{minipage}[t][0pt]{\l_docMRTbundle_dscmac_widest_dim}
       \raggedleft
       \noindent
       \begin{tabular}[t]{@{}l@{}}
@@ -181,8 +213,128 @@
       \vspace*{.5\baselineskip}
       \@hangfrom{Usage:~}\cs{begin{#2}}\texttt{#3~...~}\cs{end{#2}}
       \vspace*{.5\baselineskip}
-      \par
+    \end{minipage}\\
+    \hangindent
+      \dimexpr \l_docMRTbundle_dscmac_widest_dim - \marginparwidth \relax
+    \noindent
+    \ignorespaces
   }
-  {\end{minipage}}% <<<
+  {\__docMRTbundle_dscmac_end:}% <<<
+\cs_new:Nn \docMRTbundle_dscopt_table_element:n% >>>
+  {
+    \int_gincr:N \g_docMRTbundle_dsctable_lines_int
+    \exp_args:Nx \opt{\l_docMRTbundle_macro_name_tl #1}\\
+  }% <<<
+\cs_new:Nn \docMRTbunndle_dscopt_multiple_mac:n% >>>
+  {
+    \int_gincr:N \g_docMRTbundle_dsctable_lines_int
+    \opt { #1 } \\
+  }% <<<
+\cs_new_protected:Nn \docMRTbundle_dscopt_widest:n% >>>
+  {
+    \hbox_set:Nn \l_tmpa_box
+      { \exp_args:Nx \opt{\l_docMRTbundle_macro_name_tl #1} }
+    \dim_compare:nNnT
+      \l_docMRTbundle_dscmac_widest_dim < { \box_wd:N \l_tmpa_box }
+      {
+        \dim_set:Nn \l_docMRTbundle_dscmac_widest_dim
+          { \box_wd:N \l_tmpa_box } 
+      }
+  }% <<<
+\NewDocumentEnvironment { describeopt } { o m o }%>>>
+  {
+    \par\noindent
+    \int_gzero:N \g_docMRTbundle_dsctable_lines_int
+    \hspace*{-\dimexpr\marginparwidth+\marginparsep\relax}
+    \IfNoValueTF { #1 }
+      { \seq_set_split:Nnn \l_tmpa_seq { , } { } }
+      { \seq_set_split:Nnn \l_tmpa_seq { , } { ,#1 } }
+    \tl_if_in:nnTF { #2 } { , }
+      {
+        \seq_set_split:Nnn \l_tmpb_seq { , } { #2 }
+        \tl_clear:N \l_docMRTbundle_macro_name_tl
+        \seq_map_function:NN \l_tmpb_seq \docMRTbundle_dscopt_widest:n
+        \tl_set:Nn \l_docMRTbundle_macro_name_tl { \seq_item:Nn \l_tmpb_seq 1 }
+      }
+      {
+        \tl_set:Nn \l_docMRTbundle_macro_name_tl { #2 }
+        \seq_map_function:NN \l_tmpa_seq \docMRTbundle_dscopt_widest:n
+      }
+    \begin{minipage}[t][0pt]{\l_docMRTbundle_dscmac_widest_dim}
+      \raggedleft
+      \noindent
+      \begin{tabular}[t]{@{}l@{}}
+        \toprule
+        \tl_if_in:nnTF { #2 } { , }
+          {
+            \seq_map_function:NN\l_tmpb_seq \docMRTbunndle_dscopt_multiple_mac:n
+          }
+          {
+            \seq_map_function:NN\l_tmpa_seq \docMRTbundle_dscopt_table_element:n
+          }
+        \bottomrule
+      \end{tabular}
+    \end{minipage}
+    \hspace*{\marginparsep} 
+    \begin{minipage}[t]
+      {
+        \dimexpr
+        \textwidth + \marginparwidth - \l_docMRTbundle_dscmac_widest_dim
+        \relax
+      }
+      \vspace*{1\baselineskip}
+      \@hangfrom {}
+        { \smash { \IfValueTF { #3 } { =~ \texttt{#3} } { --NoArgument-- } } }
+      \vspace*{.5\baselineskip}
+    \end{minipage}\\
+    \hangindent
+      \dimexpr \l_docMRTbundle_dscmac_widest_dim - \marginparwidth \relax
+    \noindent
+    \ignorespaces
+  }
+  {
+    \__docMRTbundle_dscmac_end:
+  }% <<<
+\NewDocumentCommand \dscremaininglines { m }%>>>
+  {
+    \vskip
+      \dimexpr
+        #1\baselineskip - 1.5\baselineskip + 1.2ex
+      \relax
+  }%<<<
+\NewDocumentCommand \docIndividualVersions {}%>>>
+  {
+    \makeatletter
+    % If one of the packages is not loaded, the version and date of it are not
+    % defined. So we have to read the first two lines containing those
+    % definitions.
+    \ior_new:N \l_docMRTbundle_unloaded_ior
+    \clist_map_inline:nn { MRTbeam.cls }
+      {
+        \ior_open:Nn \l_docMRTbundle_unloaded_ior { ##1 }
+        \ior_get:NN \l_docMRTbundle_unloaded_ior \l_tmpa_tl
+        \exp_args:NnV \tl_rescan:nn {} \l_tmpa_tl
+        \ior_get:NN \l_docMRTbundle_unloaded_ior \l_tmpa_tl
+        \exp_args:NnV \tl_rescan:nn {} \l_tmpa_tl
+        \ior_close:N \l_docMRTbundle_unloaded_ior
+      }
+    \makeatother
+    \begin{MRTtable}
+      [
+        ,float=false
+        ,pre=
+          \def\versionline##1%
+            {
+              \pkg{MRT##1} & \csuse{MRT##1@date} & \csuse{MRT##1@version}\\
+            }
+      ]
+      Package & Date & Version\\
+      \versionline{thesis}
+      \versionline{beam}
+      \versionline{tab}
+      \versionline{if}
+      \versionline{sfacc}
+    \end{MRTtable}
+  }%<<<
 \ExplSyntaxOff
 \makeatother

@@ -1,1 +1,57 @@
 \chapter{The \cls{MRTthesis} class}
+Descriptive text here.
+
+\section{Dependencies}
+The following packages are loaded (used options given in brackets):
+\vspace*{-\multicolsep}%
+\begin{multicols}{2}%>>>
+  \begin{itemize}
+    \item \pkg{expl3}
+    \item \pkg{xparse}
+    \item \pkg{MRTif}
+    \item \pkg{MRTsfacc}
+    \item \pkg{MRTtab}
+    \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
+      \begin{itemize}[topsep=0pt]
+        \item \pkg{fontspec} and\\\verb|\defaultfontfeatures{Ligatures=TeX}|
+      \end{itemize}
+      else
+      \begin{itemize}[topsep=0pt]
+        \item \pkg{fontenc} [T1]
+        \item \pkg{inputenc} [utf8]
+      \end{itemize}
+    \item \pkg{lmodern}
+    \item \pkg{helvet}
+    \item \pkg{textcomp}
+    \item \pkg{babel} [ngerman] if \opt{UKenglish} is used with
+      [main=UKenglish,ngerman]
+    \item \pkg{scrlayer-scrpage} [singlespacing=true]
+    \item \pkg{geometry} (with correct options)
+    \item \pkg{setspace}
+    \item \pkg{ulem} [normalem]
+    \item \pkg{xcolor} [table]
+    \item \pkg{graphicx}
+    \item \pkg{enumitem}
+    \item \pkg{amsmath}
+    \item \pkg{mathastext} [italic,defaultmathsizes]
+    \item \pkg{isomath}
+    \item \pkg{hyperref}
+    \item if the \opt{minimal} option is not used:
+      \begin{itemize}
+        \item \pkg{siunitx}
+          [%
+            detect-all, locale=DE,
+            per-mode=reciprocal-positive-first, range-phrase=%
+            \verb|{\ifmmode|\hskip0pt
+            \verb|\text{ bis }\else|\hskip0pt
+            \verb|\ bis \fi}|%
+          ]
+        \item \pkg{biblatex}
+          [%
+            backend=biber, natbib=true, citestyle=numeric, bibstyle=numeric,
+            sorting=none, giveninits=true, sortcites%
+          ]
+        \item \pkg{csquotes}
+      \end{itemize}
+  \end{itemize}
+\end{multicols}%<<<
