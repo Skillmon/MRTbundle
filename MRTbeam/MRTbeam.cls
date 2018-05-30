@@ -1,19 +1,24 @@
+\newcommand*\MRTbeam@version{0.1}
+\newcommand*\MRTbeam@date{2018/04/21}
+
 \NeedsTeXFormat{LaTeX2e}
+
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{beamer}}
 \ProcessOptions\relax
-\RequirePackage{helvet,MRTsfacc,xparse}
+\RequirePackage{helvet,MRTsfacc,expl3,xparse}
 \LoadClass{beamer}
-\ProvidesClass{MRTbeam}
-  [2018/04/21 beamer template for MRT - University of Bayreuth]
+\ProvidesExplClass
+  {MRTbeam}          {\MRTbeam@date}
+  {\MRTbeam@version} {beamer template for MRT - University of Bayreuth}
 
 \usetheme{MRTbeam}
 
-\ExplSyntaxOn
 \NewDocumentCommand \ProgressBarStyle { s m }% >>>
   {%
     \IfBooleanT { #1 } { \ProgressBartrue }
     \str_case:nnF { #2 }
       {
+        { default } { \SetProgressBar{c}{30pt}{\f@size pt}{-1.65ex} }
         { Spratte } { \SetProgressBar{c}{\paperwidth}{2pt}{3pt} }
         { spratte } { \SetProgressBar{c}{\paperwidth}{2pt}{3pt} }
       }

@@ -345,18 +345,9 @@
           at (current page.south west) {#4};%
       \end{tikzpicture}}}%
   }%<<<
-\def\MRTbeam@PlaceAt@s@split@a#1,#2\end@MRTbeam@argument%>>>
-  {%
-    #1%
-  }%<<<
-\def\MRTbeam@PlaceAt@s@split@b#1,#2\end@MRTbeam@argument%>>>
-  {%
-    #2%
-  }%<<<
 \NewDocumentCommand{\MRTbeam@PlaceAt}{ m m +m }%>>>
   {%
-    \xdef\MRT@PlacedStuff%
-      {\unexpanded\expandafter{\MRT@PlacedStuff \node[#2] at (#1) {#3};}}%
+    \AddToPlaced{\node[#2] at (#1) {#3};}%
   }%<<<
 \NewDocumentCommand{\AddToPlaced}{ +m }%>>>
   {%
