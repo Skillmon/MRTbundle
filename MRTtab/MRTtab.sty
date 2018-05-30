@@ -1,10 +1,13 @@
+\newcommand*\MRTtab@version{0.1}
+\newcommand*\MRTtab@date{2018/05/22}
+
 \NeedsTeXFormat{LaTeX2e}
 
 \RequirePackage{expl3,xparse,setspace,array}
 \RequirePackage[table]{xcolor}
-\ProvidesExplClass
-  {MRTtab} {2018/05/22}
-  {0.1}    {tables matching the style in MRT scripts}
+\ProvidesExplPackage
+  {MRTtab}          {\MRTtab@date}
+  {\MRTtab@version} {tables matching the style in MRT scripts}
 
 %% package variables >>>
 %%=============================================================================
@@ -29,6 +32,8 @@
 \tl_new:N \l__MRTtab_eol_hook_public_tl
 \tl_new:N \l__MRTtab_table_pre_hook_tl
 \tl_new:N \l__MRTtab_table_post_hook_tl
+\tl_new:N \l__MRTtab_env_begin_tl
+\tl_new:N \l__MRTtab_env_end_tl
 % messages >>>
 \msg_new:nnn { MRTtab } { patch~failed } { Patching~of~\string#1~failed. }
 \msg_new:nnn { MRTtab } { KOMA~not~loaded }
@@ -86,7 +91,7 @@
 \cs_new_protected:Nn \__MRTtab_table_label_key:n%>>>
   {
     \tl_if_blank:nTF { #1 }
-      { \tl_set:Nn \l_MRTtab_table_lable_tl {} }
+      { \tl_clear:N \l_MRTtab_table_lable_tl }
       { \tl_set:Nn \l_MRTtab_table_lable_tl { \label{#1} } }
   }%<<<
 \keys_define:nn { MRTtab }%>>>
@@ -114,19 +119,31 @@
     ,columns         .tl_set:N           = \l_MRTtab_table_col_tl
     ,columns         .initial:n          = { l?c }
     ,col             .meta:n             = { columns = { #1 } }
+    ,env~begin       .tl_set:N           = \l__MRTtab_env_begin_tl
+    ,env~end         .tl_set:N           = \l__MRTtab_env_end_tl
+    ,env             .meta:n             =
+      {
+        env~begin = { \begin{#1} },
+        env~end = { \end{#1} }
+      }
+    ,env             .initial:n          = MRTtabular
     ,float           .bool_set:N         = \l_MRTtab_table_float_bool
     ,float           .default:n          = { true }
     ,float           .initial:n          = { true }
     ,head~rows       .int_set:N          = \g__MRTtab_color_upto_int
-    ,head~rows       .initial:n          = { 1 }
+    ,head~rows       .initial:n          = { -100 }
     ,head            .meta:n             = { head~rows = { #1 } }
-    ,label           .code:n             = { \__MRTtab_table_label_key:n #1 }
+    ,label           .code:n             = { \__MRTtab_table_label_key:n { #1 }}
     ,no~float        .bool_set_inverse:N = \l_MRTtab_table_float_bool
     ,no~float        .default:n          = { true }
+    ,no~inner~env    .meta:n             = { env~begin = {}, env~end = {} }
+    ,no~inner~env    .value_forbidden:n  = true
     ,pos             .tl_set:N           = \l_MRTtab_table_pos_tl
     ,pos             .initial:n          = { tbp }
     ,post~tab        .code:n             = { \MRTtabAddtoPostHook { #1 } }
+    ,post            .meta:n             = { pre~tab = { #1 } }
     ,pre~tab         .code:n             = { \MRTtabAddtoPreHook  { #1 } }
+    ,pre             .meta:n             = { pre~tab = { #1 } }
     ,short caption   .tl_set:N           = \l_MRTtab_table_scap_tl
     ,short cap       .meta:n             = { short caption = { #1 } }
     ,scap            .meta:n             = { short caption = { #1 } }
@@ -663,15 +680,24 @@
         \begin { minipage } { \textwidth }
       }
     \centering
-    \bool_if:NT \l_MRTtab_caption_above_bool { \__MRTtab_table_caption: }
+    \bool_if:NT \l_MRTtab_caption_above_bool
+      {
+        \let \if@captionabove \iftrue
+        \__MRTtab_table_caption:
+      }
     \l__MRTtab_table_pre_hook_tl
-    \exp_args:NnV \begin { MRTtabular } \l_MRTtab_table_col_tl
+    \tl_if_empty:NF \l__MRTtab_env_begin_tl
+      { \exp_args:NV \l__MRTtab_env_begin_tl \l_MRTtab_table_col_tl }
   }%<<<
 \cs_new:Nn \__MRTtab_table_normal_end:%>>>
   {
-    \end{MRTtabular}
+    \l__MRTtab_env_end_tl
     \l__MRTtab_table_post_hook_tl
-    \bool_if:NF \l_MRTtab_caption_above_bool { \__MRTtab_table_caption: }
+    \bool_if:NF \l_MRTtab_caption_above_bool
+      {
+        \let \if@captionabove \iffalse
+        \__MRTtab_table_caption:
+      }
     \bool_if:NTF \l_MRTtab_table_float_bool
       { \end { table } }
       {
@@ -700,6 +726,7 @@
   }%<<<
 \NewDocumentEnvironment { MRTtable } { O{} }%>>>
   {% begin >>>
+    \MRTtabDeclareHeadMacros
     \MRTtabSetup { head = 1 }
     \MRTtabSetup { #1 }
     \bool_if:NT \l_MRTtab_table_striped_bool
