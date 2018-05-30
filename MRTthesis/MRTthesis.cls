@@ -79,7 +79,6 @@
 \RequirePackage{lmodern}
 \RequirePackage{helvet}
 \renewcommand\familydefault{\sfdefault}
-\RequirePackage{textcomp}
 \bool_if:NTF \l_MRTthesis_UKenglish_bool
   {% true >>>
     \RequirePackage[main=UKenglish,ngerman]{babel}
