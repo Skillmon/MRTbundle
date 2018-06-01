@@ -1,0 +1,38 @@
+\documentclass[]{MRTbeam}
+
+\title{A Presentation}
+\subtitle{It'll blow your mind}
+\occasion{Example}
+\author[A. Student]{Armer Student}
+
+% The default settings might look ugly
+\ProgressBartrue
+\PrependSubsectionstrue
+
+\begin{document}
+\begingroup
+\OnlyOneTopRuletrue
+\begin{frame}%>>>
+\maketitle
+\end{frame}%<<<
+\endgroup
+
+\begin{frame}{Contents}{}%>>>
+\tableofcontents
+\end{frame}%<<<
+
+\StartOfProgress
+\include{tex/introduction}
+\include{tex/mainpart}
+\include{tex/conclusion}
+\EndOfProgress
+
+\begin{whiteframes}
+  \ShowGrid
+  \begin{frame}{\relax}{\relax}%>>>
+    \PlaceAt(.5,.5){\Huge Thank you. Here is a grid for you.}
+  \end{frame}%<<<
+\end{whiteframes}
+
+
+\end{document}

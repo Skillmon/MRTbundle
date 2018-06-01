@@ -1,0 +1,79 @@
+\chapter{Einleitung}
+\begingroup
+\color{blue}
+Absatzformate werden nicht benötigt, \LaTeX\ erkennt automatisch, ob es sich um
+den ersten Absatz nach einer Überschrift handelt oder nicht, und rückt
+dementsprechend die erste Zeile ein oder nicht. Während des Tippens braucht man
+sich um die Formatierung von normalem Text wenig Gedanken machen.
+
+Dieser Absatz ist zum Beispiel eingerückt. Dinge, um die man sich Gedanken
+machen sollte, sind vor allem Sonderzeichen, die in \LaTeX\ bzw.\@ \TeX\ für
+Befehle vorgesehen sind, wie bspw.\@ '\%', '\textbackslash', '\_' oder
+'\^{}'. Diese lassen sich durch Befehle wie: \verb|\%|, \verb|\textbackslash|,
+\verb|\_| oder \verb|\^{}| setzen. Eine kleine Übersicht liefert folgender Link%
+\footnote{\url{https://de.wikibooks.org/wiki/LaTeX-Kompendium:_Sonderzeichen}}.
+
+\noindent
+Mit \verb|\noindent| lässt sich die Einrückung eines Absatzes gezielt
+verhindern.
+
+Mit \verb|begin{enumerate}...\end{enumerate}| lassen sich nummerierte
+Aufzählungen setzen.
+\begin{enumerate}
+  \item Mit \verb|itemize| anstelle von \verb|enumerate| kann man Strickpunkte
+    machen
+    \begin{itemize}
+      \item hier in einer verschachtelten Form
+      \item Man kann die Art der Aufzählung auch beeinflussen:
+        \begin{enumerate}[label=\alph*)]
+          \item Beispielsweise so
+            \begin{enumerate}[label=(\roman*)]
+              \item oder so
+            \end{enumerate}
+        \end{enumerate}
+      \item[*•>] willkürliches Angeben des Symbols funktioniert auch
+    \end{itemize}
+  \item Die Möglichkeiten sind nahezu unbegrenzt
+\end{enumerate}
+
+\section{Stand der Technik}
+Das ist ein üblicher Gliederungspunkt.
+
+\section{Motivation und Zielsetzung}
+Das auch.
+
+\color{cyan!50!blue}
+\section{Das ist eine extrem hässliche und lange, ja gerade zu in epischer
+Breite ab\-ge\-fasste Über\-schrift, die wahrscheinlich umgebrochen werden
+muss.}
+Nur zur Verdeutlichung, wie mit sehr langen Überschriften umgegangen wird.
+Absichtlich in einem schmutzigen Cyan gesetzt, um der Hässlichkeit Ausdruck zu
+verleihen. Leider funktioniert der Algorithmus zur automatischen Silbentrennung
+von \LaTeX\ in unterstrichenen Überschriften nicht, weshalb die Silbentrennung
+hier manuell mit \verb|\-| im Wort angegeben werden muss.
+
+Es ist wichtig eine Kurzform anzugeben, damit die Kopfzeile weiterhin schön
+gesetzt und nicht mehrzeilig wird. Eine Kurzform ist durch
+\verb|\section[short]{long}| anzugeben. Man beachte, dass durch dieses Vorgehen
+auch die Kurzform ins Inhaltsverzeichnis übernommen wird. Ist dies nicht
+erwünscht, kann
+
+\verb|\section{long}\markright{\thesection\ short}|
+
+\noindent
+verwendet werden. Für Kapitel sollte allerdings
+
+\verb|\chapter{long}\markboth{\thechapter\ short}{\thechapter\ short}|
+
+\noindent
+oder 
+
+\verb|\chapter{long}\sethead{\thechapter\ short}|
+
+\noindent
+gebraucht werden. Selbiges gilt sinngemäß auch für andere Gliederungsebenen. Man
+beachte, dass die Argumente von \verb|\sethead|, \verb|\markboth|,
+\verb|\markleft| und \verb|\markright| nicht darauf überprüft werden, ob es
+sich tatsächlich um Gliederungsebenen handelt. Nahezu jeglicher Inhalt ist hier
+theoretisch möglich..
+\endgroup

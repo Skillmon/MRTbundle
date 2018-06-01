@@ -1,0 +1,80 @@
+\chapter{Grundlagen}
+\begingroup
+\color{blue}
+\section{Blabla}
+\subsection{Blablabla}
+Man muss ein bisschen was über Grundlagen schreiben. Aber nicht die halbe Arbeit
+lang. Falls Formeln nötig sind, benutzt man am besten die Umgebung
+\verb|\begin{align}|\hskip0pt\verb|...|\hskip0pt\verb|\end{align}|
+bei mehreren aufeinander folgenden Formeln oder, sollte nur eine Formel gesetzt
+werden, 
+\verb|\begin{equation}|\hskip0pt\verb|...|\hskip0pt\verb|\end{equation}|.
+
+Ein Beispiel für eine wichtige Formel ist
+\begin{equation}
+  1+1 = 2\,\text{.}
+  \label{eq:1}
+\end{equation}
+Andere wichtige, ebenfalls durchnummerierte Formeln neben \autoref{eq:1} sind
+\begin{align}
+  1+2 &= 3\,\text{,}\label{eq:2}\\
+  1+3 &= 4\text{ und}\label{eq:3}\\
+  1+4 &= 5\,\text{.}\label{eq:4}
+\end{align}
+
+Beim Editieren von Formeln muss man eigentlich auf nichts achten, was die
+Schriftart anbelangt. Wichtig ist, dass man keine leere Zeile vor oder nach
+Gleichungen lässt, sollte man keinen neuen Absatz starten wollen. Vor einer
+Gleichungsumgebung sollte dies nie der Fall sein.
+\newpage
+Symbole im Mathemodus:
+
+\def\X#1{$#1$&$\mathrm{#1}$&\string#1}
+\def\Y#1{\multicolumn{2}{l}{$#1$}&\string#1}
+\newcounter{countA}%
+\newcommand{\myline}[2][0]{%
+    \ifnum#1>0\setcounter{countA}{#1}\fi%
+    \stepcounter{countA}\Alph{countA}$\Alph{countA}$\alph{countA}$\alph{countA}$&%
+    \ifnum\numexpr#2-1>\value{countA}%
+    \myline{#2}%
+    \else%
+    \stepcounter{countA}\Alph{countA}$\Alph{countA}$\alph{countA}$\alph{countA}$%
+    \setcounter{countA}{0}%
+    \fi%
+}
+\noindent
+\begin{tabular}{l?l}
+    \myline{10} \\
+    \myline[10]{20}\\
+    \myline[20]{26}&
+    $i\times i$ & $i\cdot i$ & $i\circ i$ & $i=i$ \\
+    $i>i$ & $i<i$ & $i\in i$ & $i+i$ & $i-i$ & $i/i$
+\end{tabular}\\
+\begin{tabular}{l?l}
+\X\alpha        &\X\theta       &\X o           &\X\tau         \\
+\X\beta         &\X\vartheta    &\X\pi          &\X\upsilon     \\
+\X\gamma        &\X\gamma       &\X\varpi       &\X\phi         \\
+\X\delta        &\X\kappa       &\X\rho         &\X\varphi      \\
+\X\epsilon      &\X\lambda      &\X\varrho      &\X\chi         \\
+\X\varepsilon   &\X\mu          &\X\sigma       &\X\psi         \\
+\X\zeta         &\X\nu          &\X\varsigma    &\X\omega       \\
+\X\eta          &\X\xi                                          \\
+                                                                \\
+\X\Gamma        &\X\Lambda      &\X\Sigma       &\X\Psi         \\
+\X\Delta        &\X\Xi          &\X\Upsilon     &\X\Omega       \\
+\X\Theta        &\X\Pi          &\X\Phi                         \\
+                                                                \\
+\Y\arccos & \Y\cos    & \Y\csc & \Y\exp \\
+\Y\arcsin & \Y\cosh   & \Y\deg & \Y\gcd \\
+\Y\arctan & \Y\cot    & \Y\det & \Y\hom \\
+\Y\arg    & \Y\coth   & \Y\dim & \Y\inf \\
+\Y\ker    & \Y\limsup & \Y\min & \Y\sinh \\
+\Y\lg     & \Y\ln     & \Y\Pr  & \Y\sup  \\
+\Y\lim    & \Y\log    & \Y\sec & \Y\tan  \\
+\Y\liminf & \Y\max    & \Y\sin & \Y\tanh \\
+                                         \\
+\Y\int    & \Y\sum  & \Y\prod  & \Y\coprod \\
+\Y\oint   & \Y\iint & \Y\iiint & \Y\iiiint \\
+\Y\idotsint & \Y\in & \Y\forall & \Y\exists
+\end{tabular}
+\endgroup

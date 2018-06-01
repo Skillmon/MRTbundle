@@ -1,0 +1,42 @@
+\documentclass[]{MRTthesis}
+
+%% I could define some macros here that I need in my document. As an alternative
+%% I've put the definitions in another file and \input that file here to keep
+%% this file nice and clean.
+\input{preamble/macros.tex}
+
+\title{\textcolor{blue}{\MakeUppercase{Untersuchung zu...}}}
+\author{\textcolor{blue}{Armer Student}}
+\MRTthesisSetup
+  {
+    ,thesis=\textcolor{blue}{Meine Arbeit}
+    ,degree=\textcolor{blue}{Mein akademischer Grad}
+    ,advisor=\textcolor{blue}{Mein Betreuer}
+    ,sadvisor=\textcolor{blue}{M. Betreuer}
+    ,sauthor=\textcolor{blue}{A. Student}
+  }
+
+\begin{document}
+\maketitle
+\affidavit
+\include{tex/danksagung}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainpart% or \mainmatter which should be the same
+\include{tex/einleitung}
+\include{tex/grundlagen}
+\include{tex/hauptteil}
+\include{tex/zusammenfassung}
+
+\appendix
+% this example doesn't use a bibliography
+%\printbibliography
+\clearpage
+% because the appendix most likely contains much material for which flushed
+% bottom pages won't work or look good, put a \raggedbottom here
+\raggedbottom
+\include{tex/anhang}
+\end{document}

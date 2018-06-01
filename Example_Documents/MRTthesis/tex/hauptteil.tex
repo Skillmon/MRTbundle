@@ -1,0 +1,39 @@
+\begingroup
+\color{blue}
+\chapter{Hauptteil}
+Bilder werden auch automatisch durchnummeriert, wenn sie in einer \env{figure}
+eingebunden und mit einer \cs{caption} versehen werden. Mit \verb|\ref{label}|
+oder \verb|\autoref{label}| können sie referenziert werden. Beispiel:
+\verb|\autoref{fig:box}| produziert „\autoref{fig:box}“.
+\begin{figure}[htbp]
+  \centering
+  \fbox{\phantom{\rule{4cm}{2cm}}}
+  \caption[Testbild: Eine rechteckige Box]
+    {%
+      Testbild: Eine rechteckige Box. Der restliche Text dieser Überschrift wird
+      nicht im Bildverzeichnis erscheinen, da das optionale Argument von
+      \cs{caption} verwendet wurde.\label{fig:box}
+    }
+\end{figure}
+
+Das Ganze funktioniert auch bei Tabellen wie bei \autoref{tab:test}, die mit der
+\env{MRTtable} gesetzt wurde.
+
+\begin{MRTtable}
+  [
+    ,cap=
+      {%
+        Testtabelle mit der \env{MRTtable}. Der weitere Text wird nicht im
+        Tabellenverzeichnis erscheinen, da der Key \texttt{scap} verwendet
+        wurde.%
+      }
+    ,scap={Testtabelle mit der \env{MRTtable}}
+    ,label=tab:test
+    ,col=lcl
+    ,pos=htbp
+  ]
+  Begriff & Symbol & Erläuterung\\
+  Murgs & $\mu$ & Weiß ich selber nicht\\
+  Abmurgs & $a$ & ???
+\end{MRTtable}
+\endgroup

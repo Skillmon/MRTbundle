@@ -3,8 +3,14 @@
 *.fmt
 *.glo
 *.idx
+*.lof
 *.log
+*.lot
+*.nav
 *.out
 *.run.xml
+*.snm
 *.toc
 Doc/doc_MRTbundle.pdf
+Example_Documents/MRTbeam/example_MRTbeam.pdf
+Example_Documents/MRTthesis/example_MRTthesis.pdf
