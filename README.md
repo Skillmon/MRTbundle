@@ -23,8 +23,9 @@ unclean folder structure of your project *and* has to be redone for any future
 project.
 
 The perhaps best way would be local user wide install. This is done by placing
-the bundle's folder in your local TeX-tree. For TeX Live on Unix this would by
-default be `/home/<user>/texmf/` therein the package should belong in
+the bundle's folders `MRTbeam`, `MRTif`, `MRTsfacc`, `MRTtab`, and `MRTthesis`
+in your local TeX-tree. For TeX Live on Unix this would by default be
+`/home/<user>/texmf/` therein the package should belong in
 `tex/latex/MRTbundle`. The documentation should be placed in
 `/home/<user>/texmf/doc/latex/MRTbundle` but this is optional. For other OSes
 and TeX distributions the paths may vary. You can get the correct path to your
