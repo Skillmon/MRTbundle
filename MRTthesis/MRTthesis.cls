@@ -20,12 +20,12 @@
 % <<<
 % ifs >>>
 \newif\ifMRTbibliography
+\newif\if@MRTthesis@tikzuline@
 % <<<
 % l3 variables >>>
 % bool >>>
 \bool_new:N \l_MRTthesis_minimal_bool
 \bool_new:N \l_MRTthesis_mathsizes_bool
-\bool_new:N \l_MRTthesis_tikzuline_bool
 \bool_new:N \l_MRTthesis_UKenglish_bool
 % <<<
 % box >>>
@@ -48,11 +48,11 @@
 
 %% Class options and loading scrreprt >>>
 %%=============================================================================
-\DeclareOption{minimal}{\bool_set_true:N \l_MRTthesis_minimal_bool}
 \DeclareOption{longtable}{\PassOptionsToPackage{longtable}{MRTtab}}
 \DeclareOption{mathsizes}{\bool_set_true:N \l_MRTthesis_mathsizes_bool}
+\DeclareOption{minimal}{\bool_set_true:N \l_MRTthesis_minimal_bool}
 \DeclareOption{no mathsizes}{\bool_set_false:N \l_MRTthesis_mathsizes_bool}
-\DeclareOption{tikzunderline}{\bool_set_true:N \l_MRTthesis_tikzuline_bool}
+\DeclareOption{tikzunderline}{\@MRTthesis@tikzuline@true}
 \DeclareOption{tUline}{\ExecuteOptions{tikzunderline}}
 \DeclareOption{UKenglish}{\bool_set_true:N \l_MRTthesis_UKenglish_bool}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrreprt}}
@@ -97,7 +97,9 @@
 \RequirePackage[table]{xcolor}
 \RequirePackage{graphicx}
 \RequirePackage{enumitem}
-\RequirePackage{amsmath}
+\RequirePackage[fleqn]{mathtools}
+\RequirePackage{scalerel}
+\RequirePackage{stackengine}
 % bad math fonts 
 \RequirePackage[italic,defaultmathsizes]{mathastext}
 \RequirePackage{isomath}
@@ -112,10 +114,11 @@
     \RequirePackage{siunitx}
     \sisetup{% set options of the siunitx package
         ,detect-all%
-        ,locale=DE%
         ,per-mode=reciprocal-positive-first%
         ,range-phrase={\ifmmode\text{ bis }\else\ bis \fi}%
     }%
+    \addto\extrasngerman{\sisetup{locale=DE}}
+    \addto\extrasUKenglish{\sisetup{locale=UK}}
     \RequirePackage[% I don't know yet how they want me to cite correctly...
         backend=biber%
         ,natbib=true%
@@ -140,7 +143,7 @@
     ,caption~above   .value_forbidden:n = true
     ,caption~below   .code:n     = { \MRTtabSetup { caption~below } }
     ,caption~below   .value_forbidden:n = true
-    ,examinor        .tl_set:N   = \l_MRTthesis_examinor_tl
+    ,examiner        .tl_set:N   = \l_MRTthesis_examiner_tl
     ,logoL           .tl_set:N   = \l_MRTthesis_logoL_tl
     ,logoL~height    .dim_set:N  = \l_MRTthesis_logoL_height_dim
     ,logoR           .tl_set:N   = \l_MRTthesis_logoR_tl
@@ -151,8 +154,8 @@
     ,no~citation     .default:n  = { true }
     ,no~degree       .bool_set:N = \l_MRTthesis_no_degree_bool
     ,no~degree       .default:n  = { true }
-    ,no~examinor     .bool_set:N = \l_MRTthesis_no_examinor_bool
-    ,no~examinor     .default:n  = { true }
+    ,no~examiner     .bool_set:N = \l_MRTthesis_no_examiner_bool
+    ,no~examiner     .default:n  = { true }
     ,no~institute    .bool_set:N = \l_MRTthesis_no_institute_bool 
     ,no~institute    .default:n  = { true } 
     ,no~logos        .meta:n     = { logoL={},logoR={} }
@@ -169,11 +172,11 @@
     ,sadvisor        .meta:n     = { short~advisor={#1} }
     ,short~author    .tl_set:N   = \l_MRTthesis_s_author_tl
     ,sauthor         .meta:n     = { short~author={#1} }
-    ,short~examinor  .tl_set:N   = \l_MRTthesis_s_examinor_tl
-    ,sexaminor       .meta:n     = { short~examinor={#1} }
+    ,short~examiner  .tl_set:N   = \l_MRTthesis_s_examiner_tl
+    ,sexaminer       .meta:n     = { short~examiner={#1} }
     ,sign~height     .dim_set:N  = \l_MRTthesis_sign_height_dim
-    ,sign~seperation .dim_set:N  = \l_MRTthesis_sign_seperation_dim
-    ,sign~sep        .meta:n     = { sign~seperation={#1} }
+    ,sign~separation .dim_set:N  = \l_MRTthesis_sign_separation_dim
+    ,sign~sep        .meta:n     = { sign~separation={#1} }
     ,sign~width~max  .dim_set:N  = \l_MRTthesis_sign_width_max_dim
     ,sign~width~min  .dim_set:N  = \l_MRTthesis_sign_width_dim
     ,stretch~caption .code:n     =
@@ -204,7 +207,7 @@
 \keys_set:nn { MRTthesis/setup }% >>>
   {
     ,advisor = {\textcolor{blue}{Mein~Betreuer}}
-    ,examinor = {Univ.-Professor~Dr.-Ing.~Gerhard~Fischerauer}
+    ,examiner = {Univ.-Professor~Dr.-Ing.~Gerhard~Fischerauer}
     ,caption~below
     ,logoL = {MRTthesis_logo_UBT2.pdf}
     ,logoR = {MRTthesis_logo_MRT2.pdf}
@@ -214,14 +217,12 @@
     ,pos~float = tbp
     ,sadvisor = {\textcolor{blue}{M.~Betreuer}}
     ,sauthor  = {}
-    ,sexaminor = {G.~Fischerauer}
+    ,sexaminer = {G.~Fischerauer}
     ,sign~height = 9mm
     ,sign~width~min = 7cm
     ,sign~width~max = 0pt
-    ,sign~seperation = 2em
-    ,stretch~cap = 1.408
-    ,stretch~tab = 1.408
-    ,stretch~text = 1.408
+    ,sign~separation = 2em
+    ,stretches = 1.408
     ,tab~spacing
     ,thesis = {\textcolor{blue}{Meine~Arbeit}}
     ,title  = {\textcolor{blue}{UNTERSUCHUNG~ZU ...}}
@@ -235,12 +236,17 @@
 
 %% messages >>>
 %%=============================================================================
-\msg_new:nnnn { MRTthesis } { afterafterhyperref }
+\msg_new:nnnn { MRTthesis } { afterafterhyperref }%>>>
   {
     \exp_not:N \MRTafterhyperref
     ~used~too~late.~It~has~to~be~used~before~\exp_not:N \begin \{document\}.
   }
-  { Seriously,~which~information~do~you~miss~from~the~above? }
+  { Seriously,~which~information~do~you~miss~from~the~above? }%<<<
+\msg_new:nnn { MRTthesis } { degree~undefined }%>>>
+  {
+    The~degree~option~wasn't~used~and~guessing~the~degree~from~the~thesis~type~
+    failed.
+  }%<<<
 %%==========================================================================<<<
 
 %% macros >>>
@@ -283,6 +289,7 @@
     \includegraphics[height=#1]{#2}
   }% <<<
 \cs_generate_variant:Nn \MRTthesis_display_logo_expanded:nn { xx }
+\newcommand*\MRTthesis@fntsel[2]{\fontsize{#1bp}{#2bp}\selectfont}
 % <<<
 % \MRTafterhyperref >>>
 \NewDocumentCommand \MRTafterhyperref { +m }% >>>
@@ -297,7 +304,6 @@
       { \msg_error:nn { MRTthesis } { afterafterhyperref } }
   }% <<<
 % <<<
-\newcommand*\MRTthesis@fntsel[2]{\fontsize{#1bp}{#2bp}\selectfont}
 % ToC related >>>
 \NewDocumentCommand \DeclareTOCStyleEntryMRTSectionLike% >>>
   { O{\l_MRTthesis_toc_section_indent_tl} m }
@@ -321,8 +327,49 @@
   }% <<<
 % <<<
 % \WUline >>>
-\bool_if:NT \l_MRTthesis_tikzuline_bool% >>>
+\def\MRTthesis@HeadingsUline{\WUline}
+\NewDocumentCommand \WUline { o m }
   {
+    \mode_if_math:TF
+      { \MRTthesis_WUline_math:nn { #1 } { #2 } }
+      { \MRTthesis_WUline_text:nn { #1 } { #2 } }
+  }
+\cs_new:Nn \MRTthesis_WUline_math:nn
+  {
+    \IfNoValueTF { #1 }
+      { \MRTthesis_WUline_math_out:nn { \MRTthesis@WUline@mathheight } { #2 } }
+      { \MRTthesis_WUline_math_out:nn { #1 } { #2 } }
+  }
+\cs_new:Nn \MRTthesis_WUline_math_out:nn
+  {
+    \ThisStyle
+      {
+        \setbox0 \hbox { $\SavedStyle #2$ }
+        \stackengine
+          { #1 }
+          { $ { \SavedStyle #2 } $ }
+          { \rule { \wd0 } { 0.185ex } }
+          { U } { c } { F } { F } { S }
+      }
+    \underline { \vphantom { #2 } }
+  }
+\cs_new:Nn \MRTthesis_WUline_text:nn
+  {
+    \bgroup
+    \IfNoValueTF { #1 }
+      {
+        \markoverwith
+          { \rule [ \MRTthesis@WUline@textheight ] { 0.25ex } { 0.185ex} } 
+      }
+      { \markoverwith { \rule [ #1 ] { 0.25ex } { 0.185ex } } }
+    \ULon{#2}
+  }
+\newcommand*\MRTthesis@WUline@mathheight{0.21ex}%
+\newcommand*\MRTthesis@WUline@textheight{-0.42ex}%
+% <<<
+% \tUline >>>
+\if@MRTthesis@tikzuline@
+  \ExplSyntaxOff
   \RequirePackage{tikz}
   \usetikzlibrary{calc}
   \RequirePackage{tikzpagenodes}
@@ -356,7 +403,7 @@
         {%
           \node[anchor=base,inner sep=0pt,outer sep=0pt,xshift=-#2]
             (Begin) {\strut};
-          \gettikzxy{($(Begin.base)-(current page.south west)$)}
+          \MRTthesis@gettikzxy{($(Begin.base)-(current page.south west)$)}
             {\tUline@bx}{\tUline@by}%
         }%
       #4%
@@ -364,7 +411,7 @@
         {%
           \node[anchor=base,inner sep=0pt,outer sep=0pt,xshift=+#2]
             (End) {\strut};%
-          \gettikzxy{($(End.base)-(current page.south west)$)}
+          \MRTthesis@gettikzxy{($(End.base)-(current page.south west)$)}
             {\tUline@ex}{\tUline@ey}%
         }%
       \begin{tikzpicture}[overlay,remember picture]
@@ -393,7 +440,9 @@
       \MRTthesis@tUline@length=#2
       \MRTthesis@tUline@count=1
       \loop\ifdim
-        \dimexpr\tUline@by-\MRTthesis@tUline@count\MRTthesis@tUline@length\relax
+        \dimexpr
+          \tUline@by-\MRTthesis@tUline@count\MRTthesis@tUline@length
+        \relax
         >\tUline@ey
       \draw[MRTthesis@tUline]
         ($(Begin.base -| WestLine)+(0,#1)-
@@ -409,55 +458,8 @@
         ($(Begin.base)+(0,#1)$) -- ($(Begin.base -| EastLine)+(0,#1)$)
         ($(End.base)+(0,#1)$) -- ($(End.base -| WestLine)+(0,#1)$);%
     }% <<<
-  }% <<<
-\def\MRTthesis@HeadingsUline{\WUline}
-\NewExpandableDocumentCommand \WUline { s o m }% >>>
-  {
-    \IfBooleanTF { #1 }
-      { \MRTthesis@star@WUline   { #2 } { #3 } }
-      { \MRTthesis@nostar@WUline { #2 } { #3 } }
-  }% <<<
-\newcommand*\MRTthesis@star@WUline[2]% >>>
-  {%
-    \IfNoValueTF{#1}%
-      {\MRTthesis@nostar@WUline{#2}}%
-      {%
-        \MRTthesis@WUline@setheight
-        \bgroup
-          \def\MRTthesis@WUline@phantomp% >>>
-            {%
-              \makebox[0pt][l]{\phantom{\text{#1}}}%
-            }% <<<
-          \MRTthesis@typeout@WUline{\MRTthesis@WUline@phantomp#2}%
-        \egroup
-      }%
-  }% <<<
-\newcommand*\MRTthesis@nostar@WUline[2]% >>>
-  {%
-    \IfNoValueTF { #1 }
-      { \MRTthesis@WUline@setheight }
-      { \MRTthesis@WUline@height=#1 }
-    \MRTthesis@typeout@WUline{\MRTthesis@WUline@phantomp#2}%
-  }% <<<
-\newcommand*\MRTthesis@typeout@WUline% >>>
-  {%
-    \bgroup\markoverwith{\rule[\MRTthesis@WUline@height]{0.25ex}{0.185ex}}\ULon
-  }% <<<
-\edef\MRTthesis@WUline@phantomp% >>>
-  {%
-    \noexpand\makebox[0pt][l]{\noexpand\phantom{\text{p}}}%
-  }% <<<
-\newdimen\MRTthesis@WUline@height%
-\newcommand*\MRTthesis@WUline@setheight
-  {% >>>
-    \relax\ifmmode
-      \MRTthesis@WUline@height=\MRTthesis@WUline@mathheight\relax
-    \else
-      \MRTthesis@WUline@height=\MRTthesis@WUline@normalheight\relax
-    \fi
-  }% <<<
-\newcommand*\MRTthesis@WUline@mathheight{-0.37ex}%
-\newcommand*\MRTthesis@WUline@normalheight{-0.42ex}%
+  \ExplSyntaxOn
+\fi
 % <<<
 \NewDocumentCommand \MRTthesisSetup { +m }%>>>
   {
@@ -482,55 +484,6 @@
   }%<<<
 % <<<
 \NewDocumentCommand \sethead { m } { \markboth{#1}{#1} }
-%% MRTtable
-%\NewDocumentEnvironment { MRTtable } { O{} }% >>>
-  %{% >>>
-    %\MRTthesis_provide_head:
-  %}% <<<
-  %{% >>>
-  %}% <<<
-%% <<<
-%\cs_new_protected_nopar:Nn \MRTthesis_provide_head:% >>>
-  %{
-    %\DeclareExpandableDocumentCommand \head { +m }
-      %{
-        %\l__MRTthesis_table_head_start_tl
-        %\tl_set:Nn \l_MRTthesis_head_cont_tl { ##1 }
-        %\tl_if_in:NnT \l_MRTthesis_head_cont_tl { \\ }
-          %{
-            %\exp_args:NnV \regex_match:nnTF { \c{\\}\s*\[.*?\] }
-              %\l_MRTthesis_head_cont_tl
-              %{
-                %\regex_replace_all:nnN { (\c{\\}\s*\[.*?\]) }
-                  %{ \1 \c{l__MRTthesis_table_head_start_tl} }
-                  %\l_MRTthesis_head_cont_tl
-              %}
-              %{
-                %\regex_replace_all:nnN { (\c{\\}) }
-                  %{ \1 \c{l__MRTthesis_table_head_start_tl} }
-                  %\l_MRTthesis_head_cont_tl
-              %}
-          %}
-        %\l_MRTthesis_head_cont_tl \\
-        %\hline
-      %}
-  %}% <<<
-%\tl_new:N \l__MRTthesis_table_head_start_tl
-%\tl_set:Nn \l__MRTthesis_table_head_start_tl
-  %{
-    %\rowcolor{tablegray}
-    %\bool_if:NT \l_MRTthesis_table_spacing_bool { \l__MRTthesis_table_strut }
-  %}
-%\tl_new:N \l_MRTthesis_strut_add_tl
-%\tl_set:Nn \l_MRTthesis_strut_add_tl { .8ex }
-%\tl_new:N \l__MRTthesis_table_strut
-%\tl_set:Nn \l__MRTthesis_table_strut% >>>
-  %{
-    %\vrule height \dimexpr 1ex + \l_MRTthesis_strut_add_tl \relax
-           %depth \l_MRTthesis_strut_add_tl
-           %width 0pt
-  %}% <<<
-%
 %%==========================================================================<<<
 
 %% labels and other ngerman stuff >>>
@@ -711,12 +664,7 @@
   {%
     \automark[chapter]{chapter}% from here on use chapters in headmark
     \renewcommand*{\thesection}{\Alph{section}}%
-    \pgfkeys
-      {%
-        /MRTarbeit/MRTtab/default/.add style = {}{%
-          nofloat,%
-        }%
-      }%
+    \MRTtabSetup{no~float}
     \@addtoreset{figure}{section}%
     \@addtoreset{table}{section}%
     \@addtoreset{equation}{section}%
@@ -730,6 +678,7 @@
     \cleardoublepage
     \pagenumbering{arabic}%
   }% <<<
+\let\mainmatter\mainpart
 %%==========================================================================<<<
 
 %% bibliography >>>
@@ -916,20 +865,19 @@
     \strut
     \noindent\affidavittext
     \par
-    \vspace{2.38cm}
+    \vspace
+      {
+        \dim_eval:n { \dim_max:nn { 2.38cm } { \l_MRTthesis_sign_height_dim } }
+      }
     \noindent
     \hbox_set:Nn \l_MRTthesis_tmpa_box { Bayreuth,~den~\@date }
-    \dim_compare:nNnTF { \l_MRTthesis_sign_width_max_dim } = { 0pt }
+    \dim_compare:nNnT { \l_MRTthesis_sign_width_max_dim } = { 0pt }
       {
         \dim_set:Nn \l_MRTthesis_sign_width_max_dim
-          { \box_wd:N \l_MRTthesis_tmpa_box }
-      }
-      {
-        \dim_compare:nNnT
-          \l_MRTthesis_sign_width_max_dim < \l_MRTthesis_sign_width_dim
           {
-            \dim_set_eq:NN \l_MRTthesis_sign_width_dim
-              \l_MRTthesis_sign_width_max_dim
+            \textwidth 
+            - \box_wd:N \l_MRTthesis_tmpa_box
+            - \l_MRTthesis_sign_separation_dim
           }
       }
     \hbox_unpack_clear:N \l_MRTthesis_tmpa_box
@@ -966,12 +914,15 @@
           }
         \dim_set:Nn \l_MRTthesis_sign_width_dim
           {
-            \dim_min:nn { \l_MRTthesis_sign_width_max_dim }
-              {
-                \dim_max:nn { \l_MRTthesis_sign_width_dim }
-                  { \box_wd:N \l_MRTthesis_tmpa_box }
-              }
+            \dim_max:nn
+              { \l_MRTthesis_sign_width_dim }
+              { \box_wd:N \l_MRTthesis_tmpa_box }
           }
+      }
+    \dim_set:Nn \l_MRTthesis_sign_width_dim
+      {
+        \dim_min:nn
+          { \l_MRTthesis_sign_width_max_dim } { \l_MRTthesis_sign_width_dim }
       }
   }% <<<
 %%==========================================================================<<<
@@ -1008,12 +959,12 @@
             }
             { \MRTthesis_titlepage_place_thesis_block: }
           \vfillmult{5}
-          \bool_if:NF \l_MRTthesis_no_examinor_bool% ausgegeben von >>>
+          \bool_if:NF \l_MRTthesis_no_examiner_bool% ausgegeben von >>>
             {
               \group_begin:
                 \MRTthesis@fntsel{12}{16}
                 Ausgegeben~von\\
-                \textbf{\l_MRTthesis_examinor_tl}
+                \textbf{\l_MRTthesis_examiner_tl}
                 \bool_if:nF
                   {
                     \l_MRTthesis_no_advisor_bool
@@ -1192,8 +1143,12 @@
                 { Masterarbeit }    { Master~of~Science }
                 { Bachelorarbeit }  { Bachelor~of~Science }
                 { Diplomarbeit }    { Diplom~Ingenieur }
-                { Master thesis }   { Master~of~Science }
+                { Bachelor Thesis } { Bachelor~of~Science }
                 { Bachelor thesis } { Bachelor~of~Science }
+                { Bachelorthesis }  { Bachelor~of~Science }
+                { Master Thesis }   { Master~of~Science }
+                { Master thesis }   { Master~of~Science }
+                { Masterthesis }    { Master~of~Science }
               }
               {
                 \msg_error:nn { MRTthesis } { degree~undefined }
@@ -1231,10 +1186,10 @@
               { ,~\l_MRTthesis_s_advisor_tl }
             \bool_if:nF
               {
-                \l_MRTthesis_no_examinor_bool
-                || \tl_if_empty_p:N \l_MRTthesis_s_examinor_tl
+                \l_MRTthesis_no_examiner_bool
+                || \tl_if_empty_p:N \l_MRTthesis_s_examiner_tl
               }
-              { ,~\l_MRTthesis_s_examinor_tl }
+              { ,~\l_MRTthesis_s_examiner_tl }
             \c_colon_str\\
             \l_MRTthesis_title_tl;\\
             MRT-Bericht~Nr.~\l_MRTthesis_number_tl;~Bayreuth~(\the\year)
