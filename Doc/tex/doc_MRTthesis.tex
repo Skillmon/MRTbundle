@@ -1,14 +1,371 @@
 \chapter{The \cls{MRTthesis} class}
-Descriptive text here.
+\cls{MRTthesis} provides the template to write a thesis at the MRT. It sports a
+layout which looks confusingly similar to the MS Word template provided by the
+institute. Of course there are some minor differences and the typesetting
+algorithm of TeX should create better line breaking than Word's but if one
+doesn't know on what to pay attention or for an untrained eye the distinction
+won't be possible (at least I hope so, as that was the goal in the first place).
 
-\section{Dependencies}
-The following packages are loaded (used options given in brackets). Those are
-quite some but unfortunately most of these are required (or help a lot) to
-achieve certain formattings in order to match the MS Word template of the MRT.
-Some of the used packages are for 
-\vspace*{-\multicolsep}%
+\section{Options}%>>>
+\subsection{Load time options}\label{sec:thesis:opt}%>>>
+The class features a few load time options, none of which do take arguments.
+\begin{describeopt}{longtable}
+  Is forwarded to \pkg{MRTtab} see its description in \autoref{sec:tab:options}.
+\end{describeopt}
+\begin{describeopt}{mathsizes}
+  Opposite of \opt{no mathsizes}. If used (which it by default is) the maths
+  sizes are set according to the MS Word template. Note that those weren't set
+  by \pkg{mrtarbeit} and if you alter the default font size won't be set.
+\end{describeopt}
+\begin{describeopt}{minimal}
+  If this option is passed some packages are not loaded and therefore related
+  configurations not set. See \autoref{sec:thesis:dep}.
+\end{describeopt}
+\begin{describeopt}{no mathsizes}
+  Opposite of \opt{mathsizes}. If used the maths sizes are not changed from the
+  defaults of \cls{scrreprt}.
+\end{describeopt}
+\begin{describeopt}{tikzunderline, tUline}
+  If this option is passed \TikZ\ will be added as a required package and an
+  alternative underlining macro defined called \cs{tUline}, see its description
+  in \autoref{sec:thesis:mac}.
+\end{describeopt}
+\begin{describeopt}{UKenglish}
+  If used the document will be using the \opt{UKenglish} definition of
+  \pkg{babel}. Many strings used in the package will be in English, but some
+  might be missed out. If you find any of which you think they should be
+  translated, please contact me as described in \autoref{sec:bugs}.
+\end{describeopt}
+
+Every other given option will be passed on to \cls{scrreprt}.
+%<<<
+\subsection{Setup options}\label{sec:thesis:setup}%>>>
+The following options are accessible with \cs{MRTthesisSetup}.
+\begin{describeopt}{advisor}[\meta{name}]
+  Sets the name of the advisor of this thesis. One typical value could be
+  \texttt{Dipl.-Ing.\@ Alice Fischerauer}
+\end{describeopt}
+\begin{describeopt}{author}[\meta{name}]
+  Sets the name of the author or authors as the macro \cs{author} does.
+  Separate authors with \cs{and}. You can give the surname first followed by a
+  comma and the given name, in which case the parsing for the abbreviation works
+  better (especially with name affixes). The following two options are fine:
+  \texttt{author=\{Duck, Donald \string\and Mouse, Mickey\}} or
+  \texttt{author=\{Donald Duck \string\and Mickey Mouse\}} and should both
+  result in the abbreviation \texttt{D.\@ Duck, M.\@ Mouse}. Another example
+  would be \texttt{zu Guttenberg, Karl-Theodor} or \texttt{Karl-Theodor zu
+  Guttenberg}. Here the parsing would result in \texttt{K.-T.\@ zu Guttenberg}
+  or \texttt{K.-T.\@ z.\@ Guttenberg} -- the first one seems correct, the second
+  one fails. Remember to surround the argument with braces if you use a comma.
+\end{describeopt}
+\begin{describeopt}{degree}[\meta{degree}]
+  The degree you aim to achieve with the thesis. If you don't use this option it
+  is tried to be guessed from the type of thesis you can specify with the
+  \opt{thesis} key. An error is thrown if the degree can't be guessed. If you
+  don't want to achieve any degree, use the option \opt{no degree}. Typical
+  values would be \verb|Bachelor of Science| or \verb|Master of Science|.
+\end{describeopt}
+\begin{describeopt}{caption above}
+  Is forwarded to \pkg{MRTtab}. See \autoref{sec:tab:options:setup}.
+\end{describeopt}
+\begin{describeopt}{caption below}
+  Is forwarded to \pkg{MRTtab}. See \autoref{sec:tab:options:setup}.
+\end{describeopt}
+\begin{describeopt}{examiner}[\meta{name}]
+  The examiner of the thesis. Initial value is
+  \texttt{Univ.-Professor Dr.-Ing.\@ Gerhard Fischerauer}.
+\end{describeopt}
+\begin{describeopt}{logoL}[\meta{file}]
+  The image file for the left logo on the titlepage. Initial value is
+  \file{MRTthesis_logo_UBT2.pdf}. If \meta{file} is an empty argument no left
+  logo will be used.
+\end{describeopt}
+\begin{describeopt}{logoL height}[\meta{dimen}]
+  The height the left logo is displayed in. Initial value is \verb|10.85mm|.
+\end{describeopt}
+\begin{describeopt}{logoR}[\meta{file}]
+  The image file for the right logo on the titlepage. Initial value is
+  \file{MRTthesis_logo_MRT2.pdf}. If \meta{file} is an empty argument no right
+  logo will be used.
+\end{describeopt}
+\begin{describeopt}{logoR height}[\meta{dimen}]
+  The height the right logo is displayed in. Initial value is \verb|11.9mm|.
+\end{describeopt}
+\begin{describeopt}{no advisor}[\meta{bool}]
+  If true no advisor will be displayed on the title page. Default is true,
+  initially is false.
+\end{describeopt}
+\begin{describeopt}{no citation}[\meta{bool}]
+  If true no citation indications are displayed at the bottom of the title page.
+  Default is true, initially is false.
+\end{describeopt}
+\begin{describeopt}{no degree}[\meta{bool}]
+  If true no degree will be displayed on the title page. Default is true,
+  initially is false. Also the paragraph corresponding to the degree in the
+  affidavit will be left out.
+\end{describeopt}
+\begin{describeopt}{no examiner}[\meta{bool}]
+  If true no examiner will be displayed on the title page. Default is true,
+  initially is false.
+\end{describeopt}
+\begin{describeopt}{no institute}[\meta{bool}]
+  If true no institute will be displayed on the title page. Default is true,
+  initially is false.
+\end{describeopt}
+\begin{describeopt}{no logos}
+  If used \verb|logoL={},logoR={}| is used, which results in no logos on the
+  title page.
+\end{describeopt}
+\begin{describeopt}{no thesis}[\meta{bool}]
+  If true no thesis type will be displayed on the title page. Default is true,
+  initially is false.
+\end{describeopt}
+\begin{describeopt}{no usage}[\meta{bool}]
+  If true no usage rights are given to the MRT in the affidavit text. Default is
+  true, initially is false. If you need a custom paragraph and don't want to
+  leave it out completely you should redefine \cs{affidavittext@usagerigths}.
+\end{describeopt}
+\begin{describeopt}{number}[\meta{number}]
+  The MRT report number displayed in the citation indications. Initially is
+  empty. The typical pattern of these numbers is something like:
+  \texttt{TT-yy-mm-n} with \texttt{TT} the thesis type, e.\,g.\@ \texttt{BA} or
+  \texttt{MA}, \texttt{yy} the last two digits of the year, \texttt{mm} the
+  month, and \texttt{n} the number of the thesis in this month.
+\end{describeopt}
+\begin{describeopt}{pos figure}[\meta{placement}]
+  The \meta{placement} of floats of type \texttt{figure}.
+\end{describeopt}
+\begin{describeopt}{pos float}[\meta{placement}]
+  The \meta{placement} of floats of both types, \texttt{figure} and
+  \texttt{table}. Initially set to \texttt{tbp}.
+\end{describeopt}
+\begin{describeopt}{pos MRTtable}[\meta{placement}]
+  The \meta{placement} of floating \env{MRTtable}s, forwarded to \pkg{MRTtab}'s
+  option \opt{pos}. See \autoref{sec:tab:options:setup}.
+\end{describeopt}
+\begin{describeopt}{pos table}[\meta{placement}]
+  The \meta{placement} of floats of type \texttt{table}.
+\end{describeopt}
+\begin{describeopt}{short advisor, sadvisor}[\meta{abbreviation}]
+  The abbreviated name of the advisor. This is needed for the citation
+  indications and not parsed automatically from the \opt{advisor}, as the name
+  contains academic titles, but the abbreviation should not and the parsing
+  would be hard to do correctly.
+\end{describeopt}
+\begin{describeopt}{short author, sauthor}[\meta{abbreviation}]
+  The abbreviated name or names of the author or authors. If you don't use this
+  option it is tried to parse those automatically. If the parsing does something
+  wrong you'll have to use this option giving the correct abbreviations with
+  each name separated with commas from the others, e.\,g.\@ 
+  \texttt{short author=\{D. Duck, M. Mouse\}}.
+\end{describeopt}
+\begin{describeopt}{short examiner, sexaminer}[\meta{abbreviation}]
+  The abbreviated name of the examiner. This is needed for the citation
+  indications and not parsed automatically from the \opt{examiner}, as the name
+  contains academic titles, but the abbreviation should not and parsing would be
+  hard to do correctly. Initially value is \texttt{G.\@ Fischerauer}.
+\end{describeopt}
+\begin{describeopt}{sign height}[\meta{dimen}]
+  The height reserved for each signature below the affidavit text. Initial value
+  is \texttt{9mm}.
+\end{describeopt}
+\begin{describeopt}{sign seperation, sign sep}[\meta{dimen}]
+  If \opt{sign width max} is not given (or \texttt{0pt}) the maximum width is
+  calculated from the text width and the width of the date and location. The
+  minimum distance from the date and location to the signature lines is then
+  enforced to be at least \meta{dimen}. Initial value is \texttt{2em}.
+\end{describeopt}
+\begin{describeopt}{sign width max}[\meta{dimen}]
+  You can enforce a maximum width for the signature lines below the affidavit
+  using this option. If it is not used, the maximum width is calculated.
+\end{describeopt}
+\begin{describeopt}{sign width min}[\meta{dimen}]
+  You can enforce a minimum width for the signature lines using this option.
+  Initially this is set to \texttt{7cm}.
+\end{describeopt}
+\begin{describeopt}{stretch caption, stretch cap}[\meta{float}]
+  Uses \cs{setkomafont} to enforce a specific line spread using \cs{setstretch}
+  for captions.
+\end{describeopt}
+\begin{describeopt}{stretch tabular, stretch tab}[\meta{float}]
+  Is forwarded to \pkg{MRTtab}'s option \opt{stretch tab}. See
+  \autoref{sec:tab:options:setup}.
+\end{describeopt}
+\begin{describeopt}{stretch text}[\meta{float}]
+  Uses \cs{setstretch} to set a specific line spread in the document.
+\end{describeopt}
+\begin{describeopt}{stretches}[\meta{float}]
+  Sets \opt{stretch cap}, \opt{stretch tab}, and \opt{stretch text} in one go.
+  Initially set to \texttt{1.408}.
+\end{describeopt}
+\begin{describeopt}{subtitle}[\meta{title}]
+  The title page might include a subtitle. If you really want to use it, you'd
+  have to use \opt{with subtitle}. You can also use \cs{subtitle} to set it.
+\end{describeopt}
+\begin{describeopt}{thesis}[\meta{thesis type}]
+  Sets the \meta{thesis type}. Typical arguments would be
+  \texttt{Bachelorarbeit} or \texttt{Bachelor Thesis} (the former if you're
+  writing in German, the latter if you're writing in English).
+\end{describeopt}
+\begin{describeopt}{title}[\meta{title}]
+  Sets the title of the thesis. You might also use \cs{title} to set this.
+\end{describeopt}
+\begin{describeopt}{toc ChapIndent}[\meta{dimen}]
+  Sets the indentation of chapter entries in the table of contents. Initially
+  set to \texttt{0.01em}.
+\end{describeopt}
+\begin{describeopt}{toc SecIndent}[\meta{dimen}]
+  Sets the indentation of section entries in the table of contents. Initially
+  set to \texttt{1.32em}. The width is also used for entries in the list of
+  figures and list of tables.
+\end{describeopt}
+\begin{describeopt}{toc sSecIndent}[\meta{dimen}]
+  Sets the indentation of subsection entries in the table of contents. Initially
+  set to \texttt{3.38em}.
+\end{describeopt}
+\begin{describeopt}{toc ssSecIndent}[\meta{dimen}]
+  Sets the indentation of subsubsection entries in the table of contents.
+  Initially set to \texttt{6.38em}.
+\end{describeopt}
+\begin{describeopt}{with subtitle}[\meta{bool}]
+  If true a subtitle can be used on the title page. Default is true, initially
+  is false.
+\end{describeopt}
+%<<<
+%<<<
+
+\section{Macros}\label{sec:thesis:mac}%>>>
+The following macros are provided:
+\begin{describemacroTF}{ifNoWidth}[\marg{arg}]
+  Typesets the argument in a box (so the code is actually executed). If the
+  produced box has a width of 0pt the \meta{true} branch is executed, else the
+  \meta{false} branch.
+\end{describemacroTF}
+\begin{describemacro}{vfillmult}[\marg{num}]
+  Same as if you'd \meta{num} instances of \cs{vfill}.
+\end{describemacro}
+\begin{describemacro}{hfillmult}[\marg{num}]
+  Same as if you'd \meta{num} instances of \cs{hfill}.
+\end{describemacro}
+\begin{describemacro}{MRTafterhyperref}[\marg{content}]
+  Places \meta{content} after \pkg{hyperref} is loaded. This is important for
+  the relative few packages that need to be loaded after \pkg{hyperref}. So if
+  you have one of these, you should use something like
+  \verb|\MRTafterhyperref|\hskip0pt
+  \verb|{\usepackage|\hskip0pt
+  \verb|{cleveref}}|. This macro has to be used prior to
+  \verb|\begin|\hskip0pt
+  \verb|{document}|.
+\end{describemacro}
+\begin{describemacro}{DeclareTOCStyleEntryMRTChapterLike}%
+  [\oarg{indent}\hskip0pt\marg{entry-layer}]
+  See the description of \cs{DeclareTOCStyleEntryMRTSectionLike}. The difference
+  is that this sets the entries how the chapters are formatted. Also the
+  \meta{indent} defaults to the one of chapters.
+\end{describemacro}
+\begin{describemacro}{DeclareTOCStyleEntryMRTSectionLike}%
+  [\oarg{indent}\hskip0pt\marg{entry-layer}]
+  The macro calls the KOMA macro \cs{DeclareTOCStyleEntry} and sets the options
+  how they are used for the section entries in the table of contents.
+  \meta{indent} defaults to the indent length of section entries. It is possible
+  to use an \meta{indent} but give more options in that optional argument
+  afterwards (comma separated). \autoref{tab:thesis:tocindents} shows an
+  overview of the class's default indentations.
+\end{describemacro}
+\begin{MRTtable}%>>>
+  [%>>>
+    ,label=tab:thesis:tocindents
+    ,cap=
+      {
+        Indents of different ToC entry types and the macros they are stored in.
+        Use the options described in \autoref{sec:thesis:setup} to change the
+        values.
+      }
+    ,scap=
+      {Indents of different ToC entry types and the macro they are stored in}
+    ,col=llc
+  ]%<<<
+  entry-layer & macro name & default length \\
+
+  chapter       & \cs{l_MRTthesis_toc_chapter_indent_tl}       & 0.01em\\
+  section       & \cs{l_MRTthesis_toc_section_indent_tl}       & 1.32em\\
+  subsection    & \cs{l_MRTthesis_toc_subsection_indent_tl}    & 3.38em\\
+  subsubsection & \cs{l_MRTthesis_toc_subsubsection_indent_tl} & 6.38em\\
+  table         & \cs{l_MRTthesis_toc_section_indent_tl}       & 1.32em\\
+  figure        & \cs{l_MRTthesis_toc_section_indent_tl}       & 1.32em\\
+\end{MRTtable}%<<<
+\begin{describemacro}{WUline}[\oarg{height}\marg{text}]
+  This sets \meta{text} and underlines it in a way that looks like MS Word
+  underlining -- at least in the headings. It is usable both in math mode and in
+  text mode. Though in math mode you should use \cs{underline}.\\[\parskip]
+  In text mode the \pkg{ulem} package is used for the underline. In math mode
+  \pkg{stackengine} is employed. In both cases you can use \meta{height} to
+  change the default height of the underlining. In text mode and math mode the
+  needed height to achieve the same height of the line differs quite a lot. By
+  default in math mode \texttt{\csuse{MRTthesis@WUline@mathheight}} is used, in
+  text mode \texttt{\csuse{MRTthesis@WUline@textheight}}.
+\end{describemacro}
+\begin{describemacro}{tUline}%
+  [\oarg{height}\oarg{overhang}\oarg{thickness}\marg{text}]
+  This macro can be used to underline bigger portions of text. You should never
+  need it, I guess. Just use \cs{WUline} instead. If you need it, you'll have to
+  use the class option \opt{tUline}.\\[\parskip]
+  If you think you can use this one instead: It underlines \meta{text} at the
+  given \meta{height} (default \texttt{-0.35ex}) with the given \meta{thickness}
+  (default \texttt{0.185ex}). You can specify \meta{overhang} (default
+  \texttt{0pt}) which is the width the line should be wider than a text line on
+  each side. If you let any optional argument empty, the default is used. It is
+  assumed that the lines are equally separated with \cs{baselineskip}. It needs
+  at least two runs to be displayed correctly.
+\end{describemacro}
+\begin{describemacro}{MRTthesisSetup}[\marg{options}]
+  You can use this macro to set the options listed in
+  \autoref{sec:thesis:setup}.
+\end{describemacro}
+\begin{describemacro}{sethead}[\marg{content}]
+  Sets the head marks for both sides to \meta{content}. It is the same as
+  \cs{markboth}\hskip0pt
+  \texttt{\{\meta{content}\}\hskip0pt\{\meta{content}\}}. You might use this (or
+  any similar macro provided by KOMA script) to manually set the head marks,
+  e.\,g.\@ if your section title gets too long.
+\end{describemacro}
+\begin{describemacro}{affidavit}
+  Prints a chapter ``Eidesstattliche Erklärung'' and the affidavit text (as
+  stored in \cs{affidavit@text}) and the location and date, followed by a
+  signature line for each author. \cs{maketitle} has to be used prior to it,
+  else the lines won't be printed. This is a bug I might fix in the future.
+\end{describemacro}
+\begin{describemacro}{mainpart,mainmatter}
+  Switches the formatting from the one at the beginning to the one used in the
+  main part of the document. Should be used after \cs{tableofcontents},
+  \cs{listoffigures}, and \cs{listoftables}.
+\end{describemacro}
+\begin{describemacro}{appendix}
+  Switches the formatting to the one used in the appendix. This includes
+  switching to alphabetically numbered sections and setting the option \opt{no
+  float} in \cs{MRTtabSetup}.
+\end{describemacro}
+Additionally the macros \cs{author}, \cs{title}, and \cs{subtitle} have been
+redefined to internally use \cs{MRTthesisSetup} to set the corresponding
+options.
+%<<<
+
+\section{Dependencies}\label{sec:thesis:dep}%>>>
+As this class is based on \cls{scrreprt}, it depends on that class and all of
+its dependencies, of course. Additionally the following packages are loaded
+(used options given in brackets). Those are quite some but unfortunately most of
+these are required (or help a lot) to achieve certain formattings in order to
+match the MS Word template of the MRT best.
+
+Some of the used packages are not necessarily needed to match the MS Word
+template, but provide useful features -- e.g.  \pkg{hyperref} which allows the
+use of \cs{autoref} and cross linking but is not needed to match any specific
+formatting.%
+\footnote
+  {Don't remove it though, the current code for section headings relies on it.}
+
 \begin{multicols}{2}%>>>
-  \begin{itemize}
+  \begin{itemize}[leftmargin=10pt]
     \item \pkg{expl3}
     \item \pkg{xparse}
     \item \pkg{MRTif}
@@ -16,7 +373,8 @@ Some of the used packages are for
     \item \pkg{MRTtab}
     \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
       \begin{itemize}[topsep=0pt]
-        \item \pkg{fontspec} and\\\verb|\defaultfontfeatures{Ligatures=TeX}|
+        \item \pkg{fontspec} and
+          \verb|\defaultfontfeatures|\hskip0pt\verb|{Ligatures=TeX}|
       \end{itemize}
       else
       \begin{itemize}[topsep=0pt]
@@ -25,8 +383,8 @@ Some of the used packages are for
       \end{itemize}
     \item \pkg{lmodern}
     \item \pkg{helvet}
-    \item \pkg{babel} [ngerman] if \opt{UKenglish} is used with
-      [main=UKenglish,ngerman]
+    \item \pkg{babel} [ngerman] or if \opt{UKenglish} is used with
+      [main=UKenglish, ngerman]
     \item \pkg{scrlayer-scrpage} [singlespacing=true]
     \item \pkg{geometry} (with correct options)
     \item \pkg{setspace}
@@ -34,7 +392,9 @@ Some of the used packages are for
     \item \pkg{xcolor} [table]
     \item \pkg{graphicx}
     \item \pkg{enumitem}
-    \item \pkg{amsmath}
+    \item \pkg{mathtools}
+    \item \pkg{scalerel}
+    \item \pkg{stackengine}
     \item \pkg{mathastext} [italic,defaultmathsizes]
     \item \pkg{isomath}
     \item \pkg{hyperref}
@@ -42,12 +402,14 @@ Some of the used packages are for
       \begin{itemize}
         \item \pkg{siunitx}
           [%
-            detect-all, locale=DE,
+            detect-all,
             per-mode=reciprocal-positive-first, range-phrase=%
             \verb|{\ifmmode|\hskip0pt
             \verb|\text{ bis }\else|\hskip0pt
             \verb|\ bis \fi}|%
-          ]
+          ]\\
+          If \pkg{babel}'s \opt{UKenglish} is used [locale=UK] will be used, if
+          \opt{ngerman} [locale=DE].
         \item \pkg{biblatex}
           [%
             backend=biber, natbib=true, citestyle=numeric, bibstyle=numeric,
@@ -55,5 +417,12 @@ Some of the used packages are for
           ]
         \item \pkg{csquotes}
       \end{itemize}
+    \item if the \opt{tUline} option is used:
+      \begin{itemize}
+        \item \TikZ
+        \item \pkg{tikzpagenodes}
+        \item The \TikZ\ library \pkg{calc}
+      \end{itemize}
   \end{itemize}
 \end{multicols}%<<<
+%<<<

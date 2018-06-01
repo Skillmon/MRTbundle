@@ -23,6 +23,7 @@
 \ExplSyntaxOn
 \int_new:N \g_docMRTbundle_dsctable_lines_int
 \dim_new:N \l_docMRTbundle_dscmac_widest_dim
+\dim_new:N \l_docMRTbundle_dscmac_indent_dim
 \cs_new:Nn \__docMRTbundle_dscmac_end:%>>>
   {
     \par
@@ -40,6 +41,8 @@
   {
     \hbox_set:Nn \l_tmpa_box { \cs{PrependSubsectionsfalse} }
     \dim_set:Nn \l_docMRTbundle_dscmac_widest_dim { \box_wd:N \l_tmpa_box }
+    \dim_set:Nn \l_docMRTbundle_dscmac_indent_dim
+      { \l_docMRTbundle_dscmac_widest_dim - \marginparwidth }
   }%<<<
 \cs_new:Nn \docMRTbundle_dscmacTF_table_element:n% >>>
   {
@@ -86,8 +89,7 @@
       \@hangfrom{Usage:~}\cs{#2}\tfarg\texttt{#3}\marg{true}\marg{false}
       \vspace*{.5\baselineskip}
     \end{minipage}\\
-    \hangindent
-      \dimexpr \l_docMRTbundle_dscmac_widest_dim - \marginparwidth \relax
+    \hangindent \l_docMRTbundle_dscmac_indent_dim
     \noindent
     \ignorespaces
   }
@@ -149,7 +151,6 @@
       \vspace*{-.5\baselineskip}
     \end{minipage}
     \hspace*{\marginparsep} 
-    \hangindent\l_docMRTbundle_dscmac_widest_dim
     \begin{minipage}[t]
       {
         \dimexpr
@@ -161,8 +162,7 @@
       \exp_args:Nx \cs{\l_docMRTbundle_macro_name_tl}\texttt{#3}
       \vspace*{.5\baselineskip}
     \end{minipage}\\
-    \hangindent
-      \dimexpr \l_docMRTbundle_dscmac_widest_dim - \marginparwidth \relax
+    \hangindent \l_docMRTbundle_dscmac_indent_dim
     \noindent
     \ignorespaces
   }
@@ -214,8 +214,7 @@
       \@hangfrom{Usage:~}\cs{begin{#2}}\texttt{#3~...~}\cs{end{#2}}
       \vspace*{.5\baselineskip}
     \end{minipage}\\
-    \hangindent
-      \dimexpr \l_docMRTbundle_dscmac_widest_dim - \marginparwidth \relax
+    \hangindent \l_docMRTbundle_dscmac_indent_dim
     \noindent
     \ignorespaces
   }
@@ -287,8 +286,7 @@
         { \smash { \IfValueTF { #3 } { =~ \texttt{#3} } { --NoArgument-- } } }
       \vspace*{.5\baselineskip}
     \end{minipage}\\
-    \hangindent
-      \dimexpr \l_docMRTbundle_dscmac_widest_dim - \marginparwidth \relax
+    \hangindent \l_docMRTbundle_dscmac_indent_dim
     \noindent
     \ignorespaces
   }
@@ -321,6 +319,7 @@
     \makeatother
     \begin{MRTtable}
       [
+        ,col=llc
         ,float=false
         ,pre=
           \def\versionline##1%
