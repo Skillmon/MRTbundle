@@ -282,9 +282,13 @@
       (\insertframenumber-\MRT@pbar@start)%
       /(\MRT@pbar@end == \MRT@pbar@start ? 1 : \MRT@pbar@end-\MRT@pbar@start)}%
     \@tempdimb=\pgfmathresult\@tempdimb\relax%
+    \ifdim\@tempdimb<0pt
+      {\color{noprogress}\rule{#2}{#3}}
+    \else
       {\color{progressed}\rule{\@tempdimb}{ #3 }}%
       {\color{noprogress}%
         \rule{\dimexpr #2 -\@tempdimb\relax}{ #3 }}%
+    \fi
   }}%
   \egroup%
 }%<<<
