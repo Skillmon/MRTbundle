@@ -30,11 +30,12 @@ The class features a few load time options, none of which do take arguments.
   alternative underlining macro defined called \cs{tUline}, see its description
   in \autoref{sec:thesis:mac}.
 \end{describeopt}
-\begin{describeopt}{UKenglish}
-  If used the document will be using the \opt{UKenglish} definition of
+\begin{describeopt}{british,english,UKenglish}
+  If used the document will be using the \opt{british} definition of
   \pkg{babel}. Many strings used in the package will be in English, but some
-  might be missed out. If you find any of which you think they should be
-  translated, please contact me as described in \autoref{sec:bugs}.
+  might be missed out. If you find any of which you think should be translated,
+  please contact me as described in \autoref{sec:bugs}. English simplified (US)
+  is not supported by the class.
 \end{describeopt}
 
 Every other given option will be passed on to \cls{scrreprt}.
@@ -73,7 +74,7 @@ The following options are accessible with \cs{MRTthesisSetup}.
 \end{describeopt}
 \begin{describeopt}{examiner}[\meta{name}]
   The examiner of the thesis. Initial value is
-  \texttt{Univ.-Professor Dr.-Ing.\@ Gerhard Fischerauer}.
+  \texttt{Univ.-Professor Dr.-Ing.}\hskip0pt\ \texttt{Gerhard Fischerauer}.
 \end{describeopt}
 \begin{describeopt}{logoL}[\meta{file}]
   The image file for the left logo on the titlepage. Initial value is
@@ -383,8 +384,8 @@ formatting.%
       \end{itemize}
     \item \pkg{lmodern}
     \item \pkg{helvet}
-    \item \pkg{babel} [ngerman] or if \opt{UKenglish} is used with
-      [main=UKenglish, ngerman]
+    \item \pkg{babel} [ngerman] or if \opt{british} is used with
+      [main=british, ngerman]
     \item \pkg{scrlayer-scrpage} [singlespacing=true]
     \item \pkg{geometry} (with correct options)
     \item \pkg{setspace}
@@ -408,7 +409,7 @@ formatting.%
             \verb|\text{ bis }\else|\hskip0pt
             \verb|\ bis \fi}|%
           ]\\
-          If \pkg{babel}'s \opt{UKenglish} is used [locale=UK] will be used, if
+          If \pkg{babel}'s \opt{british} is used [locale=UK] will be used, if
           \opt{ngerman} [locale=DE].
         \item \pkg{biblatex}
           [%

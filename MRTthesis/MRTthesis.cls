@@ -26,7 +26,7 @@
 % bool >>>
 \bool_new:N \l_MRTthesis_minimal_bool
 \bool_new:N \l_MRTthesis_mathsizes_bool
-\bool_new:N \l_MRTthesis_UKenglish_bool
+\bool_new:N \l_MRTthesis_british_bool
 % <<<
 % box >>>
 \box_new:N \l_MRTthesis_tmpa_box
@@ -54,7 +54,9 @@
 \DeclareOption{no mathsizes}{\bool_set_false:N \l_MRTthesis_mathsizes_bool}
 \DeclareOption{tikzunderline}{\@MRTthesis@tikzuline@true}
 \DeclareOption{tUline}{\ExecuteOptions{tikzunderline}}
-\DeclareOption{UKenglish}{\bool_set_true:N \l_MRTthesis_UKenglish_bool}
+\DeclareOption{british}{\bool_set_true:N \l_MRTthesis_british_bool}
+\DeclareOption{UKenglish}{\ExecuteOptions{british}}
+\DeclareOption{english}{\ExecuteOptions{british}}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrreprt}}
 \ExecuteOptions{mathsizes}
 \PassOptionsToClass
@@ -79,9 +81,9 @@
 \RequirePackage{lmodern}
 \RequirePackage{helvet}
 \renewcommand\familydefault{\sfdefault}
-\bool_if:NTF \l_MRTthesis_UKenglish_bool
+\bool_if:NTF \l_MRTthesis_british_bool
   {% true >>>
-    \RequirePackage[main=UKenglish,ngerman]{babel}
+    \RequirePackage[main=british,ngerman]{babel}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { from }
   }% <<<
   {% false >>>
@@ -118,7 +120,7 @@
         ,range-phrase={\ifmmode\text{ bis }\else\ bis \fi}%
     }%
     \addto\extrasngerman{\sisetup{locale=DE}}
-    \addto\extrasUKenglish{\sisetup{locale=UK}}
+    \addto\extrasbritish{\sisetup{locale=UK}}
     \RequirePackage[% I don't know yet how they want me to cite correctly...
         backend=biber%
         ,natbib=true%
@@ -498,7 +500,7 @@
         \gdef\figureautorefname{Bild}%
         \gdef\equationautorefname{Gl.}%
       }%
-    \addto\extrasUKenglish
+    \addto\extrasbritish
       {%
         \gdef\equationautorefname{eq.}%
       }%
@@ -510,7 +512,7 @@
     \renewcommand*\tablename{\bfseries Tabelle}%
     \renewcommand*\listfigurename{Bildverzeichnis}%
   }% <<<
-\addto\captionsUKenglish% >>>
+\addto\captionsbritish% >>>
   {%
     \renewcommand*\figurename{\bfseries Figure}%
     \renewcommand*\tablename{\bfseries Table}%
