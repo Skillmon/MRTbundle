@@ -21,14 +21,16 @@ The class features a few load time options, none of which do take arguments.
   If this option is passed some packages are not loaded and therefore related
   configurations not set. See \autoref{sec:thesis:dep}.
 \end{describeopt}
+\begin{describeopt}{no geometry}
+  If this option is passed the \pkg{geometry} package is not loaded (and of
+  course the page dimensions passed to \pkg{geometry} otherwise are not set).
+\end{describeopt}
 \begin{describeopt}{no mathsizes}
   Opposite of \opt{mathsizes}. If used the maths sizes are not changed from the
   defaults of \cls{scrreprt}.
 \end{describeopt}
 \begin{describeopt}{tikzunderline, tUline}
-  If this option is passed \TikZ\ will be added as a required package and an
-  alternative underlining macro defined called \cs{tUline}, see its description
-  in \autoref{sec:thesis:mac}.
+  This option is forwarded to \pkg{MRTwuline}.
 \end{describeopt}
 \begin{describeopt}{british,english,UKenglish}
   If used the document will be using the \opt{british} definition of
@@ -295,30 +297,6 @@ The following macros are provided:
   table         & \cs{l_MRTthesis_toc_section_indent_tl}       & 1.32em\\
   figure        & \cs{l_MRTthesis_toc_section_indent_tl}       & 1.32em\\
 \end{MRTtable}%<<<
-\begin{describemacro}{WUline}[\oarg{height}\marg{text}]
-  This sets \meta{text} and underlines it in a way that looks like MS Word
-  underlining -- at least in the headings. It is usable both in math mode and in
-  text mode. Though in math mode you should use \cs{underline}.\\[\parskip]
-  In text mode the \pkg{ulem} package is used for the underline. In math mode
-  \pkg{stackengine} is employed. In both cases you can use \meta{height} to
-  change the default height of the underlining. In text mode and math mode the
-  needed height to achieve the same height of the line differs quite a lot. By
-  default in math mode \texttt{\csuse{MRTthesis@WUline@mathheight}} is used, in
-  text mode \texttt{\csuse{MRTthesis@WUline@textheight}}.
-\end{describemacro}
-\begin{describemacro}{tUline}%
-  [\oarg{height}\oarg{overhang}\oarg{thickness}\marg{text}]
-  This macro can be used to underline bigger portions of text. You should never
-  need it, I guess. Just use \cs{WUline} instead. If you need it, you'll have to
-  use the class option \opt{tUline}.\\[\parskip]
-  If you think you can use this one instead: It underlines \meta{text} at the
-  given \meta{height} (default \texttt{-0.35ex}) with the given \meta{thickness}
-  (default \texttt{0.185ex}). You can specify \meta{overhang} (default
-  \texttt{0pt}) which is the width the line should be wider than a text line on
-  each side. If you let any optional argument empty, the default is used. It is
-  assumed that the lines are equally separated with \cs{baselineskip}. It needs
-  at least two runs to be displayed correctly.
-\end{describemacro}
 \begin{describemacro}{MRTthesisSetup}[\marg{options}]
   You can use this macro to set the options listed in
   \autoref{sec:thesis:setup}.
@@ -372,6 +350,7 @@ formatting.%
     \item \pkg{MRTif}
     \item \pkg{MRTsfacc}
     \item \pkg{MRTtab}
+    \item \pkg{MRTwuline}
     \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
       \begin{itemize}[topsep=0pt]
         \item \pkg{fontspec} and
@@ -389,13 +368,10 @@ formatting.%
     \item \pkg{scrlayer-scrpage} [singlespacing=true]
     \item \pkg{geometry} (with correct options)
     \item \pkg{setspace}
-    \item \pkg{ulem} [normalem]
-    \item \pkg{xcolor} [table]
+    \item \pkg{xcolor}
     \item \pkg{graphicx}
     \item \pkg{enumitem}
     \item \pkg{mathtools}
-    \item \pkg{scalerel}
-    \item \pkg{stackengine}
     \item \pkg{mathastext} [italic,defaultmathsizes]
     \item \pkg{isomath}
     \item \pkg{hyperref}
@@ -404,25 +380,17 @@ formatting.%
         \item \pkg{siunitx}
           [%
             detect-all,
-            per-mode=reciprocal-positive-first, range-phrase=%
-            \verb|{\ifmmode|\hskip0pt
-            \verb|\text{ bis }\else|\hskip0pt
-            \verb|\ bis \fi}|%
+            per-mode=reciprocal-positive-first%
           ]\\
           If \pkg{babel}'s \opt{british} is used [locale=UK] will be used, if
-          \opt{ngerman} [locale=DE].
+          \opt{ngerman} [locale=DE]. Additionally the \opt{range-phrase} will be
+          set to either \texttt{to} or \texttt{bis} with spaces around it.
         \item \pkg{biblatex}
           [%
             backend=biber, natbib=true, citestyle=numeric, bibstyle=numeric,
             sorting=none, giveninits=true, sortcites%
           ]
         \item \pkg{csquotes}
-      \end{itemize}
-    \item if the \opt{tUline} option is used:
-      \begin{itemize}
-        \item \TikZ
-        \item \pkg{tikzpagenodes}
-        \item The \TikZ\ library \pkg{calc}
       \end{itemize}
   \end{itemize}
 \end{multicols}%<<<

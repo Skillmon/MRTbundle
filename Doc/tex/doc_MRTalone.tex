@@ -1,0 +1,115 @@
+\chapter{The \cls{MRTalone} class}
+The \cls{standalone} version of \cls{MRTthesis}. The aim is to provide a class
+to produce simple \LaTeX\ based images which match the look of \cls{MRTthesis}.
+
+\section{Options}%>>>
+\subsection{Load time options}%>>>
+The class features a few load time options, none of which do take arguments.
+\begin{describeopt}{longtable}
+  Is forwarded to \pkg{MRTtab} see its description in \autoref{sec:tab:options}.
+\end{describeopt}
+\begin{describeopt}{mathsizes}
+  Opposite of \opt{no mathsizes}. If used (which it by default is) the maths
+  sizes are set according to the MS Word template. Note that those weren't set
+  by \pkg{mrtarbeit} and if you alter the default font size won't be set.
+\end{describeopt}
+\begin{describeopt}{minimal}
+  If this option is passed some packages are not loaded and therefore related
+  configurations not set. See \autoref{sec:thesis:dep}.
+\end{describeopt}
+\begin{describeopt}{no mathsizes}
+  Opposite of \opt{mathsizes}. If used the maths sizes are not changed from the
+  defaults of \cls{scrreprt}.
+\end{describeopt}
+\begin{describeopt}{tikzunderline, tUline}
+  This option is forwarded to \pkg{MRTwuline}. See its description in
+  \autoref{sec:wuline:options}.
+\end{describeopt}
+\begin{describeopt}{british,english,UKenglish}
+  If used the document will be using the \opt{british} definition of
+  \pkg{babel}. Many strings used in the package will be in English, but some
+  might be missed out. If you find any of which you think should be translated,
+  please contact me as described in \autoref{sec:bugs}. English simplified (US)
+  is not supported by the class.
+\end{describeopt}
+
+Every other given option will be passed on to \cls{standalone}.
+%<<<
+\subsection{Setup options}\label{sec:alone:setup}%>>>
+The following options are accessible with \cs{MRTaloneSetup}.
+\begin{describeopt}{caption above}
+  Is forwarded to \pkg{MRTtab} and its \cs{MRTtabSetup}. See its description in
+  \autoref{sec:tab:options:setup}.
+\end{describeopt}
+\begin{describeopt}{caption below}
+  Is forwarded to \pkg{MRTtab} and its \cs{MRTtabSetup}. See its description in
+  \autoref{sec:tab:options:setup}.
+\end{describeopt}
+\begin{describeopt}{stretch caption, stretch cap}[\meta{float}]
+  Currently does nothing.
+\end{describeopt}
+\begin{describeopt}{stretch tabular, stretch text}[\meta{float}]
+  Is forwarded to \pkg{MRTtab} and its \cs{MRTtabSetup}. See its description in
+  \autoref{sec:tab:options:setup}.
+\end{describeopt}
+\begin{describeopt}{stretch text}[\meta{float}]
+  Uses \cs{setstretch} to set a specific line spread in the document.
+\end{describeopt}
+\begin{describeopt}{stretches}[\meta{float}]
+  Sets \opt{stretch cap}, \opt{stretch tab}, and \opt{stretch text} in one go.
+  Initially set to \texttt{1.408}.
+\end{describeopt}
+%<<<
+%<<<
+
+\section{Macros}%>>>
+\begin{describemacro}{MRTaloneSetup}[\marg{options}]%>>>
+  You can use this macro to set the options listed in \autoref{sec:alone:setup}.
+\end{describemacro}%<<<
+%<<<
+
+\section{Dependencies}%>>>
+The class is based on \cls{standalone}, therefore it naturally depends on that
+and all its dependencies. Additional dependencies are:
+\begin{multicols}{2}%>>>
+  \begin{itemize}[leftmargin=10pt]
+    \item \pkg{expl3}
+    \item \pkg{xparse}
+    \item \pkg{MRTtab} for which \opt{in text sep} is set to 0pt and the option
+      \opt{no float} is set. Take a look at \autoref{sec:tab:options:setup} to
+      see what those do.
+    \item \pkg{MRTwuline}
+    \item \pkg{MRTsfacc}
+    \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
+      \begin{itemize}[topsep=0pt]
+        \item \pkg{fontspec} and
+          \verb|\defaultfontfeatures|\hskip0pt\verb|{Ligatures=TeX}|
+      \end{itemize}
+      else
+      \begin{itemize}[topsep=0pt]
+        \item \pkg{fontenc} [T1]
+        \item \pkg{inputenc} [utf8]
+      \end{itemize}
+    \item \pkg{lmodern}
+    \item \pkg{helvet}
+    \item \pkg{babel} [ngerman] or if \opt{british} is used with
+      [main=british, ngerman]
+    \item \pkg{setspace}
+    \item \pkg{enumitem}
+    \item \pkg{mathtools} with the \opt{fleqn} option
+    \item \pkg{mathastext} with \opt{italic} and \opt{defaultmathsizes}
+    \item \pkg{isomath}
+    \item if the \opt{minimal} option is not used:
+      \begin{itemize}
+        \item \pkg{siunitx}
+          [%
+            detect-all,
+            per-mode=reciprocal-positive-first%
+          ]\\
+          If \pkg{babel}'s \opt{british} is used [locale=UK] will be used, if
+          \opt{ngerman} [locale=DE]. Additionally the \opt{range-phrase} will be
+          set to either \texttt{to} or \texttt{bis} with spaces around it.
+      \end{itemize}
+  \end{itemize}
+\end{multicols}%<<<
+%<<<

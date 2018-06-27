@@ -307,6 +307,11 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
   \env{MRTtable}. If \cs{KOMAoptions} is available the KOMA option
   \opt{captions=tablesignature} is used.
 \end{describeopt}%<<<
+\begin{describeopt}{bare}[\meta{bool}]
+  If set to true the potential caption and the tabular like environment in
+  \env{MRTtable} are neither surrounded by a \env{minipage} nor a \env{figure}.
+  Only a \cs{centering} is issued.
+\end{describeopt}
 \begin{describeopt}{BoL}[\meta{content}]%>>>
   Sets the \env{MRTtabular} Begin-of-Line hook using \cs{MRTtabAddtoBoLHook}
 \end{describeopt}%<<<
@@ -353,6 +358,11 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
   different from a stand alone \env{MRTtabular} which by defaults to \texttt{0}
   rows.
 \end{describeopt}%<<<
+\begin{describeopt}{in text sep}[\meta{skip}]
+  This controls the vertical space around a non-floating \env{MRTtable}. It is
+  initially set to \cs{intextsep}. If it is equal to 0pt the \cs{vskip} is not
+  issued.
+\end{describeopt}
 \begin{describeopt}{label}[\meta{label}]%>>>
   If \opt{caption} is used the \env{MRTtable} will get the specified
   \meta{label}.

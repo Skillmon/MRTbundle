@@ -1,0 +1,57 @@
+\chapter{The \pkg{MRTwuline} package}
+The package provides a MS Word like looking line breakable underlining. It does
+so by using \pkg{ulem} or \pkg{stackengine}.
+
+\section{Options}\label{sec:wuline:options}%>>>
+\begin{describeopt}{tUline,tikzunderline}
+  If this option is passed \TikZ\ will be added as a required package and an
+  alternative underlining macro defined called \cs{tUline}, see its description
+  in \autoref{sec:wuline:mac}.
+\end{describeopt}
+%<<<
+
+\section{Macros}\label{sec:wuline:mac}%>>>
+\begin{describemacro}{WUline}[\oarg{height}\marg{text}]%>>>
+  This sets \meta{text} and underlines it in a way that looks like MS Word
+  underlining -- at least in the headings. It is usable both in math mode and in
+  text mode. Though in math mode you should use \cs{underline}.\\[\parskip]
+  In text mode the \pkg{ulem} package is used for the underline. In math mode
+  \pkg{stackengine} is employed. In both cases you can use \meta{height} to
+  change the default height of the underlining. In text mode and math mode the
+  needed height to achieve the same height of the line differs quite a lot. By
+  default in math mode \texttt{\csuse{MRTthesis@WUline@mathheight}} is used, in
+  text mode \texttt{\csuse{MRTthesis@WUline@textheight}}.
+\end{describemacro}%<<<
+\begin{describemacro}{tUline}%>>>
+  [\oarg{height}\oarg{overhang}\oarg{thickness}\marg{text}]
+  This macro can be used to underline bigger portions of text. You should never
+  need it, I guess. Just use \cs{WUline} instead. If you need it, you'll have to
+  use the package option \opt{tUline}.\\[\parskip]
+  If you think you can use this one instead: It underlines \meta{text} at the
+  given \meta{height} (default \texttt{-0.35ex}) with the given \meta{thickness}
+  (default \texttt{0.185ex}). You can specify \meta{overhang} (default
+  \texttt{0pt}) which is the width the line should be wider than a text line on
+  each side. If you let any optional argument empty, the default is used. It is
+  assumed that the lines are equally separated with \cs{baselineskip}. It needs
+  at least two runs to be displayed correctly.
+\end{describemacro}%<<<
+%<<<
+
+\section{Dependencies}%>>>
+\begin{multicols}{2}%>>>
+  \begin{itemize}[leftmargin=10pt]
+    \item \pkg{expl3}
+    \item \pkg{xparse}
+    \item \pkg{stackengine}
+    \item \pkg{scalerel}
+    \item \pkg{MRTif}
+    \item \pkg{ulem} with the \opt{normalem} option
+    \item if the \opt{tUline} option is used:
+      \begin{itemize}
+        \item \TikZ
+        \item \pkg{tikzpagenodes}
+        \item The \TikZ\ library \pkg{calc}
+      \end{itemize}
+  \end{itemize}
+\end{multicols}
+%<<<

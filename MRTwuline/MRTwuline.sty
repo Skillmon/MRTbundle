@@ -1,0 +1,152 @@
+\newcommand*\MRTwuline@version{0.0.1}
+\newcommand*\MRTwuline@date{2018/06/01}
+
+\NeedsTeXFormat{LaTeX2e}
+
+\RequirePackage{expl3,xparse,stackengine,scalerel,MRTif}
+\PassOptionsToPackage{normalem}{ulem}
+\RequirePackage{ulem}
+\ProvidesExplPackage
+  {MRTwuline}          {\MRTwuline@date}
+  {\MRTwuline@version} {MS Word like underline using ulem or stackengine}
+
+\newif\if@MRTwuline@tikzuline@
+\DeclareOption{tikzunderline}{\@MRTwuline@tikzuline@true}
+\DeclareOption{tUline}{\ExecuteOptions{tikzunderline}}
+\ProcessOptions\relax
+
+% \WUline >>>
+\NewDocumentCommand \WUline { o m }
+  {
+    \mode_if_math:TF
+      { \MRTwuline_math:nn { #1 } { #2 } }
+      { \MRTwuline_text:nn { #1 } { #2 } }
+  }
+\cs_new:Nn \MRTwuline_math:nn
+  {
+    \IfNoValueTF { #1 }
+      { \MRTwuline_math_out:nn { \MRTwuline@mathheight } { #2 } }
+      { \MRTwuline_math_out:nn { #1 } { #2 } }
+  }
+\cs_new:Nn \MRTwuline_math_out:nn
+  {
+    \ThisStyle
+      {
+        \setbox0 \hbox { $\SavedStyle #2$ }
+        \stackengine
+          { #1 }
+          { $ { \SavedStyle #2 } $ }
+          { \rule { \wd0 } { 0.185ex } }
+          { U } { c } { F } { F } { S }
+      }
+    \underline { \vphantom { #2 } }
+  }
+\cs_new:Nn \MRTwuline_text:nn
+  {
+    \bgroup
+    \IfNoValueTF { #1 }
+      {
+        \markoverwith
+          { \rule [ \MRTwuline@textheight ] { 0.25ex } { 0.185ex} } 
+      }
+      { \markoverwith { \rule [ #1 ] { 0.25ex } { 0.185ex } } }
+    \ULon{#2}
+  }
+\newcommand*\MRTwuline@mathheight{0.21ex}%
+\newcommand*\MRTwuline@textheight{-0.42ex}%
+% <<<
+
+% \tUline >>>
+\if@MRTwuline@tikzuline@
+  \ExplSyntaxOff
+  \RequirePackage{tikz}
+  \usetikzlibrary{calc}
+  \RequirePackage{tikzpagenodes}
+  \newcommand*\MRTwuline@tUline@width{0.185ex}
+  \newlength\MRTwuline@tUline@length
+  \newcount\MRTwuline@tUline@count
+  \newcommand*\MRTwuline@gettikzxy[3]% >>>
+    % https://tex.stackexchange.com/a/58590/121799
+    {%
+      \tikz@scan@one@point\pgfutil@firstofone#1\relax
+      \xdef#2{\the\pgf@x}%
+      \xdef#3{\the\pgf@y}%
+    }% <<<
+  \tikzset{MRTwuline@tUline/.style={line width=\MRTwuline@tUline@width}}
+  \newcommand*\MRTwuline@EmptyOProcessor[2]% >>>
+    {%
+      \MRTifEmptyTF{#2}%
+        {\def\ProcessedArgument{#1}}%
+        {\def\ProcessedArgument{#2}}%
+    }% <<<
+  \NewDocumentCommand{\tUline}% >>>
+    {
+      >{\MRTwuline@EmptyOProcessor{-0.35ex}}O{} % height
+      >{\MRTwuline@EmptyOProcessor{0pt}}O{}     % overhang
+      >{\MRTwuline@EmptyOProcessor{0.185ex}}O{} % line width
+      +m
+    }
+    {%
+      \def\MRTwuline@tUline@width{#3}%
+      \tikz[remember picture,overlay, baseline=(Begin.base)]
+        {%
+          \node[anchor=base,inner sep=0pt,outer sep=0pt,xshift=-#2]
+            (Begin) {\strut};
+          \MRTwuline@gettikzxy{($(Begin.base)-(current page.south west)$)}
+            {\tUline@bx}{\tUline@by}%
+        }%
+      #4%
+      \tikz[remember picture,overlay, baseline=(End.base)]
+        {%
+          \node[anchor=base,inner sep=0pt,outer sep=0pt,xshift=+#2]
+            (End) {\strut};%
+          \MRTwuline@gettikzxy{($(End.base)-(current page.south west)$)}
+            {\tUline@ex}{\tUline@ey}%
+        }%
+      \begin{tikzpicture}[overlay,remember picture]
+        \ifdim\dimexpr\tUline@ey-\tUline@by = 0pt
+          % one line
+          \draw[MRTwuline@tUline] ($(Begin.base)+(0,#1)$)
+            -- ($(End.base)+(0,#1)$);%
+        \else
+          % multiple lines
+          \draw
+            ($(current page text area.west)-(#2,0)$) node(WestLine){};
+          \draw
+            ($(current page text area.east)+(#2,0)$) node(EastLine){};
+          \tUline@drawBtoE{#1}
+          \ifdim\dimexpr\tUline@by-\tUline@ey>\baselineskip
+            % more than two lines
+            \bgroup
+            \tUline@drawMultipleLines{#1}{\baselineskip}
+            \egroup
+          \fi
+        \fi
+      \end{tikzpicture}%
+    }% <<<
+  \newcommand*\tUline@drawMultipleLines[2]% >>>
+    {%
+      \MRTwuline@tUline@length=#2
+      \MRTwuline@tUline@count=1
+      \loop\ifdim
+        \dimexpr
+          \tUline@by-\MRTwuline@tUline@count\MRTwuline@tUline@length
+        \relax
+        >\tUline@ey
+      \draw[MRTwuline@tUline]
+        ($(Begin.base -| WestLine)+(0,#1)-
+          (0,\MRTwuline@tUline@count\MRTwuline@tUline@length)$) --
+        ($(Begin.base -| EastLine)+(0,#1)-
+          (0,\MRTwuline@tUline@count\MRTwuline@tUline@length)$);
+      \advance\MRTwuline@tUline@count by 1
+      \repeat
+    }% <<<
+  \newcommand*\tUline@drawBtoE[1]% >>>
+    {%
+      \draw[MRTwuline@tUline]
+        ($(Begin.base)+(0,#1)$) -- ($(Begin.base -| EastLine)+(0,#1)$)
+        ($(End.base)+(0,#1)$) -- ($(End.base -| WestLine)+(0,#1)$);%
+    }% <<<
+  \ExplSyntaxOn
+\fi
+% <<<

@@ -1,9 +1,9 @@
-\newcommand*\MRTthesis@version{0.0.2}
+\newcommand*\MRTthesis@version{0.0.3}
 \newcommand*\MRTthesis@date{2018/06/03}
 
 \NeedsTeXFormat{LaTeX2e}
 
-\RequirePackage{expl3,xparse,MRTif,MRTsfacc} % absolutely necessary packages
+\RequirePackage{expl3,xparse,MRTif} % absolutely necessary
 \ProvidesExplClass
   {MRTthesis}          {\MRTthesis@date}
   {\MRTthesis@version} {thesis template for MRT - University of Bayreuth}
@@ -20,13 +20,13 @@
 % <<<
 % ifs >>>
 \newif\ifMRTbibliography
-\newif\if@MRTthesis@tikzuline@
 % <<<
 % l3 variables >>>
 % bool >>>
 \bool_new:N \l_MRTthesis_minimal_bool
 \bool_new:N \l_MRTthesis_mathsizes_bool
 \bool_new:N \l_MRTthesis_british_bool
+\bool_new:N \l_MRTthesis_no_geometry_bool
 % <<<
 % box >>>
 \box_new:N \l_MRTthesis_tmpa_box
@@ -51,8 +51,9 @@
 \DeclareOption{longtable}{\PassOptionsToPackage{longtable}{MRTtab}}
 \DeclareOption{mathsizes}{\bool_set_true:N \l_MRTthesis_mathsizes_bool}
 \DeclareOption{minimal}{\bool_set_true:N \l_MRTthesis_minimal_bool}
+\DeclareOption{no geometry}{\bool_set_true:N \l_MRTthesis_no_geometry_bool}
 \DeclareOption{no mathsizes}{\bool_set_false:N \l_MRTthesis_mathsizes_bool}
-\DeclareOption{tikzunderline}{\@MRTthesis@tikzuline@true}
+\DeclareOption{tikzunderline}{\PassOptionsToPackage{tUline}{MRTwuline}}
 \DeclareOption{tUline}{\ExecuteOptions{tikzunderline}}
 \DeclareOption{british}{\bool_set_true:N \l_MRTthesis_british_bool}
 \DeclareOption{UKenglish}{\ExecuteOptions{british}}
@@ -68,7 +69,7 @@
 
 %% additional packages to achieve template formatting >>>
 %%=============================================================================
-\RequirePackage{MRTtab}
+\RequirePackage{MRTtab,MRTwuline,MRTsfacc}
 \bool_if:nTF { \sys_if_engine_luatex_p: || \sys_if_engine_xetex_p: }
   {% true >>>
     \RequirePackage{fontspec}
@@ -91,17 +92,26 @@
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
   }% <<<
 \RequirePackage[singlespacing=true]{scrlayer-scrpage}
-\RequirePackage[left=25mm,right=25mm,top=8.4mm,bottom=10.7mm%
-    ,includeheadfoot,headsep=15.4mm,marginparwidth=18mm,marginparsep=4mm]
-    {geometry}
+\bool_if:NF \l_MRTthesis_no_geometry_bool
+  {
+    \RequirePackage
+      [
+        ,left=25mm
+        ,right=25mm
+        ,top=8.4mm
+        ,bottom=10.7mm
+        ,includeheadfoot
+        ,headsep=15.4mm
+        ,marginparwidth=18mm
+        ,marginparsep=4mm
+      ]
+      {geometry}
+  }
 \RequirePackage{setspace}
-\RequirePackage[normalem]{ulem}
-\RequirePackage[table]{xcolor}
+\RequirePackage{xcolor}
 \RequirePackage{graphicx}
 \RequirePackage{enumitem}
 \RequirePackage[fleqn]{mathtools}
-\RequirePackage{scalerel}
-\RequirePackage{stackengine}
 % bad math fonts 
 \RequirePackage[italic,defaultmathsizes]{mathastext}
 \RequirePackage{isomath}
@@ -113,14 +123,19 @@
 \AtBeginDocument{\RequirePackage{hyperref}\MRTthesis@after@hyperref}
 \bool_if:NF \l_MRTthesis_minimal_bool%>>>
   {
+    \cs_new:Nn \MRTthesis_range_phrase:n
+      {
+        \mode_if_math:TF { \text { ~#1~ } } { ~#1~ }
+      }
     \RequirePackage{siunitx}
     \sisetup{% set options of the siunitx package
         ,detect-all%
         ,per-mode=reciprocal-positive-first%
-        ,range-phrase={\ifmmode\text{ bis }\else\ bis \fi}%
     }%
-    \addto\extrasngerman{\sisetup{locale=DE}}
-    \addto\extrasbritish{\sisetup{locale=UK}}
+    \addto\extrasngerman
+      { \sisetup{ locale=DE, range-phrase=\MRTthesis_range_phrase:n { bis } } }
+    \addto\extrasbritish
+      { \sisetup{ locale=UK, range-phrase=\MRTthesis_range_phrase:n { to } } }
     \RequirePackage[% I don't know yet how they want me to cite correctly...
         backend=biber%
         ,natbib=true%
@@ -328,141 +343,7 @@
       {tocline}{#2}%
   }% <<<
 % <<<
-% \WUline >>>
 \def\MRTthesis@HeadingsUline{\WUline}
-\NewDocumentCommand \WUline { o m }
-  {
-    \mode_if_math:TF
-      { \MRTthesis_WUline_math:nn { #1 } { #2 } }
-      { \MRTthesis_WUline_text:nn { #1 } { #2 } }
-  }
-\cs_new:Nn \MRTthesis_WUline_math:nn
-  {
-    \IfNoValueTF { #1 }
-      { \MRTthesis_WUline_math_out:nn { \MRTthesis@WUline@mathheight } { #2 } }
-      { \MRTthesis_WUline_math_out:nn { #1 } { #2 } }
-  }
-\cs_new:Nn \MRTthesis_WUline_math_out:nn
-  {
-    \ThisStyle
-      {
-        \setbox0 \hbox { $\SavedStyle #2$ }
-        \stackengine
-          { #1 }
-          { $ { \SavedStyle #2 } $ }
-          { \rule { \wd0 } { 0.185ex } }
-          { U } { c } { F } { F } { S }
-      }
-    \underline { \vphantom { #2 } }
-  }
-\cs_new:Nn \MRTthesis_WUline_text:nn
-  {
-    \bgroup
-    \IfNoValueTF { #1 }
-      {
-        \markoverwith
-          { \rule [ \MRTthesis@WUline@textheight ] { 0.25ex } { 0.185ex} } 
-      }
-      { \markoverwith { \rule [ #1 ] { 0.25ex } { 0.185ex } } }
-    \ULon{#2}
-  }
-\newcommand*\MRTthesis@WUline@mathheight{0.21ex}%
-\newcommand*\MRTthesis@WUline@textheight{-0.42ex}%
-% <<<
-% \tUline >>>
-\if@MRTthesis@tikzuline@
-  \ExplSyntaxOff
-  \RequirePackage{tikz}
-  \usetikzlibrary{calc}
-  \RequirePackage{tikzpagenodes}
-  \newcommand*\MRTthesis@tUline@width{0.185ex}
-  \newlength\MRTthesis@tUline@length
-  \newcount\MRTthesis@tUline@count
-  \newcommand*\MRTthesis@gettikzxy[3]% >>>
-    % https://tex.stackexchange.com/a/58590/121799
-    {%
-      \tikz@scan@one@point\pgfutil@firstofone#1\relax
-      \xdef#2{\the\pgf@x}%
-      \xdef#3{\the\pgf@y}%
-    }% <<<
-  \tikzset{MRTthesis@tUline/.style={line width=\MRTthesis@tUline@width}}
-  \newcommand*\MRTthesis@EmptyOProcessor[2]% >>>
-    {%
-      \MRTifEmptyTF{#2}%
-        {\def\ProcessedArgument{#1}}%
-        {\def\ProcessedArgument{#2}}%
-    }% <<<
-  \NewDocumentCommand{\tUline}% >>>
-    {
-      >{\MRTthesis@EmptyOProcessor{-0.35ex}}O{} % height
-      >{\MRTthesis@EmptyOProcessor{0pt}}O{}     % overhang
-      >{\MRTthesis@EmptyOProcessor{0.185ex}}O{} % line width
-      +m
-    }
-    {%
-      \def\MRTthesis@tUline@width{#3}%
-      \tikz[remember picture,overlay, baseline=(Begin.base)]
-        {%
-          \node[anchor=base,inner sep=0pt,outer sep=0pt,xshift=-#2]
-            (Begin) {\strut};
-          \MRTthesis@gettikzxy{($(Begin.base)-(current page.south west)$)}
-            {\tUline@bx}{\tUline@by}%
-        }%
-      #4%
-      \tikz[remember picture,overlay, baseline=(End.base)]
-        {%
-          \node[anchor=base,inner sep=0pt,outer sep=0pt,xshift=+#2]
-            (End) {\strut};%
-          \MRTthesis@gettikzxy{($(End.base)-(current page.south west)$)}
-            {\tUline@ex}{\tUline@ey}%
-        }%
-      \begin{tikzpicture}[overlay,remember picture]
-        \ifdim\dimexpr\tUline@ey-\tUline@by = 0pt
-          % one line
-          \draw[MRTthesis@tUline] ($(Begin.base)+(0,#1)$)
-            -- ($(End.base)+(0,#1)$);%
-        \else
-          % multiple lines
-          \draw
-            ($(current page text area.west)-(#2,0)$) node(WestLine){};
-          \draw
-            ($(current page text area.east)+(#2,0)$) node(EastLine){};
-          \tUline@drawBtoE{#1}
-          \ifdim\dimexpr\tUline@by-\tUline@ey>\baselineskip
-            % more than two lines
-            \bgroup
-            \tUline@drawMultipleLines{#1}{\baselineskip}
-            \egroup
-          \fi
-        \fi
-      \end{tikzpicture}%
-    }% <<<
-  \newcommand*\tUline@drawMultipleLines[2]% >>>
-    {%
-      \MRTthesis@tUline@length=#2
-      \MRTthesis@tUline@count=1
-      \loop\ifdim
-        \dimexpr
-          \tUline@by-\MRTthesis@tUline@count\MRTthesis@tUline@length
-        \relax
-        >\tUline@ey
-      \draw[MRTthesis@tUline]
-        ($(Begin.base -| WestLine)+(0,#1)-
-          (0,\MRTthesis@tUline@count\MRTthesis@tUline@length)$) --
-        ($(Begin.base -| EastLine)+(0,#1)-
-          (0,\MRTthesis@tUline@count\MRTthesis@tUline@length)$);
-      \advance\MRTthesis@tUline@count by 1
-      \repeat
-    }% <<<
-  \newcommand*\tUline@drawBtoE[1]% >>>
-    {%
-      \draw[MRTthesis@tUline]
-        ($(Begin.base)+(0,#1)$) -- ($(Begin.base -| EastLine)+(0,#1)$)
-        ($(End.base)+(0,#1)$) -- ($(End.base -| WestLine)+(0,#1)$);%
-    }% <<<
-  \ExplSyntaxOn
-\fi
-% <<<
 \NewDocumentCommand \MRTthesisSetup { +m }%>>>
   {
     \keys_set:nn { MRTthesis/setup } { #1 }
