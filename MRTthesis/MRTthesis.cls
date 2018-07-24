@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.3}
-\newcommand*\MRTthesis@date{2018/06/03}
+\newcommand*\MRTthesis@version{0.0.3a}
+\newcommand*\MRTthesis@date{2018/07/24}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -48,7 +48,11 @@
 
 %% Class options and loading scrreprt >>>
 %%=============================================================================
-\DeclareOption{longtable}{\PassOptionsToPackage{longtable}{MRTtab}}
+\DeclareOption{longtable}
+  {%
+    \PassOptionsToPackage{longtable}{MRTtab}%
+    \AtBeginDocument{\setlength{\LTcapwidth}{0.905\textwidth}}%
+  }
 \DeclareOption{mathsizes}{\bool_set_true:N \l_MRTthesis_mathsizes_bool}
 \DeclareOption{minimal}{\bool_set_true:N \l_MRTthesis_minimal_bool}
 \DeclareOption{no geometry}{\bool_set_true:N \l_MRTthesis_no_geometry_bool}
