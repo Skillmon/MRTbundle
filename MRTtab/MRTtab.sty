@@ -298,6 +298,7 @@
     \cs_set_eq:NN \tabular_original      \tabular
     \cs_set_eq:NN \endtabular_original   \endtabular
     \MRTtab_pretocmd:Nn  \tabular      { \MRTtab@unpatcharray }
+    \MRTtab_pretocmd:Nn  \array        { \MRTtab@unpatcharray }
     \MRTtab_pretocmd:Nn  \@@array      { \MRTtab@@arraystarthook }
     \MRTtab_pretocmd:Nn  \@arraycr     { \MRTtab@EoLHook }
     \MRTtab_apptocmd:Nn  \@yargarraycr { \MRTtab@BoLHook }
