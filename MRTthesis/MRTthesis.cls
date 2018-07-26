@@ -89,6 +89,8 @@
 \bool_if:NTF \l_MRTthesis_british_bool
   {% true >>>
     \RequirePackage[main=british,ngerman]{babel}
+    \useshorthands{"}
+    \addto\extrasbritish{\languageshorthands{ngerman}}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { from }
   }% <<<
   {% false >>>
