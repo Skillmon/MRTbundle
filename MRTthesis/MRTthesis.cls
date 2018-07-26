@@ -177,8 +177,10 @@
     ,no~degree       .default:n  = { true }
     ,no~examiner     .bool_set:N = \l_MRTthesis_no_examiner_bool
     ,no~examiner     .default:n  = { true }
-    ,no~institute    .bool_set:N = \l_MRTthesis_no_institute_bool 
-    ,no~institute    .default:n  = { true } 
+    ,no~chair        .bool_set:N = \l_MRTthesis_no_chair_bool 
+    ,no~chair        .default:n  = { true } 
+    ,no~institute    .meta:n     = { no~chair = { #1 } }
+    ,no~institute    .default:n  = { true }
     ,no~logos        .meta:n     = { logoL={},logoR={} }
     ,no~thesis       .bool_set:N = \l_MRTthesis_no_thesis_bool
     ,no~thesis       .default:n  = { true }
@@ -864,7 +866,7 @@
               \group_end:
             }% <<<
           \vfillmult{5}
-          \bool_if:NF \l_MRTthesis_no_institute_bool% institute >>>
+          \bool_if:NF \l_MRTthesis_no_chair_bool% chair >>>
             {
               \group_begin:
                 \MRTthesis@fntsel{12}{16}
