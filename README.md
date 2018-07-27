@@ -24,11 +24,11 @@ unclean folder structure of your project *and* has to be redone for any future
 project.
 
 The perhaps best way would be local user wide install. This is done by placing
-the bundle's folders `MRTbeam`, `MRTif`, `MRTsfacc`, `MRTtab`, and `MRTthesis`
-in your local TeX-tree. For TeX Live on Unix this would by default be
-`/home/<user>/texmf/` therein the package should belong in
+the bundle's folders `MRTalone`, `MRTbeam`, `MRTif`, `MRTsfacc`, `MRTtab`,
+`MRTthesis` and `MRTwuline` in your local TeX-tree. For TeX Live on Unix this
+would by default be `/home/<user>/texmf/` therein the package should belong in
 `tex/latex/MRTbundle`. The documentation should be placed in
-`/home/<user>/texmf/doc/latex/MRTbundle` but this is optional. For other OSes
+`/home/<user>/texmf/doc/latex/MRTbundle` but this is *optional*. For other OSes
 and TeX distributions the paths may vary. You can get the correct path to your
 user specific folder by running `kpsewhich -var TEXMFHOME` in your terminal (at
 least if you're running TeX Live).
@@ -36,7 +36,7 @@ least if you're running TeX Live).
 The third option would be a system wide installation. For this you need admin
 rights. Place the files in the system wide TeX-tree (again in Unix with TeX Live
 located in `/usr/local/texlive/texmf-local/`) therein put all folders
-belonging to a included package or class in `tex/latex/MRTbundle`. The
+belonging to an included package or class in `tex/latex/MRTbundle`. The
 documentation would belong in
 `/usr/local/texlive/texmf-local/doc/latex/MRTbundle`. The correct folder can be
 determined by running `kpsewhich -var TEXMFLOCAL`. Again installation of
