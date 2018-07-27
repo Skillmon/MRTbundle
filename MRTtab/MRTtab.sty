@@ -125,10 +125,23 @@
     ,col             .meta:n             = { columns = { #1 } }
     ,env~begin       .tl_set:N           = \l__MRTtab_env_begin_tl
     ,env~end         .tl_set:N           = \l__MRTtab_env_end_tl
-    ,env             .meta:n             =
+    ,env             .code:n             =
       {
-        env~begin = { \begin{#1} },
-        env~end = { \end{#1} }
+        \tl_if_empty:nTF { #1 }
+          {
+            \keys_set:nn { MRTtab }
+              {
+                env~begin = {},
+                env~end   = {},
+              }
+          }
+          {
+            \keys_set:nn { MRTtab }
+              {
+                env~begin = { \begin{#1} },
+                env~end = { \end{#1} }
+              }
+          }
       }
     ,env             .initial:n          = MRTtabular
     ,float           .bool_set:N         = \l_MRTtab_table_float_bool

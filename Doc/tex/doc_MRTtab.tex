@@ -266,7 +266,7 @@ provided:
 \begin{describemacro}{MRTtabDeclareHeadMacros}%>>>
   By default the above macros are only available inside of \env{MRTtabular} and
   in the body of \env{MRTtable}. You can make them locally available with
-  \cs{MRTtabDeclareHead}.
+  \cs{MRTtabDeclareHeadMacros}.
 \end{describemacro}%<<<
 %<<<
 
@@ -318,14 +318,6 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
 \begin{describeopt}{EoL}[\meta{content}]%>>>
   Sets the \env{MRTtabular} End-of-Line hook using \cs{MRTtabAddtoEoLHook}
 \end{describeopt}%<<<
-\begin{describeopt}{stretch tabular, stretch tab, stretch}[\meta{float}]%>>>
-  Sets the stretch in \env{MRTtabular} to the specified \meta{float} using
-  \cs{setstretch}.
-\end{describeopt}%<<<
-\begin{describeopt}{stretch caption, stretch cap, cstretch}[\meta{float}]%>>>
-  Sets the stretch in the caption using \cs{setkomafont} and \cs{setstretch}.
-  Doesn't work if KOMA script is not used but issues a warning in that case.
-\end{describeopt}%<<<
 \begin{describeopt}{caption, cap}[\meta{caption}]%>>>
   Specifies the content of the caption in an \env{MRTtable}. If it is blank, no
   caption will be used.
@@ -335,7 +327,10 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
   to first column \texttt{l}, others \texttt{c}.
 \end{describeopt}%<<<
 \begin{describeopt}{env}[\meta{name}]%>>>
-  Uses the tabular like environment \meta{name} instead of \env{MRTtabular}.
+  Uses the tabular like environment \meta{name} instead of \env{MRTtabular}. If
+  an empty argument is provided, no inner environment will be used. This is
+  useful if you want to use an environment that grabs its contents and has to be
+  explicitly used, e.g. \env{tabularx} can only be used like this.
 \end{describeopt}%<<<
 \begin{describeopt}{env begin}[\meta{begin}]%>>>
   Uses \meta{begin} as the start of the tabular like environment. This way you
@@ -389,6 +384,14 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
 \begin{describeopt}{short caption, short cap, scap}%>>>
   If caption and this option are used the list of tables will get this short
   caption instead of the caption.
+\end{describeopt}%<<<
+\begin{describeopt}{stretch tabular, stretch tab, stretch}[\meta{float}]%>>>
+  Sets the stretch in \env{MRTtabular} to the specified \meta{float} using
+  \cs{setstretch}.
+\end{describeopt}%<<<
+\begin{describeopt}{stretch caption, stretch cap, cstretch}[\meta{float}]%>>>
+  Sets the stretch in the caption using \cs{setkomafont} and \cs{setstretch}.
+  Doesn't work if KOMA script is not used but issues a warning in that case.
 \end{describeopt}%<<<
 \begin{describeopt}{striped}[\meta{bool}]%>>>
   If set to true the inner \env{MRTtabular} will be striped with \opt{stripe
