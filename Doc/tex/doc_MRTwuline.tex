@@ -18,9 +18,9 @@ so by using \pkg{ulem} or \pkg{stackengine}.
   In text mode the \pkg{ulem} package is used for the underline. In math mode
   \pkg{stackengine} is employed. In both cases you can use \meta{height} to
   change the default height of the underlining. In text mode and math mode the
-  needed height to achieve the same height of the line differs quite a lot. By
-  default in math mode \texttt{\csuse{MRTthesis@WUline@mathheight}} is used, in
-  text mode \texttt{\csuse{MRTthesis@WUline@textheight}}.
+  needed \meta{height} to achieve the same height of the line differs quite a
+  lot. By default in math mode \texttt{\csuse{MRTwuline@mathheight}} is
+  used, in text mode \texttt{\csuse{MRTwuline@textheight}}.
 \end{describemacro}%<<<
 \begin{describemacro}{tUline}%>>>
   [\oarg{height}\oarg{overhang}\oarg{thickness}\marg{text}]
@@ -32,8 +32,9 @@ so by using \pkg{ulem} or \pkg{stackengine}.
   (default \texttt{0.185ex}). You can specify \meta{overhang} (default
   \texttt{0pt}) which is the width the line should be wider than a text line on
   each side. If you let any optional argument empty, the default is used. It is
-  assumed that the lines are equally separated with \cs{baselineskip}. It needs
-  at least two runs to be displayed correctly.
+  assumed that the lines are equally separated with \cs{baselineskip} -- so if
+  your material does stretch the baseline skip, you can't use \cs{tUline}. It
+  needs at least two runs to be displayed correctly.
 \end{describemacro}%<<<
 %<<<
 
