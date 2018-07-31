@@ -29,9 +29,15 @@ the first and second argument, respectively, an expansion is made.
 
 \begin{describemacroTF}[NN,Nn,nN,G,GNN,GNn,GnN]{MRTifStringsMatch}%
   [\marg{string1}\marg{string2}]
-  Tests if \meta{string1} and \meta{string2} match.
+  Tests if \meta{string1} and \meta{string2} match, the strings are
+  \cs{detokenize}d prior to the comparison.
 \end{describemacroTF}
-\dscremaininglines{7}
+\dscremaininglines{6}
+
+\begin{describemacroTF}[G]{MRTifStringsMatchXX}[\marg{string1}\marg{string2}]
+  Tests if \meta{string1} and \meta{string2} match, the strings are fully
+  expanded.
+\end{describemacroTF}
 
 \begin{describemacroTF}[G,N,GN]{MRTifOneToken}[\marg{arg}]
   Tests if \meta{arg} is only a single token.
@@ -50,7 +56,26 @@ the first and second argument, respectively, an expansion is made.
   the arguments is contained in a group. If that's the case the \meta{false}
   branch is executed.
 \end{describemacroTF}
-\dscremaininglines{6}
+\dscremaininglines{5}
+
+\begin{describemacroTF}[G,N,GN]{MRTifNumber}[\marg{arg}]
+  Tests if \meta{arg} is a number, meaning it consists out of an optional |+| or
+  |-| sign and digits. The implementation might be suboptimal. It uses
+  \cs{MRTifContainsGroupTF}.
+\end{describemacroTF}
+\dscremaininglines{2}
+
+\begin{describemacroTF}[G,N,GN]{MRTifFloat}[\marg{arg}]
+  Tests if \meta{arg} is a float, meaning it consists out of an optional |+| or
+  |-| sign, optional digits, an optional decimal marker (|.|) and digits. The
+  implementation might be suboptimal. It uses \cs{MRTifNumberTF} and
+  \cs{MRTifContainsGroupTF}.
+\end{describemacroTF}
+
+\begin{describemacroTF}[G,N,GN]{MRTifContainsGroup}[\marg{arg}]
+  Tests if \meta{arg} contains any braced groups.
+\end{describemacroTF}
+\dscremaininglines{4}
 
 \section{Dependencies}
 \pkg{MRTif} loads the \pkg{pdftexcmds} package to make the \hologo{pdfTeX}

@@ -1,5 +1,5 @@
-\newcommand*\MRTsfacc@version{0.0.1}
-\newcommand*\MRTsfacc@date{2018/06/01}
+\newcommand*\MRTsfacc@version{0.0.2}
+\newcommand*\MRTsfacc@date{2018/07/31}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -9,13 +9,26 @@
     helvet%
   ]
 
-\def\MRTsfacc@shift{0.25}
-\DeclareOption*{\edef\MRTsfacc@shift{\CurrentOption}}
-\ProcessOptions\relax
-
-\newcommand*\MRTsfaccSet[1]{\def\MRTsfacc@shift{#1}}
-
 \RequirePackage{MRTif}
+
+\def\MRTsfacc@shift{0.25}
+\newcommand\MRTsfaccSet[1]
+  {%
+    \MRTifFloatTF{#1}
+      {\def\MRTsfacc@shift{#1}}
+      {%
+        \PackageError{MRTsfacc}{Provided option `#1` is no valid float}
+          {%
+            Parsing says you didn't provide a valid float. Please provide a
+            valid float.\MessageBreak
+            If you're sure that you entered a valid float, please report the bug
+            to the\MessageBreak
+            package maintainer.%
+          }%
+      }%
+  }
+\DeclareOption*{\expandafter\MRTsfaccSet\expandafter{\CurrentOption}}
+\ProcessOptions\relax
 
 % stupid package for math font is stupid. Have to cure the sickness >>>
 \newbox\MRTsfacc@box

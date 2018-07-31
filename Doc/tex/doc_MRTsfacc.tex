@@ -11,10 +11,12 @@ accent horizontally depending on the height of the accented character.
 Furthermore it is tested whether the character is an alphabetic one by checking
 the category code. If it is not an alphabetic character the shift isn't applied.
 
-You can specify the shift based on the multiple of the height as the package
-option. This is the only option the package takes and is not checked to be a
-valid float. The default is \makeatletter\texttt{\MRTsfacc@shift}\makeatother.
-Alternatively you can use \cs{MRTsfaccSet} to set the coefficient.
+The package forwards any option to \cs{MRTsfaccSet}. \cs{MRTsfaccSet} tests
+whether its argument is a valid float using \cs{MRTifFloatTF} and sets the share
+of the letters' height which is used as the horizontal displacement. So you can
+either use the option during load time to set the share or \cs{MRTsfaccSet} at
+any later point. The default share is
+\makeatletter\texttt{\MRTsfacc@shift}\makeatother.
 
 One can use \texttt{*} to enforce the shift and \texttt{!}\@ to enforce the
 omitting of that shift. Consider the following example:
@@ -67,5 +69,5 @@ The resulting \cs{mathaccentV} macro is not expandable and therefore created
 \cs{protected}. You can take a look at the results in \autoref{tab:sfacc}.
 
 \section{Dependencies}
-\pkg{MRTsfacc} loads the \pkg{MRTif} package and uses its test
-\cs{MRTifLetterGTF}.
+\pkg{MRTsfacc} loads the \pkg{MRTif} package and uses its tests
+\cs{MRTifLetterGTF} and \cs{MRTifFloatTF}.
