@@ -114,6 +114,20 @@
     \MRTif@create@TandF@twoargs{#1}%
     \MRTif@create@N@TandF@twoargs{#1}%
   }% <<<
+\newcommand\MRTif@notEmpty@noGroup@noSpace[2]% >>>
+  {%
+    \MRTifEmptyTF{#1}
+      {\@secondoftwo}
+      {%
+        \MRTifContainsGroupTF{#1}
+          {\@secondoftwo}
+          {%
+            \MRTifContainsSpaceTF{#1}
+              {\@secondoftwo}
+              {#2}%
+          }%
+      }%
+  }% <<<
 % MRTifEmpty >>>
 \newcommand\MRTifEmptyTF[1]{% >>>
   \if\relax\detokenize{#1}\relax
@@ -312,16 +326,82 @@
 \MRTif@create@TandF@N@TandF@twoargs{TokensMatch}
 \MRTif@create@TandF@N@TandF@twoargs{TokensMatchG}
 % <<<
+% MRTifDigit >>>
+\newcommand\MRTifDigitTF[1]% >>>
+  {%
+    \MRTifOneTokenTF{#1}
+      {\MRTifDigit@a{#1}}
+      {\@secondoftwo}%
+  }% <<<
+\newcommand\MRTifDigit@a[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{0}
+      {\@firstoftwo}
+      {\MRTifDigit@b{#1}}%
+  }% <<<
+\newcommand\MRTifDigit@b[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{1}
+      {\@firstoftwo}
+      {\MRTifDigit@c{#1}}%
+  }% <<<
+\newcommand\MRTifDigit@c[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{2}
+      {\@firstoftwo}
+      {\MRTifDigit@d{#1}}%
+  }% <<<
+\newcommand\MRTifDigit@d[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{3}
+      {\@firstoftwo}
+      {\MRTifDigit@e{#1}}%
+  }% <<<
+\newcommand\MRTifDigit@e[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{4}
+      {\@firstoftwo}
+      {\MRTifDigit@f{#1}}%
+  }% <<<
+\newcommand\MRTifDigit@f[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{5}
+      {\@firstoftwo}
+      {\MRTifDigit@g{#1}}%
+  }% <<<
+\newcommand\MRTifDigit@g[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{6}
+      {\@firstoftwo}
+      {\MRTifDigit@h{#1}}%
+  }% <<<
+\newcommand\MRTifDigit@h[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{7}
+      {\@firstoftwo}
+      {\MRTifDigit@i{#1}}%
+  }% <<<
+\newcommand\MRTifDigit@i[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{8}
+      {\@firstoftwo}
+      {\MRTifDigit@j{#1}}%
+  }% <<<
+\newcommand\MRTifDigit@j[1]% >>>
+  {%
+    \MRTifStringsMatchTF{#1}{9}
+      {\@firstoftwo}
+      {\@secondoftwo}%
+  }% <<<
+\MRTif@groupify@TF{Digit}
+\MRTif@create@TandF@N@TandF{Digit}
+\MRTif@create@TandF@N@TandF{DigitG}
+% <<<
 % MRTifNumber >>>
 \newcommand\MRTifNumberTF[1]% >>>
   {%
-    \MRTifEmptyTF{#1}
-      {\@secondoftwo}
-      {%
-        \MRTifContainsGroupTF{#1}
-          {\@secondoftwo}
-          {\MRTifNumber@a#1\MRTifNumber@endargument}%
-      }%
+    \MRTif@notEmpty@noGroup@noSpace{#1}
+      {\MRTifNumber@a#1\MRTifNumber@endargument}%
   }% <<<
 \newcommand\MRTifNumber@a[1]% >>>
   {%
@@ -341,73 +421,13 @@
   }% <<<
 \newcommand\MRTifNumber@ifDigit[1]% >>>
   {%
-    \MRTifOneTokenTF{#1}
+    \MRTifStringsMatchTF{#1}{\MRTifNumber@endargument}
+      {\@firstoftwo}
       {%
-        \MRTifStringsMatchTF{#1}{\MRTifNumber@endargument}
-          {\@firstoftwo}
-          {\MRTifNumber@ifDigit@a{#1}}%
-      }
-      {\MRTifNumber@false}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@a[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{0}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@ifDigit@b{#1}}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@b[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{1}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@ifDigit@c{#1}}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@c[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{2}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@ifDigit@d{#1}}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@d[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{3}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@ifDigit@e{#1}}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@e[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{4}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@ifDigit@f{#1}}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@f[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{5}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@ifDigit@g{#1}}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@g[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{6}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@ifDigit@h{#1}}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@h[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{7}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@ifDigit@i{#1}}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@i[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{8}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@ifDigit@j{#1}}%
-  }% <<<
-\newcommand\MRTifNumber@ifDigit@j[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{9}
-      {\MRTifNumber@ifDigit}
-      {\MRTifNumber@false}%
+        \MRTifDigitTF{#1}
+          {\MRTifNumber@ifDigit}
+          {\MRTifNumber@false}%
+      }%
   }% <<<
 \newcommand\MRTifNumber@false{}% >>>
 \long\def\MRTifNumber@false#1\MRTifNumber@endargument
@@ -421,13 +441,7 @@
 % MRTifFloat >>>
 \newcommand\MRTifFloatTF[1]% >>>
   {%
-    \MRTifEmptyTF{#1}
-      {\@secondoftwo}
-      {%
-        \MRTifContainsGroupTF{#1}
-          {\@secondoftwo}
-          {\MRTifFloat@a{#1}}%
-      }%
+    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloat@a{#1}}
   }% <<<
 %\newcommand\MRTifFloat@a \newcommand\MRTifFloat@ifDot >>>
 \begingroup
@@ -512,6 +526,26 @@
 \MRTif@groupify@TF{ContainsGroup}
 \MRTif@create@TandF@N@TandF{ContainsGroup}
 \MRTif@create@TandF@N@TandF{ContainsGroupG}
+% <<<
+% MRTifContainsSpace >>>
+\newcommand\MRTifContainsSpaceTF[1]% >>>
+  {%
+    \expandafter\MRTifContainsSpace@a
+      \MRTifContainsSpace@eat#1
+    \MRTifContainsSpace@endargument
+  }% <<<
+\newcommand\MRTifContainsSpace@a{}% >>>
+\long\def\MRTifContainsSpace@a#1\MRTifContainsSpace@endargument
+  {%
+    \MRTifEmptyTF{#1}
+      {\@secondoftwo}
+      {\@firstoftwo}%
+  }% <<<
+\newcommand\MRTifContainsSpace@eat{}% 
+\long\def\MRTifContainsSpace@eat#1 {}
+\MRTif@groupify@TF{ContainsSpace}
+\MRTif@create@TandF@N@TandF{ContainsSpace}
+\MRTif@create@TandF@N@TandF{ContainsSpaceG}
 % <<<
 %\newcommand\MRTifTokenInTF[2]% >>>
   %{%

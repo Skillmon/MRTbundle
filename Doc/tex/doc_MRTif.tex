@@ -58,12 +58,17 @@ the first and second argument, respectively, an expansion is made.
 \end{describemacroTF}
 \dscremaininglines{5}
 
+\begin{describemacroTF}[G,N,GN]{MRTifDigit}[\marg{arg}]
+  Tests if \meta{arg} is a single token and a digit. The implementation might be
+  suboptimal.
+\end{describemacroTF}
+\dscremaininglines{2}
+
 \begin{describemacroTF}[G,N,GN]{MRTifNumber}[\marg{arg}]
   Tests if \meta{arg} is a number, meaning it consists out of an optional |+| or
   |-| sign and digits. The implementation might be suboptimal. It uses
-  \cs{MRTifContainsGroupTF}.
+  \cs{MRTifDigitTF} and \cs{MRTifContainsGroupTF}.
 \end{describemacroTF}
-\dscremaininglines{2}
 
 \begin{describemacroTF}[G,N,GN]{MRTifFloat}[\marg{arg}]
   Tests if \meta{arg} is a float, meaning it consists out of an optional |+| or
@@ -74,6 +79,11 @@ the first and second argument, respectively, an expansion is made.
 
 \begin{describemacroTF}[G,N,GN]{MRTifContainsGroup}[\marg{arg}]
   Tests if \meta{arg} contains any braced groups.
+\end{describemacroTF}
+\dscremaininglines{3}
+
+\begin{describemacroTF}[G,N,GN]{MRTifContainsSpace}[\marg{arg}]
+  Tests if \meta{arg} contains spaces which are not enclosed by inner groups.
 \end{describemacroTF}
 \dscremaininglines{4}
 
