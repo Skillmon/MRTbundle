@@ -335,63 +335,28 @@
   }% <<<
 \newcommand\MRTifDigit@a[1]% >>>
   {%
-    \MRTifStringsMatchTF{#1}{0}
-      {\@firstoftwo}
-      {\MRTifDigit@b{#1}}%
-  }% <<<
-\newcommand\MRTifDigit@b[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{1}
-      {\@firstoftwo}
-      {\MRTifDigit@c{#1}}%
-  }% <<<
-\newcommand\MRTifDigit@c[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{2}
-      {\@firstoftwo}
-      {\MRTifDigit@d{#1}}%
-  }% <<<
-\newcommand\MRTifDigit@d[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{3}
-      {\@firstoftwo}
-      {\MRTifDigit@e{#1}}%
-  }% <<<
-\newcommand\MRTifDigit@e[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{4}
-      {\@firstoftwo}
-      {\MRTifDigit@f{#1}}%
-  }% <<<
-\newcommand\MRTifDigit@f[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{5}
-      {\@firstoftwo}
-      {\MRTifDigit@g{#1}}%
-  }% <<<
-\newcommand\MRTifDigit@g[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{6}
-      {\@firstoftwo}
-      {\MRTifDigit@h{#1}}%
-  }% <<<
-\newcommand\MRTifDigit@h[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{7}
-      {\@firstoftwo}
-      {\MRTifDigit@i{#1}}%
-  }% <<<
-\newcommand\MRTifDigit@i[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{8}
-      {\@firstoftwo}
-      {\MRTifDigit@j{#1}}%
-  }% <<<
-\newcommand\MRTifDigit@j[1]% >>>
-  {%
-    \MRTifStringsMatchTF{#1}{9}
-      {\@firstoftwo}
-      {\@secondoftwo}%
+    \ifx0#1\expandafter\@secondoftwo
+    \else\ifx1#1\expandafter\@secondoftwo
+    \else\ifx2#1\expandafter\@secondoftwo
+    \else\ifx3#1\expandafter\@secondoftwo
+    \else\ifx4#1\expandafter\@secondoftwo
+    \else\ifx5#1\expandafter\@secondoftwo
+    \else\ifx6#1\expandafter\@secondoftwo
+    \else\ifx7#1\expandafter\@secondoftwo
+    \else\ifx8#1\expandafter\@secondoftwo
+    \else\ifx9#1\expandafter\@secondoftwo
+    \else\expandafter\@firstoftwo
+    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \fi
+    \@secondoftwo\@firstoftwo
   }% <<<
 \MRTif@groupify@TF{Digit}
 \MRTif@create@TandF@N@TandF{Digit}
