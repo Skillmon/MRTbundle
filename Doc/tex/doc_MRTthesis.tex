@@ -40,6 +40,7 @@ The class features a few load time options, none of which do take arguments.
   is not supported by the class.
 \end{describeopt}
 
+\noindent
 Every other given option will be passed on to \cls{scrreprt}.
 %<<<
 \subsection{Setup options}\label{sec:thesis:setup}%>>>
@@ -53,8 +54,8 @@ The following options are accessible with \cs{MRTthesisSetup}.
   Separate authors with \cs{and}. You can give the surname first followed by a
   comma and the given name, in which case the parsing for the abbreviation works
   better (especially with name affixes). The following two options are fine:
-  \texttt{author=\{Duck, Donald \string\and Mouse, Mickey\}} or
-  \texttt{author=\{Donald Duck \string\and Mickey Mouse\}} and should both
+  \texttt{author=\{Duck, Donald \string\and\ Mouse, Mickey\}} or
+  \texttt{author=\{Donald Duck \string\and\ Mickey Mouse\}} and should both
   result in the abbreviation \texttt{D.\@ Duck, M.\@ Mouse}. Another example
   would be \texttt{zu Guttenberg, Karl-Theodor} or \texttt{Karl-Theodor zu
   Guttenberg}. Here the parsing would result in \texttt{K.-T.\@ zu Guttenberg}
@@ -126,7 +127,7 @@ The following options are accessible with \cs{MRTthesisSetup}.
 \begin{describeopt}{no usage}[\meta{bool}]
   If true no usage rights are given to the MRT in the affidavit text. Default is
   true, initially is false. If you need a custom paragraph and don't want to
-  leave it out completely you should redefine \cs{affidavittext@usagerigths}.
+  leave it out completely you should redefine \cs{affidavittext@usagerights}.
 \end{describeopt}
 \begin{describeopt}{number}[\meta{number}]
   The MRT report number displayed in the citation indications. Initially is
@@ -172,7 +173,7 @@ The following options are accessible with \cs{MRTthesisSetup}.
   The height reserved for each signature below the affidavit text. Initial value
   is \texttt{9mm}.
 \end{describeopt}
-\begin{describeopt}{sign seperation, sign sep}[\meta{dimen}]
+\begin{describeopt}{sign separation, sign sep}[\meta{dimen}]
   If \opt{sign width max} is not given (or \texttt{0pt}) the maximum width is
   calculated from the text width and the width of the date and location. The
   minimum distance from the date and location to the signature lines is then
@@ -245,10 +246,10 @@ The following macros are provided:
   \meta{false} branch.
 \end{describemacroTF}
 \begin{describemacro}{vfillmult}[\marg{num}]
-  Same as if you'd \meta{num} instances of \cs{vfill}.
+  Same as if you'd use \meta{num} instances of \cs{vfill}.
 \end{describemacro}
 \begin{describemacro}{hfillmult}[\marg{num}]
-  Same as if you'd \meta{num} instances of \cs{hfill}.
+  Same as if you'd use \meta{num} instances of \cs{hfill}.
 \end{describemacro}
 \begin{describemacro}{MRTafterhyperref}[\marg{content}]
   Places \meta{content} after \pkg{hyperref} is loaded. This is important for

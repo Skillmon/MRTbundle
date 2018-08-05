@@ -213,8 +213,8 @@ described in \autoref{sec:beam:macros}.
   In both cases \texttt{(0,0)} is the bottom left corner of the slide.
 \end{describemacro}
 
-\begin{describemacro}{AddToPlaced}[\marg{tikz code}]
-  Adds the specified \meta{tikz code} to the background of the current slide.
+\begin{describemacro}{AddToPlaced}[\marg{TikZ code}]
+  Adds the specified \meta{TikZ code} to the background of the current slide.
   \texttt{(0,0)} is the bottom left corner of the slide. Coordinates are by
   default in multiples of \cs{pagewidth} and \cs{pageheight}. It uses the same
   \env{tikzpicture} as \cs{PlaceAt} and is stored in the same macro.
@@ -277,7 +277,7 @@ described in \autoref{sec:beam:macros}.
 \end{describeenv}
 
 \subsection{Footnote related}\label{sec:beam:macros:foot}
-The term footnotes relates to the special MRT footnotes in this section.
+The term footnotes relates to the special MRT footnotes in this subsection.
 \begin{describemacro}{AddToRightFoot}%
   [\meta{*}\meta{+}\sarg{overlay}\oarg{pre}\marg{note}]
   This macro adds stuff to the right footer. If \meta{*} is given, the content
@@ -329,8 +329,8 @@ The term footnotes relates to the special MRT footnotes in this section.
 \end{describemacro}
 
 \begin{describemacro}{inlinecite}[\oarg{opt1}\oarg{opt2}\marg{key}]
-  Gives the citation which would be placed in the in the text by \cs{cite}
-  without any \cs{textcolor}. In fact \cs{cite} uses this internally.
+  Gives the citation which would be placed in the text by \cs{cite} without any
+  \cs{textcolor}. In fact \cs{cite} uses this internally.
 \end{describemacro}
 
 \begin{describemacro}{insertcite}[\marg{key}]
@@ -357,4 +357,4 @@ loaded:
   \end{itemize}
 \end{multicols}
 \vspace*{-\multicolsep}%
-\pkg{biblatex} uses \texttt{biber} as its backend.
+\noindent\pkg{biblatex} uses \texttt{biber} as its backend.

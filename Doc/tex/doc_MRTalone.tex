@@ -15,7 +15,7 @@ The class features a few load time options, none of which do take arguments.
 \end{describeopt}
 \begin{describeopt}{minimal}
   If this option is passed some packages are not loaded and therefore related
-  configurations not set. See \autoref{sec:thesis:dep}.
+  configurations not set. See \autoref{sec:alone:dep}.
 \end{describeopt}
 \begin{describeopt}{no mathsizes}
   Opposite of \opt{mathsizes}. If used the maths sizes are not changed from the
@@ -33,6 +33,7 @@ The class features a few load time options, none of which do take arguments.
   is not supported by the class.
 \end{describeopt}
 
+\noindent
 Every other given option will be passed on to \cls{standalone}.
 %<<<
 \subsection{Setup options}\label{sec:alone:setup}%>>>
@@ -68,7 +69,7 @@ The following options are accessible with \cs{MRTaloneSetup}.
 \end{describemacro}%<<<
 %<<<
 
-\section{Dependencies}%>>>
+\section{Dependencies}\label{sec:alone:dep}%>>>
 The class is based on \cls{standalone}, therefore it naturally depends on that
 and all its dependencies. Additional dependencies are:
 \begin{multicols}{2}%>>>

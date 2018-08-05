@@ -1,8 +1,8 @@
 \chapter{The \pkg{MRTtab} package}
-The \pkg{MRTtab} provides means to typeset tables in a style similar to the ones
-in the scripts of the MRT. This includes:
+\pkg{MRTtab} provides means to typeset tables in a style similar to the ones in
+the scripts of the MRT. This includes:
 \begin{itemize}
-  \item delimited by horizontal rules on both ends
+  \item delimited by horizontal rules on top and below
   \item head rows are light grey and delimited by horizontal rules
   \item all horizontal rules have the same thickness
   \item no vertical rules (though not enforced)
@@ -292,7 +292,8 @@ provided:
 The package only features one load time option, which is \texttt{longtable}. If
 it is specified the \pkg{longtable} package is loaded and some more options of
 \env{MRTtable} become available which are focused around the usage of
-\env{longtable} inside of \env{MRTtable}.
+\env{longtable} inside of \env{MRTtable}. Note however that the \texttt{long}
+version of \env{MRTtable} is not yet implemented.
 
 \subsection{Setup Options}\label{sec:tab:options:setup}
 The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
@@ -350,7 +351,7 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
 \begin{describeopt}{head rows, head}[\meta{num}]%>>>
   The number of rows which should be formatted as head rows as in
   \env{MRTtabular}. In each \env{MRTtable} it is initially \texttt{1} -- this is
-  different from a stand alone \env{MRTtabular} which by defaults to \texttt{0}
+  different from a stand alone \env{MRTtabular} which defaults to \texttt{0}
   rows.
 \end{describeopt}%<<<
 \begin{describeopt}{in text sep}[\meta{skip}]
