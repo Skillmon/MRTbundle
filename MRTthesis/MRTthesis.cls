@@ -143,14 +143,17 @@
     \addto\extrasbritish
       { \sisetup{ locale=UK, range-phrase=\MRTthesis_range_phrase:n { to } } }
     \RequirePackage[% I don't know yet how they want me to cite correctly...
-        backend=biber%
-        ,natbib=true%
-        ,citestyle=numeric%
-        ,bibstyle=numeric%
         ,sorting=none%
+        ,backend=biber%
+        ,style=numeric%
+        ,citecounter=true%
+        ,citetracker=true%
+        ,sortcites=true%
         ,giveninits=true%
-        ,sortcites
     ]{biblatex}
+    \setcounter{biburlnumpenalty}{9900}
+    \setcounter{biburllcpenalty}{9900}
+    \setcounter{biburlucpenalty}{9000}
     \RequirePackage{csquotes}
   }%<<<
 %%==========================================================================<<<
