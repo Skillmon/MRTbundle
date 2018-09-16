@@ -857,16 +857,16 @@
             {
               \group_begin:
                 \MRTthesis@fntsel{12}{16}
-                Ausgegeben~von\\
-                \textbf{\l_MRTthesis_examiner_tl}
+                Ausgegeben~von\strut\\
+                \textbf{\l_MRTthesis_examiner_tl}\strut
                 \bool_if:nF
                   {
                     \l_MRTthesis_no_advisor_bool
                     || \tl_if_empty_p:N \l_MRTthesis_advisor_tl
                   }
                   {
-                    ,\\mitbetreut~von\\
-                    \textbf{\l_MRTthesis_advisor_tl}\\
+                    ,\\mitbetreut~von\strut\\
+                    \textbf{\l_MRTthesis_advisor_tl}\strut\\
                   }
               \group_end:
             }% <<<
@@ -875,8 +875,10 @@
             {
               \group_begin:
                 \MRTthesis@fntsel{12}{16}
-                Lehrstuhl~f\"ur~Mess-~und~Regeltechnik\\
-                Fakult\"at~f\"ur~Ingenieurwissenschaften,~Universität~Bayreuth\\
+                Lehrstuhl~f\"ur~Mess-~und~Regeltechnik
+                \strut\\
+                Fakult\"at~f\"ur~Ingenieurwissenschaften,~Universität~Bayreuth
+                \strut\\
               \group_end:
             }% <<<
           \vfillmult{2}
@@ -999,8 +1001,10 @@
     \MRTthesis@fntsel{20}{34.5}
     \ifcsname MRTFirstTitle\endcsname
       \MRTFirstTitle
+      \strut
     \else
       \l_MRTthesis_title_tl
+      \strut
     \fi
     \bool_if:NT \l_MRTthesis_with_subtitle_bool
       {
@@ -1008,6 +1012,7 @@
         \group_begin:
         \MRTthesis@fntsel{15}{15}
         \l_MRTthesis_subtitle_tl
+        \strut
         \group_end:
       }
   }% <<<
@@ -1024,11 +1029,11 @@
   }% <<<
 \cs_new_nopar:Nn \MRTthesis_titlepage_place_thesis_block:% >>>
   {
-    \MRTthesis@fntsel{12}{15}\textbf{\l_MRTthesis_thesis_tl}
+    \MRTthesis@fntsel{12}{15}\textbf{\l_MRTthesis_thesis_tl}\strut
     \bool_if:NF \l_MRTthesis_no_degree_bool
       {
         \\\MRTthesis@fntsel{12}{16}
-        zur~Erlangung~des~akademischen~Grades\\
+        zur~Erlangung~des~akademischen~Grades\strut\\
         \MRTthesis@fntsel{12}{16}
         \tl_if_empty:NTF \l_MRTthesis_degree_tl
           {
@@ -1050,6 +1055,7 @@
               }
           }
           { \l_MRTthesis_degree_tl }
+        \strut
         \\
       }
   }% <<<
@@ -1066,10 +1072,10 @@
         \parbox[b]{.5\textwidth}
           {
             \MRTthesis@fntsel{10}{13.24}
-            Zitierhinweis:\\
+            Zitierhinweis:\strut\\
             \group_begin:
               \cs_set:Npn \and { \unskip,~ }
-              \g_MRTthesis_s_author_tl
+              \g_MRTthesis_s_author_tl\strut
             \group_end:
             \bool_if:nF
               {
@@ -1077,16 +1083,17 @@
                 || \tl_if_empty_p:N \l_MRTthesis_s_advisor_tl
                 || \tl_if_empty_p:N \l_MRTthesis_advisor_tl
               }
-              { ,~\l_MRTthesis_s_advisor_tl }
+              { ,~\l_MRTthesis_s_advisor_tl\strut }
             \bool_if:nF
               {
                 \l_MRTthesis_no_examiner_bool
                 || \tl_if_empty_p:N \l_MRTthesis_s_examiner_tl
               }
-              { ,~\l_MRTthesis_s_examiner_tl }
-            \c_colon_str\\
-            \l_MRTthesis_title_tl;\\
-            MRT-Bericht~Nr.~\l_MRTthesis_number_tl;~Bayreuth~(\the\year)
+              { ,~\l_MRTthesis_s_examiner_tl\strut }
+            \c_colon_str\strut\\
+            \l_MRTthesis_title_tl;\strut\\
+            MRT-Bericht~Nr.~\l_MRTthesis_number_tl\strut;~Bayreuth~(\the\year)
+            \strut
           }
       }
   }% <<<
@@ -1101,6 +1108,7 @@
       {
         #1
       }
+    \strut
   }%<<<
 \cs_generate_variant:Nn \MRTthesis_typeout_author:n { V }
 %%==========================================================================<<<
