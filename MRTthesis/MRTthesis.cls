@@ -164,11 +164,12 @@
   {
     ,advisor         .tl_set:N   = \l_MRTthesis_advisor_tl
     ,author          .tl_set:N   = \l_MRTthesis_authors_tl
-    ,degree          .tl_set:N   = \l_MRTthesis_degree_tl
     ,caption~above   .code:n     = { \MRTtabSetup { caption~above } }
     ,caption~above   .value_forbidden:n = true
     ,caption~below   .code:n     = { \MRTtabSetup { caption~below } }
     ,caption~below   .value_forbidden:n = true
+    ,citation~width  .dim_set:N  = \l_MRTthesis_citation_width_dim
+    ,degree          .tl_set:N   = \l_MRTthesis_degree_tl
     ,examiner        .tl_set:N   = \l_MRTthesis_examiner_tl
     ,logoL           .tl_set:N   = \l_MRTthesis_logoL_tl
     ,logoL~height    .dim_set:N  = \l_MRTthesis_logoL_height_dim
@@ -237,6 +238,7 @@
     ,advisor = {\textcolor{blue}{Mein~Betreuer}}
     ,examiner = {Univ.-Professor~Dr.-Ing.~Gerhard~Fischerauer}
     ,caption~below
+    ,citation~width = .5\textwidth
     ,logoL = {MRTthesis_logo_UBT2.pdf}
     ,logoR = {MRTthesis_logo_MRT2.pdf}
     ,logoL~height = 10.85mm
@@ -882,7 +884,7 @@
               \group_end:
             }% <<<
           \vfillmult{2}
-          \MRTthesis@fntsel{12}{16}\textbf{\@date}\\
+          \MRTthesis@fntsel{12}{16}\textbf{\@date}\strut\\
         \end{center}% <<<
         \vfillmult{5}
         \MRTthesis_titlepage_place_citation:
@@ -1069,7 +1071,7 @@
         \group_end:
       }
       {
-        \parbox[b]{.5\textwidth}
+        \parbox[b]{\l_MRTthesis_citation_width_dim}
           {
             \MRTthesis@fntsel{10}{13.24}
             Zitierhinweis:\strut\\

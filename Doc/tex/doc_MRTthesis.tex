@@ -62,18 +62,22 @@ The following options are accessible with \cs{MRTthesisSetup}.
   or \texttt{K.-T.\@ z.\@ Guttenberg} -- the first one seems correct, the second
   one fails. Remember to surround the argument with braces if you use a comma.
 \end{describeopt}
+\begin{describeopt}{caption above}
+  Is forwarded to \pkg{MRTtab}. See \autoref{sec:tab:options:setup}.
+\end{describeopt}
+\begin{describeopt}{caption below}
+  Is forwarded to \pkg{MRTtab}. See \autoref{sec:tab:options:setup}.
+\end{describeopt}
+\begin{describeopt}{citation width}[\meta{dimen}]
+  The width of the citation indications on the title page. Default is
+  \verb|.5\textwidth|.
+\end{describeopt}
 \begin{describeopt}{degree}[\meta{degree}]
   The degree you aim to achieve with the thesis. If you don't use this option it
   is tried to be guessed from the type of thesis you can specify with the
   \opt{thesis} key. An error is thrown if the degree can't be guessed. If you
   don't want to achieve any degree, use the option \opt{no degree}. Typical
   values would be \verb|Bachelor of Science| or \verb|Master of Science|.
-\end{describeopt}
-\begin{describeopt}{caption above}
-  Is forwarded to \pkg{MRTtab}. See \autoref{sec:tab:options:setup}.
-\end{describeopt}
-\begin{describeopt}{caption below}
-  Is forwarded to \pkg{MRTtab}. See \autoref{sec:tab:options:setup}.
 \end{describeopt}
 \begin{describeopt}{examiner}[\meta{name}]
   The examiner of the thesis. Initial value is
