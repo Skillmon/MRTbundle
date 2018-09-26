@@ -27,6 +27,7 @@
 \bool_new:N \l_MRTthesis_mathsizes_bool
 \bool_new:N \l_MRTthesis_british_bool
 \bool_new:N \l_MRTthesis_no_geometry_bool
+\bool_new:N \l_MRTthesis_hyper_hidelinks_bool
 % <<<
 % box >>>
 \box_new:N \l_MRTthesis_tmpa_box
@@ -62,8 +63,11 @@
 \DeclareOption{british}{\bool_set_true:N \l_MRTthesis_british_bool}
 \DeclareOption{UKenglish}{\ExecuteOptions{british}}
 \DeclareOption{english}{\ExecuteOptions{british}}
+\DeclareOption{hidelinks}{\bool_set_true:N  \l_MRTthesis_hyper_hidelinks_bool}
+\DeclareOption{showlinks}{\bool_set_false:N \l_MRTthesis_hyper_hidelinks_bool}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrreprt}}
 \ExecuteOptions{mathsizes}
+\ExecuteOptions{hidelinks}
 \PassOptionsToClass
   {twoside,fontsize=11pt,a4paper,toc=listof,toc=bib,fleqn,ngerman}
   {scrreprt}
@@ -126,7 +130,12 @@
     \DeclareMathSizes{10.95pt}{10.95pt}{9pt}{7pt}
   }%<<<
 % 
-\AtBeginDocument{\RequirePackage{hyperref}\MRTthesis@after@hyperref}
+\AtBeginDocument
+  {
+    \RequirePackage{hyperref}
+    \bool_if:NT \l_MRTthesis_hyper_hidelinks_bool { \hypersetup { hidelinks } }
+    \MRTthesis@after@hyperref
+  }
 \bool_if:NF \l_MRTthesis_minimal_bool%>>>
   {
     \cs_new:Nn \MRTthesis_range_phrase:n

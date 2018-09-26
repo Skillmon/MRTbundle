@@ -10,6 +10,21 @@
   {MRTtab}          {\MRTtab@date}
   {\MRTtab@version} {tables matching the style in MRT scripts}
 
+%% check whether the table option got used for xcolor >>>
+\cs_if_exist:NF \rowcolors
+  {
+    \msg_new:nnn { MRTtab } { rowcolors~unavailable }
+      {
+        Macro~\exp_not:N \rowcolors is~not~available.~`MRTtab`~tries~to~load~
+        package~`xcolor`~with~the~`table`~option,~this~however~can~fail~if~
+        `xcolor`~got~loaded~earlier~without~this~option.~To~solve~this~issue~
+        place~the~following~code~before~\exp_not:N \documentclass:\\
+        \ \ \exp_not:n { \PassOptionsToPackage{table}{xcolor} }
+      }
+    \msg_error:nn { MRTtab } { rowcolors~unavailable }
+  }
+%<<<
+
 %% package variables >>>
 %%=============================================================================
 \newcolumntype{?}{!{\d@llarend&\span\@gobbletwo}}

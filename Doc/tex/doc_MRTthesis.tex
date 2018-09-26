@@ -12,6 +12,10 @@ The class features a few load time options, none of which do take arguments.
 \begin{describeopt}{longtable}
   Is forwarded to \pkg{MRTtab} see its description in \autoref{sec:tab:options}.
 \end{describeopt}
+\begin{describeopt}{hidelinks}
+  If used the \pkg{hyperref} option of the same name will be used. By default
+  this is used. You can negate it with \opt{showlinks}.
+\end{describeopt}
 \begin{describeopt}{mathsizes}
   Opposite of \opt{no mathsizes}. If used (which it by default is) the maths
   sizes are set according to the MS Word template. Note that those weren't set
@@ -28,6 +32,10 @@ The class features a few load time options, none of which do take arguments.
 \begin{describeopt}{no mathsizes}
   Opposite of \opt{mathsizes}. If used the maths sizes are not changed from the
   defaults of \cls{scrreprt}.
+\end{describeopt}
+\begin{describeopt}{showlinks}
+  If used the \pkg{hyperref} option \verb|hidelinks| will not be used. This is
+  the negation of \opt{hidelinks} of this package.
 \end{describeopt}
 \begin{describeopt}{tikzunderline, tUline}
   This option is forwarded to \pkg{MRTwuline}.
