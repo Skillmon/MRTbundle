@@ -34,7 +34,7 @@
 \int_new:N \l_MRTtab_tmpb_int
 \int_new:N \g__MRTtab_current_row_int
 \int_new:N \g__MRTtab_color_upto_int
-\int_gset:Nn \g__MRTtab_color_upto_int { -100 }
+\int_gset:Nn \g__MRTtab_color_upto_int { -\c_max_int }
 \bool_new:N \l_MRTtab_longtable_bool
 \bool_new:N \l_MRTtab_bare_bool
 \bool_new:N \g__MRTtab_komaoptions_defined_bool% >>>
@@ -56,6 +56,11 @@
 \msg_new:nnn { MRTtab } { patch~failed } { Patching~of~\string#1~failed. }
 \msg_new:nnn { MRTtab } { KOMA~not~loaded }
   { It~seems~like~KOMA~is~not~loaded.#1 } 
+\msg_new:nnn { MRTtab } { deprecated~syntax }
+  {
+    The~used~syntax~for~`#1`~\tl_if_empty:nF { #2 } { to~#2~ } is~deprecated~
+    (but~should~still~work).~Please~take~a~look~into~`MRTtab`s~documentation.
+  }
 \bool_if:NF \l_MRTtab_longtable_bool
   {
     \msg_new:nnn { MRTtab } { option~longtable~not~used }
@@ -163,7 +168,7 @@
     ,float           .default:n          = { true }
     ,float           .initial:n          = { true }
     ,head~rows       .int_set:N          = \g__MRTtab_color_upto_int
-    ,head~rows       .initial:n          = { -100 }
+    ,head~rows       .initial:n          = { -\c_max_int }
     ,head            .meta:n             = { head~rows = { #1 } }
     ,in~text~sep     .skip_set:N         = \l_MRTtab_in_text_sep_skip
     ,in~text~sep     .initial:n          = \intextsep
@@ -394,12 +399,18 @@
   }% <<<
 \MRTtab_addto_private_bol_hook:n { \noalign { \MRTtab_step_row: } }
 \MRTtab_addto_private_bol_hook:n { \MRTtab_head_hook: }
-\NewDocumentEnvironment { MRTtabular } { O{} o +m }% >>>
+\NewDocumentEnvironment { MRTtabular } { O{} o +m o }% >>>
   {% begin >>>
     \MRTtab_patch_array:
     \MRTtab_declare_head_macro:
     \bool_gset_false:N \g__MRTtab_head_bool
-    \IfValueT { #2 } { \int_gset:Nn \g__MRTtab_color_upto_int { #2 } }
+    \IfValueT { #2 }
+      {
+        \int_gset:Nn \g__MRTtab_color_upto_int { #2 }
+        \msg_warning:nnnn { MRTtab } { deprecated~syntax } { MRTtabular }
+          { set~the~number~of~head~rows }
+      }
+    \IfValueT { #4 } { \int_gset:Nn \g__MRTtab_color_upto_int { #4 } }
     \setstretch { \l_MRTtab_stretch_tl }
     \begin{tabular_original}[#1]{#3}
       \MRTtab_surround_lines:
@@ -408,7 +419,7 @@
       \MRTtab_surround_lines:
       %\crcr\hline
     \end{tabular_original}
-    \int_gset:Nn \g__MRTtab_color_upto_int { -100 }
+    \int_gset:Nn \g__MRTtab_color_upto_int { -\c_max_int }
   }% <<<
   % <<<
 \NewDocumentCommand \MRTtabAddtoBoLHook { +m }% >>>
