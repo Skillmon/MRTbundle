@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.3b}
-\newcommand*\MRTthesis@date{2018/07/26}
+\newcommand*\MRTthesis@version{0.0.4}
+\newcommand*\MRTthesis@date{2018-10-02}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -28,6 +28,14 @@
 \bool_new:N \l_MRTthesis_british_bool
 \bool_new:N \l_MRTthesis_no_geometry_bool
 \bool_new:N \l_MRTthesis_hyper_hidelinks_bool
+\bool_new:N \l_MRTthesis_auto_backmatter_bool
+\bool_new:N \l_MRTthesis_auto_frontmatter_bool
+\bool_new:N \l_MRTthesis_affidavit_front_bool
+\bool_new:N \l_MRTthesis_lof_back_bool
+\bool_new:N \l_MRTthesis_lof_front_bool
+\bool_new:N \l_MRTthesis_lot_back_bool
+\bool_new:N \l_MRTthesis_lot_front_bool
+\bool_new:N \l_MRTthesis_toc_front_bool
 % <<<
 % box >>>
 \box_new:N \l_MRTthesis_tmpa_box
@@ -43,6 +51,10 @@
 \tl_new:N \l_MRTthesis_tmpa_tl
 \tl_new:N \l_MRTthesis_tmpb_tl
 \tl_new:N \l_MRTthesis_titlepage_von_tl
+\tl_new:N \l_MRTthesis_toc_Seite_tl
+\tl_new:N \l_MRTthesis_auto_frontmatter_addo_tl
+\tl_new:N \l_MRTthesis_auto_backmatter_addo_tl
+\tl_new:N \l_MRTthesis_auto_backmatter_after_tl
 % <<<
 % <<<
 %%==========================================================================<<<
@@ -95,11 +107,13 @@
     \RequirePackage[main=british,ngerman]{babel}
     \useshorthands{"}
     \addto\extrasbritish{\languageshorthands{ngerman}}
-    \tl_set:Nn \l_MRTthesis_titlepage_von_tl { from }
+    \tl_set:Nn \l_MRTthesis_titlepage_von_tl { by }
+    \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Page }
   }% <<<
   {% false >>>
     \RequirePackage[ngerman]{babel}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
+    \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Seite }
   }% <<<
 \RequirePackage[singlespacing=true]{scrlayer-scrpage}
 \bool_if:NF \l_MRTthesis_no_geometry_bool
@@ -171,75 +185,127 @@
 %%=============================================================================
 \keys_define:nn { MRTthesis/setup }% >>>
   {
-    ,advisor         .tl_set:N   = \l_MRTthesis_advisor_tl
-    ,author          .tl_set:N   = \l_MRTthesis_authors_tl
-    ,caption~above   .code:n     = { \MRTtabSetup { caption~above } }
-    ,caption~above   .value_forbidden:n = true
-    ,caption~below   .code:n     = { \MRTtabSetup { caption~below } }
-    ,caption~below   .value_forbidden:n = true
-    ,citation~width  .dim_set:N  = \l_MRTthesis_citation_width_dim
-    ,degree          .tl_set:N   = \l_MRTthesis_degree_tl
-    ,examiner        .tl_set:N   = \l_MRTthesis_examiner_tl
-    ,logoL           .tl_set:N   = \l_MRTthesis_logoL_tl
-    ,logoL~height    .dim_set:N  = \l_MRTthesis_logoL_height_dim
-    ,logoR           .tl_set:N   = \l_MRTthesis_logoR_tl
-    ,logoR~height    .dim_set:N  = \l_MRTthesis_logoR_height_dim
-    ,no~advisor      .bool_set:N = \l_MRTthesis_no_advisor_bool
-    ,no~advisor      .default:n  = { true }
-    ,no~citation     .bool_set:N = \l_MRTthesis_no_citation_bool
-    ,no~citation     .default:n  = { true }
-    ,no~degree       .bool_set:N = \l_MRTthesis_no_degree_bool
-    ,no~degree       .default:n  = { true }
-    ,no~examiner     .bool_set:N = \l_MRTthesis_no_examiner_bool
-    ,no~examiner     .default:n  = { true }
-    ,no~chair        .bool_set:N = \l_MRTthesis_no_chair_bool 
-    ,no~chair        .default:n  = { true } 
-    ,no~institute    .meta:n     = { no~chair = { #1 } }
-    ,no~institute    .default:n  = { true }
-    ,no~logos        .meta:n     = { logoL={},logoR={} }
-    ,no~thesis       .bool_set:N = \l_MRTthesis_no_thesis_bool
-    ,no~thesis       .default:n  = { true }
-    ,no~usage        .bool_set:N = \l_MRTthesis_no_usage_bool
-    ,no~usage        .default:n  = { true }
-    ,number          .tl_set:N   = \l_MRTthesis_number_tl
-    ,pos~figure      .tl_set:N   = \fps@figure
-    ,pos~float       .meta:n     = { pos~figure={#1}, pos~table={#1} }
-    ,pos~MRTtable    .code:n     = { \MRTtabSetup { pos = { #1 } } }
-    ,pos~table       .tl_set:N   = \fps@table
-    ,short~advisor   .tl_set:N   = \l_MRTthesis_s_advisor_tl
-    ,sadvisor        .meta:n     = { short~advisor={#1} }
-    ,short~author    .tl_set:N   = \l_MRTthesis_s_author_tl
-    ,sauthor         .meta:n     = { short~author={#1} }
-    ,short~examiner  .tl_set:N   = \l_MRTthesis_s_examiner_tl
-    ,sexaminer       .meta:n     = { short~examiner={#1} }
-    ,sign~height     .dim_set:N  = \l_MRTthesis_sign_height_dim
-    ,sign~separation .dim_set:N  = \l_MRTthesis_sign_separation_dim
-    ,sign~sep        .meta:n     = { sign~separation={#1} }
-    ,sign~width~max  .dim_set:N  = \l_MRTthesis_sign_width_max_dim
-    ,sign~width~min  .dim_set:N  = \l_MRTthesis_sign_width_dim
-    ,stretch~caption .code:n     =
+    ,advisor          .tl_set:N   = \l_MRTthesis_advisor_tl
+    ,author           .tl_set:N   = \l_MRTthesis_authors_tl
+    ,caption~above    .code:n     = { \MRTtabSetup { caption~above } }
+    ,caption~above    .value_forbidden:n = true
+    ,caption~below    .code:n     = { \MRTtabSetup { caption~below } }
+    ,caption~below    .value_forbidden:n = true
+    ,citation~width   .dim_set:N  = \l_MRTthesis_citation_width_dim
+    ,degree           .tl_set:N   = \l_MRTthesis_degree_tl
+    ,examiner         .tl_set:N   = \l_MRTthesis_examiner_tl
+    ,logoL            .tl_set:N   = \l_MRTthesis_logoL_tl
+    ,logoL~height     .dim_set:N  = \l_MRTthesis_logoL_height_dim
+    ,logoR            .tl_set:N   = \l_MRTthesis_logoR_tl
+    ,logoR~height     .dim_set:N  = \l_MRTthesis_logoR_height_dim
+    ,no~advisor       .bool_set:N = \l_MRTthesis_no_advisor_bool
+    ,no~advisor       .default:n  = { true }
+    ,no~citation      .bool_set:N = \l_MRTthesis_no_citation_bool
+    ,no~citation      .default:n  = { true }
+    ,no~degree        .bool_set:N = \l_MRTthesis_no_degree_bool
+    ,no~degree        .default:n  = { true }
+    ,no~examiner      .bool_set:N = \l_MRTthesis_no_examiner_bool
+    ,no~examiner      .default:n  = { true }
+    ,no~chair         .bool_set:N = \l_MRTthesis_no_chair_bool 
+    ,no~chair         .default:n  = { true } 
+    ,no~institute     .meta:n     = { no~chair = { #1 } }
+    ,no~institute     .default:n  = { true }
+    ,no~logos         .meta:n     = { logoL={},logoR={} }
+    ,no~thesis        .bool_set:N = \l_MRTthesis_no_thesis_bool
+    ,no~thesis        .default:n  = { true }
+    ,no~usage         .bool_set:N = \l_MRTthesis_no_usage_bool
+    ,no~usage         .default:n  = { true }
+    ,number           .tl_set:N   = \l_MRTthesis_number_tl
+    ,pos~figure       .tl_set:N   = \fps@figure
+    ,pos~float        .meta:n     = { pos~figure={#1}, pos~table={#1} }
+    ,pos~MRTtable     .code:n     = { \MRTtabSetup { pos = { #1 } } }
+    ,pos~table        .tl_set:N   = \fps@table
+    ,short~advisor    .tl_set:N   = \l_MRTthesis_s_advisor_tl
+    ,sadvisor         .meta:n     = { short~advisor={#1} }
+    ,short~author     .tl_set:N   = \l_MRTthesis_s_author_tl
+    ,sauthor          .meta:n     = { short~author={#1} }
+    ,short~examiner   .tl_set:N   = \l_MRTthesis_s_examiner_tl
+    ,sexaminer        .meta:n     = { short~examiner={#1} }
+    ,sign~height      .dim_set:N  = \l_MRTthesis_sign_height_dim
+    ,sign~separation  .dim_set:N  = \l_MRTthesis_sign_separation_dim
+    ,sign~sep         .meta:n     = { sign~separation={#1} }
+    ,sign~width~max   .dim_set:N  = \l_MRTthesis_sign_width_max_dim
+    ,sign~width~min   .dim_set:N  = \l_MRTthesis_sign_width_dim
+    ,stretch~caption  .code:n     =
       {% >>>
         \setkomafont { caption }      { \setstretch { #1 } \normalfont }
         \setkomafont { captionlabel } { \setstretch { #1 } \normalfont }
       }% <<<
-    ,stretch~cap     .meta:n     = { stretch~caption={#1} }
-    ,stretch~tabular .code:n     = { \MRTtabSetup { stretch~tab={#1} } }
-    ,stretch~tab     .meta:n     = { stretch~tabular={#1} }
-    ,stretch~text    .code:n     = { \setstretch { #1 } }
-    ,stretches       .meta:n     =
+    ,stretch~cap      .meta:n     = { stretch~caption={#1} }
+    ,stretch~tabular  .code:n     = { \MRTtabSetup { stretch~tab={#1} } }
+    ,stretch~tab      .meta:n     = { stretch~tabular={#1} }
+    ,stretch~text     .code:n     = { \setstretch { #1 } }
+    ,stretches        .meta:n     =
       { stretch~cap={#1}, stretch~tab={#1}, stretch~text={#1} }
-    ,subtitle        .tl_set:N   = \l_MRTthesis_subtitle_tl
-    ,table~spacing   .bool_set:N = \l_MRTthesis_table_spacing_bool
-    ,table~spacing   .default:n  = { true }
-    ,tab~spacing     .meta:n     = { table~spacing={#1} }
-    ,tab~spacing     .default:n  = { true }
-    ,thesis          .tl_set:N   = \l_MRTthesis_thesis_tl
-    ,title           .tl_set:N   = \l_MRTthesis_title_tl
-    ,toc~ChapIndent  .tl_set:N   = \l_MRTthesis_toc_chapter_indent_tl
-    ,toc~SecIndent   .tl_set:N   = \l_MRTthesis_toc_section_indent_tl
-    ,toc~sSecIndent  .tl_set:N   = \l_MRTthesis_toc_subsection_indent_tl
-    ,toc~ssSecIndent .tl_set:N   = \l_MRTthesis_toc_subsubsection_indent_tl
-    ,with~subtitle   .bool_set:N = \l_MRTthesis_with_subtitle_bool
+    ,subtitle         .tl_set:N   = \l_MRTthesis_subtitle_tl
+    ,table~spacing    .bool_set:N = \l_MRTthesis_table_spacing_bool
+    ,table~spacing    .default:n  = { true }
+    ,tab~spacing      .meta:n     = { table~spacing={#1} }
+    ,tab~spacing      .default:n  = { true }
+    ,thesis           .tl_set:N   = \l_MRTthesis_thesis_tl
+    ,title            .tl_set:N   = \l_MRTthesis_title_tl
+    ,toc~ChapIndent   .tl_set:N   = \l_MRTthesis_toc_chapter_indent_tl
+    ,toc~SecIndent    .tl_set:N   = \l_MRTthesis_toc_section_indent_tl
+    ,toc~sSecIndent   .tl_set:N   = \l_MRTthesis_toc_subsection_indent_tl
+    ,toc~ssSecIndent  .tl_set:N   = \l_MRTthesis_toc_subsubsection_indent_tl
+    ,with~subtitle    .bool_set:N = \l_MRTthesis_with_subtitle_bool
+    % front- and backmatter related
+    ,backmatter       .choice:
+    ,backmatter / auto    .code:n =
+      \bool_set_true:N  \l_MRTthesis_auto_backmatter_bool
+    ,backmatter / manual  .code:n =
+      \bool_set_false:N \l_MRTthesis_auto_backmatter_bool
+    ,frontmatter      .choice:
+    ,frontmatter / auto   .code:n =
+      \bool_set_true:N  \l_MRTthesis_auto_frontmatter_bool
+    ,frontmatter / manual .code:n =
+      \bool_set_false:N \l_MRTthesis_auto_frontmatter_bool
+    ,appendix         .tl_set:N   = \l_MRTthesis_backmatter_appendix_tl
+    ,appendix~ragged  .bool_set:N = \l_MRTthesis_backmatter_ragged_bool
+    ,acknowledgement  .tl_set:N   = \l_MRTthesis_frontmatter_acknowlegde_tl
+    ,affidavit        .choice:
+    ,affidavit   / front  .code:n =
+      \bool_set_true:N  \l_MRTthesis_affidavit_front_bool
+      \bool_set_false:N \l_MRTthesis_affidavit_back_bool
+    ,affidavit   / back   .code:n =
+      \bool_set_true:N  \l_MRTthesis_affidavit_back_bool
+      \bool_set_false:N \l_MRTthesis_affidavit_front_bool
+    ,affidavit   / off    .code:n =
+      \bool_set_false:N \l_MRTthesis_affidavit_front_bool
+      \bool_set_false:N \l_MRTthesis_affidavit_back_bool
+    ,lof              .choice:
+    ,lof         / front  .code:n =
+      \bool_set_true:N  \l_MRTthesis_lof_front_bool
+      \bool_set_false:N \l_MRTthesis_lof_back_bool
+    ,lof         / back   .code:n =
+      \bool_set_true:N  \l_MRTthesis_lof_back_bool
+      \bool_set_false:N \l_MRTthesis_lof_front_bool
+    ,lof         / off    .code:n =
+      \bool_set_false:N \l_MRTthesis_lof_back_bool
+      \bool_set_false:N \l_MRTthesis_lof_front_bool
+    ,lot              .choice:
+    ,lot         / front  .code:n =
+      \bool_set_true:N  \l_MRTthesis_lot_front_bool
+      \bool_set_false:N \l_MRTthesis_lot_back_bool
+    ,lot         / back   .code:n =
+      \bool_set_true:N  \l_MRTthesis_lot_back_bool
+      \bool_set_false:N \l_MRTthesis_lot_front_bool
+    ,lot         / off    .code:n =
+      \bool_set_false:N \l_MRTthesis_lot_back_bool
+      \bool_set_false:N \l_MRTthesis_lot_front_bool
+    ,toc              .choice:
+    ,toc         / front  .code:n =
+      \bool_set_true:N  \l_MRTthesis_toc_front_bool
+    ,toc         / off    .code:n =
+      \bool_set_false:N \l_MRTthesis_toc_front_bool
+    ,bib              .bool_set:N = \l_MRTthesis_backmatter_bibliography_bool
+    ,bibliography     .meta:n     =
+      { \tl_if_empty:nTF { #1 } { bib } { bib=#1 } }
   }% <<<
 % defaults >>>
 \keys_set:nn { MRTthesis/setup }% >>>
@@ -265,10 +331,17 @@
     ,tab~spacing
     ,thesis = {\textcolor{blue}{Meine~Arbeit}}
     ,title  = {\textcolor{blue}{UNTERSUCHUNG~ZU ...}}
-    ,toc~ChapIndent = 0.01em
-    ,toc~SecIndent  = 1.32em
-    ,toc~sSecIndent = 3.38em
+    ,toc~ChapIndent  = 0.01em
+    ,toc~SecIndent   = 1.32em
+    ,toc~sSecIndent  = 3.38em
     ,toc~ssSecIndent = 6.38em
+    % front- and backmatter related
+    ,affidavit = front
+    ,lof = front
+    ,lot = front
+    ,toc = front
+    ,bib = true
+    ,appendix~ragged = true
   }% <<<
 % <<<
 %%==========================================================================<<<
@@ -591,14 +664,16 @@
 \bool_if:NTF \l_MRTthesis_minimal_bool
   {% true >>>
     \MRTbibliographyfalse
+    \MRTthesisSetup { bib = false }
   }% <<<
   {% false >>>
     \MRTbibliographytrue
+    \MRTthesisSetup { bib = true }
     \renewcommand*{\newunitpunct}{, }% between each unit in one bib-entry
     \DefineBibliographyStrings{ngerman}
       {%
         ,bibliography={Literaturverzeichnis}%
-        ,in={}% removes 'In:' infront of journal name
+        ,in={}% removes 'In:' in front of journal name
         ,andothers={et\,al\adddot}%
       }
     % changing the order of units in article-entries. >>>
@@ -682,7 +757,7 @@
 \setcounter{secnumdepth}{3}
 \AtBeginDocument% >>>
   {%
-    \addtoeachtocfile{\mbox{}\hfill Seite\par}%
+    \addtoeachtocfile{\null\hfill\l_MRTthesis_toc_Seite_tl\par}%
   }% <<<
 \AtAddToTocList% >>>
   {%
@@ -1122,6 +1197,71 @@
     \strut
   }%<<<
 \cs_generate_variant:Nn \MRTthesis_typeout_author:n { V }
+%%==========================================================================<<<
+
+%% automatic front- and backmatter >>>
+%%=============================================================================
+\AtBeginDocument%>>>
+  {
+    \bool_if:NT \l_MRTthesis_auto_frontmatter_bool
+      { \MRTthesis_auto_frontmatter: }
+  }%<<<
+\AtEndDocument%>>>
+  {
+    \bool_if:NT \l_MRTthesis_auto_backmatter_bool
+      { \MRTthesis_auto_backmatter: }
+  }%<<<
+\cs_new_protected:Npn \MRTthesis_auto_frontmatter:%>>>
+  {
+    \maketitle
+    \bool_if:NT \l_MRTthesis_affidavit_front_bool
+      { \affidavit }
+    \tl_if_empty:NF \l_MRTthesis_frontmatter_acknowlegde_tl
+      { \include { \l_MRTthesis_frontmatter_acknowlegde_tl } }
+    \bool_if:NT \l_MRTthesis_toc_front_bool
+      { \tableofcontents }
+    \bool_if:NT \l_MRTthesis_lof_front_bool
+      { \listoffigures }
+    \bool_if:NT \l_MRTthesis_lot_front_bool
+      { \listoftables }
+    \l_MRTthesis_auto_frontmatter_addo_tl
+    \mainpart
+  }%<<<
+\cs_new_protected:Npn \MRTthesis_auto_backmatter:%>>>
+  {
+    \appendix
+    \bool_if:NT \l_MRTthesis_backmatter_bibliography_bool
+      { \printbibliography }
+    \clearpage
+    \bool_if:NT \l_MRTthesis_lof_back_bool
+      { \listoffigures }
+    \bool_if:NT \l_MRTthesis_lot_back_bool
+      { \listoftables }
+    \l_MRTthesis_auto_backmatter_addo_tl
+    \tl_if_empty:NF \l_MRTthesis_backmatter_appendix_tl
+      {
+        \group_begin:
+          \bool_if:NT \l_MRTthesis_backmatter_ragged_bool
+            { \raggedbottom }
+          \include { \l_MRTthesis_backmatter_appendix_tl }
+        \group_end:
+      }
+    \l_MRTthesis_auto_backmatter_after_tl
+    \bool_if:NT \l_MRTthesis_affidavit_back_bool
+      { \affidavit }
+  }%<<<
+\NewDocumentCommand \MRTthesisAddToFront   { +m }%>>>
+  {
+    \tl_put_right:Nn \l_MRTthesis_auto_frontmatter_addo_tl { #1 }
+  }%<<<
+\NewDocumentCommand \MRTthesisAddToBack    { +m }%>>>
+  {
+    \tl_put_right:Nn \l_MRTthesis_auto_backmatter_addo_tl { #1 }
+  }%<<<
+\NewDocumentCommand \MRTthesisAddAfterBack { +m }%>>>
+  {
+    \tl_put_right:Nn \l_MRTthesis_auto_backmatter_after_tl { #1 }
+  }%<<<
 %%==========================================================================<<<
 
 \endinput

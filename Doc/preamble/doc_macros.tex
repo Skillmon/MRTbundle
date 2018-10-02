@@ -22,8 +22,40 @@
 \newcommand*\tfarg{\texttt{\textit{TF}}}
 \ExplSyntaxOn
 \int_new:N \g_docMRTbundle_dsctable_lines_int
+\int_new:N \l_docMRTbundle_fakeit_level_int
+\int_set:Nn \l_docMRTbundle_fakeit_level_int { -\c_one }
 \dim_new:N \l_docMRTbundle_dscmac_widest_dim
 \dim_new:N \l_docMRTbundle_dscmac_indent_dim
+\dim_new:N \l_docMRTbundle_fakeit_indent_dim
+\tl_new:N  \l_docMRTbundle_tmp_tl
+\clist_new:N \l_docMRTbundle_fakeit_symbols_clist
+\clist_set:Nn \l_docMRTbundle_fakeit_symbols_clist% >>>
+  {
+    \textbullet
+    ,\normalfont\bfseries\textendash
+    ,\textasteriskcentered
+    ,\textperiodcentered
+  }% <<<
+\clist_new:N \l_docMRTbundle_bverb_both_points_clist
+\clist_new:N \l_docMRTbundle_bverb_pre_points_clist
+\clist_new:N \l_docMRTbundle_bverb_post_points_clist
+\clist_set:Nx \l_docMRTbundle_bverb_both_points_clist%>>>
+  {
+    =
+  }%<<<
+\clist_set:Nx \l_docMRTbundle_bverb_pre_points_clist%>>>
+  {
+    [
+    ,(
+    ,\char_generate:nn { `\{ } { 12 }
+    ,\char_generate:nn { `\\ } { 12 }
+  }%<<<
+\clist_set:Nx \l_docMRTbundle_bverb_post_points_clist%>>>
+  {
+    \char_generate:nn { `\} } { 12 }
+    ,)
+    ,]
+  }%<<<
 \cs_new:Nn \__docMRTbundle_dscmac_end:%>>>
   {
     \par
@@ -321,6 +353,7 @@
       [
         ,col=llc
         ,float=false
+        ,caption={Versions~of~Individual~Packages}
         ,pre=
           \def\versionline##1%
             {
@@ -337,5 +370,106 @@
       \versionline{sfacc}
     \end{MRTtable}
   }%<<<
+\NewDocumentCommand \bverb { v }%>>>
+  {
+    \group_begin:
+    \tl_set:Nn \l_docMRTbundle_tmp_tl { #1 }
+    \clist_map_inline:Nn \l_docMRTbundle_bverb_pre_points_clist
+      { \tl_replace_all:Nnn \l_docMRTbundle_tmp_tl { ##1 } { \hskip0pt ##1 } }
+    \clist_map_inline:Nn \l_docMRTbundle_bverb_post_points_clist
+      { \tl_replace_all:Nnn \l_docMRTbundle_tmp_tl { ##1 } { ##1 \hskip0pt } }
+    \clist_map_inline:Nn \l_docMRTbundle_bverb_both_points_clist
+      {
+        \tl_replace_all:Nnn \l_docMRTbundle_tmp_tl
+          { ##1 } { \hskip0pt ##1 \hskip0pt }
+      }
+    \verbatim@font
+    \@noligs
+    \frenchspacing
+    \l_docMRTbundle_tmp_tl
+    \group_end:
+  }%<<<
+\NewDocumentEnvironment { fakeitemize } {}
+  {% begin >>>
+    \dim_set:Nn \l_docMRTbundle_fakeit_indent_dim { 2em }
+    \int_incr:N \l_docMRTbundle_fakeit_level_int
+    \int_compare:nNnT { \l_docMRTbundle_fakeit_level_int } = { \c_zero }
+      { \null\\[\dimexpr.9ex-\baselineskip\relax] }
+    \cs_set_protected:Npn \item
+      {
+        \null\\[.1ex]
+        \null
+        \hskip\l_docMRTbundle_fakeit_level_int\l_docMRTbundle_fakeit_indent_dim
+        \makebox[2em][c]
+          {
+            \clist_item:Nn \l_docMRTbundle_fakeit_symbols_clist
+              { \l_docMRTbundle_fakeit_level_int + \c_one }
+          }
+      }
+  }%<<<
+  {% end >>>
+    \int_compare:nNnTF { \l_docMRTbundle_fakeit_level_int } = { \c_zero }
+      { \null\\[1ex] }
+      { \null\\[\dimexpr.1ex-\baselineskip\relax] }
+  }%<<<
 \ExplSyntaxOff
+
+%Shamelessly copied from doc.sty
+\def\MakeShortVerb{%
+  \@ifstar
+    {\def\@shortvrbdef{\verb*}\@MakeShortVerb}%
+    {\def\@shortvrbdef{\verb}\@MakeShortVerb}}
+\def\@MakeShortVerb#1{%
+  \expandafter\ifx\csname cc\string#1\endcsname\relax
+    \@shortvrbinfo{Made }{#1}\@shortvrbdef
+    \add@special{#1}%
+    \expandafter
+    \xdef\csname cc\string#1\endcsname{\the\catcode`#1}%
+    \begingroup
+      \catcode`\~\active  \lccode`\~`#1%
+      \lowercase{%
+      \global\expandafter\let
+         \csname ac\string#1\endcsname~%
+      \expandafter\gdef\expandafter~\expandafter{\@shortvrbdef~}}%
+    \endgroup
+    \global\catcode`#1\active
+  \else
+    \@shortvrbinfo\@empty{#1 already}{\@empty\verb(*)}%
+  \fi}
+\def\DeleteShortVerb#1{%
+  \expandafter\ifx\csname cc\string#1\endcsname\relax
+    \@shortvrbinfo\@empty{#1 not}{\@empty\verb(*)}%
+  \else
+    \@shortvrbinfo{Deleted }{#1 as}{\@empty\verb(*)}%
+    \rem@special{#1}%
+    \global\catcode`#1\csname cc\string#1\endcsname
+    \global \expandafter\let \csname cc\string#1\endcsname \relax
+    \ifnum\catcode`#1=\active
+      \begingroup
+        \catcode`\~\active   \lccode`\~`#1%
+        \lowercase{%
+          \global\expandafter\let\expandafter~%
+          \csname ac\string#1\endcsname}%
+      \endgroup \fi \fi}
+\def\@shortvrbinfo#1#2#3{%
+  \PackageInfo{doc}{%
+     #1\expandafter\@gobble\string#2 a short reference
+                                          for \expandafter\string#3}}
+\def\add@special#1{%
+  \rem@special{#1}%
+  \expandafter\gdef\expandafter\dospecials\expandafter
+    {\dospecials \do #1}%
+  \expandafter\gdef\expandafter\@sanitize\expandafter
+    {\@sanitize \@makeother #1}}
+\def\rem@special#1{%
+  \def\do##1{%
+    \ifnum`#1=`##1 \else \noexpand\do\noexpand##1\fi}%
+  \xdef\dospecials{\dospecials}%
+  \begingroup
+    \def\@makeother##1{%
+      \ifnum`#1=`##1 \else \noexpand\@makeother\noexpand##1\fi}%
+    \xdef\@sanitize{\@sanitize}%
+  \endgroup}
+\AtBeginDocument{\MakeShortVerb \|}
+\AtEndDocument{\DeleteShortVerb \|}
 \makeatother

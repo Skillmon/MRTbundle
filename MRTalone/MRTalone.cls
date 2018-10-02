@@ -1,5 +1,5 @@
 \newcommand*\MRTalone@version{0.0.1}
-\newcommand*\MRTalone@date{2018/06/03}
+\newcommand*\MRTalone@date{2018-06-03}
 
 \NeedsTeXFormat{LaTeX2e}
 

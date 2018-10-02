@@ -15,6 +15,9 @@ the last template is, that no one reads readmes. As a result I provide the
 documentation in the form of a PDF in the hopes that more people will read this,
 though I'll miss the enjoyment of creating the finest ASCII-art.
 
+For a more exhaustive example of an exotic use of MRTthesis you can take a look
+at the sources of the documentation.
+
 ### Installation ###
 
 There are several possibilities of installation. The easiest but unfortunately

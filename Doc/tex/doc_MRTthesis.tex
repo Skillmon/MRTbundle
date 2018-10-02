@@ -247,6 +247,88 @@ The following options are accessible with \cs{MRTthesisSetup}.
   If true a subtitle can be used on the title page. Default is true, initially
   is false.
 \end{describeopt}
+
+\subsubsection{Options concerning automatically added contents}%>>>
+\label{sec:autoopt}
+The following additional options can be set with \cs{MRTthesisSetup}. They all
+resolve around automatically added contents.
+\begin{describeopt}{backmatter}[\meta{choice}]
+  A \meta{choice} whether you want the back matter to be added automatically.
+  Possible values are |auto| and |manual|. If set to |auto| the appendix will
+  automatically be included at |\end{document}|. It might contain the following
+  (dependent on the values of other keys; in correct order):
+  \begin{fakeitemize}
+    \item bibliography (option |bib|)
+    \item list of figures (option |lof|)
+    \item list of tables (option |lot|)
+    \item contents added with \cs{MRTthesisAddToBack}
+    \item the contents of your appendix file (option |appendix|)
+    \item contents added with \cs{MRTthesisAddAfterBack}
+    \item the affidavit (option |affidavit|)
+  \end{fakeitemize}
+  It also includes the necessary formatting switches otherwise contained in
+  \cs{appendix}. Default is |manual|.
+\end{describeopt}
+\begin{describeopt}{frontmatter}[\meta{choice}]
+  A \meta{choice} whether you want the front matter to be added automatically.
+  Possible values are |auto| and |manual|. If set to |auto| the front matter
+  will automatically be included at |\begin{document}|. It might contain the
+  following (dependent on the values of other keys; in correct order):
+  \begin{fakeitemize}
+    \item title page
+    \item the affidavit (option |affidavit|)
+    \item the acknowledgements (option |acknowledgement|)
+    \item table of contents (option |toc|)
+    \item list of figures (option |lof|)
+    \item list of tables (option |lot|)
+    \item contents added with \cs{MRTthesisAddToFront}
+  \end{fakeitemize}
+  It also includes the necessary formatting switches otherwise contained in
+  \cs{mainpart}. Default is |manual|.
+\end{describeopt}
+\begin{describeopt}{acknowledgement}[\meta{file}]
+  Sets the acknowledgements file added if \bverb|frontmatter=auto| is used. If
+  \meta{file} (the argument) is empty no file will be added. By default it is
+  empty.
+\end{describeopt}
+\begin{describeopt}{affidavit}[\meta{choice}]
+  Sets where the \cs{affidavit} is added if either \bverb|frontmatter=auto| or
+  \bverb|backmatter=auto| is used. Possible \meta{choice}s are |front|, |back|
+  and |off|. If |off| is used it doesn't get added automatically. Default value
+  is |front|.
+\end{describeopt}
+\begin{describeopt}{appendix}[\meta{file}]
+  Sets the appendix file added if \bverb|backmatter=auto| is used. If
+  \meta{file} (the argument) is empty no file will be added. By default it is
+  empty.
+\end{describeopt}
+\begin{describeopt}{appendix ragged}[\meta{bool}]
+  If set |true| the contents of the |appendix| file will be typeset
+  \cs{raggedbottom}. Default is |true|.
+\end{describeopt}
+\begin{describeopt}{bib,bibliography}[\meta{bool}]
+  Sets whether the bibliography should be added automatically if
+  \bverb|backmatter=auto| is used. It gets set to |false| if the
+  class option |minimal| is used. 
+\end{describeopt}
+\begin{describeopt}{lof}[\meta{choice}]
+  Sets where the list of figures is added if either \bverb|frontmatter=auto| or
+  \bverb|backmatter=auto| is used. Possible \meta{choice}s are |front|, |back|
+  and |off|. If |off| is used it doesn't get added automatically. Default value
+  is |front|.
+\end{describeopt}
+\begin{describeopt}{lot}[\meta{choice}]
+  Sets where the list of tables is added if either \bverb|frontmatter=auto| or
+  \bverb|backmatter=auto| is used. Possible \meta{choice}s are |front|, |back|
+  and |off|. If |off| is used it doesn't get added automatically. Default value
+  is |front|.
+\end{describeopt}
+\begin{describeopt}{toc}[\meta{choice}]
+  Sets where the list of tables is added if |frontmatter=auto| is used. Possible
+  \meta{choice}s are |front| and |off|. If |off| is used it doesn't get added
+  automatically. Default value is |front|.
+\end{describeopt}
+%<<<
 %<<<
 %<<<
 
@@ -267,11 +349,23 @@ The following macros are provided:
   Places \meta{content} after \pkg{hyperref} is loaded. This is important for
   the relative few packages that need to be loaded after \pkg{hyperref}. So if
   you have one of these, you should use something like
-  \verb|\MRTafterhyperref|\hskip0pt
-  \verb|{\usepackage|\hskip0pt
-  \verb|{cleveref}}|. This macro has to be used prior to
-  \verb|\begin|\hskip0pt
-  \verb|{document}|.
+  \bverb|\MRTafterhyperref{\usepackage{cleveref}}|. This macro has to be used
+  prior to \bverb|\begin{document}|.
+\end{describemacro}
+\begin{describemacro}{MRTthesisAddToFront}[\marg{content}]
+  Adds \meta{content} to a hook executed during the front matter if
+  \bverb|frontmatter=auto| was used. See \autoref{sec:autoopt} for more
+  information.
+\end{describemacro}
+\begin{describemacro}{MRTthesisAddToBack}[\marg{content}]
+  Adds \meta{content} to a hook executed during the back matter if
+  \bverb|backmatter=auto| was used. See \autoref{sec:autoopt} for more
+  information.
+\end{describemacro}
+\begin{describemacro}{MRTthesisAddAfterBack}[\marg{content}]
+  Adds \meta{content} to a hook executed during the back matter if
+  \bverb|backmatter=auto| was used. See \autoref{sec:autoopt} for more
+  information.
 \end{describemacro}
 \begin{describemacro}{DeclareTOCStyleEntryMRTChapterLike}%
   [\oarg{indent}\hskip0pt\marg{entry-layer}]
@@ -316,10 +410,9 @@ The following macros are provided:
 \end{describemacro}
 \begin{describemacro}{sethead}[\marg{content}]
   Sets the head marks for both sides to \meta{content}. It is the same as
-  \cs{markboth}\hskip0pt
-  \texttt{\{\meta{content}\}\hskip0pt\{\meta{content}\}}. You might use this (or
-  any similar macro provided by KOMA script) to manually set the head marks,
-  e.\,g.\@ if your section title gets too long.
+  \bverb|\markboth{|\meta{content}\bverb|}{|\meta{content}\bverb|}|. You might
+  use this (or any similar macro provided by KOMA script) to manually set the
+  head marks, e.\,g.\@ if your section title gets too long.
 \end{describemacro}
 \begin{describemacro}{affidavit}
   Prints a chapter ``Eidesstattliche Erklärung'' and the affidavit text (as
@@ -366,8 +459,7 @@ formatting.%
     \item \pkg{MRTwuline}
     \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
       \begin{itemize}[topsep=0pt]
-        \item \pkg{fontspec} and
-          \verb|\defaultfontfeatures|\hskip0pt\verb|{Ligatures=TeX}|
+        \item \pkg{fontspec} and \bverb|\defaultfontfeatures{Ligatures=TeX}|
       \end{itemize}
       else
       \begin{itemize}[topsep=0pt]

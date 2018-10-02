@@ -1,5 +1,5 @@
-\newcommand*\MRTtab@version{0.0.2b}
-\newcommand*\MRTtab@date{2018/07/26}
+\newcommand*\MRTtab@version{0.0.3}
+\newcommand*\MRTtab@date{2018-10-02}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -785,7 +785,7 @@
     \end { longtable }
     \l__MRTtab_table_post_hook_tl
   }% <<<
-\NewDocumentEnvironment { MRTtable } { O{} }% >>>
+\NewDocumentEnvironment { MRTtable } { +O{} }% >>>
   {% begin >>>
     \MRTtabDeclareHeadMacros
     \MRTtabSetup { head = 1 }

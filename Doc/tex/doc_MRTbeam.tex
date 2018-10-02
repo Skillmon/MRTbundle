@@ -154,22 +154,27 @@ described in \autoref{sec:beam:macros}.
 \begin{describemacro}{ProgressBarStyle}[\meta{*}\marg{style}]
   This sets the progress bar options to a predefined \meta{style} using the
   unstarred version of \cs{SetProgressBar}. If the starred version of
-  \cs{ProgressBarStyle} is used \cs{ProgressBartrue} is issued.\par
-  \bigskip
-  \noindent
-  \small
-  \MRTtabDeclareHeadMacros
-  \setstretch{1.408}%
-  \begin{tabularx}{\textwidth}{l*4c>{\setstretch{1}}X}
-    \headS
-    style & align & length & height & voffset & description\\
-    \headE
-    default & c & 30pt            & font size & -1.65ex
-      & a thick and relatively short bar around the frame number\\
-    Spratte & c & \cs{paperwidth} & 2pt       & 3pt
-      & A thin line spanning the whole page width at the bottom of the frame\\
-    \hline
-  \end{tabularx}
+  \cs{ProgressBarStyle} is used \cs{ProgressBartrue} is issued.
+  Available styles are listed in \autoref{tab:progressstyles}.
+  \begin{MRTtable}
+    [
+      ,pre=\small\setstretch{1.408}\tabcolsep.5\tabcolsep
+      ,env
+      ,caption={Available Progress Bar Styles for \cs{ProgressBarStyle}}
+      ,label=tab:progressstyles
+    ]
+    \begin{tabularx}{\textwidth}{l*4c>{\setstretch{1}}X}
+      \headS
+      style & align & length & height & voffset & description\\
+      \headE
+      default & c & 30pt            & font size & -1.65ex
+        & a thick and relatively short bar around the frame number\\
+      Spratte & c & \cs{paperwidth} & 2pt       & 3pt
+        & A thin line spanning the whole page width at the bottom of the frame\\
+      \hline
+    \end{tabularx}
+    \vspace{-1ex}
+  \end{MRTtable}
 \end{describemacro}
 
 \subsection{Footnote related}

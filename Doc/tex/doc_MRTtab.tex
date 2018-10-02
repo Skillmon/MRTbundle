@@ -167,7 +167,7 @@ is not possible with the standard \cs{cline} as far as I know.
   \MRTthesisSetup{stretch tab=1}
   \noindent
   \vbox{%
-  \begin{MRTtabular}[][2]{lll}
+  \begin{MRTtabular}{lll}[2]
     a & b & c\\
     \MRTcline{1-2,*3}
     d & e & f\\
@@ -175,7 +175,7 @@ is not possible with the standard \cs{cline} as far as I know.
     j & k & l\\
   \end{MRTtabular}
   \begin{verbatim}
-\begin{MRTtabular}[][2]{lll}
+\begin{MRTtabular}{lll}[2]
   a & b & c\\
   \MRTcline{1-2,*3}
   d & e & f\\
@@ -183,7 +183,7 @@ is not possible with the standard \cs{cline} as far as I know.
   j & k & l\\
 \end{MRTtabular}
   \end{verbatim}}
-  \vbox{\begin{MRTtabular}[][2]{lll}
+  \vbox{\begin{MRTtabular}{lll}[2]
     a & b & c\\
     \MRTcline{<>1-2,*3}
     d & e & f\\
@@ -191,7 +191,7 @@ is not possible with the standard \cs{cline} as far as I know.
     j & k & l\\
   \end{MRTtabular}
   \begin{verbatim}
-\begin{MRTtabular}[][2]{lll}
+\begin{MRTtabular}{lll}[2]
   a & b & c\\
   \MRTcline{<>1-2,*3}
   d & e & f\\
@@ -200,7 +200,7 @@ is not possible with the standard \cs{cline} as far as I know.
 \end{MRTtabular}
   \end{verbatim}}
   \columnbreak
-  \vbox{\begin{MRTtabular}[][2]{lll}
+  \vbox{\begin{MRTtabular}{lll}[2]
     a & b & c\\
     \cline{1-2}
     \arrayrulecolor{tablegray}
@@ -213,7 +213,7 @@ is not possible with the standard \cs{cline} as far as I know.
     j & k & l\\
   \end{MRTtabular}
   \begin{verbatim}
-\begin{MRTtabular}[][2]{lll}
+\begin{MRTtabular}{lll}[2]
   a & b & c\\
   \cline{1-2}
   \arrayrulecolor{tablegray}

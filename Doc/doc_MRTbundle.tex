@@ -1,4 +1,6 @@
-\documentclass[oneside,british]{MRTthesis}
+% since this document is not for print we can use colorlinks
+\PassOptionsToPackage{colorlinks}{hyperref}
+\documentclass[oneside,british,showlinks]{MRTthesis}
 
 \MRTthesisSetup
   {
@@ -33,6 +35,11 @@
 \begin{document}
 \maketitle
 \tableofcontents
+\listoffigures
+\begingroup
+\let\clearpage\relax
+\listoftables
+\endgroup
 \mainpart
 
 \include{tex/doc_introduction}
