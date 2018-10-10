@@ -118,7 +118,10 @@
         \relax
       }
       \vspace*{.5\baselineskip}
-      \@hangfrom{Usage:~}\cs{#2}\tfarg\texttt{#3}\marg{true}\marg{false}
+      \raggedright
+      \setbox0\hbox{\texttt{\space\space}}
+      \@hangfrom{Usage:~\hskip\wd0}\hskip-\wd0
+      \cs{#2}\tfarg\hskip0pt\texttt{#3}\hskip0pt\marg{true}\hskip0pt\marg{false}
       \vspace*{.5\baselineskip}
     \end{minipage}\\
     \hangindent \l_docMRTbundle_dscmac_indent_dim
@@ -190,8 +193,10 @@
         \relax
       }
       \vspace*{.5\baselineskip}
-      \@hangfrom{Usage:~}
-      \exp_args:Nx \cs{\l_docMRTbundle_macro_name_tl}\texttt{#3}
+      \raggedright
+      \setbox0\hbox{\texttt{\space\space}}
+      \@hangfrom{Usage:~\hskip\wd0}\hskip-\wd0
+      \exp_args:Nx \cs{\l_docMRTbundle_macro_name_tl}\hskip0pt\texttt{#3}
       \vspace*{.5\baselineskip}
     \end{minipage}\\
     \hangindent \l_docMRTbundle_dscmac_indent_dim
@@ -243,7 +248,10 @@
         \relax
       }
       \vspace*{.5\baselineskip}
-      \@hangfrom{Usage:~}\cs{begin{#2}}\texttt{#3~...~}\cs{end{#2}}
+      \raggedright
+      \setbox0\hbox{\texttt{\space\space}}
+      \@hangfrom{Usage:~\hskip\wd0}\hskip-\wd0
+      \cs{begin{#2}}\hskip0pt\texttt{#3~...~}\hskip0pt\cs{end{#2}}
       \vspace*{.5\baselineskip}
     \end{minipage}\\
     \hangindent \l_docMRTbundle_dscmac_indent_dim
@@ -314,7 +322,9 @@
         \relax
       }
       \vspace*{1\baselineskip}
-      \@hangfrom {}
+      \raggedright
+      \setbox0\hbox{\texttt{\space\space}}
+      \@hangfrom{\hskip\wd0}\hskip-\wd0
         { \smash { \IfValueTF { #3 } { =~ \texttt{#3} } { --NoArgument-- } } }
       \vspace*{.5\baselineskip}
     \end{minipage}\\
@@ -389,7 +399,7 @@
     \l_docMRTbundle_tmp_tl
     \group_end:
   }%<<<
-\NewDocumentEnvironment { fakeitemize } {}
+\NewDocumentEnvironment { fakeitemize } {}%>>>
   {% begin >>>
     \dim_set:Nn \l_docMRTbundle_fakeit_indent_dim { 2em }
     \int_incr:N \l_docMRTbundle_fakeit_level_int
@@ -412,7 +422,84 @@
       { \null\\[1ex] }
       { \null\\[\dimexpr.1ex-\baselineskip\relax] }
   }%<<<
+%<<<
+\NewDocumentCommand \dangerzone { O{1} }%>>>
+  {
+    \scalebox{#1}
+      {
+        \makebox[1em][c]
+          {
+            \makebox[0pt][c]{\raisebox{.17ex}{\scalebox{.6}{\kern-.11ex!}}}
+            \makebox[0pt][c]{\color{red}$\bigtriangleup$}
+          }
+      }
+  }%<<<
+\NewDocumentCommand \dangerzoneAlt { O{1} }%>>>
+  { % requires installed fourier package
+    \group_begin:
+    \scalebox{#1}
+      {
+        \fontencoding{U}
+        \fontfamily{futs}
+        \selectfont
+        \char 66
+      }
+    \group_end:
+  }%<<<
+\NewDocumentCommand \dangermargin { s O{\Huge} D(){1} }%>>>
+  {
+    \group_begin:
+    \IfBooleanT { #1 } { \reversemarginpar }
+    \marginnote
+      {
+        #2
+        \dangerzone[#3]
+      }
+    \group_end:
+  }%<<<
+\NewExpandableDocumentCommand \easysout {}%>>>
+  {
+    \texorpdfstring{\easysout@}{\@firstofone}
+  }%<<<
+\NewDocumentCommand \easysout@ {}%>>>
+  {
+    \bgroup
+    \markoverwith { \rule [.4ex ] { .1ex } { .15ex } }
+    \ULon
+  }%<<<
+\NewDocumentCommand \plannedsection { O{} o m }%>>>
+  {
+    \use:c { #1section }
+      [ \easysout { \IfValueTF { #2 } { #2 } { #3 } } \PlannedSecLabel ]
+      { #3 }
+    \leavevmode
+    \dangermargin*
+    \NotImplementedMessage{#1}
+  }%<<<
+\NewExpandableDocumentCommand \PlannedSecLabel {}%>>>
+  {
+    \texorpdfstring
+      { \ \ \textsc { [Planned] } }
+      { ~[Planned] }
+  }%<<<
+\NewDocumentCommand \Seq {}
+  {
+    \mbox{}
+    \spacefactor100\relax
+    \space
+    =
+    \spacefactor100\relax
+    \space
+  }
 \ExplSyntaxOff
+
+\NewDocumentCommand \NotImplementedMessage { m +O{} }
+  {%
+    \emph{Not Implemented yet!}
+    Everything in this #1section is mostly inside of the documentation to remind
+    me that I still have to code this and to give me a specification what has to
+    be inside the final version. #2\par
+  }
 
 %Shamelessly copied from doc.sty
 \def\MakeShortVerb{%

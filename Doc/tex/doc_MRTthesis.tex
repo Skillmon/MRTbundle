@@ -63,11 +63,11 @@ The following options are accessible with \cs{MRTthesisSetup}.
   comma and the given name, in which case the parsing for the abbreviation works
   better (especially with name affixes). The following two options are fine:
   \texttt{author=\{Duck, Donald \string\and\ Mouse, Mickey\}} or
-  \texttt{author=\{Donald Duck \string\and\ Mickey Mouse\}} and should both
-  result in the abbreviation \texttt{D.\@ Duck, M.\@ Mouse}. Another example
-  would be \texttt{zu Guttenberg, Karl-Theodor} or \texttt{Karl-Theodor zu
-  Guttenberg}. Here the parsing would result in \texttt{K.-T.\@ zu Guttenberg}
-  or \texttt{K.-T.\@ z.\@ Guttenberg} -- the first one seems correct, the second
+  \texttt{author=\{Donald Duck \string\and\ Mickey Mouse\}}; both should result
+  in the abbreviation \texttt{D.\@ Duck, M.\@ Mouse}. Another example would be
+  \texttt{zu Guttenberg, Karl-Theodor} or \texttt{Karl-Theodor zu Guttenberg}.
+  Here the parsing would result in \texttt{K.-T.\@ zu Guttenberg} or
+  \texttt{K.-T.\@ z.\@ Guttenberg} -- the first one seems correct, the second
   one fails. Remember to surround the argument with braces if you use a comma.
 \end{describeopt}
 \begin{describeopt}{caption above}
@@ -88,21 +88,21 @@ The following options are accessible with \cs{MRTthesisSetup}.
   values would be \verb|Bachelor of Science| or \verb|Master of Science|.
 \end{describeopt}
 \begin{describeopt}{examiner}[\meta{name}]
-  The examiner of the thesis. Initial value is
-  \texttt{Univ.-Professor Dr.-Ing.}\hskip0pt\ \texttt{Gerhard Fischerauer}.
+  The examiner of the thesis. The initial value is set to
+  \texttt{Univ.-Professor Dr.-Ing.\@ Gerhard Fischerauer}.
 \end{describeopt}
 \begin{describeopt}{logoL}[\meta{file}]
-  The image file for the left logo on the titlepage. Initial value is
-  \file{MRTthesis_logo_UBT2.pdf}. If \meta{file} is an empty argument no left
-  logo will be used.
+  The image file for the left logo on the titlepage.
+  \file{MRTthesis_logo_UBT2.pdf} is the initial value. If \meta{file} is an
+  empty argument no left logo will be used.
 \end{describeopt}
 \begin{describeopt}{logoL height}[\meta{dimen}]
   The height the left logo is displayed in. Initial value is \verb|10.85mm|.
 \end{describeopt}
 \begin{describeopt}{logoR}[\meta{file}]
-  The image file for the right logo on the titlepage. Initial value is
-  \file{MRTthesis_logo_MRT2.pdf}. If \meta{file} is an empty argument no right
-  logo will be used.
+  The image file for the right logo on the titlepage.
+  \file{MRTthesis_logo_MRT2.pdf} is the initial value. If \meta{file} is an
+  empty argument no right logo will be used.
 \end{describeopt}
 \begin{describeopt}{logoR height}[\meta{dimen}]
   The height the right logo is displayed in. Initial value is \verb|11.9mm|.
@@ -292,10 +292,10 @@ resolve around automatically added contents.
   empty.
 \end{describeopt}
 \begin{describeopt}{affidavit}[\meta{choice}]
-  Sets where the \cs{affidavit} is added if either \bverb|frontmatter=auto| or
-  \bverb|backmatter=auto| is used. Possible \meta{choice}s are |front|, |back|
-  and |off|. If |off| is used it doesn't get added automatically. Default value
-  is |front|.
+  Sets where the \cs{affidavit} is added. Possible \meta{choice}s are |front|,
+  |back| and |off|. If |off| is used it doesn't get added automatically. Default
+  value is |front|. |front| and |back| will only take effect if |frontmatter|
+  and |backmatter| are set to |auto|, respectively.
 \end{describeopt}
 \begin{describeopt}{appendix}[\meta{file}]
   Sets the appendix file added if \bverb|backmatter=auto| is used. If
@@ -312,16 +312,16 @@ resolve around automatically added contents.
   class option |minimal| is used. 
 \end{describeopt}
 \begin{describeopt}{lof}[\meta{choice}]
-  Sets where the list of figures is added if either \bverb|frontmatter=auto| or
-  \bverb|backmatter=auto| is used. Possible \meta{choice}s are |front|, |back|
-  and |off|. If |off| is used it doesn't get added automatically. Default value
-  is |front|.
+  Sets where the list of figures is added. Possible \meta{choice}s are |front|,
+  |back| and |off|. If |off| is used it doesn't get added automatically. Default
+  value is |front|. |front| and |back| will only take effect if |frontmatter|
+  and |backmatter| are set to |auto|, respectively.
 \end{describeopt}
 \begin{describeopt}{lot}[\meta{choice}]
-  Sets where the list of tables is added if either \bverb|frontmatter=auto| or
-  \bverb|backmatter=auto| is used. Possible \meta{choice}s are |front|, |back|
-  and |off|. If |off| is used it doesn't get added automatically. Default value
-  is |front|.
+  Sets where the list of tables is added. Possible \meta{choice}s are |front|,
+  |back| and |off|. If |off| is used it doesn't get added automatically. Default
+  value is |front|. |front| and |back| will only take effect if |frontmatter|
+  and |backmatter| are set to |auto|, respectively.
 \end{describeopt}
 \begin{describeopt}{toc}[\meta{choice}]
   Sets where the list of tables is added if |frontmatter=auto| is used. Possible
@@ -469,8 +469,8 @@ formatting.%
     \item \pkg{lmodern}
     \item \pkg{helvet}
     \item \pkg{babel} [ngerman] or if \opt{british} is used with
-      [main=british, ngerman]
-    \item \pkg{scrlayer-scrpage} [singlespacing=true]
+      [main\Seq british, ngerman]
+    \item \pkg{scrlayer-scrpage} [singlespacing\Seq true]
     \item \pkg{geometry} (with correct options)
     \item \pkg{setspace}
     \item \pkg{xcolor}
@@ -485,15 +485,17 @@ formatting.%
         \item \pkg{siunitx}
           [%
             detect-all,
-            per-mode=reciprocal-positive-first%
+            per-mode\Seq reciprocal-positive-first%
           ]\\
-          If \pkg{babel}'s \opt{british} is used [locale=UK] will be used, if
-          \opt{ngerman} [locale=DE]. Additionally the \opt{range-phrase} will be
-          set to either \texttt{to} or \texttt{bis} with spaces around it.
+          If \pkg{babel}'s \opt{british} is used [locale\Seq UK] will be used,
+          if \opt{ngerman} [locale\Seq DE]. Additionally the \opt{range-phrase}
+          will be set to either \texttt{to} or \texttt{bis} with spaces around
+          it.
         \item \pkg{biblatex}
           [%
-            backend=biber, natbib=true, citestyle=numeric, bibstyle=numeric,
-            sorting=none, giveninits=true, sortcites%
+            backend\Seq biber, natbib\Seq true, citestyle\Seq numeric,
+            bibstyle\Seq numeric, sorting\Seq none, giveninits\Seq true,
+            sortcites%
           ] (with URLs being line breakable at any place)
         \item \pkg{csquotes}
       \end{itemize}

@@ -75,7 +75,7 @@ An ordinary description as done with other environments in this documentation:
 \end{describemacro}%<<<
 
 \begin{describemacro}{MRTtabCurrentRow}%>>>
-  Returns the current row in an \env{MRTtabular} expandably.
+  Returns the current row number in an \env{MRTtabular} expandably.
 \end{describemacro}%<<<
 
 \subsection{Known Bugs}
@@ -232,8 +232,8 @@ is not possible with the standard \cs{cline} as far as I know.
 \section{The \env{MRTtable} environment}\label{sec:tab:table}%>>>
 The \env{MRTtable} environment is a wrapper around an \env{MRTtabular} inside of
 a \env{table} environment. There might be a severe difference in the
-implementation of the \texttt{long} version, but as of now it is not
-implemented.
+implementation of the \texttt{long} version, but as of now it is \emph{not
+implemented}.
 
 \begin{describeenv}{MRTtable}[\oarg{key=value}]
   \env{MRTtable} sets its contents in an \env{MRTtabular} environment. It
@@ -265,8 +265,8 @@ provided:
 
 \begin{describemacro}{MRTtabDeclareHeadMacros}%>>>
   By default the above macros are only available inside of \env{MRTtabular} and
-  in the body of \env{MRTtable}. You can make them locally available with
-  \cs{MRTtabDeclareHeadMacros}.
+  in the body of \env{MRTtable}. \cs{MRTtabDeclareHeadMacros} will make them
+  locally available.
 \end{describemacro}%<<<
 %<<<
 
@@ -308,11 +308,11 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
   \env{MRTtable}. If \cs{KOMAoptions} is available the KOMA option
   \opt{captions=tablesignature} is used.
 \end{describeopt}%<<<
-\begin{describeopt}{bare}[\meta{bool}]
+\begin{describeopt}{bare}[\meta{bool}]%>>>
   If set to true the potential caption and the tabular like environment in
   \env{MRTtable} are neither surrounded by a \env{minipage} nor a \env{figure}.
   Only a \cs{centering} is issued.
-\end{describeopt}
+\end{describeopt}%<<<
 \begin{describeopt}{BoL}[\meta{content}]%>>>
   Sets the \env{MRTtabular} Begin-of-Line hook using \cs{MRTtabAddtoBoLHook}
 \end{describeopt}%<<<
@@ -350,15 +350,15 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
 \end{describeopt}%<<<
 \begin{describeopt}{head rows, head}[\meta{num}]%>>>
   The number of rows which should be formatted as head rows as in
-  \env{MRTtabular}. In each \env{MRTtable} it is initially \texttt{1} -- this is
-  different from a stand alone \env{MRTtabular} which defaults to \texttt{0}
-  rows.
+  \env{MRTtabular}. In each \env{MRTtable} it is initially \texttt{1} -- this
+  differs from the behaviour of a stand alone \env{MRTtabular} which defaults to
+  \texttt{0} rows.
 \end{describeopt}%<<<
-\begin{describeopt}{in text sep}[\meta{skip}]
+\begin{describeopt}{in text sep}[\meta{skip}]%>>>
   This controls the vertical space around a non-floating \env{MRTtable}. It is
   initially set to \cs{intextsep}. If it is equal to 0pt the \cs{vskip} is not
   issued.
-\end{describeopt}
+\end{describeopt}%<<<
 \begin{describeopt}{label}[\meta{label}]%>>>
   If \opt{caption} is used the \env{MRTtable} will get the specified
   \meta{label}.
@@ -417,21 +417,21 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
   set to \texttt{2}.
 \end{describeopt}%<<<
 
-\subsubsection{\pkg{longtable} related options}%>>>
-The following options are only available if the \opt{longtable} was used during
-package load time.
+\plannedsection[subsub]{\pkg{longtable} related options}
+The following options are only available if the \opt{longtable} option was used
+during package load time.
 
-\begin{describeopt}{long}[\meta{bool}]
+\begin{describeopt}{long}[\meta{bool}]%>>>
   If set true the \env{MRTtable} uses \env{longtable} internally. It doesn't
   float and gets page breakable. You should specify the \opt{columns} of
   \env{MRTtable} manually as the automatic detection might fail terribly in
   conjunction with \env{longtable}.
-\end{describeopt}
-\begin{describeopt}{continue caption, cont cap}[\meta{caption}]
+\end{describeopt}%<<<
+\begin{describeopt}{continue caption, cont cap}[\meta{caption}]%>>>
   If specified following pages use this \meta{caption} instead of the \opt{short
   caption} or the normal \opt{caption}.
-\end{describeopt}
-\begin{describeopt}{continue with caption, cont with cap, cont w cap}%
+\end{describeopt}%<<<
+\begin{describeopt}{continue with caption, cont with cap, cont w cap}%>>>
   [\meta{bool}]
   If set true, the following pages use the \opt{caption} and not the \opt{short
   caption} or \opt{continue caption}. Defaults to true and initially is set to
