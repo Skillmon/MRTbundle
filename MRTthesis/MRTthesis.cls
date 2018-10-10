@@ -135,6 +135,7 @@
 \RequirePackage{xcolor}
 \RequirePackage{graphicx}
 \RequirePackage{enumitem}
+\RequirePackage{etoolbox}
 \RequirePackage[fleqn]{mathtools}
 % bad math fonts 
 \RequirePackage[italic,defaultmathsizes]{mathastext}
@@ -144,7 +145,7 @@
     \DeclareMathSizes{10.95pt}{10.95pt}{9pt}{7pt}
   }%<<<
 % 
-\AtBeginDocument
+\BeforeBeginEnvironment{document}
   {
     \RequirePackage{hyperref}
     \bool_if:NT \l_MRTthesis_hyper_hidelinks_bool { \hypersetup { hidelinks } }
@@ -608,7 +609,8 @@
 \setkomafont{subparagraph}{\normalfont\sffamily\itshape}
 % <<<
 % Sectionformat >>>
-\AtBeginDocument{\renewcommand*\Sectionformat[2]{\MRTthesis@HeadingsUline{#1}}}
+% I don't know why this works, but it seems working.
+\newcommand*\Sectionformat[2]{\MRTthesis@HeadingsUline{#1}}
 % <<<
 %%==========================================================================<<<
 
