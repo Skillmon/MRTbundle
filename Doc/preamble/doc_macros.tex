@@ -482,7 +482,7 @@
       { \ \ \textsc { [Planned] } }
       { ~[Planned] }
   }%<<<
-\NewDocumentCommand \Seq {}
+\NewDocumentCommand \Seq {}%>>>
   {
     \mbox{}
     \spacefactor100\relax
@@ -490,23 +490,23 @@
     =
     \spacefactor100\relax
     \space
-  }
+  }%<<<
 \ExplSyntaxOff
 
-\NewDocumentCommand \NotImplementedMessage { m +O{} }
+\NewDocumentCommand \NotImplementedMessage { m +O{} }%>>>
   {%
     \emph{Not Implemented yet!}
     Everything in this #1section is mostly inside of the documentation to remind
     me that I still have to code this and to give me a specification what has to
     be inside the final version. #2\par
-  }
+  }%<<<
 
 %Shamelessly copied from doc.sty
-\def\MakeShortVerb{%
+\def\MakeShortVerb{%>>>
   \@ifstar
     {\def\@shortvrbdef{\verb*}\@MakeShortVerb}%
-    {\def\@shortvrbdef{\verb}\@MakeShortVerb}}
-\def\@MakeShortVerb#1{%
+    {\def\@shortvrbdef{\verb}\@MakeShortVerb}}%<<<
+\def\@MakeShortVerb#1{%>>>
   \expandafter\ifx\csname cc\string#1\endcsname\relax
     \@shortvrbinfo{Made }{#1}\@shortvrbdef
     \add@special{#1}%
@@ -522,8 +522,8 @@
     \global\catcode`#1\active
   \else
     \@shortvrbinfo\@empty{#1 already}{\@empty\verb(*)}%
-  \fi}
-\def\DeleteShortVerb#1{%
+  \fi}%<<<
+\def\DeleteShortVerb#1{%>>>
   \expandafter\ifx\csname cc\string#1\endcsname\relax
     \@shortvrbinfo\@empty{#1 not}{\@empty\verb(*)}%
   \else
@@ -537,18 +537,18 @@
         \lowercase{%
           \global\expandafter\let\expandafter~%
           \csname ac\string#1\endcsname}%
-      \endgroup \fi \fi}
-\def\@shortvrbinfo#1#2#3{%
+      \endgroup \fi \fi}%<<<
+\def\@shortvrbinfo#1#2#3{%>>>
   \PackageInfo{doc}{%
      #1\expandafter\@gobble\string#2 a short reference
-                                          for \expandafter\string#3}}
-\def\add@special#1{%
+                                          for \expandafter\string#3}}%<<<
+\def\add@special#1{%>>>
   \rem@special{#1}%
   \expandafter\gdef\expandafter\dospecials\expandafter
     {\dospecials \do #1}%
   \expandafter\gdef\expandafter\@sanitize\expandafter
-    {\@sanitize \@makeother #1}}
-\def\rem@special#1{%
+    {\@sanitize \@makeother #1}}%<<<
+\def\rem@special#1{%>>>
   \def\do##1{%
     \ifnum`#1=`##1 \else \noexpand\do\noexpand##1\fi}%
   \xdef\dospecials{\dospecials}%
@@ -556,7 +556,7 @@
     \def\@makeother##1{%
       \ifnum`#1=`##1 \else \noexpand\@makeother\noexpand##1\fi}%
     \xdef\@sanitize{\@sanitize}%
-  \endgroup}
+  \endgroup}%<<<
 \AtBeginDocument{\MakeShortVerb \|}
 \AtEndDocument{\DeleteShortVerb \|}
 \makeatother
