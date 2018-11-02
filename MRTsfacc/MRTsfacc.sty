@@ -36,8 +36,12 @@
 \ProcessOptions\relax
 
 % stupid package for math font is stupid. Have to cure the sickness >>>
+\newcommand\MRTsfacc@kern%>>>
+  {%
+    \MRTsfacc@shift\ht\MRTsfacc@box
+  }%<<<
 \newbox\MRTsfacc@box
-\newcommand*\MRTsfacc@patch@mathaccentV
+\newcommand*\MRTsfacc@patch@mathaccentV%>>>
   {%
     \let\mathaccentV@orig\mathaccentV
     \protected\long\def\mathaccentV##1##2##3##4% >>>
@@ -69,30 +73,22 @@
     \newcommand*\mathaccentV@shifted[5]% >>>
       {%
         \mathchoice%
-          {%
-            \expandafter\mathaccentV@shifted@a\expandafter
-              {\MRTsfacc@shift}{display}{##1}{##2}{##3}{##4}{##5}%
-          }%
-          {%
-            \expandafter\mathaccentV@shifted@a\expandafter
-              {\MRTsfacc@shift}{text}{##1}{##2}{##3}{##4}{##5}%
-          }%
-          {%
-            \expandafter\mathaccentV@shifted@a\expandafter
-              {\MRTsfacc@shift}{script}{##1}{##2}{##3}{##4}{##5}%
-          }%
-          {%
-            \expandafter\mathaccentV@shifted@a\expandafter
-              {\MRTsfacc@shift}{scriptscript}{##1}{##2}{##3}{##4}{##5}%
-          }%
+          {\mathaccentV@shifted@a{display}{##1}{##2}{##3}{##4}{##5}}
+          {\mathaccentV@shifted@a{text}{##1}{##2}{##3}{##4}{##5}}
+          {\mathaccentV@shifted@a{script}{##1}{##2}{##3}{##4}{##5}}
+          {\mathaccentV@shifted@a{scriptscript}{##1}{##2}{##3}{##4}{##5}}%
       }% <<<
-    \newcommand*\mathaccentV@shifted@a[7]% >>>
+    \newcommand*\mathaccentV@shifted@a[6]% >>>
       {%
-        \setbox\MRTsfacc@box\hbox{$\csname ##2style\endcsname##7$}%
-        \mathaccentV@orig{##3}{##4}{##5}{##6}
-          {##7\kern##1\ht\MRTsfacc@box}\kern-##1\ht\MRTsfacc@box
+        \setbox\MRTsfacc@box\hbox{$\csname ##1style\endcsname##6$}%
+        \kern\MRTsfacc@kern
+        \mathaccentV@orig{##2}{##3}{##4}{##5}%
+          {%
+            \kern-\MRTsfacc@kern
+            \copy\MRTsfacc@box % or ##6 both have drawbacks
+          }%
       }% <<<
-  }
+  }%<<<
 \AtBeginDocument{\MRTsfacc@patch@mathaccentV}
 % <<<
 
