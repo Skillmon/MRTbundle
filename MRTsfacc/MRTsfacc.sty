@@ -10,7 +10,6 @@
   ]
 
 \RequirePackage{MRTif}
-\RequirePackage{amsmath}
 
 \providecommand\@firstofthree[3]{#1}
 \providecommand\@secondofthree[3]{#2}
@@ -32,64 +31,139 @@
           }%
       }%
   }
+\newif\if@MRTsfacc@patching@
+\DeclareOption{patching}{\@MRTsfacc@patching@true}
+\DeclareOption{mathastext}{\@MRTsfacc@patching@false}
 \DeclareOption*{\expandafter\MRTsfaccSet\expandafter{\CurrentOption}}
 \ProcessOptions\relax
 
 % stupid package for math font is stupid. Have to cure the sickness >>>
-\newcommand\MRTsfacc@kern%>>>
-  {%
-    \MRTsfacc@shift\ht\MRTsfacc@box
-  }%<<<
-\newbox\MRTsfacc@box
-\newcommand*\MRTsfacc@patch@mathaccentV%>>>
-  {%
-    \let\mathaccentV@orig\mathaccentV
-    \protected\long\def\mathaccentV##1##2##3##4% >>>
-      {%
-        \def\mathaccentV@args{{##1}{##2}{##3}{##4}}%
-        \futurelet\next\mathaccentV@a
-      }% <<<
-    \newcommand*\mathaccentV@a[1]% >>>
-      {%
-        \expandafter\ifx\next!%
-          \expandafter\@firstofthree
-        \else
-          \expandafter\ifx\next*%
-            \expandafter\expandafter\expandafter\@secondofthree
+\if@MRTsfacc@patching@
+% true >>>
+  \RequirePackage{amsmath}
+  \newcommand\MRTsfacc@kern%>>>
+    {%
+      \MRTsfacc@shift\ht\MRTsfacc@box
+    }%<<<
+  \newbox\MRTsfacc@box
+  \newcommand*\MRTsfacc@patch@mathaccentV%>>>
+    {%
+      \let\mathaccentV@orig\mathaccentV
+      \protected\long\def\mathaccentV##1##2##3##4% >>>
+        {%
+          \def\mathaccentV@args{{##1}{##2}{##3}{##4}}%
+          \futurelet\next\mathaccentV@a
+        }% <<<
+      \newcommand*\mathaccentV@a[1]% >>>
+        {%
+          \expandafter\ifx\next!%
+            \expandafter\@firstofthree
           \else
-            \expandafter\expandafter\expandafter\@thirdofthree
+            \expandafter\ifx\next*%
+              \expandafter\expandafter\expandafter\@secondofthree
+            \else
+              \expandafter\expandafter\expandafter\@thirdofthree
+            \fi
           \fi
-        \fi
-        {\expandafter\mathaccentV@orig\mathaccentV@args}
-        {\expandafter\mathaccentV@shifted\mathaccentV@args}
-        {\expandafter\mathaccentV@b\mathaccentV@args{##1}}%
-      }% <<<
-    \newcommand*\mathaccentV@b[5]% >>>
-      {%
-        \MRTifLetterGTF{##5}
-          {\mathaccentV@shifted{##1}{##2}{##3}{##4}{##5}}
-          {\mathaccentV@orig{##1}{##2}{##3}{##4}{##5}}%
-      }% <<<
-    \newcommand*\mathaccentV@shifted[5]% >>>
-      {%
-        \mathchoice%
-          {\mathaccentV@shifted@a{display}{##1}{##2}{##3}{##4}{##5}}
-          {\mathaccentV@shifted@a{text}{##1}{##2}{##3}{##4}{##5}}
-          {\mathaccentV@shifted@a{script}{##1}{##2}{##3}{##4}{##5}}
-          {\mathaccentV@shifted@a{scriptscript}{##1}{##2}{##3}{##4}{##5}}%
-      }% <<<
-    \newcommand*\mathaccentV@shifted@a[6]% >>>
-      {%
-        \setbox\MRTsfacc@box\hbox{$\csname ##1style\endcsname##6$}%
-        \kern\MRTsfacc@kern
-        \mathaccentV@orig{##2}{##3}{##4}{##5}%
-          {%
-            \kern-\MRTsfacc@kern
-            \copy\MRTsfacc@box % or ##6 both have drawbacks
-          }%
-      }% <<<
-  }%<<<
-\AtBeginDocument{\MRTsfacc@patch@mathaccentV}
+          {\expandafter\mathaccentV@orig\mathaccentV@args}
+          {\expandafter\mathaccentV@shifted\mathaccentV@args}
+          {\expandafter\mathaccentV@b\mathaccentV@args{##1}}%
+        }% <<<
+      \newcommand*\mathaccentV@b[5]% >>>
+        {%
+          \MRTifLetterGTF{##5}
+            {\mathaccentV@shifted{##1}{##2}{##3}{##4}{##5}}
+            {\mathaccentV@orig{##1}{##2}{##3}{##4}{##5}}%
+        }% <<<
+      \newcommand*\mathaccentV@shifted[5]% >>>
+        {%
+          \mathchoice%
+            {\mathaccentV@shifted@a{display}{##1}{##2}{##3}{##4}{##5}}
+            {\mathaccentV@shifted@a{text}{##1}{##2}{##3}{##4}{##5}}
+            {\mathaccentV@shifted@a{script}{##1}{##2}{##3}{##4}{##5}}
+            {\mathaccentV@shifted@a{scriptscript}{##1}{##2}{##3}{##4}{##5}}%
+        }% <<<
+      \newcommand*\mathaccentV@shifted@a[6]% >>>
+        {%
+          \setbox\MRTsfacc@box\hbox{$\csname ##1style\endcsname##6$}%
+          \kern\MRTsfacc@kern
+          \mathaccentV@orig{##2}{##3}{##4}{##5}%
+            {%
+              \kern-\MRTsfacc@kern
+              %\copy\MRTsfacc@box % or ##6 both have drawbacks
+              ##6%
+            }%
+        }% <<<
+    }%<<<
+  \AtBeginDocument{\MRTsfacc@patch@mathaccentV}
+\else% <<<
+% false >>>
+  \RequirePackage[italic,defaultmathsizes]{mathastext}
+  \RequirePackage{xparse}
+  \newlength\MRTsfacc@mu
+  \newcommand*\MRTsfacc@getmu%>>>
+    {%
+      \begingroup
+        \setbox0\hbox{$\mkern1mu$}%
+        \expandafter
+      \endgroup
+      \expandafter\MRTsfacc@mu\the\wd0
+    }%<<<
+  \ExplSyntaxOn
+  \NewDocumentCommand \MRTsfaccAll {}
+    {
+      \clist_set_eq:NN \l_MRTsfacc_chars_clist \c_MRTsfacc_chars_clist
+    }
+  \NewDocumentCommand \MRTsfaccSingle { m m }
+    {
+      \clist_remove_all:Nn \l_MRTsfacc_chars_clist { #1 }
+      \AtBeginDocument { \MRTsfacc@apply@single [ #2 ] { #1 } }
+    }
+  \NewDocumentCommand \MRTsfaccHelvet {}
+    {
+      %\MRTsfaccSet{.2}
+      %\MRTsfaccAll
+      %\MRTsfaccSingle
+    }
+  \clist_const:Nn \c_MRTsfacc_chars_clist%>>>
+    {
+      A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,
+      a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+    }%<<<
+  \clist_new:N \l_MRTsfacc_chars_clist
+  \MRTsfaccAll
+  \newcommand*\MRTsfacc@pttomu[1]%>>>
+    {
+      \fp_eval:n { #1 / \MRTsfacc@mu } mu
+    }%<<<
+  \newcommand*\MRTsfacc@apply%>>>
+    {
+      \clist_map_function:NN \c_MRTsfacc_chars_clist \MRTsfacc@apply@single
+    }%<<<
+  \ExplSyntaxOff
+  \newcommand*\MRTsfacc@apply@single@a[2]%>>>
+    {%
+      \typeout{Moving accents for #2 with #1}
+      \MTsetmathskips{#2}{-#1}{#1}%
+    }%<<<
+  \newcommand*\MRTsfacc@apply@single[2][\MRTsfacc@shift]%>>>
+    {%
+      \begingroup
+        \setbox0\hbox{$#2$}%
+        \ht0=#1\ht0
+        \edef\MRTsfacc@tmp{\MRTsfacc@pttomu{\ht0}}%
+        \expandafter
+      \endgroup
+      \expandafter\MRTsfacc@apply@single@a\expandafter{\MRTsfacc@tmp}{#2}%
+    }%<<<
+  \AtBeginDocument%>>>
+    {%
+      \MRTsfacc@getmu
+      \MRTsfacc@apply
+    }%<<<
 % <<<
+\fi
+% <<<
+
 
 \endinput
