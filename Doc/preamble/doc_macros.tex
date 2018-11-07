@@ -1,5 +1,6 @@
 \makeatletter
 \newcommand*\pkg[1]{\textrm{#1}}
+\newcommand*\pkgWopt[2]{\opt{[#2]}\penalty500\pkg{#1}}
 \newcommand*\cls[1]{\textrm{#1}}
 \newcommand*\TikZ{\pkg{Ti\textit{k}Z}}
 \newcommand*\env[1]{\texttt{#1}}
@@ -12,7 +13,18 @@
     \texttt{\expandafter\eatspace\string\ \detokenize{#1}}%
   }%<<<
 \def\cs@PDFString#1{(macro #1)}
-\protected\def\meta#1{\texttt{$\langle$\textit{#1}$\rangle$}}
+\protected\def\meta#1{\texttt{$\langle$\textit{\meta@a{#1}}$\rangle$}}
+\ExplSyntaxOn
+\newcommand\meta@a[1]%>>>
+  {
+    \group_begin:
+    \tl_set:Nn \l_docMRTbundle_tmp_tl { #1 }
+    \regex_replace_once:nnN { \d+$ } { \c{textsubscript} \cB{ \0 \cE} }
+      \l_docMRTbundle_tmp_tl
+    \l_docMRTbundle_tmp_tl
+    \group_end:
+  }%<<<
+\ExplSyntaxOff
 \newcommand*\metaEnclosed[3]{\texttt{#1}\meta{#2}\texttt{#3}}
 \newcommand*\marg[1]{\metaEnclosed\{{#1}\}}
 \newcommand*\oarg[1]{\metaEnclosed[{#1}]}

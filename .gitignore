@@ -11,5 +11,6 @@
 *.run.xml
 *.snm
 *.toc
+Doc/img/*-alone.pdf
 Example_Documents/MRTbeam/example_MRTbeam.pdf
 Example_Documents/MRTthesis/example_MRTthesis.pdf

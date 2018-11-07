@@ -6,6 +6,8 @@ FLAGS  = -halt-on-error
 TEXF   = ./tex
 # relative path to included TeX-files containing preamble stuff
 PREF   = ./preamble
+# relative path to images
+IMGF   = ./img
 ##########################################
 # }}}
 # Automatically defined variables {{{
@@ -24,7 +26,7 @@ FMT    = $(NAME).fmt
 ## the name 'quick' maybe misleading! 'all' might be faster if $(FILE) hasn't
 ## changed. 'quick' is for quickly running TeX assuming that you know what
 ## you're doing
-quick: $(FMT)
+quick: img $(FMT)
 	$(TEX) $(FLAGS) -fmt="$(NAME)" $(FILE)
 	#$(TEX) $(FLAGS) $(FILE);
 # }}}
@@ -37,11 +39,15 @@ $(OUT): $(FILE) $(SFILES) $(PREAMB)# {{{
 $(FMT): $(FILE) $(PREAMB)# {{{
 	$(TEX) -ini -enc -jobname="$(NAME)" "&$(TEX)" mylatexformat.ltx """$(FILE)"""
 # }}}
-.PHONY: clean cleantex cleansubfoldertex quick all
-clean: cleantex cleansubfoldertex
+img:
+	cd $(IMGF); make -j4
+.PHONY: clean cleantex cleansubfoldertex cleanimg quick all img
+clean: cleantex cleansubfoldertex cleanimg
 cleantex: # {{{
 	-rm $(shell find $(NAME)\.* | grep -Ev '\.tex$$' | grep -Ev '\.sty$$' | grep -Ev '\.bib$$')
 # }}}
 cleansubfoldertex: # {{{
 	-cd $(TEXF); rm $(shell cd $(TEXF); find * | grep -v tex);
 # }}}
+cleanimg:
+	cd $(IMGF)); make clean

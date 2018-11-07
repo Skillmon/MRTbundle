@@ -1,0 +1,38 @@
+\documentclass[british,sfacc=height]{MRTalone}
+\usepackage{collcell}
+
+\begin{document}
+\begin{MRTtable}
+  [
+    col=
+      {
+        *2{>{\collectcell\hatex}c<{\endcollectcell}}
+        *2{>{\collectcell\hatst}c<{\endcollectcell}}
+        >{\hskip4\tabcolsep}l
+        *2{>{\collectcell\hatex}c<{\endcollectcell}}
+        *2{>{\collectcell\hatst}c<{\endcollectcell}}
+      }
+    ,pre=
+      {%
+        \newcommand\hatex[1]{$\hat!{#1}$}%
+        \newcommand\hatst[1]{$\hat*{#1}$}%
+      }
+  ]
+  \multicolumn{2}{c}{original} & \multicolumn{2}{c}{shifted} &&
+  \multicolumn{2}{c}{original} & \multicolumn{2}{c}{shifted} \\
+
+    a & A & a & A   &&   n & N & n & N \\
+    b & B & b & B   &&   o & O & o & O \\
+    c & C & c & C   &&   p & P & p & P \\
+    d & D & d & D   &&   q & Q & q & Q \\
+    e & E & e & E   &&   r & R & r & R \\
+    f & F & f & F   &&   s & S & s & S \\
+    g & G & g & G   &&   t & T & t & T \\
+    h & H & h & H   &&   u & U & u & U \\
+    i & I & i & I   &&   v & V & v & V \\
+    j & J & j & J   &&   w & W & w & W \\
+    k & K & k & K   &&   x & X & x & X \\
+    l & L & l & L   &&   y & Y & y & Y \\
+    m & M & m & M   &&   z & Z & z & Z \\
+\end{MRTtable}
+\end{document}

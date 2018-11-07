@@ -1,74 +1,162 @@
-\chapter{The \pkg{MRTsfacc} package}
+\chapter{The \pkg{MRTsfacc} package}\label{sec:sfacc}
 This package is provided to remedy an issue related with sans serif maths, to be
 more precise to fix the placement of \cs{mathaccentV}, which is internally used
-by macros such as \cs{hat} and \cs{dot}. It is therefore loaded by both,
-\cls{MRTthesis} and \cls{MRTbeam}. The \cls{beamer} class provides a fix for the
-same issue which is unfortunately only working for \cls{beamer}'s default font
-by fixing the font metrics.
+by macros such as \cs{hat} and \cs{dot} with \pkg{amsmath} loaded. It is
+therefore loaded by all three, \cls{MRTthesis}, \cls{MRTbeam} and
+\cls{MRTalone}. The \cls{beamer} class provides a fix for the same issue which
+is unfortunately only working for \cls{beamer}'s default font by fixing the font
+metrics (and as far as I know only works with \hologo{pdfLaTeX}).
 
-\cls{MRTsfacc} has a different approach by patching \cs{mathaccentV} to move the
-accent horizontally depending on the height of the accented character.
-Furthermore it is tested whether the character is an alphabetic one by checking
-the category code. If it is not an alphabetic character the shift isn't applied.
+\cls{MRTsfacc} has two different approaches by patching \cs{mathaccentV} to move
+the accent horizontally -- either depending on the height of the accented
+character or a defined offset in a list of possible arguments.
 
-The package forwards any option to \cs{MRTsfaccSet}. \cs{MRTsfaccSet} tests
-whether its argument is a valid float using \cs{MRTifFloatTF} and sets the share
-of the letters' height which is used as the horizontal displacement. So you can
-either use the option during load time to set the share or \cs{MRTsfaccSet} at
-any later point. The default share is
-\makeatletter\texttt{\MRTsfacc@shift}\makeatother.
+The package is designed with \pkg{mathastext} with the \opt{italics} option in
+mind. It might work for other sans serif maths solutions as well. It requires
+\pkg{amsmath} to be loaded.
 
-One can use \texttt{*} to enforce the shift and \texttt{!}\@ to enforce the
-omitting of that shift. Consider the following example:
-\verb$\hat!{m}$ produces $\hat!{m}$, \verb$\hat*{m}$ produces $\hat*{m}$, and
-\verb$\hat{m}$ produces $\hat{m}$, which is the same as \verb$\hat*{m}$ since
-\texttt{m} has by default the category code of an alphabetic character.
+Independent on the used approach the accent macros check whether their argument
+is one meeting a special criterion (a character of category 11 or a known
+element). Furthermore both versions should detect whether the argument is just
+another accent macro nested so that in \bverb|\dot{\bar{a}}| the \cs{dot} would
+still find the |a| as a known argument. This nested usage works only if the
+nested macro uses \cs{mathaccentV} internally and each level of nesting is an
+exact match of the approach's criterion or does only contain two tokens or
+groups (so in above example the \cs{bar} and the |{a}|) with the first one being
+a \cs{mathaccentV} using macro.
 
-The tokens \texttt{*} and \texttt{!}\@ must not be enclosed by braces if you
-want to specify the behaviour of \cs{mathaccentV}, so \verb$\hat{*}\hat{!}$
-results in $\hat{*}\hat{!}$.
+\section{Options}%>>>
+The package has the following options:
+\begin{describeopt}{height}
+  If this option is used the offset is dependent on the height of the accented
+  character. Read the description in \autoref{sec:sfacc:height}.
+\end{describeopt}
+\begin{describeopt}{list}
+  If this option is used the offset is defined by a list of known arguments.
+  Read the description in \autoref{sec:sfacc:list}.
+\end{describeopt}
+\begin{describeopt}{notest}
+  By default the package does test whether the definition of \cs{mathaccentV}
+  meets the known definition from the \pkg{amsmath} package. If something does
+  redefine \cs{mathaccentV} or the definition has changed but you're sure that
+  \pkg{MRTsfacc} still works with (it redefines it anyway) you can deactivate
+  that test with this option. If \pkg{amsmath}'s definition of \cs{mathaccentV}
+  has changed, please contact the me as described in \autoref{sec:bugs}.
+\end{describeopt}
 
-\begin{MRTtable}
+Every other option is passed on to \cs{MRTsfaccSet}, its description is included
+in \autoref{sec:sfacc:height:macros}. This will have no effect if the \opt{list}
+option is used.
+%<<<
+
+\section{\opt{height} Variant}\label{sec:sfacc:height}%>>>
+This variant checks whether the argument is a single character with category
+code 11. If this test does not return true, the shift isn't applied.
+
+\autoref{tab:sfacc:height} shows the results of this approach. While this
+approach is easier to adapt to other fonts -- one has to change only one
+parameter -- it is always a compromise trying to match every character as good
+as possible.
+
+\begin{table}% >>>
+  \centering
+  \includegraphics{img/sfacc_height_table-alone.pdf}
+  \caption
+    {%
+      Comparison of shifted accents against original placement with the use of
+      the \opt{height} variant.%
+      \label{tab:sfacc:height}%
+    }%
+\end{table}% <<<
+
+
+\subsection{Macros}\label{sec:sfacc:height:macros}%>>>
+\begin{describemacro}{<accent>}[\meta{*/!}\marg{arg}]%>>>
+  \cs{<accent>} can be any of the maths accent macros using \cs{mathaccentV}
+  internally (e.g. \cs{bar}, \cs{dot}, etc.).\\
+  The \meta{*/!} can either be \texttt{*} or \texttt{!}\@ or omitted entirely.
+  If the starred version is used, the shift is enforced regardless of the
+  argument, if the exclamation mark is given it is prohibited.
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTsfaccSet}[\marg{float}]%>>>
+  The shift width depends on a multiple of the box's height. The multiple can be
+  set with this macro and should be a valid float. This is tested using
+  \cs{MRTifFloatTF}. The package default for this share is
+  \makeatletter\texttt{\MRTsfacc@shift}\makeatother.
+\end{describemacro}%<<<
+%<<<
+%<<<
+
+\section{\opt{list} Variant}\label{sec:sfacc:list}%>>>
+This variant checks whether the argument is a known element from a list in which
+the offset is defined in the unit of \texttt{mu}.
+
+It has the advantage that you can define individual offsets for every argument.
+In addition not only characters can be added to the list but almost arbitrary
+stuff. The drawback is that everything has to be added that you want to be
+recognized.
+\autoref{tab:sfacc:list} shows the results of this approach.
+
+\begin{table}% >>>
+  \centering
+  \includegraphics{img/sfacc_list_table-alone.pdf}
+  \caption
+    {%
+      Comparison of shifted accents against original placement with the use of
+      the \opt{list} variant.%
+      \label{tab:sfacc:list}%
+    }%
+\end{table}% <<<
+
+\subsection{Macros}
+\begin{describemacro}{<accent>}[\oarg{opt}\marg{arg}]%>>>
+  \cs{<accent>} can be any of the maths accent macros using \cs{mathaccentV}
+  internally (e.g. \cs{bar}, \cs{dot}, etc.).\\
+  \meta{opt} can either be a defined element from the list or a length in the
+  unit of \texttt{mu}. So with \texttt{foo} a defined list element, both
+  \bverb|\hat[foo]{bar}| and \bverb|\hat[4mu]{bar}| would be valid. If
+  \meta{opt} is a known element the offset of that element is used regardless of
+  the given \meta{arg} else (if it is used) the given length is used as the
+  offset. If the optional argument isn't used at all, it'll be tested whether
+  \meta{arg} is a known element and if so the appropriate offset will be used.
+  Else no offset will be applied.
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTsfaccShift}[\marg{element}\marg{shift}]%>>>
+  Adds \meta{element} to the list of known arguments and saves \meta{shift} for
+  it. If \meta{element} is already known it'll get redefined. \meta{shift} has
+  to be given in \texttt{mu}.
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTsfaccShiftLet}%>>>
+  [\marg{element1}\marg{element2}]
+  Adds \meta{element1} to the list of known arguments and defines the
+  offset to be the one currently used by \meta{element2}.
+  \meta{element2} has to be known, if it isn't an error will be thrown.
+\end{describemacro}%<<<
+
+\begin{describemacro}{MRTsfaccLoadShiftList}[\marg{list}]
+  The package comes with definitions for some fonts (see
+  \autoref{tab:sfacc:listfiles}). With this macro you can load them. If you
+  define a list for a font (or font combination) not listed in the table you
+  might contact me as described in \autoref{sec:bugs} and I'll gladly add it
+  to the package.
+\end{describemacro}
+%<<<
+
+\begin{MRTtable}%>>>
   [
-    col=
-      {
-        *2{>{\collectcell\hatex}c<{\endcollectcell}}
-        *2{>{\collectcell\hatst}c<{\endcollectcell}}
-        >{\hskip4\tabcolsep}l
-        *2{>{\collectcell\hatex}c<{\endcollectcell}}
-        *2{>{\collectcell\hatst}c<{\endcollectcell}}
-      }
-    ,cap={Comparison of shifted accents against original placement}
-    ,label=tab:sfacc
-    ,pre=
-      {%
-        \newcommand\hatex[1]{$\hat!{#1}$}%
-        \newcommand\hatst[1]{$\hat*{#1}$}%
-      }
-    ,pos=!bp
+    ,col={>{\ttfamily}l >{\raggedright\arraybackslash}p{.55\linewidth}}
+    ,cap={Available shift definition lists}
+    ,label={tab:sfacc:listfiles}
   ]
-  \multicolumn{2}{c}{original} & \multicolumn{2}{c}{shifted} &&
-  \multicolumn{2}{c}{original} & \multicolumn{2}{c}{shifted} \\
-  
-    a & A & a & A   &&   n & N & n & N \\
-    b & B & b & B   &&   o & O & o & O \\
-    c & C & c & C   &&   p & P & p & P \\
-    d & D & d & D   &&   q & Q & q & Q \\
-    e & E & e & E   &&   r & R & r & R \\
-    f & F & f & F   &&   s & S & s & S \\
-    g & G & g & G   &&   t & T & t & T \\
-    h & H & h & H   &&   u & U & u & U \\
-    i & I & i & I   &&   v & V & v & V \\
-    j & J & j & J   &&   w & W & w & W \\
-    k & K & k & K   &&   x & X & x & X \\
-    l & L & l & L   &&   y & Y & y & Y \\
-    m & M & m & M   &&   z & Z & z & Z \\
-\end{MRTtable}
-
-The resulting \cs{mathaccentV} macro is not expandable and therefore created
-\cs{protected}. You can take a look at the results in \autoref{tab:sfacc}.
+    \normalfont List & To be used with\\
+    helvet & \pkg{helvet} and \pkgWopt{mathastext}{italic,defaultmathsizes}
+    \\
+\end{MRTtable}%<<<
 
 \section{Dependencies}
 \pkg{MRTsfacc} loads the \pkg{MRTif} package and uses its tests
-\cs{MRTifLetterGTF} and \cs{MRTifFloatTF}. It also depends on \pkg{amsmath}
-being loaded.
+\cs{MRTifLetterGTF}, \cs{MRTifFloatTF}, \cs{MRTifStringsMatchXXTF} and
+\cs{MRTifTwoTokenTF}. It also depends on \pkg{amsmath} being loaded.

@@ -44,6 +44,11 @@ the first and second argument, respectively, an expansion is made.
 \end{describemacroTF}
 \dscremaininglines{3}
 
+\begin{describemacroTF}[G,N,GN]{MRTifTwoToken}[\marg{arg}]
+  Tests if \meta{arg} is exactly two tokens.
+\end{describemacroTF}
+\dscremaininglines{3}
+
 \begin{describemacroTF}[G,N,GN]{MRTifLetter}[\marg{arg}]
   Tests if \meta{arg} is a letter, meaning of category code 11.
 \end{describemacroTF}
@@ -86,6 +91,12 @@ the first and second argument, respectively, an expansion is made.
   Tests if \meta{arg} contains spaces which are not enclosed by inner groups.
 \end{describemacroTF}
 \dscremaininglines{4}
+
+\begin{describemacro}{MRTtllength,MRTtllengthN}[\marg{arg}]
+  Expands to the number of tokens or groups inside of \meta{arg}. Unprotected
+  spaces are ignored. The ordinary version needs two expansions while the |N|
+  version needs four.
+\end{describemacro}
 
 \section{Dependencies}
 \pkg{MRTif} loads the \pkg{pdftexcmds} package to make the \hologo{pdfTeX}

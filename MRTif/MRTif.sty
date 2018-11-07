@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.2}
-\newcommand*\MRTif@date{2018-07-31}
+\newcommand*\MRTif@version{0.0.3}
+\newcommand*\MRTif@date{2018-11-06}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -9,6 +9,16 @@
     and mrtarbeit%
   ]
 \RequirePackage{pdftexcmds}
+
+\edef\endMRTifargument{\detokenize{{.$^_&}{}}{.$^_&}{}UnlikelyString}
+\newcommand\MRTif@endMRTifargument[1]% >>>
+  {%
+    \ifx\endMRTifargument#1%
+      \expandafter\@firstoftwo
+    \else
+      \expandafter\@secondoftwo
+    \fi
+  }% <<<
 
 \newcommand*\MRTif@groupify@TF[1]% >>>
   {%
@@ -243,6 +253,25 @@
 \MRTif@groupify@TF{OneToken}
 \MRTif@create@TandF@N@TandF{OneToken}
 \MRTif@create@TandF@N@TandF{OneTokenG}
+% <<<
+% MRTifTwoToken >>>
+\newcommand\MRTifTwoTokenTF[1]% >>>
+  {%
+    \MRTifEmptyTF{#1}{\@secondoftwo}
+      {%
+        \MRTifOneToken@a#1.\end@MRTifOneTokenTF
+          {\@secondoftwo}
+          {%
+            \MRTifTwoToken@a#1.\end@MRTifTwoTokenTF
+          }%
+      }%
+  }% <<<
+\newcommand\MRTifTwoToken@a{}% >>>
+\long\def\MRTifTwoToken@a#1#2#3#4\end@MRTifTwoTokenTF
+  {\MRTifEmptyTF{#4}}% <<<
+\MRTif@groupify@TF{TwoToken}
+\MRTif@create@TandF@N@TandF{TwoToken}
+\MRTif@create@TandF@N@TandF{TwoTokenG}
 % <<<
 % MRTifLetter >>>
 \newcommand\MRTifLetterTF[1]% >>>
@@ -517,6 +546,22 @@
     %\
   %}% <<<
 %
+% MRTtllength >>>
+\newcommand\MRTtllength@inner[1]% >>>
+  {%
+    \MRTif@endMRTifargument{#1}
+      {\relax}
+      {+1\MRTtllength@inner}%
+  }% <<<
+\newcommand\MRTtllength[1]% >>>
+  {%
+    \the\numexpr0\MRTtllength@inner#1\endMRTifargument
+  }% <<<
+\newcommand\MRTtllengthN[1]% >>>
+  {%
+    \expandafter\MRTtllength\expandafter{#1}%
+  }% <<<
+% <<<
 
 \endinput
 % vim: fdm=marker foldmarker=>>>,<<< ft=tex
