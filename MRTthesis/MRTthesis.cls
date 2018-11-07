@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.4}
-\newcommand*\MRTthesis@date{2018-10-02}
+\newcommand*\MRTthesis@version{0.0.5}
+\newcommand*\MRTthesis@date{2018-11-06}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -36,6 +36,7 @@
 \bool_new:N \l_MRTthesis_lot_back_bool
 \bool_new:N \l_MRTthesis_lot_front_bool
 \bool_new:N \l_MRTthesis_toc_front_bool
+\bool_new:N \l_MRTthesis_sfacc_height_bool
 % <<<
 % box >>>
 \box_new:N \l_MRTthesis_tmpa_box
@@ -77,6 +78,8 @@
 \DeclareOption{english}{\ExecuteOptions{british}}
 \DeclareOption{hidelinks}{\bool_set_true:N  \l_MRTthesis_hyper_hidelinks_bool}
 \DeclareOption{showlinks}{\bool_set_false:N \l_MRTthesis_hyper_hidelinks_bool}
+\DeclareOption{sfacc = height}{\bool_set_true:N \l_MRTthesis_sfacc_height_bool}
+\DeclareOption{sfacc = list}{\bool_set_false:N \l_MRTthesis_sfacc_height_bool}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrreprt}}
 \ExecuteOptions{mathsizes}
 \ExecuteOptions{hidelinks}
@@ -89,10 +92,10 @@
 
 %% additional packages to achieve template formatting >>>
 %%=============================================================================
-\RequirePackage{MRTtab,MRTwuline,MRTsfacc}
+\RequirePackage{MRTtab,MRTwuline}
 \bool_if:nTF { \sys_if_engine_luatex_p: || \sys_if_engine_xetex_p: }
   {% true >>>
-    \RequirePackage{fontspec}
+    \RequirePackage[no-math]{fontspec}
     \defaultfontfeatures{Ligatures=TeX}
   }% <<<
   {% false >>>
@@ -140,6 +143,14 @@
 % bad math fonts 
 \RequirePackage[italic,defaultmathsizes]{mathastext}
 \RequirePackage{isomath}
+\bool_if:NTF \l_MRTthesis_sfacc_height_bool
+  {
+    \RequirePackage[height]{MRTsfacc}
+  }
+  {
+    \RequirePackage[list]{MRTsfacc}
+    \MRTsfaccLoadShiftList{helvet}
+  }
 \bool_if:NT \l_MRTthesis_mathsizes_bool%>>>
   {
     \DeclareMathSizes{10.95pt}{10.95pt}{9pt}{7pt}

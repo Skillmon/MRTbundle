@@ -3,9 +3,18 @@
 
 \NeedsTeXFormat{LaTeX2e}
 
+\newif\if@MRTbeam@sfacc@height@
+\DeclareOption{sfacc = height}{\@MRTbeam@sfacc@height@true}
+\DeclareOption{sfacc = list}{\@MRTbeam@sfacc@height@false}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{beamer}}
 \ProcessOptions\relax
-\RequirePackage{helvet,MRTsfacc,expl3,xparse}
+\RequirePackage{helvet,expl3,xparse}
+\if@MRTbeam@sfacc@height@
+  \RequirePackage[height]{MRTsfacc}
+\else
+  \RequirePackage[list]{MRTsfacc}
+  \MRTsfaccLoadShiftList{helvet}
+\fi
 \LoadClass{beamer}
 \ProvidesExplClass
   {MRTbeam}          {\MRTbeam@date}

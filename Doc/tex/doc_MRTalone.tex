@@ -4,7 +4,7 @@ to produce simple \LaTeX\ based images which match the look of \cls{MRTthesis}.
 
 \section{Options}%>>>
 \subsection{Load time options}%>>>
-The class features a few load time options, none of which do take arguments.
+The class features a few load time options.
 \begin{describeopt}{longtable}
   Is forwarded to \pkg{MRTtab} see its description in \autoref{sec:tab:options}.
 \end{describeopt}
@@ -31,6 +31,11 @@ The class features a few load time options, none of which do take arguments.
   might be missed out. If you find any of which you think should be translated,
   please contact me as described in \autoref{sec:bugs}. English simplified (US)
   is not supported by the class.
+\end{describeopt}
+\begin{describeopt}{sfacc}[\meta{choice}]
+  \meta{choice} must be \opt{height} or \opt{list}. Sets the approach used by
+  \pkg{MRTsfacc} (see \autoref{sec:sfacc}). If it is not specified the
+  \opt{list} variant is used.
 \end{describeopt}
 
 \noindent

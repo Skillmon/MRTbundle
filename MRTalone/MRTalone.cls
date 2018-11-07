@@ -15,6 +15,7 @@
 \bool_new:N \l_MRTthesis_minimal_bool
 \bool_new:N \l_MRTthesis_mathsizes_bool
 \bool_new:N \l_MRTthesis_british_bool
+\bool_new:N \l_MRTthesis_sfacc_height_bool
 % <<<
 % <<<
 %%==========================================================================<<<
@@ -35,6 +36,8 @@
 \DeclareOption{british}{\bool_set_true:N \l_MRTthesis_british_bool}
 \DeclareOption{UKenglish}{\ExecuteOptions{british}}
 \DeclareOption{english}{\ExecuteOptions{british}}
+\DeclareOption{sfacc = height}{\bool_set_true:N \l_MRTthesis_sfacc_height_bool}
+\DeclareOption{sfacc = list}{\bool_set_false:N \l_MRTthesis_sfacc_height_bool}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{standalone}}
 \ExecuteOptions{mathsizes}
 \PassOptionsToClass{11pt}{standalone}
@@ -44,7 +47,7 @@
 
 %% additional packages to achieve template formatting >>>
 %%=============================================================================
-\RequirePackage{MRTtab,MRTwuline,MRTsfacc}
+\RequirePackage{MRTtab,MRTwuline}
 \bool_if:nTF { \sys_if_engine_luatex_p: || \sys_if_engine_xetex_p: }
   {% true >>>
     \RequirePackage{fontspec}
@@ -72,6 +75,14 @@
 % bad math fonts 
 \RequirePackage[italic,defaultmathsizes]{mathastext}
 \RequirePackage{isomath}
+\bool_if:NTF \l_MRTthesis_sfacc_height_bool
+  {
+    \RequirePackage[height]{MRTsfacc}
+  }
+  {
+    \RequirePackage[list]{MRTsfacc}
+    \MRTsfaccLoadShiftList{helvet}
+  }
 \bool_if:NT \l_MRTthesis_mathsizes_bool%>>>
   {
     \DeclareMathSizes{10.95pt}{10.95pt}{9pt}{7pt}
