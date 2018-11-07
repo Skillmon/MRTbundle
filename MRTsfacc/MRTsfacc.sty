@@ -16,11 +16,11 @@
 \providecommand\@secondofthree[3]{#2}
 \providecommand\@thirdofthree[3]{#3}
 
-\def\MRTsfacc@shift{0.25}
+\def\MRTsfacc@share{0.25}
 \newcommand\MRTsfaccSet[1]%>>>
   {%
     \MRTifFloatTF{#1}
-      {\def\MRTsfacc@shift{#1}}
+      {\def\MRTsfacc@share{#1}}
       {%
         \PackageError{MRTsfacc}{Provided option `#1` is no valid float}
           {%
@@ -172,7 +172,7 @@
     }% <<<
   \newcommand*\MRTsfacc@kern% >>>
     {%
-      \MRTsfacc@shift\ht\MRTsfacc@box
+      \MRTsfacc@share\ht\MRTsfacc@box
     }% <<<
   \newbox\MRTsfacc@box
   \newcommand*\mathaccentV@a[1]% >>>
@@ -284,13 +284,13 @@
         }
       \mkern-#5\relax
     }% <<<
-  \renewcommand*\MRTsfacc@shift[1]% >>>
+  \newcommand*\MRTsfacc@shift[1]% >>>
     {%
       MRTsfacc@shift@\detokenize{#1}%
     }% <<<
   \newcommand*\MRTsfaccShift[2]% >>>
     {%
-      \expandafter\def\csname MRTsfacc@shift@\detokenize{#1}\endcsname{#2}%
+      \expandafter\def\csname \MRTsfacc@shift{#1}\endcsname{#2}%
     }% <<<
   \newcommand*\MRTsfaccShiftLet[2]% >>>
     {%
