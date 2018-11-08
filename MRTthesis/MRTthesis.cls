@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.5}
-\newcommand*\MRTthesis@date{2018-11-07}
+\newcommand*\MRTthesis@version{0.0.6}
+\newcommand*\MRTthesis@date{2018-11-08}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -8,6 +8,10 @@
   {MRTthesis}          {\MRTthesis@date}
   {\MRTthesis@version} {thesis template for MRT - University of Bayreuth}
 
+%% variants of external macros >>>
+%%=============================================================================
+\cs_generate_variant:Nn \keys_set:nn { nV }
+%%==========================================================================<<<
 
 %% variables >>>
 %%=============================================================================
@@ -60,6 +64,32 @@
 % <<<
 %%==========================================================================<<<
 
+%% messages >>>
+%%=============================================================================
+\msg_new:nnnn { MRTthesis } { afterafterhyperref }%>>>
+  {
+    \exp_not:N \MRTafterhyperref
+    ~used~too~late.~It~has~to~be~used~before~\exp_not:N \begin \{document\}.
+  }
+  { Seriously,~which~information~do~you~miss~from~the~above? }%<<<
+\msg_new:nnn { MRTthesis } { degree~undefined }%>>>
+  {
+    The~degree~option~wasn't~used~and~guessing~the~degree~from~the~thesis~type~
+    failed.
+  }%<<<
+\msg_new:nnn { MRTthesis } { wrong~engine }%>>>
+  {
+    The ~ used ~ #1 ~ is ~ not ~ available ~ under ~ \c_sys_engine_str. ~ You ~
+    have ~ to ~ use ~ #2.
+  }%<<<
+%%==========================================================================<<<
+
+%% constants >>>
+%%=============================================================================
+\bool_const:Nn \c_MRTthesis_xetex_or_luatex_bool
+  { \sys_if_engine_luatex_p: || \sys_if_engine_xetex_p: }
+%%==========================================================================<<<
+
 %% Class options and loading scrreprt >>>
 %%=============================================================================
 \DeclareOption{longtable}
@@ -78,9 +108,38 @@
 \DeclareOption{english}{\ExecuteOptions{british}}
 \DeclareOption{hidelinks}{\bool_set_true:N  \l_MRTthesis_hyper_hidelinks_bool}
 \DeclareOption{showlinks}{\bool_set_false:N \l_MRTthesis_hyper_hidelinks_bool}
-\DeclareOption{sfacc = height}{\bool_set_true:N \l_MRTthesis_sfacc_height_bool}
-\DeclareOption{sfacc = list}{\bool_set_false:N \l_MRTthesis_sfacc_height_bool}
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrreprt}}
+%% Additional KV-options >>>
+\keys_define:nn { MRTthesis / loadtime }%>>>
+  {
+    sfacc .choice:
+    ,sfacc / height .code:n = { \bool_set_true:N \l_MRTthesis_sfacc_height_bool}
+    ,sfacc / list .code:n = { \bool_set_false:N \l_MRTthesis_sfacc_height_bool }
+    ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { scrreprt } }
+  }%<<<
+\bool_if:NTF \c_MRTthesis_xetex_or_luatex_bool
+  {%>>>
+    \keys_define:nn { MRTthesis / loadtime }
+      {
+         font       .tl_set:N = \l_MRTthesis_font_tl
+        ,serif~font .tl_set:N = \l_MRTthesis_serif_font_tl
+        ,mono~font  .tl_set:N = \l_MRTthesis_mono_font_tl
+      }
+  }%<<<
+  {%>>>
+    \clist_map_inline:nn { font, serif~font, mono~font }
+      {
+        \keys_define:nn { MRTthesis / loadtime }
+          {
+            #1 .code:n =
+              {
+                \msg_error:nnnn { MRTthesis } { wrong~engine } { key ~ `#1` }
+                  { xetex ~ or ~ luatex }
+              }
+          }
+      }
+  }%<<<
+%% <<<
+\DeclareOption* { \keys_set:nV { MRTthesis / loadtime } \CurrentOption }
 \ExecuteOptions{mathsizes}
 \ExecuteOptions{hidelinks}
 \PassOptionsToClass
@@ -93,17 +152,33 @@
 %% additional packages to achieve template formatting >>>
 %%=============================================================================
 \RequirePackage{MRTtab,MRTwuline}
-\bool_if:nTF { \sys_if_engine_luatex_p: || \sys_if_engine_xetex_p: }
+\bool_if:NTF \c_MRTthesis_xetex_or_luatex_bool
   {% true >>>
     \RequirePackage[no-math]{fontspec}
     \defaultfontfeatures{Ligatures=TeX}
+    \tl_if_empty:NTF \l_MRTthesis_font_tl
+      {
+        \msg_new:nnn { MRTthesis } { no~font }
+          {
+            You ~ did ~ not ~ specify ~ any ~ sans ~ font ~ using ~ the ~
+            `font` ~ key. ~ I'll ~ use ~ the ~ default ~ font ~ but ~ you ~
+            should ~ use ~ a ~ system ~ font ~ looking ~ like ~ Arial ~ or ~
+            Helvetica.
+          }
+        \msg_warning:nn { MRTthesis } { no~font }
+      }
+      { \exp_args:NV \setsansfont \l_MRTthesis_font_tl }
+    \tl_if_empty:NF \l_MRTthesis_serif_font_tl
+      { \exp_args:NV \setmainfont \l_MRTthesis_serif_font_tl }
+    \tl_if_empty:NF \l_MRTthesis_mono_font_tl
+      { \exp_args:NV \setmonofont \l_MRTthesis_mono_font_tl }
   }% <<<
   {% false >>>
     \RequirePackage[T1]{fontenc}
     \RequirePackage[utf8]{inputenc}
+    \RequirePackage{lmodern}
+    \RequirePackage{helvet}
   }%<<<
-\RequirePackage{lmodern}
-\RequirePackage{helvet}
 \renewcommand\familydefault{\sfdefault}
 \bool_if:NTF \l_MRTthesis_british_bool
   {% true >>>
@@ -356,21 +431,6 @@
     ,appendix~ragged = true
   }% <<<
 % <<<
-%%==========================================================================<<<
-
-%% messages >>>
-%%=============================================================================
-\msg_new:nnnn { MRTthesis } { afterafterhyperref }%>>>
-  {
-    \exp_not:N \MRTafterhyperref
-    ~used~too~late.~It~has~to~be~used~before~\exp_not:N \begin \{document\}.
-  }
-  { Seriously,~which~information~do~you~miss~from~the~above? }%<<<
-\msg_new:nnn { MRTthesis } { degree~undefined }%>>>
-  {
-    The~degree~option~wasn't~used~and~guessing~the~degree~from~the~thesis~type~
-    failed.
-  }%<<<
 %%==========================================================================<<<
 
 %% macros >>>

@@ -32,6 +32,20 @@
 \newcommand*\sarg[1]{\metaEnclosed<{#1}>}
 \newcommand*\carg[2]{\texttt{(}\meta{#1},\meta{#2}\texttt{)}}
 \newcommand*\tfarg{\texttt{\textit{TF}}}
+\newcommand*\luaxetex%>>>
+  {%
+    \luaxe{}%
+  }%<<<
+\newcommand*\luaxelatex%>>>
+  {%
+    \luaxe{La}%
+  }%<<<
+\newcommand*\luaxe[1]%>>>
+  {%
+    \@ifstar
+      {\hologo{Lua#1TeX} and \hologo{Xe#1TeX}}
+      {\hologo{Lua#1TeX} or  \hologo{Xe#1TeX}}%
+  }%<<<
 \ExplSyntaxOn
 \int_new:N \g_docMRTbundle_dsctable_lines_int
 \int_new:N \l_docMRTbundle_fakeit_level_int

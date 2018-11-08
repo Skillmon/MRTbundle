@@ -82,13 +82,29 @@ Neither of the footers is restricted in horizontal size. As a result they might
 overlap if you specify really long contents.
 
 \section{Options}
-The class passes almost all options given to it on to \cls{beamer}. The one
-handled by the class is:
+The class passes almost all options given to it on to \cls{beamer}. The few
+handled by the class are:
 
 \begin{describeopt}{sfacc}[\meta{choice}]
   \meta{choice} must be \opt{height} or \opt{list}. Sets the approach used by
   \pkg{MRTsfacc} (see \autoref{sec:sfacc}). If it is not specified the
-  \opt{list} variant is used.
+  \opt{list} variant is used and \bverb|\MRTsfaccLoadShiftList{helvet}| will be
+  issued.
+\end{describeopt}
+\begin{describeopt}{font}[\meta{font}]
+  This is only available if you're using \luaxetex. With this you can set the
+  used sans serif font, which will be used as the default font. It should be
+  a font resembling Helvetica or Arial.
+\end{describeopt}
+\begin{describeopt}{serif font}[\meta{font}]
+  This is only available if you're using \luaxetex. With this you can set the
+  used serif font. This isn't too important as the default fonts will suffice.
+  You shouldn't have too much text with a Roman font anyway.
+\end{describeopt}
+\begin{describeopt}{mono font}[\meta{font}]
+  This is only available if you're using \luaxetex. With this you can set the
+  used mono font. This isn't too important as the default fonts will suffice.
+  You shouldn't have too much text with a Roman font anyway.
 \end{describeopt}
 
 There are still some more class specific options which you can set with some
