@@ -239,10 +239,11 @@
     }% <<<
   \newcommand*\MRTsfacc@ifknown[1]% >>>
     {%
-      \ifcsname\MRTsfacc@shift{#1}\endcsname
-        \expandafter\@firstoftwo
-      \else
+      \begingroup\expandafter\expandafter\expandafter\endgroup
+      \expandafter\ifx\csname\MRTsfacc@shift{#1}\endcsname\relax
         \expandafter\@secondoftwo
+      \else
+        \expandafter\@firstoftwo
       \fi
     }% <<<
   \newcommand*\MRTsfacc@mathaccentV@shifted@expandhelper[6]% >>>
