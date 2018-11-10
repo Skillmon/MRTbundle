@@ -296,8 +296,8 @@
     {%
       \MRTsfacc@ifknown{#2}
         {%
-          \expandafter\MRTsfaccShiftLet@a\csname\MRTsfacc@shift{#2}\endcsname
-            {#1}%
+          \expandafter\let\csname\MRTsfacc@shift{#1}\expandafter\endcsname
+            \csname\MRTsfacc@shift{#2}\endcsname
         }
         {%
           \PackageError{MRTsfacc}{No shift defined for `\detokenize{#2}`.}
@@ -306,10 +306,6 @@
               \string\MRTsfaccShiftLet.
             }%
         }%
-    }% <<<
-  \newcommand*\MRTsfaccShiftLet@a[2]% >>>
-    {%
-      \expandafter\let\csname\MRTsfacc@shift{#2}\endcsname#1%
     }% <<<
   \newcommand*\MRTsfaccLoadShiftList[1]% >>>
     {%
