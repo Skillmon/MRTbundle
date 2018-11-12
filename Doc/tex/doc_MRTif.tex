@@ -40,12 +40,17 @@ the first and second argument, respectively, an expansion is made.
 \end{describemacroTF}
 
 \begin{describemacroTF}[G,N,GN]{MRTifOneToken}[\marg{arg}]
-  Tests if \meta{arg} is only a single token.
+  Tests if \meta{arg} is only a single token or group.
 \end{describemacroTF}
 \dscremaininglines{3}
 
+\begin{describemacroTF}[N]{MRTifOneTokenNoGroup}[\marg{arg}]
+  Tests if \meta{arg} is only a single token. A single group is also
+  \meta{false}. A |G| version is not supplied for obvious reasons.
+\end{describemacroTF}
+
 \begin{describemacroTF}[G,N,GN]{MRTifTwoToken}[\marg{arg}]
-  Tests if \meta{arg} is exactly two tokens.
+  Tests if \meta{arg} is exactly two tokens or groups.
 \end{describemacroTF}
 \dscremaininglines{3}
 
@@ -80,15 +85,26 @@ the first and second argument, respectively, an expansion is made.
 \begin{describemacroTF}[G,N,GN]{MRTifNumber}[\marg{arg}]
   Tests if \meta{arg} is a number, meaning it consists out of an optional
   \texttt{+} or \texttt{-} sign and digits. The implementation might be
-  suboptimal. It uses \cs{MRTifDigitTF} and \cs{MRTifContainsGroupTF}.
+  suboptimal.
 \end{describemacroTF}
+\dscremaininglines{2}
+
+\begin{describemacroTF}[G,N,GN]{MRTifNumberNoSign}[\marg{arg}]
+  Same as \cs{MRTifNumberTF} but also returns \meta{false} for a leading sign.
+\end{describemacroTF}
+\dscremaininglines{3}
 
 \begin{describemacroTF}[G,N,GN]{MRTifFloat}[\marg{arg}]
   Tests if \meta{arg} is a float, meaning it consists out of an optional
   \texttt{+} or \texttt{-} sign, optional digits, an optional decimal marker
-  (\texttt{.}) and digits. The implementation might be suboptimal. It uses
-  \cs{MRTifNumberTF} and \cs{MRTifContainsGroupTF}.
+  (\texttt{.}) and digits (which are again optional if there were digits prior
+  to a decimal marker). The implementation might be suboptimal.
 \end{describemacroTF}
+
+\begin{describemacroTF}[G,N,GN]{MRTifFloatNoSign}[\marg{arg}]
+  Same as \cs{MRTifFloatTF} but also returns \meta{false} for a leading sign.
+\end{describemacroTF}
+\dscremaininglines{3}
 
 \begin{describemacroTF}[G,N,GN]{MRTifContainsGroup}[\marg{arg}]
   Tests if \meta{arg} contains any braced groups.

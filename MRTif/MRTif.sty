@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.3}
-\newcommand*\MRTif@date{2018-11-07}
+\newcommand*\MRTif@version{0.0.4}
+\newcommand*\MRTif@date{2018-11-12}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -10,36 +10,50 @@
   ]
 \RequirePackage{pdftexcmds}
 
+% MRTif@fi macros >>>
+\long\def\MRTif@fiAa#1\fi#2#3{\fi#2}
+\long\def\MRTif@fiAb#1\fi#2#3{\fi#3}
+\long\def\MRTif@fiBa\fi#1#2{\fi#1}
+\long\def\MRTif@fiBb\fi#1#2{\fi#2}
+\long\def\MRTif@fiAy#1\fi#2{\fi#2}
+\long\def\MRTif@fiAn#1\fi#2{\fi}
+\long\def\MRTif@fiBy\fi#1{\fi#1}
+\long\def\MRTif@fiBn\fi#1{\fi}
+\long\def\MRTif@fifiAa#1\fi\fi#2#3{\fi#2}
+\long\def\MRTif@fifiAb#1\fi\fi#2#3{\fi#3}
+\long\def\MRTif@fifiBAa#1\fi\fi#2#3{\fi\fi#2}
+\long\def\MRTif@fifiBAb#1\fi\fi#2#3{\fi\fi#3}
+\long\def\MRTif@fifiBBa\fi\fi#1#2{\fi\fi#1}
+\long\def\MRTif@fifiBBb\fi\fi#1#2{\fi\fi#2}
+% <<<
+
 \edef\endMRTifargument{\detokenize{{.$^_&}{}}{.$^_&}{}UnlikelyString}
 \newcommand\MRTif@endMRTifargument[1]% >>>
   {%
     \ifx\endMRTifargument#1%
-      \expandafter\@firstoftwo
+      \MRTif@fiAa
     \else
-      \expandafter\@secondoftwo
+      \MRTif@fiBb
     \fi
   }% <<<
 
 \newcommand*\MRTif@groupify@TF[1]% >>>
   {%
-    \expandafter\newcommand\csname MRTif#1GTF\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1GTF\endcsname##1%
       {%
         \unexpanded{\MRTifGroupTF}{##1}%
-        {\unexpanded\expandafter{\csname MRTif#1GTF\endcsname}##1}%
-        {\unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}}%
+          {\unexpanded\expandafter{\csname MRTif#1GTF\endcsname}##1}%
+          {\unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}}%
       }%
   }% <<<
 \newcommand*\MRTif@create@TandF[1]% >>>
   {%
-    \expandafter\newcommand\csname MRTif#1T\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1T\endcsname##1%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}%
           {\noexpand\@firstofone}
           {\noexpand\@gobble}%
       }%
-    \expandafter\newcommand\csname MRTif#1F\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1F\endcsname##1%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}%
@@ -49,14 +63,12 @@
   }% <<<
 \newcommand*\MRTif@create@TandF@twoargs[1]% >>>
   {%
-    \expandafter\newcommand\csname MRTif#1T\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1T\endcsname##1##2%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}{##2}%
           {\noexpand\@firstofone}
           {\noexpand\@gobble}%
       }%
-    \expandafter\newcommand\csname MRTif#1F\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1F\endcsname##1##2%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}{##2}%
@@ -66,7 +78,6 @@
   }% <<<
 \newcommand*\MRTif@create@N@TandF[1]% >>>
   {%
-    \expandafter\newcommand\csname MRTif#1NTF\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1NTF\endcsname##1%
       {%
         \noexpand\expandafter
@@ -77,14 +88,12 @@
   }% <<<
 \newcommand*\MRTif@create@N@TandF@twoargs[1]% >>>
   {%
-    \expandafter\newcommand\csname MRTif#1NNTF\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1NNTF\endcsname##1##2%
       {%
         \noexpand\expandafter
         \expandafter\noexpand\csname MRTif#1NNTF@a\endcsname
         \noexpand\expandafter{##2}{##1}%
       }%
-    \expandafter\newcommand\csname MRTif#1NNTF@a\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1NNTF@a\endcsname##1##2%
       {%
         \noexpand\expandafter
@@ -92,7 +101,6 @@
         \noexpand\expandafter{##2}{##1}%
       }%
     \MRTif@create@TandF@twoargs{#1NN}%
-    \expandafter\newcommand\csname MRTif#1NnTF\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1NnTF\endcsname##1##2%
       {%
         \noexpand\expandafter
@@ -100,14 +108,12 @@
         \noexpand\expandafter{##1}{##2}%
       }%
     \MRTif@create@TandF@twoargs{#1Nn}%
-    \expandafter\newcommand\csname MRTif#1nNTF\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1nNTF\endcsname##1##2%
       {%
         \noexpand\expandafter
         \expandafter\noexpand\csname MRTif#1nNTF@a\endcsname
         \noexpand\expandafter{##2}{##1}%
       }%
-    \expandafter\newcommand\csname MRTif#1nNTF@a\endcsname{}%
     \expandafter\long\expandafter\edef\csname MRTif#1nNTF@a\endcsname##1##2%
       {%
         \expandafter\noexpand\csname MRTif#1TF\endcsname{##2}{##1}
@@ -139,25 +145,26 @@
       }%
   }% <<<
 % MRTifEmpty >>>
-\newcommand\MRTifEmptyTF[1]{% >>>
-  \if\relax\detokenize{#1}\relax
-    \expandafter\@firstoftwo
-  \else
-    \expandafter\@secondoftwo
-  \fi}
-% <<<
+\newcommand\MRTifEmptyTF[1]% >>>
+  {%
+    \if\relax\detokenize{#1}\relax
+      \MRTif@fiAa
+    \else
+      \MRTif@fiBb
+    \fi
+  }% <<<
 \newcommand\MRTifEmptyT[1]{% >>>
   \if\relax\detokenize{#1}\relax
-    \expandafter\@firstofone
+    \MRTif@fiAy
   \else
-    \expandafter\@gobble
+    \MRTif@fiBn
   \fi}
 % <<<
 \newcommand\MRTifEmptyF[1]{% >>>
   \if\relax\detokenize{#1}\relax
-    \expandafter\@gobble
+    \MRTif@fiAn
   \else
-    \expandafter\@firstofone
+    \MRTif@fiBy
   \fi}
 % <<<
 \newcommand\MRTifEmptyNTF[1]% >>>
@@ -171,16 +178,21 @@
 % <<<
 % MRTifGroup >>>
 \newcommand\MRTifGroupTF[1]% >>>
-  {\expandafter\MRTifGroup@a\romannumeral-`\.#1.{}\MRTifGroup@endargument}% <<<
-\newcommand\MRTifGroup@a{}% >>>
-\long\def\MRTifGroup@a#1#%
-  {\MRTifEmptyTF{#1}{\MRTifGroup@b}{\MRTifGroup@c}}% <<<
-\newcommand\MRTifGroup@b{}% >>>
-\long\def\MRTifGroup@b#1#2#3\MRTifGroup@endargument
-  {\MRTifEmptyTF{#3}{\@firstoftwo}{\@secondoftwo}}% <<<
-\newcommand\MRTifGroup@c{}% >>>
-\long\def\MRTifGroup@c#1\MRTifGroup@endargument
-  {\@secondoftwo}% <<<
+  {%
+    \expandafter\MRTifGroup@a\romannumeral-`\.#1.{}\MRTifGroup@endargument
+  }% <<<
+\long\def\MRTifGroup@a#1#% >>>
+  {%
+    \MRTifEmptyTF{#1}{\MRTifGroup@b}{\MRTifGroup@c}%
+  }% <<<
+\long\def\MRTifGroup@b#1#2#3\MRTifGroup@endargument% >>>
+  {%
+    \MRTifEmptyTF{#3}{\@firstoftwo}{\@secondoftwo}%
+  }% <<<
+\long\def\MRTifGroup@c#1\MRTifGroup@endargument% >>>
+  {%
+    \@secondoftwo
+  }% <<<
 \MRTif@create@TandF@N@TandF{Group}
 % <<<
 % MRTifGroupNoSpaces >>>
@@ -191,18 +203,13 @@
       {\@secondoftwo}
       {\@firstoftwo}
   }% <<<
-\newcommand\MRTifGroupNoSpaces@a{}
 \long\def\MRTifGroupNoSpaces@a#1\end@MRTifGroupNoSpaces@a{#1}
 \MRTif@create@TandF@N@TandF{GroupNoSpaces}
 % <<<
 % MRTifStringsMatch >>>
 \newcommand\MRTifStringsMatchTF[2]% >>>
   {%
-    \expandafter\MRTifStringsMatch@a\expandafter{\detokenize{#2}}{#1}
-  }% <<<
-\newcommand\MRTifStringsMatch@a[2]% >>>
-  {%
-    \expandafter\MRTifStringsMatchXXTF\expandafter{\detokenize{#2}}{#1}
+    \MRTifStringsMatchXXTF{\detokenize{#1}}{\detokenize{#2}}
   }% <<<
 \newcommand\MRTifStringsMatchGTF[2]% >>>
   {%
@@ -221,9 +228,9 @@
 \newcommand\MRTifStringsMatchXXTF[2]
   {%
     \ifnum\pdf@strcmp{#1}{#2}=0
-      \expandafter\@firstoftwo
+      \MRTif@fiAa
     \else
-      \expandafter\@secondoftwo
+      \MRTif@fiBb
     \fi
   }
 \newcommand\MRTifStringsMatchXXGTF[2]% >>>
@@ -247,12 +254,22 @@
         \MRTifOneToken@a#1.\end@MRTifOneTokenTF
       }%
   }% <<<
-\newcommand\MRTifOneToken@a{}% >>>
-\long\def\MRTifOneToken@a#1#2#3\end@MRTifOneTokenTF
-  {\MRTifEmptyTF{#3}}% <<<
+\long\def\MRTifOneToken@a#1#2#3\end@MRTifOneTokenTF% >>>
+  {%
+    \MRTifEmptyTF{#3}
+  }% <<<
 \MRTif@groupify@TF{OneToken}
 \MRTif@create@TandF@N@TandF{OneToken}
 \MRTif@create@TandF@N@TandF{OneTokenG}
+% <<<
+% MRTifOneTokenNoGroup>>>
+\newcommand\MRTifOneTokenNoGroupTF[1]% >>>
+  {%
+    \MRTifContainsGroupTF{#1}
+      {\@secondoftwo}
+      {\MRTifOneTokenTF{#1}}
+  }% <<<
+\MRTif@create@TandF@N@TandF{OneTokenNoGroup}
 % <<<
 % MRTifTwoToken >>>
 \newcommand\MRTifTwoTokenTF[1]% >>>
@@ -266,9 +283,10 @@
           }%
       }%
   }% <<<
-\newcommand\MRTifTwoToken@a{}% >>>
-\long\def\MRTifTwoToken@a#1#2#3#4\end@MRTifTwoTokenTF
-  {\MRTifEmptyTF{#4}}% <<<
+\long\def\MRTifTwoToken@a#1#2#3#4\end@MRTifTwoTokenTF% >>>
+  {%
+    \MRTifEmptyTF{#4}
+  }% <<<
 \MRTif@groupify@TF{TwoToken}
 \MRTif@create@TandF@N@TandF{TwoToken}
 \MRTif@create@TandF@N@TandF{TwoTokenG}
@@ -277,9 +295,9 @@
 \newcommand\MRTifNumTokenTF[2]% >>>
   {%
     \ifnum\MRTtllength{#2}=#1\relax
-      \expandafter\@firstoftwo
+      \MRTif@fiAa
     \else
-      \expandafter\@secondoftwo
+      \MRTif@fiBb
     \fi
   }% <<<
 \newcommand\MRTifNumTokenGTF[2]% >>>
@@ -340,9 +358,9 @@
     \newcommand\MRTifLetter@core[1]
       {%
         \ifcat\noexpand##1z%
-          \expandafter\@firstoftwo
+          \MRTif@fiAa
         \else
-          \expandafter\@secondoftwo
+          \MRTif@fiBb
         \fi
       }%
   }
@@ -379,9 +397,9 @@
         \MRTifOneTokenTF{#2}
           {%
             \ifx#1#2%
-              \expandafter\@firstoftwo
+              \MRTif@fiAa
             \else
-              \expandafter\@secondoftwo
+              \MRTif@fiBb
             \fi
           }
           {\@secondoftwo}%
@@ -394,79 +412,98 @@
 % MRTifDigit >>>
 \newcommand\MRTifDigitTF[1]% >>>
   {%
-    \MRTifOneTokenTF{#1}
+    \MRTifOneTokenNoGroupTF{#1}
       {\MRTifDigit@a{#1}}
       {\@secondoftwo}%
   }% <<<
 \newcommand\MRTifDigit@a[1]% >>>
   {%
-    \ifx0#1\expandafter\@secondoftwo
-    \else\ifx1#1\expandafter\@secondoftwo
-    \else\ifx2#1\expandafter\@secondoftwo
-    \else\ifx3#1\expandafter\@secondoftwo
-    \else\ifx4#1\expandafter\@secondoftwo
-    \else\ifx5#1\expandafter\@secondoftwo
-    \else\ifx6#1\expandafter\@secondoftwo
-    \else\ifx7#1\expandafter\@secondoftwo
-    \else\ifx8#1\expandafter\@secondoftwo
-    \else\ifx9#1\expandafter\@secondoftwo
-    \else\expandafter\@firstoftwo
-    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
-    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
-    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
-    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
-    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
-    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
-    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
-    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
-    \fi{\expandafter\@firstoftwo}{\expandafter\@secondoftwo}%
+    \ifx0#1\MRTif@fiAa
+    \else\MRTifDigit@b1#1%
+    \else\MRTifDigit@b2#1%
+    \else\MRTifDigit@b3#1%
+    \else\MRTifDigit@b4#1%
+    \else\MRTifDigit@b5#1%
+    \else\MRTifDigit@b6#1%
+    \else\MRTifDigit@b7#1%
+    \else\MRTifDigit@b8#1%
+    \else\MRTifDigit@b9#1%
+    \else\MRTif@fiBb
     \fi
-    \@secondoftwo\@firstoftwo
   }% <<<
-\MRTif@groupify@TF{Digit}
+\newcommand\MRTifDigit@b[2]% >>>
+  {%
+    \fi\ifx#1#2\MRTif@fiAa
+  }% <<<
+\newcommand\MRTifDigitGTF[1]% >>>
+  {%
+    \MRTifGroupTF{#1}
+      {\MRTifDigitGTF#1}
+      {%
+        \MRTifOneTokenTF{#1}
+          {\MRTifDigit@a{#1}}
+          {\@secondoftwo}%
+      }%
+  }% <<<
 \MRTif@create@TandF@N@TandF{Digit}
 \MRTif@create@TandF@N@TandF{DigitG}
 % <<<
 % MRTifNumber >>>
 \newcommand\MRTifNumberTF[1]% >>>
   {%
-    \MRTif@notEmpty@noGroup@noSpace{#1}
-      {\MRTifNumber@a#1\MRTifNumber@endargument}%
-  }% <<<
-\newcommand\MRTifNumber@a[1]% >>>
-  {%
-    \MRTifOneTokenTF{#1}
-      {\MRTifNumber@ifSign{#1}}
-      {\MRTifNumber@false}%
+    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifNumber@ifSign#1\endMRTifargument}%
   }% <<<
 \newcommand\MRTifNumber@ifSign[1]% >>>
   {%
-    \MRTifStringsMatchTF{#1}{+}
-      {\MRTifNumber@ifDigit}
-      {%
-        \MRTifStringsMatchTF{#1}{-}
-          {\MRTifNumber@ifDigit}
-          {\MRTifNumber@ifDigit{#1}}%
-      }%
+    \ifx+#1%
+      \MRTif@fifiAa
+    \else
+      \ifx-#1%
+        \MRTif@fifiBAa
+      \else
+        \MRTif@fifiBBb
+      \fi
+    \fi
+    {\MRTifNumber@ifDigit@noend}
+    {\MRTifNumber@ifDigit#1}
   }% <<<
 \newcommand\MRTifNumber@ifDigit[1]% >>>
   {%
-    \MRTifStringsMatchTF{#1}{\MRTifNumber@endargument}
+    \MRTif@endMRTifargument{#1}
       {\@firstoftwo}
       {%
-        \MRTifDigitTF{#1}
+        \MRTifDigit@a{#1}
           {\MRTifNumber@ifDigit}
           {\MRTifNumber@false}%
       }%
   }% <<<
-\newcommand\MRTifNumber@false{}% >>>
-\long\def\MRTifNumber@false#1\MRTifNumber@endargument
+\newcommand\MRTifNumber@ifDigit@noend[1]% >>>
   {%
-    \expandafter\@secondoftwo
+    \MRTif@endMRTifargument{#1}
+      {\@secondoftwo}
+      {%
+        \MRTifDigit@a{#1}
+          {\MRTifNumber@ifDigit}
+          {\MRTifNumber@false}%
+      }%
+  }% <<<
+\long\def\MRTifNumber@false#1\endMRTifargument% >>>
+  {%
+    \@secondoftwo
   }% <<<
 \MRTif@groupify@TF{Number}
 \MRTif@create@TandF@N@TandF{Number}
 \MRTif@create@TandF@N@TandF{NumberG}
+% <<<
+% MRTifNumberNoSign >>>
+\newcommand\MRTifNumberNoSignTF[1]% >>>
+  {%
+    \MRTif@notEmpty@noGroup@noSpace{#1}
+      {\MRTifNumber@ifDigit#1\endMRTifargument}%
+  }% <<<
+\MRTif@groupify@TF{NumberNoSign}
+\MRTif@create@TandF@N@TandF{NumberNoSign}
+\MRTif@create@TandF@N@TandF{NumberNoSignG}
 % <<<
 % MRTifFloat >>>
 \newcommand\MRTifFloatTF[1]% >>>
@@ -479,63 +516,65 @@
 \def\MRTif@zz
   {%
     \endgroup
-    \newcommand\MRTifFloat@a[1]
+    \newcommand\MRTifFloat@a[1]% >>>
       {%
-        \MRTifFloat@ifDot##1.?\MRTifFloat@endargument
-          {\MRTifFloat@withDot{##1}}
-          {\MRTifNumberTF{##1}}%
-      }%
-    \newcommand\MRTifFloat@ifDot{}%
-    \long\def\MRTifFloat@ifDot##1.##2\MRTifFloat@endargument
+        \MRTifFloat@ifDot{##1}
+          {\MRTifFloat@withDot##1\MRTifFloat@endargument}
+          {\MRTifNumber@ifSign##1\endMRTifargument}%
+      }% <<<
+    \newcommand\MRTifFloat@ifDot[1]% >>>
       {%
-        \ifx?##2
-          \expandafter\@secondoftwo
+        \MRTifFloat@ifDot@a##1.?\MRTifFloat@endargument
+      }% <<<
+    \long\def\MRTifFloat@ifDot@a##1.##2\MRTifFloat@endargument% >>>
+      {%
+        \ifx?##2%
+          \MRTif@fiAb
         \else
-          \expandafter\@firstoftwo
+          \MRTif@fiBa
         \fi
-      }%
+      }% <<<
   }
 \MRTif@zz
 % <<<
-\newcommand\MRTifFloat@withDot[1]% >>>
-  {%
-    \MRTifFloat@withDot@a#1\MRTifFloat@endargument
-  }% <<<
-\newcommand\MRTifFloat@withDot@a{}% >>>
-\long\def\MRTifFloat@withDot@a#1.#2\MRTifFloat@endargument
+\long\def\MRTifFloat@withDot#1.#2\MRTifFloat@endargument% >>>
   {%
     \MRTifEmptyTF{#1}
+      {\MRTifNumber@ifDigit@noend#2\endMRTifargument}
       {%
-        \MRTifFloat@noSign#2\MRTifFloat@endargument
-      }
-      {%
-        \MRTifNumberTF{#1}
-          {\MRTifFloat@noSign#2\MRTifFloat@endargument}
-          {\@secondoftwo}%
-      }%
-  }% <<<
-\newcommand\MRTifFloat@noSign{}% >>>
-\long\def\MRTifFloat@noSign#1#2\MRTifFloat@endargument
-  {%
-    \MRTifEmptyTF{#1}
-      {\@secondoftwo}
-      {%
-        \MRTifOneTokenTF{#1}
-          {%
-            \MRTifStringsMatchTF{#1}{+}
-              {\@secondoftwo}
-              {%
-                \MRTifStringsMatchTF{#1}{-}
-                  {\@secondoftwo}
-                  {\MRTifNumberTF{#1#2}}%
-              }%
-          }
+        \MRTifNumber@ifSign#1\endMRTifargument
+          {\MRTifNumber@ifDigit#2\endMRTifargument}
           {\@secondoftwo}%
       }%
   }% <<<
 \MRTif@groupify@TF{Float}
 \MRTif@create@TandF@N@TandF{Float}
 \MRTif@create@TandF@N@TandF{FloatG}
+% <<<
+% MRTifFloatNoSign >>>
+\newcommand\MRTifFloatNoSignTF[1]% >>>
+  {%
+    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloatNoSpace@a{#1}}
+  }% <<<
+\newcommand\MRTifFloatNoSpace@a[1]% >>>
+  {%
+    \MRTifFloat@ifDot{#1}
+      {\MRTifFloatNoSign@withDot#1\MRTifFloatNoSign@endargument}
+      {\MRTifNumber@ifDigit@noend#1\endMRTifargument}%
+  }% <<<
+\long\def\MRTifFloatNoSign@withDot#1.#2\MRTifFloatNoSign@endargument% >>>
+  {%
+    \MRTifEmptyTF{#1}
+      {\MRTifNumber@ifDigit@noend#2\endMRTifargument}
+      {%
+        \MRTifNumber@ifDigit@noend#1\endMRTifargument
+          {\MRTifNumber@ifDigit#2\endMRTifargument}
+          {\@secondoftwo}%
+      }%
+  }% <<<
+\MRTif@groupify@TF{FloatNoSign}
+\MRTif@create@TandF@N@TandF{FloatNoSign}
+\MRTif@create@TandF@N@TandF{FloatNoSignG}
 % <<<
 % MRTifContainsGroup >>>
 \newcommand\MRTifContainsGroupTF[1]% >>>
@@ -544,10 +583,8 @@
       \MRTifContainsGroup@eat#1{}%
     \MRTifContainsGroup@endargument
   }% <<<
-\newcommand\MRTifContainsGroup@eat{}% >>>
-\long\def\MRTifContainsGroup@eat#1#{}% <<<
-\newcommand\MRTifContainsGroup@a{}% >>>
-\long\def\MRTifContainsGroup@a#1\MRTifContainsGroup@endargument
+\long\def\MRTifContainsGroup@eat#1#{}
+\long\def\MRTifContainsGroup@a#1\MRTifContainsGroup@endargument% >>>
   {%
     \MRTifEmptyTF{#1}
       {\@secondoftwo}
@@ -564,14 +601,12 @@
       \MRTifContainsSpace@eat#1
     \MRTifContainsSpace@endargument
   }% <<<
-\newcommand\MRTifContainsSpace@a{}% >>>
-\long\def\MRTifContainsSpace@a#1\MRTifContainsSpace@endargument
+\long\def\MRTifContainsSpace@a#1\MRTifContainsSpace@endargument% >>>
   {%
     \MRTifEmptyTF{#1}
       {\@secondoftwo}
       {\@firstoftwo}%
   }% <<<
-\newcommand\MRTifContainsSpace@eat{}% 
 \long\def\MRTifContainsSpace@eat#1 {}
 \MRTif@groupify@TF{ContainsSpace}
 \MRTif@create@TandF@N@TandF{ContainsSpace}
