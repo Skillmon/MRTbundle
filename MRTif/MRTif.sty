@@ -273,6 +273,42 @@
 \MRTif@create@TandF@N@TandF{TwoToken}
 \MRTif@create@TandF@N@TandF{TwoTokenG}
 % <<<
+% MRTifNumToken>>>
+\newcommand\MRTifNumTokenTF[2]% >>>
+  {%
+    \ifnum\MRTtllength{#2}=#1\relax
+      \expandafter\@firstoftwo
+    \else
+      \expandafter\@secondoftwo
+    \fi
+  }% <<<
+\newcommand\MRTifNumTokenGTF[2]% >>>
+  {%
+    \MRTifGroupTF{#2}
+      {\MRTifNumTokenGTF{#1}#2}
+      {\MRTifNumTokenTF{#1}{#2}}
+  }% <<<
+\newcommand\MRTifNumTokenN@[2]% >>>
+  {%
+    \MRTifNumTokenTF{#2}{#1}%
+  }% <<<
+\newcommand\MRTifNumTokenNTF[2]% >>>
+  {%
+    \expandafter\MRTifNumTokenN@\expandafter{#2}{#1}%
+  }% <<<
+\newcommand\MRTifNumTokenGN@[2]% >>>
+  {%
+    \MRTifNumTokenGTF{#2}{#1}%
+  }% <<<
+\newcommand\MRTifNumTokenGNTF[2]% >>>
+  {%
+    \expandafter\MRTifNumTokenGN@\expandafter{#2}{#1}%
+  }% <<<
+\MRTif@create@TandF@twoargs{NumToken}
+\MRTif@create@TandF@twoargs{NumTokenG}
+\MRTif@create@TandF@twoargs{NumTokenN}
+\MRTif@create@TandF@twoargs{NumTokenGN}
+% <<<
 % MRTifLetter >>>
 \newcommand\MRTifLetterTF[1]% >>>
   {%

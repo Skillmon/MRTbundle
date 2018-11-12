@@ -49,6 +49,14 @@ the first and second argument, respectively, an expansion is made.
 \end{describemacroTF}
 \dscremaininglines{3}
 
+\begin{describemacroTF}[G,N,GN]{MRTifNumToken}[\marg{num}\marg{arg}]
+  Tests if \meta{arg} is exactly \meta{num} tokens long. It uses
+  \cs{MRTtllength} internally. Compared to \cs{MRTifOneToken} and
+  \cs{MRTifTwoToken} this macro takes longer and the longer the tested
+  \meta{arg} the longer it takes. The |G| and |N| variants only work on
+  \meta{arg}, \meta{num} will not be changed.
+\end{describemacroTF}
+
 \begin{describemacroTF}[G,N,GN]{MRTifLetter}[\marg{arg}]
   Tests if \meta{arg} is a letter, meaning of category code 11.
 \end{describemacroTF}

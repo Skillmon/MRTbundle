@@ -239,10 +239,12 @@
     }% <<<
   \newcommand*\MRTsfacc@ifknown[1]% >>>
     {%
-      \begingroup\expandafter\expandafter\expandafter\endgroup
+      \begingroup
       \expandafter\ifx\csname\MRTsfacc@shift{#1}\endcsname\relax
+        \endgroup
         \expandafter\@secondoftwo
       \else
+        \endgroup
         \expandafter\@firstoftwo
       \fi
     }% <<<
