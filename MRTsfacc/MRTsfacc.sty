@@ -12,10 +12,11 @@
 \RequirePackage{MRTif}
 \RequirePackage{amsmath}
 
-\providecommand\@firstofthree[3]{#1}
-\providecommand\@secondofthree[3]{#2}
-\providecommand\@thirdofthree[3]{#3}
+\long\def\MRTsfacc@fifiATa#1\fi\fi#2#3#4{\fi#2}
+\long\def\MRTsfacc@fifiBATb#1\fi\fi#2#3#4{\fi\fi#3}
+\long\def\MRTsfacc@fifiBBTc\fi\fi#1#2#3{\fi\fi#3}
 
+%% Package options >>>
 \def\MRTsfacc@share{0.25}
 \newcommand\MRTsfaccSet[1]%>>>
   {%
@@ -40,8 +41,9 @@
 \DeclareOption{notest}{\@MRTsfacc@notest@true}
 \DeclareOption*{\expandafter\MRTsfaccSet\expandafter{\CurrentOption}}
 \ProcessOptions\relax
+% <<<
 
-% Test whether \mathaccentV has the correct meaning >>>
+%% Test whether \mathaccentV has the correct meaning >>>
 \if@MRTsfacc@notest@
 \else
   % this is amsmath's definition of \mathaccentV (2018-06-11)
@@ -91,12 +93,13 @@
 \fi
 % <<<
 
-\newcommand\MRTsfacc@mathaccentV[5]% >>>
+\newcommand\MRTsfacc@mathaccentV[4]% >>>
   {%
     \global\let\macc@nucleus\@empty
-    \mathaccent"\accentclass@#2#3#4{#5}\macc@nucleus
+    \mathaccent"\accentclass@#1#2#3{#4}\macc@nucleus
   }% <<<
 
+%% Test for nested mathaccentV with known argument >>>
 \newif\if@MRTsfacc@found@known@
 \edef\MRTsfacc@mathaccentV@detokenized{\detokenize{\mathaccentV}}
 \long\def\MRTsfacc@mathaccentV@using@inner#1 #2 #3\endMRTsfacc@arg% >>>
@@ -122,9 +125,9 @@
             $#2$%
           }%
         \if@MRTsfacc@found@known@
-          \expandafter\@firstoftwo
+          \MRTif@fiAa
         \else
-          \expandafter\@secondoftwo
+          \MRTif@fiBb
         \fi
       }
       {\@secondoftwo}%
@@ -144,16 +147,13 @@
               {\@secondoftwo}%
           }
           {\@secondoftwo}%
-          {%
-            #5%
-          }
-          {%
-            \global\@MRTsfacc@found@known@false
-          }%
+          {#5}
+          {\global\@MRTsfacc@found@known@false}%
       }%
   }% <<<
+% <<<
 
-% stupid package for math font is stupid. Have to cure the sickness >>>
+%% stupid package for math font is stupid. Have to cure the sickness >>>
 \if@MRTsfacc@height@
 % true >>>
   \newcommand*\MRTsfacc@patch@mathaccentV% >>>
@@ -161,11 +161,11 @@
       \protected\long\def\mathaccentV##1##2##3##4% >>>
         {%
           \ifmmode
-            \def\mathaccentV@args{{##1}{##2}{##3}{##4}}%
-            \expandafter\@firstofone
+            \def\mathaccentV@args{{##2}{##3}{##4}}%
+            \MRTif@fiAy
           \else
             \@xp\nonmatherr@\csname ##1\endcsname
-            \expandafter\@gobble
+            \MRTif@fiBn
           \fi
           {\futurelet\next\mathaccentV@a}%
         }% <<<
@@ -178,42 +178,42 @@
   \newcommand*\mathaccentV@a[1]% >>>
     {%
       \expandafter\ifx\next!%
-        \expandafter\@firstofthree
+        \MRTsfacc@fifiATa
       \else
         \expandafter\ifx\next*%
-          \expandafter\expandafter\expandafter\@secondofthree
+          \MRTsfacc@fifiBATb
         \else
-          \expandafter\expandafter\expandafter\@thirdofthree
+          \MRTsfacc@fifiBBTc
         \fi
       \fi
       {\expandafter\MRTsfacc@mathaccentV\mathaccentV@args}
       {\expandafter\mathaccentV@shifted\mathaccentV@args}
       {\expandafter\mathaccentV@b\mathaccentV@args{#1}}%
     }% <<<
-  \newcommand*\mathaccentV@b[5]% >>>
+  \newcommand*\mathaccentV@b[4]% >>>
     {%
-      \MRTifLetterGTF{#5}
-        {\mathaccentV@shifted{#1}{#2}{#3}{#4}{#5}}
+      \MRTifLetterGTF{#4}
+        {\mathaccentV@shifted{#1}{#2}{#3}{#4}}
         {%
-          \MRTsfacc@testnest\MRTifLetterGTF{#5}
-            {\mathaccentV@shifted{#1}{#2}{#3}{#4}{#5}}
-            {\MRTsfacc@mathaccentV{#1}{#2}{#3}{#4}{#5}}%
+          \MRTsfacc@testnest\MRTifLetterGTF{#4}
+            {\mathaccentV@shifted{#1}{#2}{#3}{#4}}
+            {\MRTsfacc@mathaccentV{#1}{#2}{#3}{#4}}%
         }%
     }% <<<
-  \newcommand*\mathaccentV@shifted[5]% >>>
+  \newcommand*\mathaccentV@shifted[4]% >>>
     {%
       \mathchoice
-        {\mathaccentV@shifted@a{display}{#1}{#2}{#3}{#4}{#5}}
-        {\mathaccentV@shifted@a{text}{#1}{#2}{#3}{#4}{#5}}
-        {\mathaccentV@shifted@a{script}{#1}{#2}{#3}{#4}{#5}}
-        {\mathaccentV@shifted@a{scriptscript}{#1}{#2}{#3}{#4}{#5}}%
+        {\mathaccentV@shifted@a{display}{#1}{#2}{#3}{#4}}
+        {\mathaccentV@shifted@a{text}{#1}{#2}{#3}{#4}}
+        {\mathaccentV@shifted@a{script}{#1}{#2}{#3}{#4}}
+        {\mathaccentV@shifted@a{scriptscript}{#1}{#2}{#3}{#4}}%
     }% <<<
-  \newcommand*\mathaccentV@shifted@a[6]% >>>
+  \newcommand*\mathaccentV@shifted@a[5]% >>>
     {%
-      \setbox\MRTsfacc@box\hbox{$\csname #1style\endcsname#6$}%
-      \MRTsfacc@mathaccentV{#2}{#3}{#4}{#5}%
+      \setbox\MRTsfacc@box\hbox{$\csname #1style\endcsname#5$}%
+      \MRTsfacc@mathaccentV{#2}{#3}{#4}%
         {%
-          #6%
+          #5%
           \kern\MRTsfacc@kern
         }%
       \kern-\MRTsfacc@kern
@@ -225,15 +225,15 @@
       \protected\def\mathaccentV##1##2##3##4% >>>
         {%
           \ifmmode
-            \expandafter\@firstofone
+            \MRTif@fiAy
           \else
             \@xp\nonmatherr@\csname ##1\endcsname
-            \expandafter\@gobble
+            \MRTif@fiBn
           \fi
           {%
             \@ifnextchar[%]
-              {\mathaccentV@b{##1}{##2}{##3}{##4}}
-              {\mathaccentV@a{##1}{##2}{##3}{##4}}%
+              {\mathaccentV@b{##2}{##3}{##4}}
+              {\mathaccentV@a{##2}{##3}{##4}}%
           }%
         }% <<<
     }% <<<
@@ -242,50 +242,50 @@
       \begingroup
       \expandafter\ifx\csname\MRTsfacc@shift{#1}\endcsname\relax
         \endgroup
-        \expandafter\@secondoftwo
+        \MRTif@fiAb
       \else
         \endgroup
-        \expandafter\@firstoftwo
+        \MRTif@fiBa
       \fi
     }% <<<
-  \newcommand*\MRTsfacc@mathaccentV@shifted@expandhelper[6]% >>>
+  \newcommand*\MRTsfacc@mathaccentV@shifted@expandhelper[5]% >>>
     {%
-      \mathaccentV@shifted{#2}{#3}{#4}{#5}
-        {\csname\MRTsfacc@shift{#1}\endcsname}{#6}%
+      \mathaccentV@shifted{#2}{#3}{#4}
+        {\csname\MRTsfacc@shift{#1}\endcsname}{#5}%
     }% <<<
-  \newcommand\mathaccentV@a[5]% >>>
+  \newcommand\mathaccentV@a[4]% >>>
     {%
-      \MRTsfacc@ifknown{#5}
+      \MRTsfacc@ifknown{#4}
         {%
-          \mathaccentV@shifted{#1}{#2}{#3}{#4}
-            {\csname\MRTsfacc@shift{#5}\endcsname}{#5}%
+          \mathaccentV@shifted{#1}{#2}{#3}
+            {\csname\MRTsfacc@shift{#4}\endcsname}{#4}%
         }%
         {%
-          \MRTsfacc@testnest\MRTsfacc@ifknown{#5}
+          \MRTsfacc@testnest\MRTsfacc@ifknown{#4}
             {%
               \expandafter\MRTsfacc@mathaccentV@shifted@expandhelper\expandafter
-                {\MRTsfacc@known}{#1}{#2}{#3}{#4}{#5}%
+                {\MRTsfacc@known}{#1}{#2}{#3}{#4}%
             }
-            {\MRTsfacc@mathaccentV{#1}{#2}{#3}{#4}{#5}}%
+            {\MRTsfacc@mathaccentV{#1}{#2}{#3}{#4}}%
         }%
     }% <<<
-  \long\def\mathaccentV@b#1#2#3#4[#5]#6% >>>
+  \long\def\mathaccentV@b#1#2#3[#4]#5% >>>
     {%
-      \MRTsfacc@ifknown{#5}
+      \MRTsfacc@ifknown{#4}
         {%
-          \mathaccentV@shifted{#1}{#2}{#3}{#4}
-            {\csname\MRTsfacc@shift{#5}\endcsname}{#6}%
+          \mathaccentV@shifted{#1}{#2}{#3}
+            {\csname\MRTsfacc@shift{#4}\endcsname}{#5}%
         }
-        {\mathaccentV@shifted{#1}{#2}{#3}{#4}{#5}{#6}}%
+        {\mathaccentV@shifted{#1}{#2}{#3}{#4}{#5}}%
     }% <<<
-  \newcommand\mathaccentV@shifted[6]% >>>
+  \newcommand\mathaccentV@shifted[5]% >>>
     {%
-      \MRTsfacc@mathaccentV{#1}{#2}{#3}{#4}
+      \MRTsfacc@mathaccentV{#1}{#2}{#3}
         {%
-          #6%
-          \mkern#5\relax
+          #5%
+          \mkern#4\relax
         }
-      \mkern-#5\relax
+      \mkern-#4\relax
     }% <<<
   \newcommand*\MRTsfacc@shift[1]% >>>
     {%
@@ -317,6 +317,7 @@
 % <<<
 \fi
 % <<<
+
 \AtBeginDocument{\MRTsfacc@patch@mathaccentV}
 
 
