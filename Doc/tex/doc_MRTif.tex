@@ -11,6 +11,18 @@ takes two arguments ends with \texttt{NN} prior to the \tfarg\ in both arguments
 the first token is expanded once, \texttt{Nn} and \texttt{nN} mean that only for
 the first and second argument, respectively, an expansion is made.
 
+\pkg{MRTif} uses a special marker in some of its tests which expands to the
+undefined control sequence
+\begin{center}
+  \ttfamily
+  \detokenize\expandafter\expandafter\expandafter
+    {\csname endMRTif@argument\endcsname}%
+\end{center}
+If you ever see this in your log or console output, please contact me as stated
+in \autoref{sec:bugs} and include a minimal example producing this behaviour in
+your contacting. Please do the same if you get any other undefined control
+sequence errors containing \texttt{MRTif} in the control sequences' name.
+
 \section{Macros}
 \begin{describemacroTF}[G,N,GN]{MRTifEmpty}[\marg{arg}]
   Tests if \meta{arg} is completely empty.

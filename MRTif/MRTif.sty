@@ -27,10 +27,10 @@
 \long\def\MRTif@fifiBBb\fi\fi#1#2{\fi\fi#2}
 % <<<
 
-\edef\endMRTifargument{\detokenize{{.$^_&}{}}{.$^_&}{}UnlikelyString}
-\newcommand\MRTif@endMRTifargument[1]% >>>
+\def\endMRTif@argument{\MRTif@IfYouSeeThisContactTheMaintainer}
+\newcommand\MRTif@endMRTif@argument[1]% >>>
   {%
-    \ifx\endMRTifargument#1%
+    \ifx\endMRTif@argument#1%
       \MRTif@fiAa
     \else
       \MRTif@fiBb
@@ -451,7 +451,9 @@
 % MRTifNumber >>>
 \newcommand\MRTifNumberTF[1]% >>>
   {%
-    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifNumber@ifSign#1\endMRTifargument}%
+    \MRTif@notEmpty@noGroup@noSpace
+      {#1}
+      {\MRTifNumber@ifSign#1\endMRTif@argument}%
   }% <<<
 \newcommand\MRTifNumber@ifSign[1]% >>>
   {%
@@ -469,7 +471,7 @@
   }% <<<
 \newcommand\MRTifNumber@ifDigit[1]% >>>
   {%
-    \MRTif@endMRTifargument{#1}
+    \MRTif@endMRTif@argument{#1}
       {\@firstoftwo}
       {%
         \MRTifDigit@a{#1}
@@ -479,7 +481,7 @@
   }% <<<
 \newcommand\MRTifNumber@ifDigit@noend[1]% >>>
   {%
-    \MRTif@endMRTifargument{#1}
+    \MRTif@endMRTif@argument{#1}
       {\@secondoftwo}
       {%
         \MRTifDigit@a{#1}
@@ -487,7 +489,7 @@
           {\MRTifNumber@false}%
       }%
   }% <<<
-\long\def\MRTifNumber@false#1\endMRTifargument% >>>
+\long\def\MRTifNumber@false#1\endMRTif@argument% >>>
   {%
     \@secondoftwo
   }% <<<
@@ -499,7 +501,7 @@
 \newcommand\MRTifNumberNoSignTF[1]% >>>
   {%
     \MRTif@notEmpty@noGroup@noSpace{#1}
-      {\MRTifNumber@ifDigit#1\endMRTifargument}%
+      {\MRTifNumber@ifDigit#1\endMRTif@argument}%
   }% <<<
 \MRTif@groupify@TF{NumberNoSign}
 \MRTif@create@TandF@N@TandF{NumberNoSign}
@@ -520,7 +522,7 @@
       {%
         \MRTifFloat@ifDot{##1}
           {\MRTifFloat@withDot##1\MRTifFloat@endargument}
-          {\MRTifNumber@ifSign##1\endMRTifargument}%
+          {\MRTifNumber@ifSign##1\endMRTif@argument}%
       }% <<<
     \newcommand\MRTifFloat@ifDot[1]% >>>
       {%
@@ -540,10 +542,10 @@
 \long\def\MRTifFloat@withDot#1.#2\MRTifFloat@endargument% >>>
   {%
     \MRTifEmptyTF{#1}
-      {\MRTifNumber@ifDigit@noend#2\endMRTifargument}
+      {\MRTifNumber@ifDigit@noend#2\endMRTif@argument}
       {%
-        \MRTifNumber@ifSign#1\endMRTifargument
-          {\MRTifNumber@ifDigit#2\endMRTifargument}
+        \MRTifNumber@ifSign#1\endMRTif@argument
+          {\MRTifNumber@ifDigit#2\endMRTif@argument}
           {\@secondoftwo}%
       }%
   }% <<<
@@ -560,15 +562,15 @@
   {%
     \MRTifFloat@ifDot{#1}
       {\MRTifFloatNoSign@withDot#1\MRTifFloatNoSign@endargument}
-      {\MRTifNumber@ifDigit@noend#1\endMRTifargument}%
+      {\MRTifNumber@ifDigit@noend#1\endMRTif@argument}%
   }% <<<
 \long\def\MRTifFloatNoSign@withDot#1.#2\MRTifFloatNoSign@endargument% >>>
   {%
     \MRTifEmptyTF{#1}
-      {\MRTifNumber@ifDigit@noend#2\endMRTifargument}
+      {\MRTifNumber@ifDigit@noend#2\endMRTif@argument}
       {%
-        \MRTifNumber@ifDigit@noend#1\endMRTifargument
-          {\MRTifNumber@ifDigit#2\endMRTifargument}
+        \MRTifNumber@ifDigit@noend#1\endMRTif@argument
+          {\MRTifNumber@ifDigit#2\endMRTif@argument}
           {\@secondoftwo}%
       }%
   }% <<<
@@ -620,13 +622,13 @@
 % MRTtllength >>>
 \newcommand\MRTtllength@inner[1]% >>>
   {%
-    \MRTif@endMRTifargument{#1}
+    \MRTif@endMRTif@argument{#1}
       {\relax}
       {+1\MRTtllength@inner}%
   }% <<<
 \newcommand\MRTtllength[1]% >>>
   {%
-    \the\numexpr0\MRTtllength@inner#1\endMRTifargument
+    \the\numexpr0\MRTtllength@inner#1\endMRTif@argument
   }% <<<
 \newcommand\MRTtllengthN[1]% >>>
   {%
