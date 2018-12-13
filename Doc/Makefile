@@ -50,4 +50,4 @@ cleansubfoldertex: # {{{
 	-cd $(TEXF); rm $(shell cd $(TEXF); find * | grep -v tex);
 # }}}
 cleanimg:
-	cd $(IMGF)); make clean
+	cd $(IMGF); make clean
