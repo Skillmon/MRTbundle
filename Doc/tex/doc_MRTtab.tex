@@ -286,6 +286,16 @@ provided:
   vertical skip which reveals the lines (issuing
   \verb|\noalign{\vskip\arrayrulewidth}|).  It is also used by \cs{MRTcline}.
 \end{describemacro}
+
+\begin{describemacro}{MRTtabRepeatCols}
+  This macro is to be used in column definitions of \env{tabular}s or
+  \env{array}s and other macros and environments using these internally (e.g.
+  \env{MRTtabular} and \env{MRTtable}). The effect is that the column
+  definitions which follow this macro are repeated indefinitely to match the
+  required columns for the tables body. E.g., \bverb|l \MRTtabRepeatCols c| does
+  set the first column left aligned and every following column centred. It has
+  to be preceded by at least one valid column definition.
+\end{describemacro}
 %<<<
 
 \section{Options}\label{sec:tab:options}%>>>

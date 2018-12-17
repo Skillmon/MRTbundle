@@ -27,7 +27,7 @@
 
 %% package variables >>>
 %%=============================================================================
-\newcolumntype{?}{!{\d@llarend&\span\@gobbletwo}}
+\newcolumntype{\MRTtabRepeatCols}{!{\d@llarend&\span\@gobbletwo}}
 \definecolor{tablegray}{gray}{0.85}
 \tl_new:N  \l_MRTtab_tmpa_tl
 \int_new:N \l_MRTtab_tmpa_int
@@ -141,7 +141,7 @@
     ,caption         .tl_set:N           = \l_MRTtab_table_cap_tl
     ,cap             .meta:n             = { caption = { #1 } }
     ,columns         .tl_set:N           = \l_MRTtab_table_col_tl
-    ,columns         .initial:n          = { l?c }
+    ,columns         .initial:n          = { l\MRTtabRepeatCols c }
     ,col             .meta:n             = { columns = { #1 } }
     ,env~begin       .tl_set:N           = \l__MRTtab_env_begin_tl
     ,env~end         .tl_set:N           = \l__MRTtab_env_end_tl
