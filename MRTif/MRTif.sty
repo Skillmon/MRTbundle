@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.4}
-\newcommand*\MRTif@date{2018-11-12}
+\newcommand*\MRTif@version{0.0.5}
+\newcommand*\MRTif@date{2019-01-08}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -636,5 +636,56 @@
   }% <<<
 % <<<
 
+% MRTifFexp >>>
+\newcommand\MRTif@endfexp@gobble[1]{ }
+\newcommand\MRTif@endfexp@firstofone[1]{ #1}
+\newcommand\MRTif@endfexp@firstoftwo[2]{ #1}
+\newcommand\MRTif@endfexp@secondoftwo[2]{ #2}
+\newcommand\MRTifFexp[1]% >>>
+  {%
+    \romannumeral-`\0\expandafter\MRTifFexp@a
+    \romannumeral-`\0#1{\MRTifFexp@b} \MRTifFexp@c
+  }% <<<
+\newcommand\MRTifFexp@a[1]% >>>
+  {%
+    \ifx\MRTifFexp@c#1%
+      \MRTif@fiAa
+    \else
+      \MRTif@fiBb
+    \fi
+    {%
+      \MRTif@endfexp@gobble
+    }
+    {%
+      #1%
+    }
+  }% <<<
+\newcommand\MRTifFexp@b[1]% >>>
+  {%
+    \ifx\MRTifFexp@c#1%
+      \MRTif@fiAa
+    \else
+      \MRTif@fiBb
+    \fi
+    { % space ending the inner \romannumeral
+      \MRTif@endfexp@firstofone
+    }
+    { % space ending the inner \romannumeral
+      \MRTif@endfexp@firstoftwo{#1}%
+    }%
+  }% <<<
+\newcommand\MRTifFexp@c% >>>
+  { % space ending the inner \romannumeral
+    \MRTif@endfexp@secondoftwo
+  }% <<<
+\newcommand\MRTifFexpII[1]% >>>
+  {%
+    \romannumeral-`\0#1\MRTif@endfexp@firstoftwo\MRTif@endfexp@secondoftwo
+  }% <<<
+\newcommand\MRTifFexpI[1]% >>>
+  {%
+    \romannumeral-`\0#1\MRTif@endfexp@secondoftwo\MRTif@endfexp@gobble
+  }% <<<
+% <<<
 \endinput
 % vim: fdm=marker foldmarker=>>>,<<< ft=tex

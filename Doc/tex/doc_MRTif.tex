@@ -21,7 +21,7 @@ undefined control sequence
 If you ever see this in your log or console output, please contact me as stated
 in \autoref{sec:bugs} and include a minimal example producing this behaviour in
 your contacting. Please do the same if you get any other undefined control
-sequence errors containing \texttt{MRTif} in the control sequences' name.
+sequence errors containing \texttt{MRTif} in the control sequence's name.
 
 \section{Macros}
 \begin{describemacroTF}[G,N,GN]{MRTifEmpty}[\marg{arg}]
@@ -132,6 +132,41 @@ sequence errors containing \texttt{MRTif} in the control sequences' name.
   Expands to the number of tokens or groups inside of \meta{arg}. Unprotected
   spaces are ignored. The ordinary version needs two expansions while the |N|
   version needs four.
+\end{describemacro}
+
+\begin{describemacro}{MRTifFexp,MRTifFexpI,MRTifFexpII}%
+  [\marg{MRTif test}\meta{branches}]
+  These macros take an arbitrary expandable test and expand it in exactly two
+  steps of expansion. \cs{MRTifFexp} can be applied to any test, while
+  \cs{MRTifFexpI} is meant to be used for tests having only one -- a true or a
+  false -- branch and \cs{MRTifFexpII} is meant to be used for tests having two
+  branches. \meta{MRTif test} doesn't necessarily have to be a test provided by
+  \pkg{MRTif} but can be any fully expandable test. Inside of \meta{MRTif test}
+  all the arguments necessary for the test should be contained but not the true
+  or false branch. An example:\\[\smallskipamount]
+  \mbox{}\hfill\begin{tabular}{@{}l@{}}
+    \verb|\MRTifFexp{\MRTifEmptyF{abc}}{false}|          \\
+    \verb|\MRTifFexp{\MRTifEmptyTF{abc}}{true}{false}|   \\
+    \verb|\MRTifFexpI{\MRTifEmptyF{abc}}{false}|         \\
+    \verb|\MRTifFexpII{\MRTifEmptyTF{abc}}{true}{false}| \\
+  \end{tabular}\hfill\mbox{}%
+  \\[\smallskipamount]
+  all expand to |false| after exactly two steps of expansion. \cs{MRTifFexpI}
+  and \cs{MRTifFexpII} are more than thrice as fast as \cs{MRTifFexp} and of
+  course each test takes longer with these added than without.%
+  \footnote
+    {%
+      Benchmarking done with \hologo{pdfTeX}, version 3.14159265-2.6-1.40.19
+      (\TeX\ Live 2018), on an Intel\textregistered\ Core\texttrademark\
+      \mbox{i5-2540M} with \cs{MRTifEmptyT} and \cs{MRTifEmptyTF} utilizing the
+      \pkg{l3benchmark} package. To give some numbers: 2~\cs{MRTifFexpI} and
+      2~\cs{MRTifFexpII} added roughly \SI{1.2}{\micro\second} to the compile
+      time of \SI{1.8}{\micro\second} for 2~\cs{MRTifEmptyT} and
+      2~\cs{MRTifEmptyTF} tests, each once empty and once not with empty
+      branches, while 4~\cs{MRTifFexp} added \SI{4.2}{\micro\second}.%
+    }
+  The advantage is the control
+  over the needed expansion steps.
 \end{describemacro}
 
 \section{Dependencies}
