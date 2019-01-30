@@ -9,6 +9,7 @@
 \RequirePackage{tikz}
 \usetikzlibrary{math}
 \RequirePackage{xparse}
+\RequirePackage{MRTutil}
 \RequirePackage[%>>> biblatex
   ,sorting=none%
   ,backend=biber%
@@ -50,11 +51,11 @@
     \def\ProcessedArgument{<#1>}%
   \fi%
 }
-\newcommand*{\MRT@ftn}{}% ordinary MRT-footnotes
-\newcommand*{\MRT@ftn@p}{}% persistent MRT-footnotes
-\newcommand*{\MRT@ftn@c}{}% citation MRT-footnotes
+\MRTutil@def\MRT@ftn{}% ordinary MRT-footnotes
+\MRTutil@def\MRT@ftn@p{}% persistent MRT-footnotes
+\MRTutil@def\MRT@ftn@c{}% citation MRT-footnotes
 %<<<
-\newcommand*{\@leftfooter}{%>>>
+\MRTutil@def\@leftfooter{%>>>
   \footnotesize%
   \ifx\@occasion\@empty\else\@occasion\newline\fi
   \ifx\beamer@shorttitle\@empty
@@ -76,39 +77,39 @@
     \fi
   \fi
 }%<<<
-\newcommand*{\@centerfooter}{%>>>
+\MRTutil@def\@centerfooter{%>>>
   \normalsize\ifProgressBar\ProgressBar\fi%
   \makebox[0pt][c]{\insertframenumber}}%<<<
-\newcommand*{\@rightfooter}{%>>>
+\MRTutil@def\@rightfooter{%>>>
   \csuse{MRT@ftn@p}%
   \csuse{MRT@ftn}%
   \csuse{MRT@ftn@c}%
 }%<<<
-\newcommand*{\MRTbeam@putlogo}[1]%>>>
+\MRTutil@def\MRTbeam@putlogo#1%>>>
   {%
     \expandafter\MRTbeam@putlogo@a\expandafter
       {\csname MRTbeam@#1logo@options\endcsname}
       {\csname MRTbeam@#1logo\endcsname}%
   }%<<<
-\newcommand*\MRTbeam@putlogo@a[2]%>>>
+\MRTutil@def\MRTbeam@putlogo@a#1#2%>>>
   {%
     % #1 options (macro)
     % #2 file (csname)
     \expandafter\MRTbeam@putlogo@b\expandafter{#2}{#1}%
   }%<<<
-\newcommand*\MRTbeam@putlogo@b[2]%>>>
+\MRTutil@def\MRTbeam@putlogo@b#1#2%>>>
   {%
     % #1 file (macro)
     % #2 options (macro)
     \expandafter\MRTbeam@putlogo@c\expandafter{#1}{#2}%
   }%<<<
-\newcommand*\MRTbeam@putlogo@c[2]%>>>
+\MRTutil@def\MRTbeam@putlogo@c#1#2%>>>
   {%
     % #1 file (string)
     % #2 options (macro)
     \smash{\expandafter\includegraphics\expandafter[#2]{#1}}%
   }%<<<
-\newcommand*{\MRT@tabularT}{\begin{tabular}[t]}
+\MRTutil@def\MRT@tabularT{\begin{tabular}[t]}
 \let\footnoterule\relax
 \gdef\MRTbeam@Grid@defaults{xstep={0.05\paperwidth},ystep=0.1\paperheight,help lines}
 \tikzset{MRTbeam@Grid@options/.style={xstep={0.05\paperwidth},ystep={0.1\paperheight},help lines}}
@@ -118,7 +119,7 @@
     \tl_set:No \ProcessedArgument { #1 }
   }% <<<
 \ExplSyntaxOff
-\newcommand*{\MRTbeam@frametitle}[1]{%>>>
+\MRTutil@def\MRTbeam@frametitle#1{%>>>
   \ifOnlyOneTopRule% no title if only one top rule
     \vskip-.101\paperheight
   \else
@@ -183,7 +184,7 @@
     }%
   \insertsubsection}
 %<<<
-\newcommand*{\ColumnsTabularNotes}[1]{\gdef\MRT@ColTabNotes{#1}}
+\MRTutil@def\ColumnsTabularNotes#1{\gdef\MRT@ColTabNotes{#1}}
 \newenvironment*{whiteframes}{\whiteframestrue}{\whiteframesfalse}
 \NewDocumentCommand{\advisor}{s o m}{%>>>
   \IfNoValueTF{#2}%
@@ -321,14 +322,14 @@
   \fi%
 }%<<<
 \def\MRT@pbar@start{0}
-\newcommand*{\StartOfProgress}{%>>>
+\MRTutil@def\StartOfProgress{%>>>
   \xdef\MRT@pbar@start{\insertframenumber}%
   \immediate\write\@auxout{%
     \gdef\noexpand\MRT@pbar@start{\insertframenumber}%
   }%
 }%<<<
 \def\MRT@pbar@end{\inserttotalframenumber}
-\newcommand*{\EndOfProgress}{%>>>
+\MRTutil@def\EndOfProgress{%>>>
   \xdef\MRT@pbar@end{\insertframenumber}%
   \immediate\write\@auxout{%
     \gdef\noexpand\MRT@pbar@end{\insertframenumber}%
@@ -448,7 +449,7 @@
   {}%\usebibmacro{postnote}}%
 %<<<
 % Untested whether the new version works -- legacy >>>
-%\newcommand*{\MRTbeam@ifciteseen@old}{%>>>
+%\MRTutil@def\MRTbeam@ifciteseen@old{%>>>
 %  \ifNoExplicitCite%
 %    \expandafter\@firstoftwo%
 %  \else%
@@ -456,7 +457,7 @@
 %    \expandafter\MRTbeam@ifanyseen@old%
 %  \fi}%
 %%<<<
-%\newcommand*{\MRTbeam@ifanyseen@old}{%>>>
+%\MRTutil@def\MRTbeam@ifanyseen@old{%>>>
 %  \ifExplicitCiteOnce%
 %    \expandafter\MRTbeam@temp@if%
 %  \else%
@@ -464,26 +465,26 @@
 %  \fi}
 %%<<<
 %<<<
-\newcommand*{\MRTbeam@ifciteseen}{%>>>
-  \ifciteseen%
+\MRTutil@def\MRTbeam@ifciteseen{%>>>
+  \ifciteseen
     {\MRTbeam@ifanyseen@a}%
     {\MRTbeam@ifanyseen@b}%
 }
 %<<<
-\newcommand*{\MRTbeam@ifentryseen}[1]{%>>>
+\MRTutil@def\MRTbeam@ifentryseen#1{%>>>
   \blx@ifentryseen@global{#1}%
     {\MRTbeam@ifanyseen@a}%
     {\MRTbeam@ifanyseen@b}%
 }
 %<<<
-\newcommand*{\MRTbeam@ifanyseen@a}{%>>>
+\MRTutil@def\MRTbeam@ifanyseen@a{%>>>
   \ifExplicitCiteOnce%
     \expandafter\@firstoftwo%
   \else%
     \expandafter\MRTbeam@ifanyseen@b%
   \fi}
 %<<<
-\newcommand*{\MRTbeam@ifanyseen@b}{%>>>
+\MRTutil@def\MRTbeam@ifanyseen@b{%>>>
   \ifNoExplicitCite%
     \expandafter\@firstoftwo%
   \else%

@@ -1,0 +1,67 @@
+\chapter{The \pkg{MRTutil} package}\label{sec:util}
+This package provides some utility functions. Those are meant to aid people
+defining their own macros and are used throughout other packages of this bundle.
+Every macro this package provides is at the code level so there are no real user
+facing macros. As a general rule of thumb the user level is therefore moved one
+layer down, user facing macros have a single \texttt{@} in their names, while
+internal macros have at least two.
+
+\section{Defining Macros}
+Since the author of this bundle often finds the possibilities of the \LaTeX2e
+macro family of \cs{newcommand} too restricting, the package provides some
+macros which use the syntax of \TeX's \cs{def} but still check whether the macro
+is already defined.
+
+\begin{describemacro}{MRTutil@def,MRTutil@edef}%
+  [\oarg{prefixes}\meta{cs}\meta{args}\marg{definition}]
+  Those are versions of \cs{def} and \cs{edef}. You can define \meta{prefixes}
+  like \cs{long} or \cs{protected}. \meta{cs} is the new control sequence's
+  name, \meta{args} is the argument specification and \meta{definition} is the
+  replacement text of the macro. Both check whether the macro is already defined
+  and will raise an error if they are. They are like a fusion of \cs{newcommand}
+  and \cs{def} in that they only define a new command but keep the versatility
+  of \cs{def}.
+\end{describemacro}
+
+\section{Optional Argument Parsing}
+Since the author really likes what \pkg{xparse} allows in defining macros with
+many optional arguments but doesn't want to force the complete \pkg{expl3} onto
+the user (since it's huge), if a user is only interested in one or two of the
+small packages of this bundle there are some macros in those packages which have
+multiple optional arguments. To define those the following macros were created
+to provide a very limited subset of \pkg{xparse}'s functionality. Note that none
+of the provided macros allow expandable definitions.
+
+\begin{describemacro}{MRTutil@Oarg}[\marg{default}\marg{continue}]
+  checks for a following optional argument in \texttt{[]}. If there is none it
+  provides the \meta{default}. \meta{continue} will be executed after the
+  argument has been parsed. The value of the optional argument will be provided
+  to \meta{continue} in braces (\texttt{\{\}}).
+\end{describemacro}
+
+\begin{describemacro}{MRTutil@oarg}[\marg{continue}]
+  Like \cs{MRTutil@Oarg}, but provides a special marker if there is no optional
+  argument. You can check whether the special marker was provided with
+  \cs{MRTutil@ifmark}.
+\end{describemacro}
+
+\begin{describemacro}{MRTutil@Darg}%
+  [\meta{token1}\meta{token2}\marg{default}\marg{continue}]
+  Like \cs{MRTutil@Oarg}, but the optional argument should be delimited by
+  \meta{token1} and \meta{token2}. So \bverb|\MRTutil@Darg<>{}\foo| will check
+  whether there is an optional argument delimited by \texttt{<>} and if there is
+  none will use an empty one. The result is provided to \cs{foo}.
+\end{describemacro}
+
+\begin{describemacro}{MRTutil@darg}%
+  [\meta{token1}\meta{token2}\marg{continue}]
+  Like \cs{MRTutil@darg}, but provides a special marker if there is no optional
+  argument. You can check whether the special marker was provided with
+  \cs{MRTutil@ifmark}. 
+\end{describemacro}
+
+\begin{describemacro}{MRTutil@ifmark}[\marg{test}\marg{true}\marg{false}]
+  Tests whether \marg{test} is the special mark provided by \cs{MRTutil@oarg}
+  and \cs{MRTutil@darg} and if so expands to \meta{true}. If not it expands to
+  \meta{false}.
+\end{describemacro}

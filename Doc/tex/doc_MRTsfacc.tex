@@ -156,7 +156,89 @@ recognized.
     \\
 \end{MRTtable}%<<<
 
+\section{Additional macros}
+The package provides macros to use the accents used in text mode additionally in
+maths. Since the placement proves somewhat difficult -- this might be caused by
+the bundle's author's insufficient knowledge -- there is no really automated way
+to do so with a few macros. Instead you can define macros which will produce a
+symbol which is accented by one of the text accents.
+
+\begin{describemacro}%>>>
+  {%
+    newsfhatmacro,defsfhatmacro,%
+    newsfcheckmacro,defsfcheckmacro,%
+    newsftildemacro,defsftildemacro,%
+    newsfacutemacro,defsfacutemacro,%
+    newsfgravemacro,defsfgravemacro,%
+    newsfdotmacro,defsfdotmacro,%
+    newsfddotmacro,defsfddotmacro,%
+    newsfbrevemacro,defsfbrevemacro,%
+    newsfbarmacro,defsfbarmacro%
+  }%
+  [%
+    \sarg{horizontal}\oarg{vertical}\marg{cs}\oarg{type}\hspace{0pt}%
+    \marg{symbol}%
+  ]
+  The difference between the \cs{def...} and the \cs{new...} variant is that
+  the former will not check whether the macro \meta{cs} is already defined or
+  not. With these macros you can locally create a \meta{cs} that gets displayed
+  as \meta{symbol} with an accent based on the text font's variant of the
+  accents.  \texttt{hat} uses \cs{^}, \texttt{check} uses \cs{v}, \texttt{tilde}
+  uses \cs{~}, \texttt{acute} uses \cs{'}, \texttt{grave} uses \cs{`},
+  \texttt{dot} uses \cs{.}, \texttt{ddot} uses \cs{"}, \texttt{breve} uses
+  \cs{u} and \texttt{bar} uses \cs{=}.\\
+  You can control the horizontal positioning of the accent using
+  \meta{horizontal}, which should be a length in |mu|. If you don't provide
+  \meta{horizontal} the offset will be determined based on the rules of the used
+  variant (see \autoref{sec:sfacc:height} and \autoref{sec:sfacc:list}).
+  \meta{vertical} specifies the vertical shift of the accent and should be given
+  in |ex|. If \meta{vertical} is not given nothing special will happen (this
+  might change in the future -- for now it is best if you specify |0ex| if you
+  don't want to change the accents vertical placement).\\
+  \meta{type} is the math atom type to be used for the newly created \meta{cs}.
+  You could use \cs{mathord}, \cs{mathop}, \cs{mathbin}, \cs{mathrel},
+  \cs{mathopen}, \cs{mathclose}, \cs{mathpunct}, \cs{mathinner}, or any other
+  macro taking one argument.
+\end{describemacro}%<<<
+
+\begin{describemacro}{newsfaccmacro,defsfaccmacro}%>>>
+  [%
+    \sarg{horizontal}\oarg{vertical}\marg{cs}\oarg{type}\hspace{0pt}%
+    \marg{accent}\marg{symbol}%
+  ]
+  This is a more general variant of \cs{newsfhatmacro} and the like. With this
+  macro you can specify the macro responsible for typesetting the accent using
+  the \meta{accent} argument. The specified \meta{accent} should take at most
+  one argument and this one will be empty.
+\end{describemacro}%<<<
+
+The results of these macros heavily depend on the used font. For
+\cls{MRTthesis}, using \hologo{pdfLaTeX}, the results don't look too bad. For
+example one can define a \cs{hateq}:
+
+\begingroup
+\defsfhatmacro[-.3ex]\hateq[\mathrel]=
+\begin{verbatim}
+\defsfhatmacro[-0.3ex]{\hateq}[\mathrel]{=}
+\end{verbatim}%
+We use \cs{mathrel} since a |=| is a relation and should be spaced like that.
+Additionally we move the accent down by |0.3ex|, which should give a good result
+in this case. The following formula uses this \cs{hateq} definition,
+|\mathrel{\hat{=}}| and the default |=| for comparison:
+\begin{equation*}
+  a\hateq a \mathrel{\hat{=}} a = a
+\end{equation*}
+\endgroup
+
+Unfortunately these accents don't look good in combination with Greek letters
+(see for yourself: $\hat{\alpha}$ vs.
+\begingroup\defsfhatmacro[-.1ex]\hatalpha\alpha$\hatalpha$\endgroup), and one
+shouldn't mix the two types of accents in a document. The decision which
+approach you use is up to you.
+
 \section{Dependencies}
 \pkg{MRTsfacc} loads the \pkg{MRTif} package and uses its tests
 \cs{MRTifLetterGTF}, \cs{MRTifFloatTF}, \cs{MRTifStringsMatchXXTF} and
 \cs{MRTifTwoTokenTF}. It also depends on \pkg{amsmath} being loaded.
+Additionally it uses the \pkg{MRTutil} package for some of its macros'
+definitions.

@@ -10,9 +10,9 @@
 \newcommand*\cs{\texorpdfstring{\cs@TeXString}{\cs@PDFString}}
 \protected\def\cs@TeXString#1%>>>
   {%
-    \texttt{\expandafter\eatspace\string\ \detokenize{#1}}%
+    \texttt{\cs@PDFString{#1}}%
   }%<<<
-\def\cs@PDFString#1{(macro #1)}
+\edef\cs@PDFString#1{\expandafter\eatspace\string\ \noexpand\detokenize{#1}}
 \protected\def\meta#1{\texttt{$\langle${\itshape\meta@a{#1}}\kern.05em$\rangle$}}
 \ExplSyntaxOn
 \newcommand\meta@a[1]%>>>
@@ -404,6 +404,7 @@
       \versionline{if}
       \versionline{wuline}
       \versionline{sfacc}
+      \versionline{util}
     \end{MRTtable}
   }%<<<
 \NewDocumentCommand \bverb { v }%>>>

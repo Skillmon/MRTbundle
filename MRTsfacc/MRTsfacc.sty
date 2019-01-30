@@ -1,5 +1,5 @@
-\newcommand*\MRTsfacc@version{0.0.4}
-\newcommand*\MRTsfacc@date{2018-11-07}
+\newcommand*\MRTsfacc@version{0.0.5}
+\newcommand*\MRTsfacc@date{2019-01-30}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -9,6 +9,7 @@
     helvet and other fonts%
   ]
 
+\RequirePackage{MRTutil}
 \RequirePackage{MRTif}
 \RequirePackage{amsmath}
 
@@ -18,7 +19,7 @@
 
 %% Package options >>>
 \def\MRTsfacc@share{0.25}
-\newcommand\MRTsfaccSet[1]%>>>
+\MRTutil@def[\long]\MRTsfaccSet#1%>>>
   {%
     \MRTifFloatTF{#1}
       {\def\MRTsfacc@share{#1}}
@@ -50,7 +51,7 @@
   \AtBeginDocument% >>>
     {%
       \begingroup
-      \newcommand*\MRTsfacc@mathaccentV@test[5]% >>>
+      \MRTutil@def\MRTsfacc@mathaccentV@test#1#2#3#4#5% >>>
         {%
           \ifmmode
             \gdef\macc@tmp{\macc@depth\@ne}%
@@ -93,7 +94,7 @@
 \fi
 % <<<
 
-\newcommand\MRTsfacc@mathaccentV[4]% >>>
+\MRTutil@def[\long]\MRTsfacc@mathaccentV#1#2#3#4% >>>
   {%
     \global\let\macc@nucleus\@empty
     \mathaccent"\accentclass@#1#2#3{#4}\macc@nucleus
@@ -106,11 +107,11 @@
   {%
     \MRTifStringsMatchXXTF{\MRTsfacc@mathaccentV@detokenized}{#2 }
   }% <<<
-\newcommand\MRTsfacc@mathaccentV@using[1]% >>>
+\MRTutil@def[\long]\MRTsfacc@mathaccentV@using#1% >>>
   {%
     \expandafter\MRTsfacc@mathaccentV@using@inner\meaning#1 . .\endMRTsfacc@arg
   }% <<<
-\newcommand\MRTsfacc@testnest[2]% >>>
+\MRTutil@def[\long]\MRTsfacc@testnest#1#2% >>>
   {%
     \MRTifTwoTokenTF{#2}
       {%
@@ -132,7 +133,7 @@
       }
       {\@secondoftwo}%
   }% <<<
-\newcommand\MRTsfacc@testnest@[5]% >>>
+\MRTutil@def[\long]\MRTsfacc@testnest@#1#2#3#4#5% >>>
   {%
     \MRTsfacc@testknown{#5}
       {%
@@ -156,7 +157,7 @@
 %% stupid package for math font is stupid. Have to cure the sickness >>>
 \if@MRTsfacc@height@
 % true >>>
-  \newcommand*\MRTsfacc@patch@mathaccentV% >>>
+  \MRTutil@def\MRTsfacc@patch@mathaccentV% >>>
     {%
       \protected\long\def\mathaccentV##1##2##3##4% >>>
         {%
@@ -170,12 +171,12 @@
           {\futurelet\next\mathaccentV@a}%
         }% <<<
     }% <<<
-  \newcommand*\MRTsfacc@kern% >>>
+  \MRTutil@def\MRTsfacc@kern% >>>
     {%
       \MRTsfacc@share\ht\MRTsfacc@box
     }% <<<
-  \newbox\MRTsfacc@box
-  \newcommand*\mathaccentV@a[1]% >>>
+  \newsavebox\MRTsfacc@box
+  \MRTutil@def\mathaccentV@a#1% >>>
     {%
       \expandafter\ifx\next!%
         \MRTsfacc@fifiATa
@@ -190,7 +191,7 @@
       {\expandafter\mathaccentV@shifted\mathaccentV@args}
       {\expandafter\mathaccentV@b\mathaccentV@args{#1}}%
     }% <<<
-  \newcommand*\mathaccentV@b[4]% >>>
+  \MRTutil@def\mathaccentV@b#1#2#3#4% >>>
     {%
       \MRTifLetterGTF{#4}
         {\mathaccentV@shifted{#1}{#2}{#3}{#4}}
@@ -200,7 +201,7 @@
             {\MRTsfacc@mathaccentV{#1}{#2}{#3}{#4}}%
         }%
     }% <<<
-  \newcommand*\mathaccentV@shifted[4]% >>>
+  \MRTutil@def\mathaccentV@shifted#1#2#3#4% >>>
     {%
       \mathchoice
         {\mathaccentV@shifted@a{display}{#1}{#2}{#3}{#4}}
@@ -208,7 +209,7 @@
         {\mathaccentV@shifted@a{script}{#1}{#2}{#3}{#4}}
         {\mathaccentV@shifted@a{scriptscript}{#1}{#2}{#3}{#4}}%
     }% <<<
-  \newcommand*\mathaccentV@shifted@a[5]% >>>
+  \MRTutil@def\mathaccentV@shifted@a#1#2#3#4#5% >>>
     {%
       \setbox\MRTsfacc@box\hbox{$\csname #1style\endcsname#5$}%
       \MRTsfacc@mathaccentV{#2}{#3}{#4}%
@@ -220,7 +221,7 @@
     }% <<<
 \else% <<<
 % false >>>
-  \newcommand*\MRTsfacc@patch@mathaccentV% >>>
+  \MRTutil@def\MRTsfacc@patch@mathaccentV% >>>
     {%
       \protected\def\mathaccentV##1##2##3##4% >>>
         {%
@@ -237,23 +238,16 @@
           }%
         }% <<<
     }% <<<
-  \newcommand*\MRTsfacc@ifknown[1]% >>>
+  \MRTutil@def\MRTsfacc@ifknown#1%>>>
     {%
-      \begingroup
-      \expandafter\ifx\csname\MRTsfacc@shift{#1}\endcsname\relax
-        \endgroup
-        \MRTif@fiAb
-      \else
-        \endgroup
-        \MRTif@fiBa
-      \fi
-    }% <<<
-  \newcommand*\MRTsfacc@mathaccentV@shifted@expandhelper[5]% >>>
+      \@ifundefined{\MRTsfacc@shift{#1}}\@secondoftwo\@firstoftwo
+    }%<<<
+  \MRTutil@def\MRTsfacc@mathaccentV@shifted@expandhelper#1#2#3#4#5% >>>
     {%
       \mathaccentV@shifted{#2}{#3}{#4}
         {\csname\MRTsfacc@shift{#1}\endcsname}{#5}%
     }% <<<
-  \newcommand\mathaccentV@a[4]% >>>
+  \MRTutil@def[\long]\mathaccentV@a#1#2#3#4% >>>
     {%
       \MRTsfacc@ifknown{#4}
         {%
@@ -269,7 +263,7 @@
             {\MRTsfacc@mathaccentV{#1}{#2}{#3}{#4}}%
         }%
     }% <<<
-  \long\def\mathaccentV@b#1#2#3[#4]#5% >>>
+  \MRTutil@def[\long]\mathaccentV@b#1#2#3[#4]#5% >>>
     {%
       \MRTsfacc@ifknown{#4}
         {%
@@ -278,24 +272,26 @@
         }
         {\mathaccentV@shifted{#1}{#2}{#3}{#4}{#5}}%
     }% <<<
-  \newcommand\mathaccentV@shifted[5]% >>>
+  \MRTutil@def[\long]\mathaccentV@shifted#1#2#3#4#5% >>>
     {%
       \MRTsfacc@mathaccentV{#1}{#2}{#3}
         {%
           #5%
           \mkern#4\relax
+          \mkern#4\relax
         }
       \mkern-#4\relax
+      \mkern-#4\relax
     }% <<<
-  \newcommand*\MRTsfacc@shift[1]% >>>
+  \MRTutil@def\MRTsfacc@shift#1% >>>
     {%
       MRTsfacc@shift@\detokenize{#1}%
     }% <<<
-  \newcommand*\MRTsfaccShift[2]% >>>
+  \MRTutil@def\MRTsfaccShift#1#2% >>>
     {%
       \expandafter\def\csname \MRTsfacc@shift{#1}\endcsname{#2}%
     }% <<<
-  \newcommand*\MRTsfaccShiftLet[2]% >>>
+  \MRTutil@def\MRTsfaccShiftLet#1#2% >>>
     {%
       \MRTsfacc@ifknown{#2}
         {%
@@ -310,13 +306,133 @@
             }%
         }%
     }% <<<
-  \newcommand*\MRTsfaccLoadShiftList[1]% >>>
+  \MRTutil@def\MRTsfaccLoadShiftList#1% >>>
     {%
       \input{MRTsfacc.list.#1.tex}%
     }% <<<
 % <<<
 \fi
 % <<<
+
+% sfaccmacros >>>
+\MRTutil@def[\protected]\defsfaccmacro@a#1#2#3%>>>
+  {%
+    \MRTutil@oarg{\defsfaccmacro@b{#1}{#2}{#3}}%
+  }%<<<
+\MRTutil@def[\protected]\defsfaccmacro@b#1#2#3#4#5%>>>
+  {%
+    \MRTutil@oarg{\defsfaccmacro@c{#1}{#2}{#3}{#4}{#5}}%
+  }%<<<
+\MRTutil@def[\protected]\defsfaccmacro@c#1#2#3#4#5#6#7%>>>
+  {%
+    % #1 def type
+    % #2 mark/accent
+    % #3 horizontal displacement
+    % #4 vertical displacement
+    % #5 macro name
+    % #6 math atom type
+    % #7 accent/character
+    \MRTutil@ifmark{#2}
+      {\defsfaccmacro@d{#1}{#3}{#4}{#5}{#6}{#7}}
+      {\defsfaccmacro@d{#1}{#3}{#4}{#5}{#6}{#2}{#7}}%
+  }%<<<
+\MRTutil@def[\protected]\defsfaccmacro@d#1#2#3#4#5#6#7%>>>
+  {%
+    % #1 def
+    % #2 horizontal displacement
+    % #3 vertical displacement
+    % #4 macro name
+    % #5 math atom type
+    % #6 accent macro
+    % #7 character
+    #1#4%
+      {%
+        \MRTutil@ifmark{#5}{}{\unexpanded{#5}\bgroup}
+        \unexpanded
+          {%
+            \mathchoice
+              {\MRTsfacc@sfaccmacro{#2}{#3}{#6}{#7}\displaystyle}
+              {\MRTsfacc@sfaccmacro{#2}{#3}{#6}{#7}\textstyle}
+              {\MRTsfacc@sfaccmacro{#2}{#3}{#6}{#7}\scriptstyle}
+              {\MRTsfacc@sfaccmacro{#2}{#3}{#6}{#7}\scriptscriptstyle}%
+          }%
+        \unexpanded{\phantom{#7}}%
+        \MRTutil@ifmark{#5}{}{\egroup}%
+      }%
+  }%<<<
+\MRTutil@def[\protected]\MRTsfacc@sfaccmacro#1#2#3#4#5%>>>
+  {%
+    % #1 horizontal displacement
+    % #2 vertical displacement
+    % #3 accent macro
+    % #4 character
+    % #5 mathmode
+    \begingroup
+    \setbox\MRTsfacc@box\hbox{$#5#4$}%
+    \kern.5\wd\MRTsfacc@box
+    \MRTutil@ifmark{#1}
+      {\MRTsfacc@autokern{}{#4}}
+      {\mkern#1}%
+    \text%>>>
+      {%
+        \clap
+          {%
+            \smash
+              {%
+                \MRTutil@ifmark{#2}%
+                  {#3{}}%
+                  {\raise#2\hbox{#3{}}}%
+              }%
+          }%
+      }%<<<
+    \kern-.5\wd\MRTsfacc@box
+    \MRTutil@ifmark{#1}
+      {\MRTsfacc@autokern{-}{#4}}
+      {\mkern-#1}%
+    \mathrlap{\copy\MRTsfacc@box}%
+    \endgroup
+  }%<<<
+\MRTutil@def[\protected]\MRTsfacc@new@defsfaccmacro#1#2%>>>
+  {%
+    \MRTutil@def[\protected]#1%
+      {\MRTutil@darg<>{\defsfaccmacro@a{\protected\edef}{#2}}}%
+  }%<<<
+\MRTutil@def[\protected]\MRTsfacc@new@newsfaccmacro#1#2%>>>
+  {%
+    \MRTutil@def[\protected]#1%
+      {\MRTutil@darg<>{\defsfaccmacro@a{\MRTutil@edef[\protected]}{#2}}}%
+  }%<<<
+\MRTutil@def[\protected]\MRTsfacc@new@sfaccmacro@pair#1#2%>>>
+  {%
+    \expandafter\MRTsfacc@new@defsfaccmacro\csname defsf#1macro\endcsname{#2}%
+    \expandafter\MRTsfacc@new@newsfaccmacro\csname newsf#1macro\endcsname{#2}%
+  }%<<<
+\MRTsfacc@new@sfaccmacro@pair{acc}\MRTutil@@mark
+\MRTsfacc@new@sfaccmacro@pair{hat}\^
+\MRTsfacc@new@sfaccmacro@pair{check}\v
+\MRTsfacc@new@sfaccmacro@pair{tilde}\~
+\MRTsfacc@new@sfaccmacro@pair{acute}\'
+\MRTsfacc@new@sfaccmacro@pair{grave}\`
+\MRTsfacc@new@sfaccmacro@pair{dot}\.
+\MRTsfacc@new@sfaccmacro@pair{ddot}\"
+\MRTsfacc@new@sfaccmacro@pair{breve}\u
+\MRTsfacc@new@sfaccmacro@pair{bar}\=
+\if@MRTsfacc@height@%>>>
+  \MRTutil@def[\protected]\MRTsfacc@autokern#1#2%>>>
+    {%
+      \kern#1\MRTsfacc@kern
+    }%<<<
+%<<<
+\else%>>>
+  \newsavebox\MRTsfacc@box
+  \MRTutil@def[\protected]\MRTsfacc@autokern#1#2%>>>
+    {%
+      \MRTsfacc@ifknown{#2}
+        {\mkern#1\csname\MRTsfacc@shift{#2}\endcsname}
+        {}%
+    }%<<<
+\fi%<<<
+%<<<
 
 \AtBeginDocument{\MRTsfacc@patch@mathaccentV}
 

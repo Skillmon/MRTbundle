@@ -1,9 +1,9 @@
-\newcommand*\MRTthesis@version{0.0.6}
-\newcommand*\MRTthesis@date{2018-11-08}
+\newcommand*\MRTthesis@version{0.0.7}
+\newcommand*\MRTthesis@date{2019-01-30}
 
 \NeedsTeXFormat{LaTeX2e}
 
-\RequirePackage{expl3,xparse,MRTif} % absolutely necessary
+\RequirePackage{expl3,xparse,MRTif,MRTutil} % absolutely necessary
 \ProvidesExplClass
   {MRTthesis}          {\MRTthesis@date}
   {\MRTthesis@version} {thesis template for MRT - University of Bayreuth}
@@ -473,7 +473,7 @@
     \includegraphics[height=#1]{#2}
   }% <<<
 \cs_generate_variant:Nn \MRTthesis_display_logo_expanded:nn { xx }
-\newcommand*\MRTthesis@fntsel[2]{\fontsize{#1bp}{#2bp}\selectfont}
+\MRTutil@def\MRTthesis@fntsel#1#2{\fontsize{#1bp}{#2bp}\selectfont}
 % <<<
 % \MRTafterhyperref >>>
 \NewDocumentCommand \MRTafterhyperref { +m }% >>>
@@ -481,7 +481,7 @@
     \xdef \MRTthesis@after@hyperref 
       { \unexpanded \expandafter { \MRTthesis@after@hyperref #1 } }
   }% <<<
-\newcommand*\MRTthesis@after@hyperref{}
+\MRTutil@def\MRTthesis@after@hyperref{}
 \MRTafterhyperref% redefine itself after hyperref to throw an error >>>
   {
     \cs_set:Npn \MRTafterhyperref #1
@@ -541,7 +541,7 @@
 \renewcommand*\theequation{\hbox{(\thechapter-\arabic{equation})}}
 \renewcommand*\thefigure  {\hbox{\thechapter-\arabic{figure}}}
 \renewcommand*\thetable   {\hbox{\thechapter-\arabic{table}}}
-\newcommand*\MRTthesis@setautorefnames% >>>
+\MRTutil@def\MRTthesis@setautorefnames% >>>
   {%
     \addto\extrasngerman
       {%
@@ -644,7 +644,7 @@
     \endgroup
   }
 % <<<
-\newcommand\MRTthesis@headingsformat[3]%>>>
+\MRTutil@def[\long]\MRTthesis@headingsformat#1#2#3%>>>
   {
     \begingroup
     \setbox \MRTthesis@TestBoxA \hbox
@@ -681,7 +681,7 @@
 % <<<
 % Sectionformat >>>
 % I don't know why this works, but it seems working.
-\newcommand*\Sectionformat[2]{\MRTthesis@HeadingsUline{#1}}
+\MRTutil@def\Sectionformat#1#2{\MRTthesis@HeadingsUline{#1}}
 % <<<
 %%==========================================================================<<<
 
@@ -837,15 +837,15 @@
     \setuptoc{\@currext}{totoc}%
   }% <<<
 %\DeclareTOCStyleEntry[<options>]{<style>}{<section-layer>}
-\newcommand*\MRTthesis@chapter@dotfill% >>>
+\MRTutil@def\MRTthesis@chapter@dotfill% >>>
   {%
     \def\@dotsep{0.072}\TOCLineLeaderFill[\textbf{.}]%
   }% <<<
-\newcommand*\MRTthesis@section@dotfill% >>>
+\MRTutil@def\MRTthesis@section@dotfill% >>>
   {%
     \def\@dotsep{0.072}\TOCLineLeaderFill
   }% <<<
-\newcommand*\MRTthesis@toc@default@all% >>>
+\MRTutil@def\MRTthesis@toc@default@all% >>>
   {%
     pagenumberbox=\makebox%
     ,dynnumwidth=true%
@@ -877,7 +877,7 @@
 %% affidavit >>>
 %%=============================================================================
 \ExplSyntaxOff%>>>
-\newcommand*\affidavittext@base% >>>
+\MRTutil@def\affidavittext@base% >>>
   {%
     Hiermit versichere ich an Eides statt, dass ich die vorliegende Arbeit
     selbst\"andig und unter Angabe aller Hilfsmittel und Referenzen angefertigt
@@ -885,7 +885,7 @@
     Arbeit, die st\"andig eingeflossen sind und daher nicht im Einzelnen
     nachgewiesen werden.%
   }% <<<
-\newcommand*\affidavittext@usagerights% >>>
+\MRTutil@def\affidavittext@usagerights% >>>
   {%
     Der Universit\"at Bayreuth, vertreten durch den Lehrstuhl f\"ur Mess- und
     Regeltechnik (Prof. Dr.-Ing. Fischerauer), habe ich das Nutzungs- und
@@ -897,20 +897,24 @@
     einverstanden. Ich erkl\"are ferner, dass ich die Inhalte der Arbeit
     meinerseits nicht ohne Zustimmung des Lehrstuhls publizieren werde.%
   }% <<<
-\newcommand*\affidavittext@degree% >>>
+\MRTutil@def\affidavittext@degree% >>>
   {%
     Hiermit erkl\"are ich, dass ich die vorliegende Arbeit mit dem Thema
     „\csname l_MRTthesis_title_tl\endcsname“ noch nicht anderweitig zur
     Erlangung eines akademischen Grades eingereicht habe.%
   }% <<<
 \ExplSyntaxOn%<<<
-\NewExpandableDocumentCommand \affidavittext {}% >>>
+\MRTutil@def\affidavittext% >>>
   {
     \affidavittext@base
     \bool_if:NF \l_MRTthesis_no_usage_bool { \par \affidavittext@usagerights }
     \bool_if:NF \l_MRTthesis_no_degree_bool { \par \affidavittext@degree }
   }% <<<
-\NewDocumentCommand \affidavit {}% >>>
+\MRTutil@def\affidavittitle%>>>
+  {
+    Eidesstattliche~Erkl\"arung
+  }%<<<
+\MRTutil@def[\protected]\affidavit% >>>
   {
     \cleardoublepage
     \chapter*{Eidesstattliche~Erkl\"arung}

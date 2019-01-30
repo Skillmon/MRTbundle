@@ -368,7 +368,7 @@ The following macros are provided:
 \end{describemacro}
 \begin{describemacro}{MRTafterhyperref}[\marg{content}]
   Places \meta{content} after \pkg{hyperref} is loaded. This is important for
-  the relative few packages that need to be loaded after \pkg{hyperref}. So if
+  the relatively few packages that need to be loaded after \pkg{hyperref}. So if
   you have one of these, you should use something like
   \bverb|\MRTafterhyperref{\usepackage{cleveref}}|. This macro has to be used
   prior to \bverb|\begin{document}|.
@@ -436,10 +436,11 @@ The following macros are provided:
   head marks, e.\,g.\@ if your section title gets too long.
 \end{describemacro}
 \begin{describemacro}{affidavit}
-  Prints a chapter ``Eidesstattliche Erklärung'' and the affidavit text (as
-  stored in \cs{affidavit@text}) and the location and date, followed by a
-  signature line for each author. \cs{maketitle} has to be used prior to it,
-  else the lines won't be printed. This is a bug I might fix in the future.
+  Prints a chapter ``Eidesstattliche Erklärung'' (stored in \cs{affidavittitle},
+  you might redefine it to change the title) and the affidavit text (as stored
+  in \cs{affidavittext}) and the location and date, followed by a signature line
+  for each author. \cs{maketitle} has to be used prior to it, else the lines
+  won't be printed. This is a bug I might fix in the future.
 \end{describemacro}
 \begin{describemacro}{mainpart,mainmatter}
   Switches the formatting from the one at the beginning to the one used in the
@@ -475,6 +476,7 @@ formatting.%
     \item \pkg{expl3}
     \item \pkg{xparse}
     \item \pkg{MRTif}
+    \item \pkg{MRTutil}
     \item \pkg{MRTsfacc}
     \item \pkg{MRTtab}
     \item \pkg{MRTwuline}

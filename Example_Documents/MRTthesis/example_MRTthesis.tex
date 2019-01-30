@@ -16,6 +16,9 @@
     ,sauthor=\textcolor{blue}{A. Student}
   }
 
+%% add references.bib as resource for biblatex citations
+%\addbibresource{references.bib}
+
 \begin{document}
 \maketitle
 \affidavit
@@ -32,11 +35,11 @@
 \include{tex/zusammenfassung}
 
 \appendix
-% this example doesn't use a bibliography
+%% this example doesn't use a bibliography
 %\printbibliography
 \clearpage
-% because the appendix most likely contains much material for which flushed
-% bottom pages won't work or look good, put a \raggedbottom here
+%% because the appendix most likely contains much material for which flushed
+%% bottom pages won't work or look good, put a \raggedbottom here
 \raggedbottom
 \include{tex/anhang}
 \end{document}
