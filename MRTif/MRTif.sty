@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.6}
-\newcommand*\MRTif@date{2019-01-30}
+\newcommand*\MRTif@version{0.0.7}
+\newcommand*\MRTif@date{2019-02-02}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -25,6 +25,11 @@
 \long\def\MRTif@fifiBAb#1\fi\fi#2#3{\fi\fi#3}
 \long\def\MRTif@fifiBBa\fi\fi#1#2{\fi\fi#1}
 \long\def\MRTif@fifiBBb\fi\fi#1#2{\fi\fi#2}
+\long\def\MRTif@fiBTa\fi#1#2#3{\fi#1}
+\long\def\MRTif@fiBTb\fi#1#2#3{\fi#2}
+\long\def\MRTif@fiBTc\fi#1#2#3{\fi#3}
+\long\def\MRTif@fiBg\fi#1#2{\fi}
+\long\def\MRTif@fiBTg\fi#1#2#3{\fi}
 % <<<
 
 \def\endMRTif@argument{\MRTif@IfYouSeeThisContactTheMaintainer}
@@ -148,38 +153,35 @@
 \MRTutil@def[\long]\MRTifEmptyTF#1% >>>
   {%
     \if\relax\detokenize{#1}\relax
-      \MRTif@fiAa
-    \else
-      \MRTif@fiBb
+      \MRTif@fiBTb
     \fi
+    \@secondoftwo
   }% <<<
 \MRTutil@def[\long]\MRTifEmptyT#1% >>>
   {%
     \if\relax\detokenize{#1}\relax
-      \MRTif@fiAy
-    \else
-      \MRTif@fiBn
+      \MRTif@fiBb
     \fi
+    \@gobble
   }% <<<
 \MRTutil@def[\long]\MRTifEmptyF#1% >>>
   {%
     \if\relax\detokenize{#1}\relax
-      \MRTif@fiAn
-    \else
-      \MRTif@fiBy
+      \MRTif@fiBg
     \fi
+    \@firstofone
   }% <<<
-\MRTutil@def\MRTifEmptyNTF% >>>
+\MRTutil@def[\long]\MRTifEmptyNTF#1% >>>
   {%
-    \expandafter\MRTifEmptyTF\expandafter
+    \expandafter\MRTifEmptyTF\expandafter{#1}%
   }% <<<
-\MRTutil@def\MRTifEmptyNT% >>>
+\MRTutil@def[\long]\MRTifEmptyNT#1% >>>
   {%
-    \expandafter\MRTifEmptyT\expandafter
+    \expandafter\MRTifEmptyT\expandafter{#1}%
   }% <<<
-\MRTutil@def\MRTifEmptyNF% >>>
+\MRTutil@def[\long]\MRTifEmptyNF#1% >>>
   {%
-    \expandafter\MRTifEmptyF\expandafter
+    \expandafter\MRTifEmptyF\expandafter{#1}%
   }% <<<
 \MRTif@groupify@TF{Empty}
 \MRTif@create@TandF@N@TandF{EmptyG}
@@ -195,7 +197,7 @@
   }% <<<
 \long\def\MRTifGroup@b#1#2#3\MRTifGroup@endargument% >>>
   {%
-    \MRTifEmptyTF{#3}{\@firstoftwo}{\@secondoftwo}%
+    \MRTifEmptyTF{#3}%
   }% <<<
 \long\def\MRTifGroup@c#1\MRTifGroup@endargument% >>>
   {%
@@ -206,7 +208,7 @@
 % MRTifGroupNoSpaces >>>
 \MRTutil@def[\long]\MRTifGroupNoSpacesTF#1% >>>
   {%
-    \expandafter\MRTifStringsMatchTF\expandafter
+    \MRTifStringsMatchXXTF
       {\MRTifGroupNoSpaces@a#1\end@MRTifGroupNoSpaces@a}{#1}
       {\@secondoftwo}
       {\@firstoftwo}
@@ -236,10 +238,9 @@
 \MRTutil@def[\long]\MRTifStringsMatchXXTF#1#2% >>>
   {%
     \ifnum\pdf@strcmp{#1}{#2}=0
-      \MRTif@fiAa
-    \else
-      \MRTif@fiBb
+      \MRTif@fiBTb
     \fi
+    \@secondoftwo
   }% <<<
 \MRTutil@def[\long]\MRTifStringsMatchXXGTF#1#2% >>>
   {%
@@ -303,10 +304,9 @@
 \MRTutil@def[\long]\MRTifNumTokenTF#1#2% >>>
   {%
     \ifnum\MRTtllength{#2}=#1\relax
-      \MRTif@fiAa
-    \else
-      \MRTif@fiBb
+      \MRTif@fiBTb
     \fi
+    \@secondoftwo
   }% <<<
 \MRTutil@def[\long]\MRTifNumTokenGTF#1#2% >>>
   {%
@@ -366,10 +366,9 @@
     \MRTutil@def[\long]\MRTifLetter@core##1%
       {%
         \ifcat\noexpand##1z%
-          \MRTif@fiAa
-        \else
-          \MRTif@fiBb
+          \MRTif@fiBTb
         \fi
+        \@secondoftwo
       }%
   }
 \MRTif@zz
@@ -405,10 +404,9 @@
         \MRTifOneTokenTF{#2}
           {%
             \ifx#1#2%
-              \MRTif@fiAa
-            \else
-              \MRTif@fiBb
+              \MRTif@fiBTb
             \fi
+            \@secondoftwo
           }
           {\@secondoftwo}%
       }
@@ -638,9 +636,9 @@
   {%
     \the\numexpr0\MRTtllength@inner#1\endMRTif@argument
   }% <<<
-\MRTutil@def\MRTtllengthN% >>>
+\MRTutil@def[\long]\MRTtllengthN#1% >>>
   {%
-    \expandafter\MRTtllength\expandafter%
+    \expandafter\MRTtllength\expandafter{#1}%
   }% <<<
 % <<<
 
