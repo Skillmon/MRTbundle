@@ -152,7 +152,7 @@
   }%<<<
 \bool_if:NF \l_MRTalone_minimal_bool%>>>
   {
-    \cs_new:Nn \MRTalone_range_phrase:n
+    \cs_new:Npn \MRTalone_range_phrase:n #1
       {
         \mode_if_math:TF { \text { ~#1~ } } { ~#1~ }
       }

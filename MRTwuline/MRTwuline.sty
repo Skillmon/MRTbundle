@@ -1,5 +1,5 @@
-\newcommand*\MRTwuline@version{0.0.2}
-\newcommand*\MRTwuline@date{2019-01-30}
+\newcommand*\MRTwuline@version{0.0.3}
+\newcommand*\MRTwuline@date{2019-02-03}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -22,13 +22,13 @@
       { \MRTwuline_math:nn { #1 } { #2 } }
       { \MRTwuline_text:nn { #1 } { #2 } }
   }
-\cs_new:Nn \MRTwuline_math:nn
+\cs_new:Npn \MRTwuline_math:nn #1 #2
   {
     \IfNoValueTF { #1 }
       { \MRTwuline_math_out:nn { \MRTwuline@mathheight } { #2 } }
       { \MRTwuline_math_out:nn { #1 } { #2 } }
   }
-\cs_new:Nn \MRTwuline_math_out:nn
+\cs_new:Npn \MRTwuline_math_out:nn #1 #2
   {
     \ThisStyle
       {
@@ -41,7 +41,7 @@
       }
     \underline { \vphantom { #2 } }
   }
-\cs_new:Nn \MRTwuline_text:nn
+\cs_new:Npn \MRTwuline_text:nn #1 #2
   {
     \bgroup
     \IfNoValueTF { #1 }

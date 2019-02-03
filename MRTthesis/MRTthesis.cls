@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.7}
-\newcommand*\MRTthesis@date{2019-01-30}
+\newcommand*\MRTthesis@version{0.0.8}
+\newcommand*\MRTthesis@date{2019-02-03}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -239,7 +239,7 @@
   }
 \bool_if:NF \l_MRTthesis_minimal_bool%>>>
   {
-    \cs_new:Nn \MRTthesis_range_phrase:n
+    \cs_new:Npn \MRTthesis_range_phrase:n #1
       {
         \mode_if_math:TF { \text { ~#1~ } } { ~#1~ }
       }
@@ -459,7 +459,7 @@
   {%
     \hskip 0pt plus #1fill\relax
   }% <<<
-\cs_new:Nn \MRTthesis_display_logo:n% >>>
+\cs_new:Npn \MRTthesis_display_logo:n #1% >>>
   {
     \exp_args:Nx \tl_if_empty:nF { \tl_use:c { l_MRTthesis_logo #1 _tl } }
       {
@@ -468,7 +468,7 @@
           { \tl_use:c { l_MRTthesis_logo #1 _tl } }
       }
   }% <<<
-\cs_new:Nn \MRTthesis_display_logo_expanded:nn% >>>
+\cs_new:Npn \MRTthesis_display_logo_expanded:nn #1 #2% >>>
   {
     \includegraphics[height=#1]{#2}
   }% <<<
@@ -942,7 +942,7 @@
     \seq_map_function:NN \g_MRTthesis_authors_seq
       \MRTthesis_affidavit_sign_authors:n
   }% <<<
-\cs_new_protected:Nn \MRTthesis_affidavit_sign_authors:n% >>>
+\cs_new_protected:Npn \MRTthesis_affidavit_sign_authors:n #1% >>>
   {
     \mbox{}\hfill
     \parbox[t]{\l_MRTthesis_sign_width_dim}
@@ -960,7 +960,7 @@
       }
     \vskip\l_MRTthesis_sign_height_dim
   }% <<<
-\cs_new:Nn \MRTthesis_affidavit_get_sign_width:% >>>
+\cs_new:Npn \MRTthesis_affidavit_get_sign_width:% >>>
   {
     \seq_map_inline:Nn \g_MRTthesis_authors_seq
       {
@@ -1058,7 +1058,7 @@
     \cleardoublepage
     \restoregeometry
   }% <<<
-\cs_new_protected_nopar:Nn \MRTthesis_parse_authors:% >>>
+\cs_new_protected_nopar:Npn \MRTthesis_parse_authors:% >>>
   {
     \seq_gset_split:NnV \g_MRTthesis_authors_seq
       { \and } \l_MRTthesis_authors_tl
@@ -1159,7 +1159,7 @@
       { \tl_gset_eq:NN \g_MRTthesis_s_author_tl \l_MRTthesis_s_author_tl }
   }% <<<
 \cs_new:Npn \MRTthesis_only_first_token:w #1#2\q_nil { #1 }
-\cs_new_nopar:Nn \MRTthesis_titlepage_place_title:% >>>
+\cs_new_nopar:Npn \MRTthesis_titlepage_place_title:% >>>
   {
     \MRTthesis@fntsel{20}{34.5}
     \ifcsname MRTFirstTitle\endcsname
@@ -1179,7 +1179,7 @@
         \group_end:
       }
   }% <<<
-\cs_new_nopar:Nn \MRTthesis_titlepage_place_authors:% >>>
+\cs_new_nopar:Npn \MRTthesis_titlepage_place_authors:% >>>
   {
     \seq_set_eq:NN \l_MRTthesis_tmpa_seq \g_MRTthesis_authors_seq
     \MRTthesis@fntsel{12}{12}
@@ -1190,7 +1190,7 @@
         \\\vfill
       }
   }% <<<
-\cs_new_nopar:Nn \MRTthesis_titlepage_place_thesis_block:% >>>
+\cs_new_nopar:Npn \MRTthesis_titlepage_place_thesis_block:% >>>
   {
     \MRTthesis@fntsel{12}{15}\textbf{\l_MRTthesis_thesis_tl}\strut
     \bool_if:NF \l_MRTthesis_no_degree_bool
@@ -1222,7 +1222,7 @@
         \\
       }
   }% <<<
-\cs_new_nopar:Nn \MRTthesis_titlepage_place_citation:% >>>
+\cs_new_nopar:Npn \MRTthesis_titlepage_place_citation:% >>>
   {
     \bool_if:NTF \l_MRTthesis_no_citation_bool
       {
@@ -1260,7 +1260,7 @@
           }
       }
   }% <<<
-\cs_new:Nn \MRTthesis_typeout_author:n%>>>
+\cs_new:Npn \MRTthesis_typeout_author:n #1%>>>
   {
     \tl_if_in:nnTF { #1 } { , }
       {
