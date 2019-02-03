@@ -155,6 +155,7 @@
 % <<<
 
 %% stupid package for math font is stupid. Have to cure the sickness >>>
+\newsavebox\MRTsfacc@box
 \if@MRTsfacc@height@
 % true >>>
   \MRTutil@def\MRTsfacc@patch@mathaccentV% >>>
@@ -175,7 +176,6 @@
     {%
       \MRTsfacc@share\ht\MRTsfacc@box
     }% <<<
-  \newsavebox\MRTsfacc@box
   \MRTutil@def\mathaccentV@a#1% >>>
     {%
       \expandafter\ifx\next!%
@@ -315,6 +315,7 @@
 % <<<
 
 % sfaccmacros >>>
+\MRTutil@defoarg\MRTsfacc@darg<>
 \MRTutil@def[\protected]\defsfaccmacro@a#1#2#3%>>>
   {%
     \MRTutil@oarg{\defsfaccmacro@b{#1}{#2}{#3}}%
@@ -395,12 +396,12 @@
 \MRTutil@def[\protected]\MRTsfacc@new@defsfaccmacro#1#2%>>>
   {%
     \MRTutil@def[\protected]#1%
-      {\MRTutil@darg<>{\defsfaccmacro@a{\protected\edef}{#2}}}%
+      {\MRTsfacc@darg{\defsfaccmacro@a{\protected\edef}{#2}}}%
   }%<<<
 \MRTutil@def[\protected]\MRTsfacc@new@newsfaccmacro#1#2%>>>
   {%
     \MRTutil@def[\protected]#1%
-      {\MRTutil@darg<>{\defsfaccmacro@a{\MRTutil@edef[\protected]}{#2}}}%
+      {\MRTsfacc@darg{\defsfaccmacro@a{\MRTutil@edef[\protected]}{#2}}}%
   }%<<<
 \MRTutil@def[\protected]\MRTsfacc@new@sfaccmacro@pair#1#2%>>>
   {%
@@ -424,7 +425,6 @@
     }%<<<
 %<<<
 \else%>>>
-  \newsavebox\MRTsfacc@box
   \MRTutil@def[\protected]\MRTsfacc@autokern#1#2%>>>
     {%
       \MRTsfacc@ifknown{#2}
