@@ -5,6 +5,7 @@
 
 \MRTthesisSetup
   {
+    % title page related
     ,no advisor
     ,no citation
     ,no degree
@@ -13,9 +14,13 @@
     ,no logos
     ,no thesis
     ,with subtitle
-    ,number=00-00-00-0
+    % front matter related
+    ,frontmatter=auto
+    ,affidavit=off
+    % document related
     ,stretches=1
     ,stretch tab=1.408
+    ,caption above
   }
 
 \input{preamble/doc_macros.tex}
@@ -34,15 +39,11 @@
 \subtitle{\LaTeX\ Templates for the MRT, University of Bayreuth}
 \author{Spratte, Jonathan P.}%\and zu Guttenberg, Karl-Theodor}
 
+%% keep LoF and LoT on one page
+\pretocmd\listoftables{\vskip2cm\begingroup\let\clearpage\relax}{}{}
+\apptocmd\listoftables{\endgroup}{}{}
+
 \begin{document}
-\maketitle
-\tableofcontents
-\listoffigures
-\begingroup
-\let\clearpage\relax
-\listoftables
-\endgroup
-\mainpart
 
 \include{tex/doc_introduction}
 \include{tex/doc_MRTthesis}

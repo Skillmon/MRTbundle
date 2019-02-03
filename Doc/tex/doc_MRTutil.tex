@@ -6,31 +6,17 @@ facing macros. As a general rule of thumb the user level is therefore moved one
 layer down, user facing macros have a single \texttt{@} in their names, while
 internal macros have at least two.
 
-\section{Defining Macros}
-Since the author of this bundle often finds the possibilities of the \LaTeX2e
-macro family of \cs{newcommand} too restricting, the package provides some
-macros which use the syntax of \TeX's \cs{def} but still check whether the macro
-is already defined.
-
-\begin{describemacro}{MRTutil@def,MRTutil@edef}%
-  [\oarg{prefixes}\meta{cs}\meta{args}\marg{definition}]
-  Those are versions of \cs{def} and \cs{edef}. You can define \meta{prefixes}
-  like \cs{long} or \cs{protected}. \meta{cs} is the new control sequence's
-  name, \meta{args} is the argument specification and \meta{definition} is the
-  replacement text of the macro. Both check whether the macro is already defined
-  and will raise an error if they are. They are like a fusion of \cs{newcommand}
-  and \cs{def} in that they only define a new command but keep the versatility
-  of \cs{def}.
-\end{describemacro}
-
-\section{Optional Argument Parsing}
+\section{Optional Argument Parsing}%>>>
 Since the author really likes what \pkg{xparse} allows in defining macros with
 many optional arguments but doesn't want to force the complete \pkg{expl3} onto
 the user (since it's huge), if a user is only interested in one or two of the
 small packages of this bundle there are some macros in those packages which have
 multiple optional arguments. To define those the following macros were created
 to provide a very limited subset of \pkg{xparse}'s functionality. Note that none
-of the provided macros allow expandable definitions.
+of the provided macros allow expandable definitions and none checks for matched
+delimiters (so if you want to pass in a |]| to a macro with an optional argument
+delimited by |[]| you'll need to use |[{foo]}]|, this is the same behaviour
+encountered in \LaTeXe's optional arguments).
 
 \begin{describemacro}{MRTutil@Oarg}[\marg{default}\marg{continue}]
   checks for a following optional argument in \texttt{[]}. If there is none it
@@ -42,12 +28,12 @@ of the provided macros allow expandable definitions.
 \begin{describemacro}{MRTutil@oarg}[\marg{continue}]
   Like \cs{MRTutil@Oarg}, but provides a special marker if there is no optional
   argument. You can check whether the special marker was provided with
-  \cs{MRTutil@ifmark}.
+  \cs{MRTutil@ifmark}. There is a usage example in \autoref{sec:util:example}.
 \end{describemacro}
 
 \begin{describemacro}{MRTutil@Darg}%
   [\meta{token1}\meta{token2}\marg{default}\marg{continue}]
-  Like \cs{MRTutil@Oarg}, but the optional argument should be delimited by
+  Like \cs{MRTutil@Oarg}, but the optional argument is delimited by
   \meta{token1} and \meta{token2}. So \bverb|\MRTutil@Darg<>{}\foo| will check
   whether there is an optional argument delimited by \texttt{<>} and if there is
   none will use an empty one. The result is provided to \cs{foo}.
@@ -65,3 +51,132 @@ of the provided macros allow expandable definitions.
   and \cs{MRTutil@darg} and if so expands to \meta{true}. If not it expands to
   \meta{false}.
 \end{describemacro}
+%<<<
+
+\section{Defining Macros}%>>>
+Since the author of this bundle often finds the possibilities of the \LaTeXe\
+macro family of \cs{newcommand} too restricting, the package provides some
+macros which use the syntax of \TeX's \cs{def} but still check whether the macro
+is already defined.
+
+\begin{describemacro}{MRTutil@def,MRTutil@edef}%
+  [\oarg{prefixes}\meta{cs}\meta{args}\marg{definition}]
+  Those are versions of \cs{def} and \cs{edef}. You can define \meta{prefixes}
+  like \cs{long} or \cs{protected}. \meta{cs} is the new control sequence's
+  name, \meta{args} is the argument specification and \meta{definition} is the
+  replacement text of the macro. Both check whether the macro is already defined
+  and will raise an error if they are. They are like a fusion of \cs{newcommand}
+  and \cs{def} in that they only define a new command but keep the versatility
+  of \cs{def}. There is a usage example in \autoref{sec:util:example}.
+\end{describemacro}
+
+\begin{describemacro}{MRTutil@defOargpair}
+  [\marg{cs1}\marg{cs2}\meta{token1}\meta{token2}]
+  This defines \meta{cs1} to be similar to \cs{MRTutil@Oarg} and \meta{cs2} to
+  be similar to \cs{MRTutil@oarg}, but using \meta{token1} and \meta{token2} as
+  delimiters. The resulting macros should be faster than \cs{MRTutil@Darg} and
+  \cs{MRTutil@darg}. Additionally to \meta{cs1} and \meta{cs2} a macro called
+  \meta{\textbackslash cs1} (with an additional backslash in its name) will be
+  defined that does the argument grabbing. \meta{cs1} and \meta{cs2} should
+  include the leading backslash.
+\end{describemacro}
+
+\begin{describemacro}{MRTutil@defOarg,MRTutil@defoarg}
+  [\marg{cs}\meta{token1}\meta{token2}]
+  These can be used if only one of the equivalents of \cs{MRTutil@Oarg} or
+  \cs{MRTutil@oarg} is needed. Additionally to \meta{cs} a macro called
+  \meta{\textbackslash cs} (with an additional backslash in its name) will be
+  defined that does the argument grabbing. \meta{cs} should include the leading
+  backslash. There is a usage example in \autoref{sec:util:example}.
+\end{describemacro}
+%<<<
+
+\subsection{Example}\label{sec:util:example}%>>>
+In the following example we'll define a macro that takes two optional arguments
+-- one delimited by |[]| and one delimited by |<>| -- and a mandatory one. We'll
+need one auxiliary macro per optional argument.
+
+First we define the front facing macro named \cs{ourmacro}. It is defined
+\cs{protected}, because it isn't expandable since \cs{MRTutil@oarg} isn't.
+\begin{verbatim}
+\makeatletter
+\MRTutil@def[\protected]\ourmacro{\MRTutil@oarg{\ourmacro@a}}
+\end{verbatim}
+Next we define the second step that looks for the second optional argument,
+again defined \cs{protected}, but this time also \cs{long}, because it takes
+arguments and those might contain an explicit or implicit \cs{par}. We pipe
+through the first optional argument. Since we think that \cs{ourmacro} is gonna
+be used pretty often we want the argument grabbing for the second optional
+argument to be fast, so instead of using \cs{MRTutil@darg<>} we define our own
+test macro \cs{ourmacro@opt}.
+\begin{verbatim}
+\MRTutil@defoarg\ourmacro@opt<>
+\MRTutil@def[\protected\long]\ourmacro@a#1{\ourmacro@opt{\ourmacro@b{#1}}}
+\end{verbatim}
+The last step is the one which takes both optional arguments and the mandatory
+one. This one doesn't have to be defined \cs{protected}, because it is
+expandable.
+\begin{verbatim}
+\MRTutil@def[\long]\ourmacro@b#1#2#3%
+  {%
+    \MRTutil@ifmark{#1}
+      {No 1st optional argument provided}
+      {1st optional argument: #1}%
+    \par
+    \MRTutil@ifmark{#2}
+      {No 2nd optional argument provided}
+      {2nd optional argument: #2}%
+    \par
+    Mandatory argument: #3%
+  }
+\makeatother
+\end{verbatim}
+As you can see, the macro doesn't do anything special, it just lists its
+arguments.
+
+\begingroup
+\makeatletter
+\MRTutil@def[\protected]\ourmacro{\MRTutil@oarg{\ourmacro@a}}
+\MRTutil@defoarg\ourmacro@opt<>
+\MRTutil@def[\protected\long]\ourmacro@a#1{\ourmacro@opt{\ourmacro@b{#1}}}
+\MRTutil@def[\long]\ourmacro@b#1#2#3%
+  {%
+    \MRTutil@ifmark{#1}
+      {No 1st optional argument provided}
+      {1st optional argument: #1}%
+    \par
+    \MRTutil@ifmark{#2}
+      {No 2nd optional argument provided}
+      {2nd optional argument: #2}%
+    \par
+    Mandatory argument: #3%
+  }
+\MRTutil@def\ourmacrocell{\setstretch{1}\expandafter\ourmacro\@firstofone}
+\makeatother
+A few usage examples of the above defined macro can be seen in
+\autoref{tab:util:ourmacro}.
+
+\noindent
+\begin{MRTtable}
+  [
+    ,pre=
+      {%
+        \setbox0\hbox{No 2nd optional argument provided}%
+        \def\mc{\multicolumn{1}}%
+      }
+    ,caption=Usage examples of \cs{ourmacro}
+    ,label=tab:util:ourmacro
+    ,col=
+      {
+        >{\cs{ourmacro}}l
+        >{\collectcell\ourmacrocell}p{\wd0}<{\endcollectcell}
+      }
+  ]
+  \mc{l}{Macro call} & \mc{p{\wd0}}{Output} \\
+  |{baz}| & {baz} \\
+  |[foo]{baz}| & [foo]{baz} \\
+  |<bar>{baz}| & <bar>{baz} \\
+  |[foo]<bar>{baz}| & [foo]<bar>{baz} \\
+\end{MRTtable}
+\endgroup
+%<<<

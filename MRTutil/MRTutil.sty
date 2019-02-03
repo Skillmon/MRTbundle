@@ -1,5 +1,5 @@
-\newcommand*\MRTutil@version{0.0.1}
-\newcommand*\MRTutil@date{2019-01-30}
+\newcommand*\MRTutil@version{0.0.2}
+\newcommand*\MRTutil@date{2019-02-03}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -35,30 +35,51 @@
 
 %% opt arg parsing >>>
 \MRTutil@def\MRTutil@@mark{\MRTutil@@mark}
+\MRTutil@def[\long]\MRTutil@fiBTb\fi#1#2#3{\fi#2}
 \MRTutil@def[\long]\MRTutil@ifmark#1%>>>
   {%
     \ifx\MRTutil@@mark#1%
-      \MRTif@fiAa
-    \else
-      \MRTif@fiBb
+      \MRTutil@fiBTb
     \fi
+    \@secondoftwo
   }%<<<
-\MRTutil@def[\protected\long]\MRTutil@Oarg#1#2%>>>
+\MRTutil@def[\protected\long]\MRTutil@defOarg#1#2#3%>>>
   {%
-    \@ifnextchar[{\MRTutil@Oarg@{#2}}{\MRTutil@Oarg@{#2}[{#1}]}%
+    \MRTutil@edef[\protected\long]#1##1##2%
+      {%
+        \noexpand\@ifnextchar#2%
+          {\expandafter\noexpand\csname\string#1\endcsname{##2}}
+          {##2{##1}}%
+      }%
+    \expandafter\MRTutil@def\expandafter[\expandafter\long\expandafter]%
+      \csname\string#1\endcsname##1#2##2#3{##1{##2}}%
   }%<<<
-\MRTutil@def[\long]\MRTutil@Oarg@#1[#2]%>>>
+\MRTutil@def[\protected\long]\MRTutil@defoarg#1#2#3%>>>
   {%
-    #1{#2}%
+    \MRTutil@edef[\protected\long]#1##1%
+      {%
+        \noexpand\@ifnextchar#2%
+          {\expandafter\noexpand\csname\string#1\endcsname{##1}}
+          {##1{\noexpand\MRTutil@@mark}}%
+      }%
+    \expandafter\MRTutil@def\expandafter[\expandafter\long\expandafter]%
+      \csname\string#1\endcsname##1#2##2#3{##1{##2}}%
   }%<<<
-\MRTutil@def[\protected]\MRTutil@oarg%>>>
+\MRTutil@def[\protected\long]\MRTutil@defOargpair#1#2#3#4%>>>
   {%
-    \MRTutil@Oarg\MRTutil@@mark
+    \MRTutil@defOarg#1#3#4%
+    \MRTutil@edef[\protected\long]#2##1%
+      {%
+        \noexpand\@ifnextchar#3%
+          {\expandafter\noexpand\csname\string#1\endcsname{##1}}
+          {##1{\noexpand\MRTutil@@mark}}%
+      }%
   }%<<<
+\MRTutil@defOargpair\MRTutil@Oarg\MRTutil@oarg[]
 \MRTutil@def[\protected\long]\MRTutil@Darg#1#2#3#4%>>>
   {%
     \long\def\MRTutil@Darg@##1#1##2#2{##1{##2}}%
-    \@ifnextchar#1{\MRTutil@Darg@{#4}}{\MRTutil@Darg@{#4}#1{#3}#2}%
+    \@ifnextchar#1{\MRTutil@Darg@{#4}}{#4{#3}}%
   }%<<<
 \MRTutil@def[\protected\long]\MRTutil@darg#1#2%>>>
   {%

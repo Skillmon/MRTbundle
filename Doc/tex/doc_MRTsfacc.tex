@@ -58,17 +58,18 @@ approach is easier to adapt to other fonts -- one has to change only one
 parameter -- it is always a compromise trying to match every character as good
 as possible.
 
-\begin{table}% >>>
-  \centering
+\begin{MRTtable}% >>>
+  [
+    ,env={}
+    ,label=tab:sfacc:height
+    ,caption=
+      {%
+        Comparison of shifted accents against original placement with the use of
+        the \opt{height} variant.%
+      }
+  ]
   \includegraphics{img/sfacc_height_table-alone.pdf}
-  \caption
-    {%
-      Comparison of shifted accents against original placement with the use of
-      the \opt{height} variant.%
-      \label{tab:sfacc:height}%
-    }%
-\end{table}% <<<
-
+\end{MRTtable}% <<<
 
 \subsection{Macros}\label{sec:sfacc:height:macros}%>>>
 \begin{describemacro}{<accent>}[\meta{*/!}\marg{arg}]%>>>
@@ -98,16 +99,18 @@ stuff. The drawback is that everything has to be added that you want to be
 recognized.
 \autoref{tab:sfacc:list} shows the results of this approach.
 
-\begin{table}% >>>
-  \centering
+\begin{MRTtable}% >>>
+  [
+    ,env={}
+    ,label=tab:sfacc:list
+    ,caption=
+      {%
+        Comparison of shifted accents against original placement with the use of
+        the \opt{list} variant.%
+      }%
+  ]
   \includegraphics{img/sfacc_list_table-alone.pdf}
-  \caption
-    {%
-      Comparison of shifted accents against original placement with the use of
-      the \opt{list} variant.%
-      \label{tab:sfacc:list}%
-    }%
-\end{table}% <<<
+\end{MRTtable}% <<<
 
 \subsection{Macros}
 \begin{describemacro}{<accent>}[\oarg{opt}\marg{arg}]%>>>

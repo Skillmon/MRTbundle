@@ -41,6 +41,7 @@
 \bool_new:N \l_MRTthesis_lot_front_bool
 \bool_new:N \l_MRTthesis_toc_front_bool
 \bool_new:N \l_MRTthesis_sfacc_height_bool
+\bool_new:N \l_MRTthesis_hyperref_code_executed_bool
 % <<<
 % box >>>
 \box_new:N \l_MRTthesis_tmpa_box
@@ -233,9 +234,14 @@
 % 
 \BeforeBeginEnvironment{document}
   {
-    \RequirePackage{hyperref}
-    \bool_if:NT \l_MRTthesis_hyper_hidelinks_bool { \hypersetup { hidelinks } }
-    \MRTthesis@after@hyperref
+    \bool_if:NF \l_MRTthesis_hyperref_code_executed_bool
+      {
+        \RequirePackage{hyperref}
+        \bool_if:NT \l_MRTthesis_hyper_hidelinks_bool
+          { \hypersetup { hidelinks } }
+        \MRTthesis@after@hyperref
+        \bool_gset_true:N \l_MRTthesis_hyperref_code_executed_bool
+      }
   }
 \bool_if:NF \l_MRTthesis_minimal_bool%>>>
   {
@@ -478,13 +484,12 @@
 % \MRTafterhyperref >>>
 \NewDocumentCommand \MRTafterhyperref { +m }% >>>
   {
-    \xdef \MRTthesis@after@hyperref 
-      { \unexpanded \expandafter { \MRTthesis@after@hyperref #1 } }
+    \tl_gput_right:Nn \MRTthesis@after@hyperref { #1 }
   }% <<<
 \MRTutil@def\MRTthesis@after@hyperref{}
 \MRTafterhyperref% redefine itself after hyperref to throw an error >>>
   {
-    \cs_set:Npn \MRTafterhyperref #1
+    \cs_set_protected:Npn \MRTafterhyperref #1
       { \msg_error:nn { MRTthesis } { afterafterhyperref } }
   }% <<<
 % <<<
@@ -1278,7 +1283,7 @@
 
 %% automatic front- and backmatter >>>
 %%=============================================================================
-\AtBeginDocument%>>>
+\AfterEndPreamble%>>>
   {
     \bool_if:NT \l_MRTthesis_auto_frontmatter_bool
       { \MRTthesis_auto_frontmatter: }
