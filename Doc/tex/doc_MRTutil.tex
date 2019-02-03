@@ -14,9 +14,9 @@ small packages of this bundle there are some macros in those packages which have
 multiple optional arguments. To define those the following macros were created
 to provide a very limited subset of \pkg{xparse}'s functionality. Note that none
 of the provided macros allow expandable definitions and none checks for matched
-delimiters (so if you want to pass in a |]| to a macro with an optional argument
-delimited by |[]| you'll need to use |[{foo]}]|, this is the same behaviour
-encountered in \LaTeXe's optional arguments).
+delimiters (so if you want to pass in a |[| and a |]| to a macro with an
+optional argument delimited by |[]| you'll need to use |[{[foo]}]|, this is the
+same behaviour encountered in \LaTeXe's optional arguments).
 
 \begin{describemacro}{MRTutil@Oarg}[\marg{default}\marg{continue}]
   checks for a following optional argument in \texttt{[]}. If there is none it
