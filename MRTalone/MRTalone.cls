@@ -1,5 +1,5 @@
-\newcommand*\MRTalone@version{0.0.3}
-\newcommand*\MRTalone@date{2018-11-08}
+\newcommand*\MRTalone@version{0.0.4}
+\newcommand*\MRTalone@date{2018-02-03}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -217,6 +217,27 @@
   }
 \setlist[itemize]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
 \setlist[enumerate]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
+%%==========================================================================<<<
+
+%% set page dimensions >>>
+%% equal to the ones in MRTthesis 
+%%=============================================================================
+\RequirePackage
+  [
+    ,paperheight=845.04694pt
+    ,paperwidth=597.50793pt
+    ,left=25mm
+    ,right=25mm
+    ,top=8.4mm
+    ,bottom=10.7mm
+    ,includeheadfoot
+    ,headsep=15.4mm
+    ,marginparwidth=18mm
+    ,marginparsep=4mm
+  ]
+  {geometry}
+\textwidth=455.24417pt
+\textheight=682.285pt
 %%==========================================================================<<<
 
 % Setting up MRTtab to work in standalone by default
