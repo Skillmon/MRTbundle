@@ -28,9 +28,9 @@ project.
 
 The perhaps best way would be local user wide install. This is done by placing
 the bundle's folders `MRTalone`, `MRTbeam`, `MRTif`, `MRTsfacc`, `MRTtab`,
-`MRTthesis` and `MRTwuline` in your local TeX-tree. For TeX Live on Unix this
-would by default be `/home/<user>/texmf/` therein the package should belong in
-`tex/latex/MRTbundle`. The documentation should be placed in
+`MRTthesis`, `MRTutil` and `MRTwuline` in your local TeX-tree. For TeX Live on
+Unix this would by default be `/home/<user>/texmf/` therein the packages should
+belong in `tex/latex/MRTbundle`. The documentation should be placed in
 `/home/<user>/texmf/doc/latex/MRTbundle` but this is *optional*. For other OSes
 and TeX distributions the paths may vary. You can get the correct path to your
 user specific folder by running `kpsewhich -var TEXMFHOME` in your terminal (at
@@ -43,10 +43,10 @@ belonging to an included package or class in `tex/latex/MRTbundle`. The
 documentation would belong in
 `/usr/local/texlive/texmf-local/doc/latex/MRTbundle`. The correct folder can be
 determined by running `kpsewhich -var TEXMFLOCAL`. Again installation of
-documentation is optional. After you placed the file in the system folders you'd
-have to update your directory indices by running `mktexlsr` as root. The correct
-installation can be checked by running `kpsewhich MRTthesis.cls` or for any
-other provided package or class.
+documentation is optional. After you placed the files in the system folders
+you'd have to update your directory indices by running `mktexlsr` as root. The
+correct installation can be checked by running `kpsewhich MRTthesis.cls` or for
+any other provided package or class.
 
 ### Licensing ###
 
