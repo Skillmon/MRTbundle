@@ -1,13 +1,15 @@
 # User defined variables {{{
 ##########################################
-TEX    = pdflatex
-FLAGS  = -halt-on-error
+TEX     = pdflatex
+FLAGS   = -halt-on-error
 # relative path to included TeX-files
-TEXF   = ./tex
+TEXF    = ./tex
 # relative path to included TeX-files containing preamble stuff
-PREF   = ./preamble
+PREF    = ./preamble
 # relative path to images
-IMGF   = ./img
+IMGF    = ./img
+# command (with flags) to be used for make in subdirectories
+SUBMAKE = make -j4
 ##########################################
 # }}}
 # Automatically defined variables {{{
@@ -40,7 +42,7 @@ $(FMT): $(FILE) $(PREAMB)# {{{
 	$(TEX) -ini -enc -jobname="$(NAME)" "&$(TEX)" mylatexformat.ltx """$(FILE)"""
 # }}}
 img:
-	cd $(IMGF); make -j4
+	cd $(IMGF); $(SUBMAKE)
 .PHONY: clean cleantex cleansubfoldertex cleanimg quick all img
 clean: cleantex cleansubfoldertex cleanimg
 cleantex: # {{{
