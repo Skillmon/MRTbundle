@@ -1,5 +1,5 @@
-\newcommand*\MRTalone@version{0.0.4}
-\newcommand*\MRTalone@date{2018-02-03}
+\newcommand*\MRTalone@version{0.0.5}
+\newcommand*\MRTalone@date{2018-02-05}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -21,6 +21,7 @@
 \bool_new:N \l_MRTalone_mathsizes_bool
 \bool_new:N \l_MRTalone_british_bool
 \bool_new:N \l_MRTalone_sfacc_height_bool
+\bool_new:N \l_MRTalone_lmscale_bool
 % <<<
 % <<<
 %%==========================================================================<<<
@@ -68,13 +69,21 @@
   {%>>>
     \keys_define:nn { MRTalone / loadtime }
       {
-         font       .tl_set:N = \l_MRTalone_font_tl
-        ,serif~font .tl_set:N = \l_MRTalone_serif_font_tl
-        ,mono~font  .tl_set:N = \l_MRTalone_mono_font_tl
+         font        .tl_set:N  = \l_MRTalone_font_tl
+        ,font        .initial:n = { TeX~Gyre~Heros }
+        ,serif font  .tl_set:N  = \l_MRTalone_serif_font_tl
+        ,serif font  .initial:n = { Latin Modern Roman }
+        ,mono font   .tl_set:N  = \l_MRTalone_mono_font_tl
+        ,mono font   .initial:n = { Latin Modern Mono }
+        ,scale maths .code:n    =
+          {
+            \msg_error:nnnn { MRTalone } { wrong~engine }
+              { key ~ `scale~maths` } { pdftex }
+          }
       }
   }%<<<
   {%>>>
-    \clist_map_inline:nn { font, serif~font, mono~font }
+    \clist_map_inline:nn { font, serif font, mono font }
       {
         \keys_define:nn { MRTalone / loadtime }
           {
@@ -84,6 +93,30 @@
                   { xetex ~ or ~ luatex }
               }
           }
+      }
+    \keys_define:nn { MRTalone / loadtime }
+      {
+        scale maths .code:n =
+          {
+            \tl_if_empty:nTF { #1 }
+              {
+                \bool_set_true:N \l_MRTalone_lmscale_bool
+              }
+              {
+                \str_case:nnF { #1 }
+                  {
+                    { off   } { \bool_set_false:N \l_MRTalone_lmscale_bool }
+                    { false } { \bool_set_false:N \l_MRTalone_lmscale_bool }
+                    { on    } { \bool_set_true:N  \l_MRTalone_lmscale_bool }
+                    { true  } { \bool_set_true:N  \l_MRTalone_lmscale_bool }
+                  }
+                  {
+                    \bool_set_true:N \l_MRTalone_lmscale_bool
+                    \PassOptionsToPackage { #1 } { MRTlmscale }
+                  }
+              }
+          }
+        ,scale maths .initial:n = {}
       }
   }%<<<
 %% <<<
@@ -107,8 +140,8 @@
           {
             You ~ did ~ not ~ specify ~ any ~ sans ~ font ~ using ~ the ~
             `font` ~ key. ~ I'll ~ use ~ the ~ default ~ font ~ but ~ you ~
-            should ~ use ~ a ~ system ~ font ~ looking ~ like ~ Arial ~ or ~
-            Helvetica.
+            should ~ use ~ a ~ system ~ font ~ looking ~ like ~ Helvetica ~ or ~
+            Arial.
           }
         \msg_warning:nn { MRTalone } { no~font }
       }
@@ -122,6 +155,7 @@
     \RequirePackage[T1]{fontenc}
     \RequirePackage[utf8]{inputenc}
     \RequirePackage{lmodern}
+    \bool_if:NT \l_MRTalone_lmscale_bool { \RequirePackage { MRTlmscale } }
     \RequirePackage{helvet}
   }%<<<
 \renewcommand\familydefault{\sfdefault}
@@ -222,20 +256,10 @@
 %% set page dimensions >>>
 %% equal to the ones in MRTthesis 
 %%=============================================================================
-\RequirePackage
-  [
-    ,paperheight=845.04694pt
-    ,paperwidth=597.50793pt
-    ,left=25mm
-    ,right=25mm
-    ,top=8.4mm
-    ,bottom=10.7mm
-    ,includeheadfoot
-    ,headsep=15.4mm
-    ,marginparwidth=18mm
-    ,marginparsep=4mm
-  ]
-  {geometry}
+%% Using geometry doesn't lead to the exact same dimensions, so we do it by hand
+%% Only set paper and text block dimensions, rest shouldn't be necessary
+\paperheight=845.04694pt
+\paperwidth=597.50793pt
 \textwidth=455.24417pt
 \textheight=682.285pt
 %%==========================================================================<<<

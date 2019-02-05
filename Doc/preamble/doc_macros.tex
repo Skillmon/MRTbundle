@@ -404,6 +404,7 @@
       \versionline{if}
       \versionline{wuline}
       \versionline{sfacc}
+      \versionline{lmscale}
       \versionline{util}
     \end{MRTtable}
   }%<<<
@@ -532,7 +533,7 @@
 \def\MakeShortVerb{%>>>
   \@ifstar
     {\def\@shortvrbdef{\verb*}\@MakeShortVerb}%
-    {\def\@shortvrbdef{\verb}\@MakeShortVerb}}%<<<
+    {\def\@shortvrbdef{\bverb}\@MakeShortVerb}}%<<<
 \def\@MakeShortVerb#1{%>>>
   \expandafter\ifx\csname cc\string#1\endcsname\relax
     \@shortvrbinfo{Made }{#1}\@shortvrbdef

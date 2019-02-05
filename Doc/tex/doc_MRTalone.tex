@@ -41,17 +41,30 @@ The class features a few load time options.
 \begin{describeopt}{font}[\meta{font}]
   This is only available if you're using \luaxetex. With this you can set the
   used sans serif font, which will be used as the default font. It should be
-  a font resembling Helvetica or Arial.
+  a font resembling Helvetica or Arial. Per default the font
+  \bverb|TeX Gyre Heros| will be used.
 \end{describeopt}
 \begin{describeopt}{serif font}[\meta{font}]
   This is only available if you're using \luaxetex. With this you can set the
   used serif font. This isn't too important as the default fonts will suffice.
-  You shouldn't have too much text with a Roman font anyway.
+  You shouldn't have too much text with a Roman font anyway. Per default the
+  font \bverb|Latin Modern Roman| will be used.
 \end{describeopt}
 \begin{describeopt}{mono font}[\meta{font}]
   This is only available if you're using \luaxetex. With this you can set the
   used mono font. This isn't too important as the default fonts will suffice.
-  You shouldn't have too much text with a Roman font anyway.
+  You shouldn't have too much text with a mono font anyway. Per default the
+  font \bverb|Latin Modern Mono| will be used.
+\end{describeopt}
+\begin{describeopt}{scale maths}[\meta{choice}]
+  This is only available if you're using \hologo{pdfTeX}. With this you can
+  specify whether the \pkg{MRTlmscale} package should be loaded. Available
+  \meta{choice}s are no argument, resulting in \pkg{MRTlmscale} being used with
+  its default, |on| resulting in the same, |off| resulting in \pkg{MRTlmscale}
+  not being used, and any valid float, resulting in \pkg{MRTlmscale} being used
+  with the specified float as its scale factor. See \autoref{sec:lmscale} for
+  more about \pkg{MRTlmscale}. By default, \pkg{MRTlmscale} will be used with
+  its default scale factor.
 \end{describeopt}
 
 \noindent
@@ -105,15 +118,18 @@ and all its dependencies. Additional dependencies are:
     \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
       \begin{itemize}[topsep=0pt]
         \item \pkg{fontspec} and
-          \verb|\defaultfontfeatures|\hskip0pt\verb|{Ligatures=TeX}|
+          \bverb|\defaultfontfeatures{Ligatures=TeX}|
+        \item the fonts \bverb|TeX Gyre Heros|, \bverb|Latin Modern Roman| and
+          \bverb|Latin Modern Mono|, dependent on the |font| keys.
       \end{itemize}
       else
       \begin{itemize}[topsep=0pt]
         \item \pkg{fontenc} [T1]
         \item \pkg{inputenc} [utf8]
+        \item \pkg{lmodern}
+        \item \pkg{helvet}
+        \item \pkg{MRTlmscale} dependent on the \bverb|scale maths| key.
       \end{itemize}
-    \item \pkg{lmodern}
-    \item \pkg{helvet}
     \item \pkg{babel} [ngerman] or if \opt{british} is used with
       [main=british, ngerman]
     \item \pkg{setspace}

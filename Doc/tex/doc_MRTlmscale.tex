@@ -1,0 +1,31 @@
+\chapter{The \pkg{MRTlmscale} package}\label{sec:lmscale}
+This package provides the option to scale the maths font of \pkg{lmodern} in a
+similar way \pkg{helvet} is scalable. It is only meant to be used with the
+\hologo{pdfTeX} engine.
+
+If you load it it applies the default scale of \num{1.17647}. This scale leads
+to a matching height of the Greek maths font compared to \pkg{helvet} when used
+in combination with \pkg{mathastext}. You can provide any other scale as a
+package option. The package only takes this one option and it is checked whether
+this option is a valid float with \cs{MRTifFloatTF}.
+
+Here are the results of this scale:
+
+\begin{figure}[htb]% >>>
+  \centering
+  \includegraphics[scale=5]{img/lmscale_not_scaled-alone.pdf}%
+  \hfil
+  \includegraphics[scale=5]{img/lmscale_scaled-alone.pdf}%
+  \caption
+    [Effects of the \pkg{MRTlmscale} package.]
+    {%
+      Effects of the \pkg{MRTlmscale} package. On the left the unscaled font,
+      right with the default scale applied.%
+      \label{fig:lmscale}%
+    }%
+\end{figure}% <<<
+
+\section{Dependencies}\label{sec:lmscale:dep}%>>>
+The package uses the \pkg{MRTutil} package and \cs{MRTifFloatTF} from the
+\pkg{MRTif} package.
+%<<<

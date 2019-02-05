@@ -1,0 +1,53 @@
+\newcommand*\MRTlmscale@version{0.0.1}
+\newcommand*\MRTlmscale@date{2019-02-05}
+
+\NeedsTeXFormat{LaTeX2e}
+
+\ProvidesPackage{MRTlmscale}
+  [%
+    \MRTlmscale@date\space v\MRTlmscale@version\space scales the mathematical
+    alphabet of lmodern%
+  ]
+
+\RequirePackage{MRTif,MRTutil}
+
+%% package options >>>
+\MRTutil@def\MRTlmscale@scale{1.17647}% default
+\MRTutil@def[\long]\MRTlmscale@set#1%>>>
+  {%
+    \MRTifFloatTF{#1}
+      {\def\MRTlmscale@scale{#1}}
+      {%
+        \PackageError{MRTlmscale}{Provided option `#1` is no valid float}
+          {%
+            Parsing says you didn't provide a valid float. Please provide a
+            valid float.\MessageBreak
+            If you're sure that you entered a valid float, please report the bug
+            to the\MessageBreak
+            package maintainer.%
+          }%
+      }%
+  }%<<<
+\DeclareOption*{\expandafter\MRTlmscale@set\expandafter{\CurrentOption}}
+\ProcessOptions\relax
+\edef\MRTlmscale@scale{s*[\MRTlmscale@scale]}
+%<<<
+
+%% replacing the contents of omllmm.fd with the scaled variant >>>
+\DeclareFontFamily{OML}{lmm}{\skewchar\font127 }
+\DeclareFontShape{OML}{lmm}{m}{it}%
+     {<-5.5>    \MRTlmscale@scale lmmi5     <5.5-6.5> \MRTlmscale@scale lmmi6
+      <6.5-7.5> \MRTlmscale@scale lmmi7     <7.5-8.5> \MRTlmscale@scale lmmi8
+      <8.5-9.5> \MRTlmscale@scale lmmi9     <9.5-11>  \MRTlmscale@scale lmmi10
+      <11->     \MRTlmscale@scale lmmi12
+      }{}
+\DeclareFontShape{OML}{lmm}{b}{it}{%
+       <-6> \MRTlmscale@scale lmmib5
+      <6-8> \MRTlmscale@scale lmmib7
+      <8->  \MRTlmscale@scale lmmib10
+      }{}
+\DeclareFontShape{OML}{lmm}{bx}{it}%
+     {<->ssub*lmm/b/it}{}
+% <<<
+
+\endinput

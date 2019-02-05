@@ -1,0 +1,17 @@
+% make twice
+\documentclass[border=1mm,scalemaths=off]{MRTalone}
+
+\usepackage{amssymb}
+
+\usepackage{transparent}
+
+\newcommand\compare[2]
+  {\rlap{${\color{red}#1}$}${\transparent{.7}#2}$}
+\newcommand\compareT[2]
+  {\rlap{{\color{red}#1}}{\transparent{.7}#2}}
+
+\begin{document}
+\compare\alpha a
+\compare\delta d
+\compare\varepsilon e
+\end{document}

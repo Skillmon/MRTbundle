@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.8}
-\newcommand*\MRTthesis@date{2019-02-03}
+\newcommand*\MRTthesis@version{0.0.9}
+\newcommand*\MRTthesis@date{2019-02-05}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -41,6 +41,7 @@
 \bool_new:N \l_MRTthesis_lot_front_bool
 \bool_new:N \l_MRTthesis_toc_front_bool
 \bool_new:N \l_MRTthesis_sfacc_height_bool
+\bool_new:N \l_MRTthesis_lmscale_bool
 \bool_new:N \l_MRTthesis_hyperref_code_executed_bool
 % <<<
 % box >>>
@@ -121,13 +122,21 @@
   {%>>>
     \keys_define:nn { MRTthesis / loadtime }
       {
-         font       .tl_set:N = \l_MRTthesis_font_tl
-        ,serif~font .tl_set:N = \l_MRTthesis_serif_font_tl
-        ,mono~font  .tl_set:N = \l_MRTthesis_mono_font_tl
+         font        .tl_set:N = \l_MRTthesis_font_tl
+        ,font        .initial:n = { TeX~Gyre~Heros }
+        ,serif font  .tl_set:N = \l_MRTthesis_serif_font_tl
+        ,serif font  .initial:n = { Latin Modern Roman }
+        ,mono font   .tl_set:N = \l_MRTthesis_mono_font_tl
+        ,mono font   .initial:n = { Latin Modern Mono }
+        ,scale maths .code:n    =
+          {
+            \msg_error:nnnn { MRTthesis } { wrong~engine }
+              { key ~ `scale~maths` } { pdftex }
+          }
       }
   }%<<<
   {%>>>
-    \clist_map_inline:nn { font, serif~font, mono~font }
+    \clist_map_inline:nn { font, serif font, mono font }
       {
         \keys_define:nn { MRTthesis / loadtime }
           {
@@ -137,6 +146,28 @@
                   { xetex ~ or ~ luatex }
               }
           }
+      }
+    \keys_define:nn { MRTthesis / loadtime }
+      {
+        scale maths .code:n =
+          {
+            \tl_if_empty:nTF { #1 }
+              {
+                \bool_set_true:N \l_MRTthesis_lmscale_bool
+              }
+              {
+                \str_case:nnF { #1 }
+                  {
+                    { off } { \bool_set_false:N \l_MRTthesis_lmscale_bool }
+                    { on  } { \bool_set_true:N  \l_MRTthesis_lmscale_bool }
+                  }
+                  {
+                    \bool_set_true:N \l_MRTthesis_lmscale_bool
+                    \PassOptionsToPackage { #1 } { MRTlmscale }
+                  }
+              }
+          }
+        ,scale maths .initial:n = {}
       }
   }%<<<
 %% <<<
@@ -163,8 +194,8 @@
           {
             You ~ did ~ not ~ specify ~ any ~ sans ~ font ~ using ~ the ~
             `font` ~ key. ~ I'll ~ use ~ the ~ default ~ font ~ but ~ you ~
-            should ~ use ~ a ~ system ~ font ~ looking ~ like ~ Arial ~ or ~
-            Helvetica.
+            should ~ use ~ a ~ system ~ font ~ looking ~ like ~ Helvetica ~ or ~
+            Arial.
           }
         \msg_warning:nn { MRTthesis } { no~font }
       }
@@ -178,6 +209,7 @@
     \RequirePackage[T1]{fontenc}
     \RequirePackage[utf8]{inputenc}
     \RequirePackage{lmodern}
+    \bool_if:NT \l_MRTthesis_lmscale_bool { \RequirePackage { MRTlmscale } }
     \RequirePackage{helvet}
   }%<<<
 \renewcommand\familydefault{\sfdefault}
