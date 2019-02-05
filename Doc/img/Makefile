@@ -4,7 +4,6 @@ TEX   = pdflatex
 FLAG  = -halt-on-error
 AINP  = .alone.tex
 AOUT  = -alone.pdf
-SHELL = zsh
 ##########################################
 # }}}
 # Automatically defined variables {{{
@@ -17,8 +16,10 @@ AOUTP = $(ALONE:%$(AINP)=%$(AOUT))
 all: alone
 alone: $(AOUTP)
 %-alone.pdf: %.alone.tex
-	-TMP=$$(head -n1 $<) &&\
-		[[ $$TMP = "% make twice" ]] && $(TEX) $(FLAGS) -jobname="$<" "\input{$<}"
+	TMP=`head -n1 $<`;\
+		if [ "$$TMP" = "% make twice" ];then\
+		$(TEX) $(FLAGS) -jobname="$<" "\input{$<}";\
+		fi
 	$(TEX) $(FLAGS) -jobname="$<" "\input{$<}"
 	-rm $<.aux
 	-rm $<.log
