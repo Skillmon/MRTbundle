@@ -27,10 +27,10 @@ unclean folder structure of your project *and* has to be redone for any future
 project.
 
 The perhaps best way would be local user wide install. This is done by placing
-the bundle's folders `MRTalone`, `MRTbeam`, `MRTif`, `MRTsfacc`, `MRTtab`,
-`MRTthesis`, `MRTutil` and `MRTwuline` in your local TeX-tree. For TeX Live on
-Unix this would by default be `/home/<user>/texmf/` therein the packages should
-belong in `tex/latex/MRTbundle`. The documentation should be placed in
+the bundle's folders `MRTalone`, `MRTbeam`, `MRTif`, `MRTlmscale`, `MRTsfacc`,
+`MRTtab`, `MRTthesis`, `MRTutil` and `MRTwuline` in your local TeX-tree. For TeX
+Live on Unix this would by default be `/home/<user>/texmf/` therein the packages
+should belong in `tex/latex/MRTbundle`. The documentation should be placed in
 `/home/<user>/texmf/doc/latex/MRTbundle` but this is *optional*. For other OSes
 and TeX distributions the paths may vary. You can get the correct path to your
 user specific folder by running `kpsewhich -var TEXMFHOME` in your terminal (at
