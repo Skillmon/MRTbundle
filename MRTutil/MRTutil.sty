@@ -1,5 +1,5 @@
-\newcommand*\MRTutil@version{0.0.2}
-\newcommand*\MRTutil@date{2019-02-03}
+\newcommand*\MRTutil@version{0.0.3}
+\newcommand*\MRTutil@date{2019-02-09}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -84,6 +84,14 @@
 \MRTutil@def[\protected\long]\MRTutil@darg#1#2%>>>
   {%
     \MRTutil@Darg#1#2\MRTutil@@mark
+  }%<<<
+\MRTutil@def[\protected\long]\MRTutil@Earg#1#2#3%>>>
+  {%
+    \@ifnextchar#1{\@firstoftwo{#3}}{#3{#2}}%
+  }%<<<
+\MRTutil@def[\protected\long]\MRTutil@earg#1%>>>
+  {%
+    \MRTutil@Earg#1\MRTutil@@mark
   }%<<<
 % <<<
 
