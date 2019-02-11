@@ -90,6 +90,8 @@
   {MRTbeam}          {\MRTbeam@date}
   {\MRTbeam@version} {beamer template for MRT - University of Bayreuth}
 
+\prop_gput:Nnn \g_msg_module_type_prop { MRTbeam } { Class }
+
 %% font loading >>>
 %%=============================================================================
 \ExplSyntaxOn
