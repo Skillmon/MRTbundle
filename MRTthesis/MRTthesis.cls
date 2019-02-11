@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.9}
-\newcommand*\MRTthesis@date{2019-02-05}
+\newcommand*\MRTthesis@version{0.0.10}
+\newcommand*\MRTthesis@date{2019-02-09}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -7,6 +7,8 @@
 \ProvidesExplClass
   {MRTthesis}          {\MRTthesis@date}
   {\MRTthesis@version} {thesis template for MRT - University of Bayreuth}
+
+\prop_gput:Nnn \g_msg_module_type_prop { MRTthesis } { Class }
 
 %% variants of external macros >>>
 %%=============================================================================
@@ -583,11 +585,11 @@
     \addto\extrasngerman
       {%
         \gdef\figureautorefname{Bild}%
-        \gdef\equationautorefname{Gl.}%
+        \gdef\equationautorefname{Gl.\@}%
       }%
     \addto\extrasbritish
       {%
-        \gdef\equationautorefname{eq.}%
+        \gdef\equationautorefname{eq.\@}%
       }%
   }% <<<
 \MRTafterhyperref{\MRTthesis@setautorefnames}
