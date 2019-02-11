@@ -1,5 +1,5 @@
-\newcommand*\MRTalone@version{0.0.5}
-\newcommand*\MRTalone@date{2018-02-05}
+\newcommand*\MRTalone@version{0.0.6}
+\newcommand*\MRTalone@date{2018-02-09}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -7,6 +7,8 @@
 \ProvidesExplClass
   {MRTalone}          {\MRTalone@date}
   {\MRTalone@version} {standalone matching MRTthesis}
+
+\prop_gput:Nnn \g_msg_module_type_prop { MRTalone } { Class }
 
 %% variants of external macros >>>
 %%=============================================================================
@@ -23,6 +25,10 @@
 \bool_new:N \l_MRTalone_sfacc_height_bool
 \bool_new:N \l_MRTalone_lmscale_bool
 % <<<
+% tl >>>
+\tl_const:Nn \c_MRTalone_setup_file_name_tl { ./MRTalone.setup.tex }
+\tl_const:Nn \c_MRTalone_options_file_name_tl { ./MRTalone.option.tex }
+% <<<
 % <<<
 %%==========================================================================<<<
 
@@ -38,6 +44,11 @@
   {
     The ~ used ~ #1 ~ is ~ not ~ available ~ under ~ \c_sys_engine_str. ~ You ~
     have ~ to ~ use ~ #2.
+  }%<<<
+\msg_new:nnn { MRTalone } { options~too~late }%>>>
+  {
+    \token_to_str:N \MRTaloneOptions \c_space_tl may ~ only ~ be ~ used ~ in ~
+    the ~ file ~ '\c_MRTalone_options_file_name_tl'.
   }%<<<
 %%==========================================================================<<<
 
@@ -57,6 +68,8 @@
 \DeclareOption{british}{\bool_set_true:N \l_MRTalone_british_bool}
 \DeclareOption{UKenglish}{\ExecuteOptions{british}}
 \DeclareOption{english}{\ExecuteOptions{british}}
+\DeclareOption{tikz}
+  {\PassOptionsToPackage{table}{xcolor}\PassOptionsToClass{tikz}{standalone}}
 %% Additional KV-options >>>
 \keys_define:nn { MRTalone / loadtime }%>>>
   {
@@ -123,6 +136,20 @@
 \DeclareOption* { \keys_set:nV { MRTalone / loadtime } \CurrentOption }
 \ExecuteOptions{mathsizes}
 \PassOptionsToClass{11pt}{standalone}
+\file_if_exist:nT { \c_MRTalone_options_file_name_tl }
+  {
+    \cs_new:Npn \MRTaloneOptions #1
+      {
+        \ExecuteOptions { #1 }
+      }
+    \ExplSyntaxOff
+    \file_input:n { \c_MRTalone_options_file_name_tl }
+    \ExplSyntaxOn
+  }
+\cs_set:Npn \MRTaloneOptions #1
+  {
+    \msg_error:nn { MRTalone } { options~too~late }
+  }
 \ProcessOptions\relax
 \LoadClass{standalone}
 %%==========================================================================<<<
@@ -264,5 +291,17 @@
 \textheight=682.285pt
 %%==========================================================================<<<
 
-% Setting up MRTtab to work in standalone by default
+%% Setting up MRTtab to work in standalone by default >>>
+%%=============================================================================
 \MRTtabSetup{in~text~sep=\c_zero_skip,no~float}
+%%==========================================================================<<<
+
+%% look for a setup file >>>
+%%=============================================================================
+\file_if_exist:nT { \c_MRTalone_setup_file_name_tl }
+  {
+    \ExplSyntaxOff
+    \file_input:n { \c_MRTalone_setup_file_name_tl }
+    \ExplSyntaxOn
+  }
+%%==========================================================================<<<
