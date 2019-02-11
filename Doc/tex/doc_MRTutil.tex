@@ -64,6 +64,23 @@ same behaviour encountered in \LaTeXe's optional arguments).
   \cs{MRTutil@ifmark}. 
 \end{describemacro}
 
+\begin{describemacro}{MRTutil@Targ}[\meta{token}\marg{default}\marg{continue}]
+  checks for a following optional argument which is indicated by a leading
+  \meta{token}. If there is a \meta{token} following, the following argument
+  will be grabbed according to \TeX's rules (so a single token might follow or a
+  group delimited by |{}|). If there is no \meta{token} following it provides
+  \meta{default}. \meta{continue} will be executed after the argument has been
+  parsed. The value of the optional argument will be provided to \meta{continue}
+  as it is present in the input stream (so if it is braced there will be braces,
+  if it's just a single token, there will be only a single token).
+\end{describemacro}
+
+\begin{describemacro}{MRTutil@targ}[\meta{token}\marg{continue}]
+  Like \cs{MRTutil@Targ}, but if there is no \meta{token} following instead of a
+  default, a special marker will be provided. You can check whether the special
+  marker was provided with \cs{MRTutil@ifmark}.
+\end{describemacro}
+
 \begin{describemacro}{MRTutil@ifmark}[\marg{test}\marg{true}\marg{false}]
   Tests whether \marg{test} is the special mark provided by \cs{MRTutil@oarg}
   and \cs{MRTutil@darg} and if so expands to \meta{true}. If not it expands to

@@ -1,0 +1,15 @@
+\chapter{Downwards Incompatibilities}
+Though I try to avoid it as much as possible, there might sometimes be a
+backwards incompatibility, which is necessary to implement new features I deem
+worth it or fix bugs. Where possible I'll try to provide means to switch back to
+something close to the old behaviour.
+
+This chapter should list all those ground breaking changes (which might be
+really minor, though).
+
+\section{\pkg{MRTtab}}
+\begin{incompatibilities}{\pkg{MRTtab}}
+  2019-02-09 & v0.0.5 & \cs{MRTcline} & By default the entire line is coloured
+  first and then the effects of \cs{MRTcline} are applied. Reversible with the
+  \opt{cline version} key (see \autoref{sec:tab:options:setup}). \\
+\end{incompatibilities}

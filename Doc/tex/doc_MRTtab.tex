@@ -87,7 +87,7 @@ it won't matter whether you end the last row with \texttt{\string\\} or not.
 
 \section{The \cs{MRTcline} macro}\label{sec:tab:cline}%>>>
 \begin{describemacro}{MRTcline}%>>>
-  [\oarg{color}\{\meta{*}\oarg{color}%
+  [\meta{!}\oarg{color}\{\meta{*}\oarg{color}%
   \meta{<\oarg{left skip}}\meta{>\oarg{right skip}}\meta{cols}\}]
   Sets something like a \cs{cline} in the specified \meta{cols}.
   \\[\parskip]
@@ -117,6 +117,11 @@ it won't matter whether you end the last row with \texttt{\string\\} or not.
   \\[\parskip]
   You should only use one \cs{MRTcline} per line and specify every column you
   want in that.
+  \\[\parskip]
+  If you don't give the optional \meta{!} after \cs{MRTcline}, before anything
+  else something like a \cs{hline} using \meta{color} will be used to cover the
+  full width of the tabular. This way you don't have to specify every column you
+  want to color with \meta{color} using the \meta{*} type argument.
 \end{describemacro}%<<<
 
 I hope you got that rather cryptic description (if you can supply a better
@@ -308,6 +313,11 @@ version of \env{MRTtable} is not yet implemented.
 \subsection{Setup Options}\label{sec:tab:options:setup}
 The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
 
+\begin{describeopt}{align}[\meta{align}]%>>>
+  If \opt{no float} has been used, a \env{minipage} is used around the
+  \env{MRTtable}. With the \opt{align} option you can specify the vertical
+  alignment of that \env{minipage}.
+\end{describeopt}%<<<
 \begin{describeopt}{caption above,above}%>>>
   If specified the caption will be put above the \env{MRTtabular} in
   \env{MRTtable}. If \cs{KOMAoptions} is available the KOMA option
@@ -332,6 +342,11 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
 \begin{describeopt}{caption, cap}[\meta{caption}]%>>>
   Specifies the content of the caption in an \env{MRTtable}. If it is blank, no
   caption will be used.
+\end{describeopt}%<<<
+\begin{describeopt}{cline version}[\meta{choice}]%>>>
+  set the behaviour of \cs{MRTcline}. Choices are |1| and |2|. |2| is the
+  behaviour currently described in \autoref{sec:tab:cline}. If you specify |1|
+  the behaviour of the optional \meta{!} of \cs{MRTcline} is reversed.
 \end{describeopt}%<<<
 \begin{describeopt}{columns, col}[\meta{preamble}]%>>>
   Specifies the \env{MRTtabular} preamble (the column specifications). Defaults

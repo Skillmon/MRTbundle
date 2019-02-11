@@ -2,8 +2,24 @@
 The \cls{standalone} version of \cls{MRTthesis}. The aim is to provide a class
 to produce simple \LaTeX\ based images which match the look of \cls{MRTthesis}.
 
+\section{Options and Setup Files}\label{sec:alone:files}%>>>
+\cls{MRTalone} allows you to use a shared options file and a shared setup file
+for your project. The files get sourced if they are available.
+
+The shared options might be placed into the file \file{./MRTalone.option.tex}.
+This file can include any number of \cs{MRTaloneOptions} calls. It is loaded in
+the midst of the class file. See \autoref{sec:alone:macros} for a description of
+\cs{MRTaloneOptions} and \autoref{sec:alone:options} for the available options.
+
+The additional setup file should be \file{./MRTalone.setup.tex}. It is sourced
+at the end of the class and might contain any valid \LaTeX\ code, of course
+including some \cs{MRTaloneSetup} instructions. See \autoref{sec:alone:macros}
+for \cs{MRTaloneSetup} and \autoref{sec:alone:setup} for the available setup
+options.
+%<<<
+
 \section{Options}%>>>
-\subsection{Load time options}%>>>
+\subsection{Load time options}\label{sec:alone:options}%>>>
 The class features a few load time options.
 \begin{describeopt}{longtable}
   Is forwarded to \pkg{MRTtab} see its description in \autoref{sec:tab:options}.
@@ -50,7 +66,7 @@ The following options are accessible with \cs{MRTaloneSetup}.
 \begin{describeopt}{stretch caption, stretch cap}[\meta{float}]
   Currently does nothing.
 \end{describeopt}
-\begin{describeopt}{stretch tabular, stretch text}[\meta{float}]
+\begin{describeopt}{stretch tabular, stretch tab}[\meta{float}]
   Is forwarded to \pkg{MRTtab} and its \cs{MRTtabSetup}. See its description in
   \autoref{sec:tab:options:setup}.
 \end{describeopt}
@@ -64,9 +80,14 @@ The following options are accessible with \cs{MRTaloneSetup}.
 %<<<
 %<<<
 
-\section{Macros}%>>>
+\section{Macros}\label{sec:alone:macros}%>>>
 \begin{describemacro}{MRTaloneSetup}[\marg{options}]%>>>
   You can use this macro to set the options listed in \autoref{sec:alone:setup}.
+\end{describemacro}%<<<
+\begin{describemacro}{MRTaloneOptions}[\marg{options}]%>>>
+  You can use this macro to set the options listed in
+  \autoref{sec:alone:options}. It is only available inside of the
+  \file{./MRTalone.option.tex} file (see \autoref{sec:alone:files}).
 \end{describemacro}%<<<
 %<<<
 
