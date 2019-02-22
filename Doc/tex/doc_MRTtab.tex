@@ -133,92 +133,41 @@ is not possible with the standard \cs{cline} as far as I know.
 \begin{multicols}{2}%>>>
   \MRTthesisSetup{stretch tab=1}
   \noindent
-  \vbox{\begin{MRTtabular}{lll}
-    a & b & c\\
-    \MRTcline{1-2}
-    d & e & f\\
-    g & h & i\\
-    j & k & l\\
-  \end{MRTtabular}
-  \begin{verbatim}
-\begin{MRTtabular}{lll}
+\vbox{\DoAndPrint{\begin{MRTtabular}{lll}
   a & b & c\\
   \MRTcline{1-2}
   d & e & f\\
   g & h & i\\
   j & k & l\\
-\end{MRTtabular}
-  \end{verbatim}}
-  \vbox{\begin{MRTtabular}{lll}
-    a & b & c\\
-    \cline{1-2}
-    \clineReveal
-    d & e & f\\
-    g & h & i\\
-    j & k & l\\
-  \end{MRTtabular}
-  \begin{verbatim}
-\begin{MRTtabular}{lll}
+\end{MRTtabular}}}
+\vbox{\DoAndPrint{\begin{MRTtabular}{lll}
   a & b & c\\
   \cline{1-2}
   \clineReveal
   d & e & f\\
   g & h & i\\
   j & k & l\\
-\end{MRTtabular}
-  \end{verbatim}}
+\end{MRTtabular}}}
 \end{multicols}%<<<
 \begin{multicols}{2}%>>>
   \MRTthesisSetup{stretch tab=1}
   \noindent
-  \vbox{%
-  \begin{MRTtabular}{lll}[2]
-    a & b & c\\
-    \MRTcline{1-2,*3}
-    d & e & f\\
-    g & h & i\\
-    j & k & l\\
-  \end{MRTtabular}
-  \begin{verbatim}
-\begin{MRTtabular}{lll}[2]
+\vbox{\DoAndPrint{\begin{MRTtabular}{lll}[2]
   a & b & c\\
-  \MRTcline{1-2,*3}
+  \MRTcline{1-2}
   d & e & f\\
   g & h & i\\
   j & k & l\\
-\end{MRTtabular}
-  \end{verbatim}}
-  \vbox{\begin{MRTtabular}{lll}[2]
-    a & b & c\\
-    \MRTcline{<>1-2,*3}
-    d & e & f\\
-    g & h & i\\
-    j & k & l\\
-  \end{MRTtabular}
-  \begin{verbatim}
-\begin{MRTtabular}{lll}[2]
+\end{MRTtabular}}}
+\vbox{\DoAndPrint{\begin{MRTtabular}{lll}[2]
   a & b & c\\
-  \MRTcline{<>1-2,*3}
+  \MRTcline{<>1-2}
   d & e & f\\
   g & h & i\\
   j & k & l\\
-\end{MRTtabular}
-  \end{verbatim}}
+\end{MRTtabular}}}
   \columnbreak
-  \vbox{\begin{MRTtabular}{lll}[2]
-    a & b & c\\
-    \cline{1-2}
-    \arrayrulecolor{tablegray}
-    \cline{3-3}
-    \arrayrulecolor{black}
-    \clineReveal
-    \rowcolor{tablegray}
-    d & e & f\\
-    g & h & i\\
-    j & k & l\\
-  \end{MRTtabular}
-  \begin{verbatim}
-\begin{MRTtabular}{lll}[2]
+\vbox{\DoAndPrint{\begin{MRTtabular}{lll}[2]
   a & b & c\\
   \cline{1-2}
   \arrayrulecolor{tablegray}
@@ -229,8 +178,7 @@ is not possible with the standard \cs{cline} as far as I know.
   d & e & f\\
   g & h & i\\
   j & k & l\\
-\end{MRTtabular}
-  \end{verbatim}}
+\end{MRTtabular}}}
 \end{multicols}%<<<
 %<<<
 

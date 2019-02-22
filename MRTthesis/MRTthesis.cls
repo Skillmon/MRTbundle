@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.10}
-\newcommand*\MRTthesis@date{2019-02-09}
+\newcommand*\MRTthesis@version{0.0.11}
+\newcommand*\MRTthesis@date{2019-02-22}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -781,7 +781,7 @@
   {% false >>>
     \MRTbibliographytrue
     \MRTthesisSetup { bib = true }
-    \renewcommand*{\newunitpunct}{, }% between each unit in one bib-entry
+    \renewcommand*{\newunitpunct}{,~}% between each unit in one bib-entry
     \DefineBibliographyStrings{ngerman}
       {%
         ,bibliography={Literaturverzeichnis}%

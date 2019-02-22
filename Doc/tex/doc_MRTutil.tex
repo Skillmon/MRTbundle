@@ -113,12 +113,13 @@ In the following example we'll define a macro that takes two optional arguments
 -- one delimited by |[]| and one delimited by |<>| -- and a mandatory one. We'll
 need one auxiliary macro per optional argument.
 
+\begingroup
 First we define the front facing macro named \cs{ourmacro}. It is defined
 \cs{protected}, because it isn't expandable since \cs{MRTutil@oarg} isn't.
-\begin{verbatim}
-\makeatletter
-\MRTutil@def[\protected]\ourmacro{\MRTutil@oarg{\ourmacro@a}}
-\end{verbatim}
+\DoAndPrint
+{\makeatletter
+\MRTutil@def[\protected]\ourmacro{\MRTutil@oarg{\ourmacro@a}}}
+\noindent
 Next we define the second step that looks for the second optional argument,
 again defined \cs{protected}, but this time also \cs{long}, because it takes
 arguments and those might contain an explicit or implicit \cs{par}. We pipe
@@ -126,10 +127,10 @@ through the first optional argument. Since we think that \cs{ourmacro} is gonna
 be used pretty often we want the argument grabbing for the second optional
 argument to be fast, so instead of using \cs{MRTutil@darg<>} we define our own
 test macro \cs{ourmacro@opt}.
-\begin{verbatim}
-\MRTutil@defoarg\ourmacro@opt<>
-\MRTutil@def[\protected\long]\ourmacro@a#1{\ourmacro@opt{\ourmacro@b{#1}}}
-\end{verbatim}
+\DoAndPrint
+{\MRTutil@defoarg\ourmacro@opt<>
+\MRTutil@def[\protected\long]\ourmacro@a#1{\ourmacro@opt{\ourmacro@b{#1}}}}
+\noindent
 The last step is the one which takes both optional arguments and the mandatory
 one. This one doesn't have to be defined \cs{protected}, because it is
 expandable.
@@ -148,14 +149,6 @@ expandable.
   }
 \makeatother
 \end{verbatim}
-As you can see, the macro doesn't do anything special, it just lists its
-arguments.
-
-\begingroup
-\makeatletter
-\MRTutil@def[\protected]\ourmacro{\MRTutil@oarg{\ourmacro@a}}
-\MRTutil@defoarg\ourmacro@opt<>
-\MRTutil@def[\protected\long]\ourmacro@a#1{\ourmacro@opt{\ourmacro@b{#1}}}
 \MRTutil@def[\long]\ourmacro@b#1#2#3%
   {%
     \MRTutil@ifmark{#1}
@@ -168,11 +161,11 @@ arguments.
     \par
     Mandatory argument: #3%
   }
-\MRTutil@def\ourmacrocell{\setstretch{1}\expandafter\ourmacro\@firstofone}
-\makeatother
-A few usage examples of the above defined macro can be seen in
-\autoref{tab:util:ourmacro}.
+As you can see, the macro doesn't do anything special, it just lists its
+arguments. A few usage examples are shown in \autoref{tab:util:ourmacro}.
 
+\MRTutil@def\ourmacrocell{\setstretch{1}\expandafter\ourmacro\@firstofone}%
+\makeatother
 \noindent
 \begin{MRTtable}
   [

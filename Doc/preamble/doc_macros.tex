@@ -558,6 +558,52 @@
     \endfoot
   }%<<<
   { \end { longtable } }%<<<
+\cs_new_protected:Npx \__docMRTbundle_replace_verb_newline:Nn #1 #2%>>>
+  {
+    \tl_replace_all:Nnn #1
+      { \char_generate:nn { 13 } { 12 } }
+      { #2 }
+  }%<<<
+\cs_new_protected:Npx \__docMRTbundle_replace_verb_newline_newline:Nn #1 #2%>>>
+  {
+    \tl_replace_all:Nnn #1
+      { \char_generate:nn { 13 } { 12 } \char_generate:nn { 13 } { 12 } }
+      { #2 }
+  }%<<<
+\tl_new:N \l__docMRTbundle_doandprint_tl
+\cs_set_eq:NN \__docMRTbundle_everyeof:w \tex_everyeof:D
+\cs_set_eq:NN \__docMRTbundle_scantokens:w \tex_scantokens:D
+\NewDocumentCommand \DoAndPrint { +v }%>>>
+  {
+    \tl_set:Nn \l__docMRTbundle_doandprint_tl { #1 }
+    \__docMRTbundle_replace_verb_newline_newline:Nn
+      \l__docMRTbundle_doandprint_tl { \par }
+    \__docMRTbundle_replace_verb_newline:Nn
+      \l__docMRTbundle_doandprint_tl { ~ }
+    \group_begin:
+      \__docMRTbundle_everyeof:w { \exp_not:N }
+      \exp_after:wN
+      \exp_after:wN
+      \exp_after:wN
+    \group_end:
+    \exp_after:wN \__docMRTbundle_scantokens:w
+      \exp_after:wN { \l__docMRTbundle_doandprint_tl }
+    \tl_set:Nn \l__docMRTbundle_doandprint_tl { #1 }
+    \__docMRTbundle_replace_verb_newline:Nn
+      \l__docMRTbundle_doandprint_tl { \\\mbox{} }
+    \group_begin:
+      \trivlist\item\relax
+      \leftskip\@totalleftmargin
+      \rightskip\z@skip
+      \parindent\z@
+      \parfillskip\@flushglue
+      \parskip\z@skip
+      \verbatim@font
+      \frenchspacing
+      \l__docMRTbundle_doandprint_tl
+      \endtrivlist
+    \group_end:
+  }%<<<
 \ExplSyntaxOff
 
 \NewDocumentCommand \NotImplementedMessage { m +O{} }%>>>
