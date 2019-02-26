@@ -86,6 +86,10 @@
     The ~ used ~ #1 ~ is ~ not ~ available ~ under ~ \c_sys_engine_str. ~ You ~
     have ~ to ~ use ~ #2.
   }%<<<
+\msg_new:nnn { MRTthesis } { patch~failed }%>>>
+  {
+    Patching~`\token_to_str:N #1`~failed.~Please~contact~MRTbundle's~maintainer.
+  }%<<<
 %%==========================================================================<<<
 
 %% constants >>>
@@ -586,10 +590,12 @@
       {%
         \gdef\figureautorefname{Bild}%
         \gdef\equationautorefname{Gl.\@}%
+        \gdef\appendixautorefname{Anhang}%
       }%
     \addto\extrasbritish
       {%
-        \gdef\equationautorefname{eq.\@}%
+        \gdef\equationautorefname{Eq.\@}%
+        \gdef\appendixautorefname{Appendix}%
       }%
   }% <<<
 \MRTafterhyperref{\MRTthesis@setautorefnames}
@@ -762,6 +768,11 @@
     \renewcommand*\thetable{\hbox{\thesection-\arabic{table}}}%
     \renewcommand*\theequation{\hbox{(\thesection-\arabic{equation})}}%
     \addtokomafont{section}{\large}%
+    \patchcmd\hyper@makecurrent{\edef\Hy@param}{\MRTthesis@hyper@patch}{}
+      {%
+        \msg_error:nnn
+          { MRTthesis } { patch~failed } { \hyper@makecurrent }
+      }%
   }% <<<
 \NewDocumentCommand \mainpart {}% >>>
   {%
@@ -769,6 +780,19 @@
     \pagenumbering{arabic}%
   }% <<<
 \let\mainmatter\mainpart
+%%==========================================================================<<<
+
+%% hyperref patches for appendix autoref >>>
+%%=============================================================================
+\MRTutil@def\MRTthesis@hyper@patch#1%>>>
+  {%
+    \edef\Hy@param
+      {%
+        \MRTifStringsMatchXXTF{#1}{section}
+          {appendix}
+          {#1}%
+      }%
+  }%<<<
 %%==========================================================================<<<
 
 %% bibliography >>>
