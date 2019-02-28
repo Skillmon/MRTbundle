@@ -103,27 +103,7 @@ and all its dependencies. Additional dependencies are:
       see what those do.
     \item \pkg{MRTwuline}
     \item \pkg{MRTsfacc}
-    \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
-      \begin{itemize}[topsep=0pt]
-        \item \pkg{fontspec} and
-          \bverb|\defaultfontfeatures{Ligatures=TeX}|
-        \item the fonts \bverb|TeX Gyre Heros|, \bverb|Latin Modern Roman| and
-          \bverb|Latin Modern Mono|, dependent on the |font| keys.
-      \end{itemize}
-      else
-      \begin{itemize}[topsep=0pt]
-        \item \pkg{fontenc} [T1]
-        \item \pkg{inputenc} [utf8]
-        \item \pkg{lmodern}
-        \item \pkg{helvet}
-        \item \pkg{MRTlmscale} dependent on the \bverb|scale maths| key.
-        \item If \opt{new maths} is used
-          \begin{itemize}
-            \item \pkg{bm}
-            \item \pkg{newpxmath} [upint, slantedGreek]
-            \item The |ztmcm| font
-          \end{itemize}
-      \end{itemize}
+    \item \pkg{MRTfonts}
     \item \pkg{babel} [ngerman] or if \opt{british} is used with
       [main=british, ngerman]
     \item \pkg{setspace}

@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.11}
-\newcommand*\MRTthesis@date{2019-02-22}
+\newcommand*\MRTthesis@version{0.0.12}
+\newcommand*\MRTthesis@date{2019-02-28}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -30,7 +30,6 @@
 % l3 variables >>>
 % bool >>>
 \bool_new:N \l_MRTthesis_minimal_bool
-\bool_new:N \l_MRTthesis_mathsizes_bool
 \bool_new:N \l_MRTthesis_british_bool
 \bool_new:N \l_MRTthesis_no_geometry_bool
 \bool_new:N \l_MRTthesis_hyper_hidelinks_bool
@@ -42,9 +41,6 @@
 \bool_new:N \l_MRTthesis_lot_back_bool
 \bool_new:N \l_MRTthesis_lot_front_bool
 \bool_new:N \l_MRTthesis_toc_front_bool
-\bool_new:N \l_MRTthesis_sfacc_height_bool
-\bool_new:N \l_MRTthesis_lmscale_bool
-\bool_new:N \l_MRTthesis_new_math_bool
 \bool_new:N \l_MRTthesis_hyperref_code_executed_bool
 % <<<
 % box >>>
@@ -65,9 +61,6 @@
 \tl_new:N \l_MRTthesis_auto_frontmatter_addo_tl
 \tl_new:N \l_MRTthesis_auto_backmatter_addo_tl
 \tl_new:N \l_MRTthesis_auto_backmatter_after_tl
-% <<<
-% fp >>>
-\fp_new:N \l_MRTthesis_new_math_scale_fp
 % <<<
 % <<<
 %%==========================================================================<<<
@@ -113,15 +106,15 @@
 
 %% Class options and loading scrreprt >>>
 %%=============================================================================
+\input{MRTfonts.forward.keys.tex}
+\MRTfonts_setup_forwarded_from:n { MRTthesis }
 \DeclareOption{longtable}
   {%
     \PassOptionsToPackage{longtable}{MRTtab}%
     \AtBeginDocument{\setlength{\LTcapwidth}{0.905\textwidth}}%
   }
-\DeclareOption{mathsizes}{\bool_set_true:N \l_MRTthesis_mathsizes_bool}
 \DeclareOption{minimal}{\bool_set_true:N \l_MRTthesis_minimal_bool}
 \DeclareOption{no geometry}{\bool_set_true:N \l_MRTthesis_no_geometry_bool}
-\DeclareOption{no mathsizes}{\bool_set_false:N \l_MRTthesis_mathsizes_bool}
 \DeclareOption{tikzunderline}{\PassOptionsToPackage{tUline}{MRTwuline}}
 \DeclareOption{tUline}{\ExecuteOptions{tikzunderline}}
 \DeclareOption{british}{\bool_set_true:N \l_MRTthesis_british_bool}
@@ -129,100 +122,11 @@
 \DeclareOption{english}{\ExecuteOptions{british}}
 \DeclareOption{hidelinks}{\bool_set_true:N  \l_MRTthesis_hyper_hidelinks_bool}
 \DeclareOption{showlinks}{\bool_set_false:N \l_MRTthesis_hyper_hidelinks_bool}
-%% Additional KV-options >>>
-\keys_define:nn { MRTthesis / loadtime }%>>>
+\keys_define:nn { MRTthesis / loadtime }
   {
-    sfacc .choice:
-    ,sfacc / height .code:n = { \bool_set_true:N \l_MRTthesis_sfacc_height_bool}
-    ,sfacc / list .code:n = { \bool_set_false:N \l_MRTthesis_sfacc_height_bool }
-    ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { scrreprt } }
-  }%<<<
-\bool_if:NTF \c_MRTthesis_xetex_or_luatex_bool
-  {%>>>
-    \clist_map_inline:nn { scale maths, new maths }
-      {
-        \keys_define:nn { MRTthesis / loadtime }
-          {
-            #1 .code:n =
-              {
-                \msg_error:nnnn { MRTthesis } { wrong~engine } { key ~ `#1` }
-                  { pdftex }
-              }
-          }
-      }
-    \keys_define:nn { MRTthesis / loadtime }
-      {
-         font        .tl_set:N = \l_MRTthesis_font_tl
-        ,font        .initial:n = { texgyreheros-regular.otf }
-        ,serif font  .tl_set:N = \l_MRTthesis_serif_font_tl
-        ,serif font  .initial:n = { lmroman10-regular.otf }
-        ,mono font   .tl_set:N = \l_MRTthesis_mono_font_tl
-        ,mono font   .initial:n = { lmmono10-regular.otf }
-      }
-  }%<<<
-  {%>>>
-    \clist_map_inline:nn { font, serif font, mono font }
-      {
-        \keys_define:nn { MRTthesis / loadtime }
-          {
-            #1 .code:n =
-              {
-                \msg_error:nnnn { MRTthesis } { wrong~engine } { key ~ `#1` }
-                  { xetex ~ or ~ luatex }
-              }
-          }
-      }
-    \keys_define:nn { MRTthesis / loadtime }
-      {
-        scale maths .code:n =%>>>
-          {
-            \tl_if_empty:nTF { #1 }
-              { \bool_set_true:N \l_MRTthesis_lmscale_bool }
-              {
-                \str_case:nnF { #1 }
-                  {
-                    { off } { \bool_set_false:N \l_MRTthesis_lmscale_bool }
-                    { on  } { \bool_set_true:N  \l_MRTthesis_lmscale_bool }
-                  }
-                  {
-                    \bool_set_true:N \l_MRTthesis_lmscale_bool
-                    \PassOptionsToPackage { #1 } { MRTlmscale }
-                  }
-              }
-          }%<<<
-        ,scale maths .initial:n = {}
-        ,new maths .code:n = %>>>
-          {
-            \tl_if_empty:nTF { #1 }
-              { \bool_set_true:N \l_MRTthesis_new_math_bool }
-              {
-                \str_case:nnF { #1 }
-                  {
-                    { off } { \bool_set_false:N \l_MRTthesis_new_math_bool }
-                    { on  } { \bool_set_true:N  \l_MRTthesis_new_math_bool }
-                  }
-                  {
-                    \bool_set_true:N \l_MRTthesis_new_math_bool
-                    \MRTifFloatTF { #1 }
-                      {
-                        \fp_set:Nn \l_MRTthesis_new_math_scale_fp { #1 }
-                      }
-                      {
-                        \msg_error:nnn { MRTthesis } { no~float }
-                          {
-                            the~value~\exp_not:n { #1 }~you~provided~to~
-                            `new~math`.
-                          }
-                      }
-                  }
-              }
-          }%<<<
-        ,new maths .initial:n = { 1.05 }
-      }
-  }%<<<
-%% <<<
+    unknown .code:n = { \PassOptionsToClass { \CurrentOption } { scrreprt } }
+  }
 \DeclareOption* { \keys_set:nV { MRTthesis / loadtime } \CurrentOption }
-\ExecuteOptions{mathsizes}
 \ExecuteOptions{hidelinks}
 \PassOptionsToClass
   {twoside,fontsize=11pt,a4paper,toc=listof,toc=bib,fleqn,ngerman}
@@ -247,35 +151,6 @@
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
     \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Seite }
   }% <<<
-\bool_if:NTF \c_MRTthesis_xetex_or_luatex_bool
-  {% true >>>
-    \RequirePackage[no-math]{fontspec}
-    \defaultfontfeatures{Ligatures=TeX}
-    \tl_if_empty:NTF \l_MRTthesis_font_tl
-      {
-        \msg_new:nnn { MRTthesis } { no~font }
-          {
-            You ~ did ~ not ~ specify ~ any ~ sans ~ font ~ using ~ the ~
-            `font` ~ key. ~ I'll ~ use ~ the ~ default ~ font ~ but ~ you ~
-            should ~ use ~ a ~ system ~ font ~ looking ~ like ~ Helvetica ~ or ~
-            Arial.
-          }
-        \msg_warning:nn { MRTthesis } { no~font }
-      }
-      { \exp_args:NV \setsansfont \l_MRTthesis_font_tl }
-    \tl_if_empty:NF \l_MRTthesis_serif_font_tl
-      { \exp_args:NV \setmainfont \l_MRTthesis_serif_font_tl }
-    \tl_if_empty:NF \l_MRTthesis_mono_font_tl
-      { \exp_args:NV \setmonofont \l_MRTthesis_mono_font_tl }
-  }% <<<
-  {% false >>>
-    \RequirePackage[T1]{fontenc}
-    \RequirePackage[utf8]{inputenc}
-    \RequirePackage{lmodern}
-    \bool_if:NT \l_MRTthesis_lmscale_bool { \RequirePackage { MRTlmscale } }
-    \RequirePackage{helvet}
-  }%<<<
-\renewcommand\familydefault{\sfdefault}
 \RequirePackage[singlespacing=true]{scrlayer-scrpage}
 \bool_if:NF \l_MRTthesis_no_geometry_bool
   {
@@ -298,31 +173,7 @@
 \RequirePackage{enumitem}
 \RequirePackage{etoolbox}
 \RequirePackage[fleqn]{mathtools}
-% bad math fonts 
-\bool_if:NT \l_MRTthesis_new_math_bool
-  {
-    \RequirePackage{bm}
-    \RequirePackage[upint,slantedGreek]{newpxmath}
-    \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
-    \DeclareFontFamily{OML}{ztmcm}{\skewchar \font =127}
-    \DeclareFontShape{OML}{ztmcm}{m}{it}
-      { <-> s*[\fp_use:N \l_MRTthesis_new_math_scale_fp ] zptmcm7m }{}
-    \DeclareFontShape{OML}{ztmcm}{m}{sl}{<->ssub * ztmcm/m/it}{}
-  }
-\RequirePackage[italic,defaultmathsizes]{mathastext}
-\RequirePackage{isomath}
-\bool_if:NTF \l_MRTthesis_sfacc_height_bool
-  {
-    \RequirePackage[height]{MRTsfacc}
-  }
-  {
-    \RequirePackage[list]{MRTsfacc}
-    \MRTsfaccLoadShiftList{helvet}
-  }
-\bool_if:NT \l_MRTthesis_mathsizes_bool%>>>
-  {
-    \DeclareMathSizes{10.95pt}{10.95pt}{9pt}{7pt}
-  }%<<<
+\RequirePackage{MRTfonts}
 % 
 \BeforeBeginEnvironment{document}
   {

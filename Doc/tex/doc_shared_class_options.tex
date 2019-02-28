@@ -1,52 +1,11 @@
-\begin{describeopt}{sfacc}[\meta{choice}]
-  \meta{choice} must be \opt{height} or \opt{list}. Sets the approach used by
-  \pkg{MRTsfacc} (see \autoref{sec:sfacc}) and if \opt{list} is in use the shift
-  list for \pkg{helvet} will also be loaded. If it is not specified the
-  \opt{list} variant is used.
-\end{describeopt}
-\begin{describeopt}{font}[\meta{font}]
-  This is only available if you're using \luaxetex. With this you can set the
-  used sans serif font, which will be used as the default font. It should be
-  a font resembling Helvetica or Arial. Per default the font
-  \bverb|TeX Gyre Heros| will be used.
-\end{describeopt}
-\begin{describeopt}{serif font}[\meta{font}]
-  This is only available if you're using \luaxetex. With this you can set the
-  used serif font. This isn't too important as the default fonts will suffice.
-  You shouldn't have too much text with a Roman font anyway. Per default the
-  font \bverb|Latin Modern Roman| will be used.
-\end{describeopt}
-\begin{describeopt}{mono font}[\meta{font}]
-  This is only available if you're using \luaxetex. With this you can set the
-  used mono font. This isn't too important as the default fonts will suffice.
-  You shouldn't have too much text with a mono font anyway. Per default the
-  font \bverb|Latin Modern Mono| will be used.
-\end{describeopt}
-\begin{describeopt}{new maths}[\meta{choice}]
-  This is only available if you're using \hologo{pdfTeX}. With this you can
-  specify whether some special maths fonts are loaded. The result looks closer
-  to the MS Word template for Greek letters and operators.\\
-  Available \meta{choice}s are |off| or |false| to turn this off, |on| or |true|
-  to turn this on, and a valid float, to set the scale of the Greek letters and
-  activate the feature.  By default |1.05| will be used.\\
-  The number of usable fonts will be used exhaustively. The \pkg{newpxmath} will
-  be loaded with its \opt{upint} and \opt{slantedGreek}, the math letters of
-  \pkg{mathptmx} will be loaded with a scale factor.
-  \ifinbeamerdoc
-    \pkg{bm} can't be loaded if you use this in \cls{MRTbeam}, as this will take
-    up too many fonts, so no bold Greek letters for you.
-  \else
-    \pkg{bm} will be loaded so that you can use the bold symbols of the Latin
-    Modern fonts for Greek letters.
-  \fi
-\end{describeopt}
-\begin{describeopt}{scale maths}[\meta{choice}]
-  This is only available if you're using \hologo{pdfTeX}. With this you can
-  specify whether the \pkg{MRTlmscale} package should be loaded. Available
-  \meta{choice}s are no argument, resulting in \pkg{MRTlmscale} being used with
-  its default, |on| or |true| resulting in the same, |off| or |false| resulting
-  in \pkg{MRTlmscale} not being used, and any valid float, resulting in
-  \pkg{MRTlmscale} being used with the specified float as its scale factor. See
-  \autoref{sec:lmscale} for more about \pkg{MRTlmscale}. By default,
-  \pkg{MRTlmscale} will be used with its default scale factor.
-\end{describeopt}
+The following options (and their values) will be forwarded to \pkg{MRTfonts}
+(see \autoref{sec:fonts:options} for their description):
+\begin{itemize}
+  \ttfamily
+  \item sfacc
+  \item font
+  \item serif font
+  \item mono font
+  \item new maths
+  \item scale maths
+\end{itemize}

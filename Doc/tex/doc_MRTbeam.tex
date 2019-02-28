@@ -345,26 +345,7 @@ are loaded:
     \item \pkg{MRTsfacc}
     \item \pkg{MRTutil}
     \item \pkg{xparse}
-    \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
-      \begin{itemize}[topsep=0pt]
-        \item \pkg{fontspec} and
-          \bverb|\defaultfontfeatures{Ligatures=TeX}|
-        \item the fonts \bverb|TeX Gyre Heros|, \bverb|Latin Modern Roman| and
-          \bverb|Latin Modern Mono|, dependent on the |font| keys.
-      \end{itemize}
-      else
-      \begin{itemize}[topsep=0pt]
-        \item \pkg{fontenc} [T1]
-        \item \pkg{inputenc} [utf8]
-        \item \pkg{lmodern}
-        \item \pkg{helvet}
-        \item \pkg{MRTlmscale} dependent on the \bverb|scale maths| key.
-        \item If \opt{new maths} is used
-          \begin{itemize}
-            \item \pkg{newpxmath} [upint, slantedGreek]
-            \item The |ztmcm| font
-          \end{itemize}
-      \end{itemize}
+    \item \pkg{MRTfonts}
     \item \TikZ
     \item \pkg{biblatex} (with URLs being line breakable at any place)
   \end{itemize}

@@ -22,6 +22,18 @@ Andere wichtige, ebenfalls durchnummerierte Formeln neben \autoref{eq:1} sind
   1+4 &= 5\,\text{.}\label{eq:4}
 \end{align}
 
+Herauszuheben ist die Tatsache, dass ein kleines \texttt{l} und ein großes
+\texttt{I} nicht gut unterscheidbar sind. Deshalb sollte \verb|\altl| verwendet
+werden, vergleiche die folgenden zwei Darstellungen des Gesetzes von
+Lambert-Beer in logarithmischer Form:
+\begin{align}
+  \ln I &= \ln I_0 - \alpha\altl\label{eq:lb1}\\
+  \ln I &= \ln I_0 - \alpha l\label{eq:lb2}
+\end{align}
+Mit $I$ der Strahlungsintensität, $I_0$ der Intensität bei Eintritt in das
+Medium und $\altl$ (\autoref{eq:lb1}) bzw. $l$ (\autoref{eq:lb2}) der Weglänge
+durch das Medium mit Extinktionskoeffizienten $\alpha$.
+
 Beim Editieren von Formeln muss man eigentlich auf nichts achten, was die
 Schriftart anbelangt. Wichtig ist, dass man keine leere Zeile vor oder nach
 Gleichungen lässt, sollte man keinen neuen Absatz starten wollen. Vor einer
@@ -43,14 +55,14 @@ Symbole im Mathemodus:
     \fi%
 }
 \noindent
-\begin{tabular}{l?l}
+\begin{tabular}{l\MRTtabRepeatCols l}
     \myline{10} \\
     \myline[10]{20}\\
     \myline[20]{26}&
     $i\times i$ & $i\cdot i$ & $i\circ i$ & $i=i$ \\
     $i>i$ & $i<i$ & $i\in i$ & $i+i$ & $i-i$ & $i/i$
 \end{tabular}\\
-\begin{tabular}{l?l}
+\begin{tabular}{l\MRTtabRepeatCols l}
 \X\alpha        &\X\theta       &\X o           &\X\tau         \\
 \X\beta         &\X\vartheta    &\X\pi          &\X\upsilon     \\
 \X\gamma        &\X\gamma       &\X\varpi       &\X\phi         \\

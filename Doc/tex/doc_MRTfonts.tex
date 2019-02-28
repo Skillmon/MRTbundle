@@ -1,0 +1,98 @@
+\chapter{The \pkg{MRTfonts} package}
+\pkg{MRTfonts} loads the fonts as they are used by the classes of this bundle,
+giving a uniform look to the documents.
+
+\section{Options}\label{sec:fonts:options}
+\begin{describeopt}{sfacc}[\meta{choice}]
+  \meta{choice} must be \opt{height} or \opt{list}. Sets the approach used by
+  \pkg{MRTsfacc} (see \autoref{sec:sfacc}) and if \opt{list} is in use the shift
+  list for \pkg{helvet} will also be loaded. If it is not specified the
+  \opt{list} variant is used.
+\end{describeopt}
+\begin{describeopt}{font}[\meta{font}]
+  This is only available if you're using \luaxetex. With this you can set the
+  used sans serif font, which will be used as the default font. It should be
+  a font resembling Helvetica or Arial. Per default the font
+  \bverb|TeX Gyre Heros| will be used.
+\end{describeopt}
+\begin{describeopt}{serif font}[\meta{font}]
+  This is only available if you're using \luaxetex. With this you can set the
+  used serif font. This isn't too important as the default fonts will suffice.
+  You shouldn't have too much text with a Roman font anyway. Per default the
+  font \bverb|Latin Modern Roman| will be used.
+\end{describeopt}
+\begin{describeopt}{mono font}[\meta{font}]
+  This is only available if you're using \luaxetex. With this you can set the
+  used mono font. This isn't too important as the default fonts will suffice.
+  You shouldn't have too much text with a mono font anyway. Per default the
+  font \bverb|Latin Modern Mono| will be used.
+\end{describeopt}
+\begin{describeopt}{new maths}[\meta{choice}]
+  This is only available if you're using \hologo{pdfTeX}. With this you can
+  specify whether some special maths fonts are loaded. The result looks closer
+  to the MS Word template for Greek letters and operators.\\
+  Available \meta{choice}s are |off| or |false| to turn this off, |on| or |true|
+  to turn this on, and a valid float, to set the scale of the Greek letters and
+  activate the feature.  By default |1.05| will be used.\\
+  The number of usable fonts will be used exhaustively. The \pkg{newpxmath} will
+  be loaded with its \opt{upint} and \opt{slantedGreek}, the math letters of
+  \pkg{mathptmx} will be loaded with a scale factor. \pkg{bm} will be loaded so
+  that you can use the bold symbols of the Latin Modern fonts for Greek letters.
+\end{describeopt}
+\begin{describeopt}{scale maths}[\meta{choice}]
+  This is only available if you're using \hologo{pdfTeX}. With this you can
+  specify whether the \pkg{MRTlmscale} package should be loaded. Available
+  \meta{choice}s are no argument, resulting in \pkg{MRTlmscale} being used with
+  its default, |on| or |true| resulting in the same, |off| or |false| resulting
+  in \pkg{MRTlmscale} not being used, and any valid float, resulting in
+  \pkg{MRTlmscale} being used with the specified float as its scale factor. See
+  \autoref{sec:lmscale} for more about \pkg{MRTlmscale}. By default,
+  \pkg{MRTlmscale} will be used with its default scale factor.
+\end{describeopt}
+
+\section{Macros}
+\begin{describemacro}{altl}
+  \cs{altl} provides an alternative lower case |l| for use in maths which is
+  distinct from an upper case |I|. Compare: $lI$ (that is |$lI$|) and $\altl I$
+  (that is |$\altl I$|).
+\end{describemacro}
+\begin{describemacro}{altlUnscaled}
+  \cs{altl} is a scaled version of the letter it uses. \cs{altlUnscaled} is the
+  unscaled original version. Compare: $\altl I\altlUnscaled$ (that is
+  |$\altl I\altlUnscaled$|). Don't change its definition, as it is used by
+  \cs{altl} internally.
+\end{describemacro}
+\begin{describemacro}{scalemath}[\marg{float}\marg{text}]
+  This is a version of \cs{scalebox} to be used in maths. It is used by
+  \cs{altl} to scale down \cs{altlUnscaled}. 
+\end{describemacro}
+
+\section{Dependencies}
+\begin{multicols}{2}%>>>
+  \begin{itemize}[leftmargin=10pt]
+    \item \pkg{expl3}
+    \item \pkg{MRTif}
+    \item \pkg{MRTutil}
+    \item \pkg{graphics}
+    \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
+      \begin{itemize}[topsep=0pt]
+        \item \pkg{fontspec} and \bverb|\defaultfontfeatures{Ligatures=TeX}|
+        \item the fonts \bverb|TeX Gyre Heros|, \bverb|Latin Modern Roman| and
+          \bverb|Latin Modern Mono|, dependent on the |font| keys.
+      \end{itemize}
+      else
+      \begin{itemize}[topsep=0pt]
+        \item \pkg{fontenc} [T1]
+        \item \pkg{inputenc} [utf8]
+        \item \pkg{lmodern}
+        \item \pkg{helvet}
+        \item \pkg{MRTlmscale} dependent on the \bverb|scale maths| key.
+        \item If \opt{new maths} is used
+          \begin{itemize}
+            \item \pkg{bm}
+            \item \pkg{newpxmath} [upint, slantedGreek]
+            \item The |ztmcm| font
+          \end{itemize}
+      \end{itemize}
+  \end{itemize}
+\end{multicols}%<<<

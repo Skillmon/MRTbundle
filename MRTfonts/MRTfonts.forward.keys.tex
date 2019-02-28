@@ -1,0 +1,20 @@
+\ProvidesFile{MRTfonts.forward.keys.tex}
+%% keys forwarded to MRTfonts>>>
+\cs_new_protected:Npn \MRTfonts_setup_forwarded_from:n #1
+  {
+    \clist_map_inline:nn
+      { sfacc, scale maths, new maths, font, serif font, mono font }
+      {
+        \__MRTfonts_setup_forward_from_aux:nn { #1 } { ##1 }
+      }
+    \DeclareOption{no mathsizes}{\PassOptionsToPackage{no mathsizes}{MRTfonts}}
+    \DeclareOption{mathsizes}{\PassOptionsToPackage{mathsizes}{MRTfonts}}
+  }
+\cs_new_protected:Npn \__MRTfonts_setup_forward_from_aux:nn #1 #2
+  {
+    \keys_define:nn { #1 / loadtime }
+      {
+        #2 .code:n = { \PassOptionsToPackage { #2 = ##1 } { MRTfonts } }
+      }
+  }
+%% <<<

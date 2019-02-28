@@ -1,5 +1,5 @@
-\newcommand*\MRTalone@version{0.0.6}
-\newcommand*\MRTalone@date{2018-02-09}
+\newcommand*\MRTalone@version{0.0.7}
+\newcommand*\MRTalone@date{2018-02-28}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -20,18 +20,11 @@
 % l3 variables >>>
 % bool >>>
 \bool_new:N \l_MRTalone_minimal_bool
-\bool_new:N \l_MRTalone_mathsizes_bool
 \bool_new:N \l_MRTalone_british_bool
-\bool_new:N \l_MRTalone_sfacc_height_bool
-\bool_new:N \l_MRTalone_lmscale_bool
-\bool_new:N \l_MRTalone_new_math_bool
 % <<<
 % tl >>>
 \tl_const:Nn \c_MRTalone_setup_file_name_tl { ./MRTalone.setup.tex }
 \tl_const:Nn \c_MRTalone_options_file_name_tl { ./MRTalone.option.tex }
-% <<<
-% fp >>>
-\fp_new:N \l_MRTalone_new_math_scale_fp
 % <<<
 % <<<
 %%==========================================================================<<<
@@ -72,6 +65,8 @@
 
 %% Class options and loading standalone >>>
 %%=============================================================================
+\input{MRTfonts.forward.keys.tex}
+\MRTfonts_setup_forwarded_from:n { MRTalone }
 \DeclareOption{longtable}{\PassOptionsToPackage{longtable}{MRTtab}}
 \DeclareOption{mathsizes}{\bool_set_true:N \l_MRTalone_mathsizes_bool}
 \DeclareOption{minimal}{\bool_set_true:N \l_MRTalone_minimal_bool}
@@ -83,104 +78,11 @@
 \DeclareOption{english}{\ExecuteOptions{british}}
 \DeclareOption{tikz}
   {\PassOptionsToPackage{table}{xcolor}\PassOptionsToClass{tikz}{standalone}}
-%% Additional KV-options >>>
 \keys_define:nn { MRTalone / loadtime }%>>>
   {
-    sfacc .choice:
-    ,sfacc / height .code:n = { \bool_set_true:N \l_MRTalone_sfacc_height_bool}
-    ,sfacc / list .code:n = { \bool_set_false:N \l_MRTalone_sfacc_height_bool }
-    ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { standalone } }
+    unknown .code:n = { \PassOptionsToClass { \CurrentOption } { standalone } }
   }%<<<
-\bool_if:NTF \c_MRTalone_xetex_or_luatex_bool
-  {%>>>
-    \clist_map_inline:nn { scale maths, new maths }
-      {
-        \keys_define:nn { MRTalone / loadtime }
-          {
-            #1 .code:n =
-              {
-                \msg_error:nnnn { MRTalone } { wrong~engine } { key ~ `#1` }
-                  { pdftex }
-              }
-          }
-      }
-    \keys_define:nn { MRTalone / loadtime }
-      {
-         font        .tl_set:N  = \l_MRTalone_font_tl
-        ,font        .initial:n = { texgyreheros-regular.otf }
-        ,serif font  .tl_set:N  = \l_MRTalone_serif_font_tl
-        ,serif font  .initial:n = { lmroman10-regular.otf }
-        ,mono font   .tl_set:N  = \l_MRTalone_mono_font_tl
-        ,mono font   .initial:n = { lmmono10-regular.otf }
-      }
-  }%<<<
-  {%>>>
-    \clist_map_inline:nn { font, serif font, mono font }
-      {
-        \keys_define:nn { MRTalone / loadtime }
-          {
-            #1 .code:n =
-              {
-                \msg_error:nnnn { MRTalone } { wrong~engine } { key ~ `#1` }
-                  { xetex ~ or ~ luatex }
-              }
-          }
-      }
-    \keys_define:nn { MRTalone / loadtime }
-      {
-        scale maths .code:n =%>>>
-          {
-            \tl_if_empty:nTF { #1 }
-              {
-                \bool_set_true:N \l_MRTalone_lmscale_bool
-              }
-              {
-                \str_case:nnF { #1 }
-                  {
-                    { off   } { \bool_set_false:N \l_MRTalone_lmscale_bool }
-                    { false } { \bool_set_false:N \l_MRTalone_lmscale_bool }
-                    { on    } { \bool_set_true:N  \l_MRTalone_lmscale_bool }
-                    { true  } { \bool_set_true:N  \l_MRTalone_lmscale_bool }
-                  }
-                  {
-                    \bool_set_true:N \l_MRTalone_lmscale_bool
-                    \PassOptionsToPackage { #1 } { MRTlmscale }
-                  }
-              }
-          }%<<<
-        ,scale maths .initial:n = {}
-        ,new maths .code:n = %>>>
-          {
-            \tl_if_empty:nTF { #1 }
-              { \bool_set_true:N \l_MRTalone_new_math_bool }
-              {
-                \str_case:nnF { #1 }
-                  {
-                    { off } { \bool_set_false:N \l_MRTalone_new_math_bool }
-                    { on  } { \bool_set_true:N  \l_MRTalone_new_math_bool }
-                  }
-                  {
-                    \bool_set_true:N \l_MRTalone_new_math_bool
-                    \MRTifFloatTF { #1 }
-                      {
-                        \fp_set:Nn \l_MRTalone_new_math_scale_fp { #1 }
-                      }
-                      {
-                        \msg_error:nnn { MRTalone } { no~float }
-                          {
-                            the~value~\exp_not:n { #1 }~you~provided~to~
-                            `new~math`.
-                          }
-                      }
-                  }
-              }
-          }%<<<
-        ,new maths .initial:n = { 1.05 }
-      }
-  }%<<<
-%% <<<
 \DeclareOption* { \keys_set:nV { MRTalone / loadtime } \CurrentOption }
-\ExecuteOptions{mathsizes}
 \PassOptionsToClass{11pt}{standalone}
 \file_if_exist:nT { \c_MRTalone_options_file_name_tl }
   {
@@ -203,35 +105,6 @@
 %% additional packages to achieve template formatting >>>
 %%=============================================================================
 \RequirePackage{MRTtab,MRTwuline}
-\bool_if:NTF \c_MRTalone_xetex_or_luatex_bool
-  {% true >>>
-    \RequirePackage[no-math]{fontspec}
-    \defaultfontfeatures{Ligatures=TeX}
-    \tl_if_empty:NTF \l_MRTalone_font_tl
-      {
-        \msg_new:nnn { MRTalone } { no~font }
-          {
-            You ~ did ~ not ~ specify ~ any ~ sans ~ font ~ using ~ the ~
-            `font` ~ key. ~ I'll ~ use ~ the ~ default ~ font ~ but ~ you ~
-            should ~ use ~ a ~ system ~ font ~ looking ~ like ~ Helvetica ~ or ~
-            Arial.
-          }
-        \msg_warning:nn { MRTalone } { no~font }
-      }
-      { \exp_args:NV \setsansfont \l_MRTalone_font_tl }
-    \tl_if_empty:NF \l_MRTalone_serif_font_tl
-      { \exp_args:NV \setmainfont \l_MRTalone_serif_font_tl }
-    \tl_if_empty:NF \l_MRTalone_mono_font_tl
-      { \exp_args:NV \setmonofont \l_MRTalone_mono_font_tl }
-  }% <<<
-  {% false >>>
-    \RequirePackage[T1]{fontenc}
-    \RequirePackage[utf8]{inputenc}
-    \RequirePackage{lmodern}
-    \bool_if:NT \l_MRTalone_lmscale_bool { \RequirePackage { MRTlmscale } }
-    \RequirePackage{helvet}
-  }%<<<
-\renewcommand\familydefault{\sfdefault}
 \bool_if:NTF \l_MRTalone_british_bool
   {% true >>>
     \RequirePackage[main=british,ngerman]{babel}
@@ -242,31 +115,7 @@
 \RequirePackage{setspace}
 \RequirePackage{enumitem}
 \RequirePackage[fleqn]{mathtools}
-% bad math fonts 
-\bool_if:NT \l_MRTalone_new_math_bool
-  {
-    \RequirePackage{bm}
-    \RequirePackage[upint,slantedGreek]{newpxmath}
-    \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
-    \DeclareFontFamily{OML}{ztmcm}{\skewchar \font =127}
-    \DeclareFontShape{OML}{ztmcm}{m}{it}
-      { <-> s*[\fp_use:N \l_MRTalone_new_math_scale_fp ] zptmcm7m }{}
-    \DeclareFontShape{OML}{ztmcm}{m}{sl}{<->ssub * ztmcm/m/it}{}
-  }
-\RequirePackage[italic,defaultmathsizes]{mathastext}
-\RequirePackage{isomath}
-\bool_if:NTF \l_MRTalone_sfacc_height_bool
-  {
-    \RequirePackage[height]{MRTsfacc}
-  }
-  {
-    \RequirePackage[list]{MRTsfacc}
-    \MRTsfaccLoadShiftList{helvet}
-  }
-\bool_if:NT \l_MRTalone_mathsizes_bool%>>>
-  {
-    \DeclareMathSizes{10.95pt}{10.95pt}{9pt}{7pt}
-  }%<<<
+\RequirePackage{MRTfonts}
 \bool_if:NF \l_MRTalone_minimal_bool%>>>
   {
     \cs_new:Npn \MRTalone_range_phrase:n #1
