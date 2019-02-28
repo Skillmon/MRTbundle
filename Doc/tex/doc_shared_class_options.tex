@@ -22,6 +22,24 @@
   You shouldn't have too much text with a mono font anyway. Per default the
   font \bverb|Latin Modern Mono| will be used.
 \end{describeopt}
+\begin{describeopt}{new maths}[\meta{choice}]
+  This is only available if you're using \hologo{pdfTeX}. With this you can
+  specify whether some special maths fonts are loaded. The result looks closer
+  to the MS Word template for Greek letters and operators.\\
+  Available \meta{choice}s are |off| or |false| to turn this off, |on| or |true|
+  to turn this on, and a valid float, to set the scale of the Greek letters and
+  activate the feature.  By default |1.05| will be used.\\
+  The number of usable fonts will be used exhaustively. The \pkg{newpxmath} will
+  be loaded with its \opt{upint} and \opt{slantedGreek}, the math letters of
+  \pkg{mathptmx} will be loaded with a scale factor.
+  \ifinbeamerdoc
+    \pkg{bm} can't be loaded if you use this in \cls{MRTbeam}, as this will take
+    up too many fonts, so no bold Greek letters for you.
+  \else
+    \pkg{bm} will be loaded so that you can use the bold symbols of the Latin
+    Modern fonts for Greek letters.
+  \fi
+\end{describeopt}
 \begin{describeopt}{scale maths}[\meta{choice}]
   This is only available if you're using \hologo{pdfTeX}. With this you can
   specify whether the \pkg{MRTlmscale} package should be loaded. Available

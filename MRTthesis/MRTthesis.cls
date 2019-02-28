@@ -44,6 +44,7 @@
 \bool_new:N \l_MRTthesis_toc_front_bool
 \bool_new:N \l_MRTthesis_sfacc_height_bool
 \bool_new:N \l_MRTthesis_lmscale_bool
+\bool_new:N \l_MRTthesis_new_math_bool
 \bool_new:N \l_MRTthesis_hyperref_code_executed_bool
 % <<<
 % box >>>
@@ -64,6 +65,9 @@
 \tl_new:N \l_MRTthesis_auto_frontmatter_addo_tl
 \tl_new:N \l_MRTthesis_auto_backmatter_addo_tl
 \tl_new:N \l_MRTthesis_auto_backmatter_after_tl
+% <<<
+% fp >>>
+\fp_new:N \l_MRTthesis_new_math_scale_fp
 % <<<
 % <<<
 %%==========================================================================<<<
@@ -89,6 +93,15 @@
 \msg_new:nnn { MRTthesis } { patch~failed }%>>>
   {
     Patching~`\token_to_str:N #1`~failed.~Please~contact~MRTbundle's~maintainer.
+  }%<<<
+\msg_new:nnn { MRTthesis } { no~float }%>>>
+  {
+    Parsing~says~you~didn't~provide~a~valid~float.~Please~provide~a
+    valid~float.\\
+    If~you're~sure~that~you~entered~a~valid~float,~please~report~the~bug
+    to~the\\
+    package~maintainer.\\
+    Error~occured~while~parsing~#1.%
   }%<<<
 %%==========================================================================<<<
 
@@ -126,19 +139,25 @@
   }%<<<
 \bool_if:NTF \c_MRTthesis_xetex_or_luatex_bool
   {%>>>
+    \clist_map_inline:nn { scale maths, new maths }
+      {
+        \keys_define:nn { MRTthesis / loadtime }
+          {
+            #1 .code:n =
+              {
+                \msg_error:nnnn { MRTthesis } { wrong~engine } { key ~ `#1` }
+                  { pdftex }
+              }
+          }
+      }
     \keys_define:nn { MRTthesis / loadtime }
       {
          font        .tl_set:N = \l_MRTthesis_font_tl
-        ,font        .initial:n = { TeX~Gyre~Heros }
+        ,font        .initial:n = { texgyreheros-regular.otf }
         ,serif font  .tl_set:N = \l_MRTthesis_serif_font_tl
-        ,serif font  .initial:n = { Latin Modern Roman }
+        ,serif font  .initial:n = { lmroman10-regular.otf }
         ,mono font   .tl_set:N = \l_MRTthesis_mono_font_tl
-        ,mono font   .initial:n = { Latin Modern Mono }
-        ,scale maths .code:n    =
-          {
-            \msg_error:nnnn { MRTthesis } { wrong~engine }
-              { key ~ `scale~maths` } { pdftex }
-          }
+        ,mono font   .initial:n = { lmmono10-regular.otf }
       }
   }%<<<
   {%>>>
@@ -155,12 +174,10 @@
       }
     \keys_define:nn { MRTthesis / loadtime }
       {
-        scale maths .code:n =
+        scale maths .code:n =%>>>
           {
             \tl_if_empty:nTF { #1 }
-              {
-                \bool_set_true:N \l_MRTthesis_lmscale_bool
-              }
+              { \bool_set_true:N \l_MRTthesis_lmscale_bool }
               {
                 \str_case:nnF { #1 }
                   {
@@ -172,8 +189,35 @@
                     \PassOptionsToPackage { #1 } { MRTlmscale }
                   }
               }
-          }
+          }%<<<
         ,scale maths .initial:n = {}
+        ,new maths .code:n = %>>>
+          {
+            \tl_if_empty:nTF { #1 }
+              { \bool_set_true:N \l_MRTthesis_new_math_bool }
+              {
+                \str_case:nnF { #1 }
+                  {
+                    { off } { \bool_set_false:N \l_MRTthesis_new_math_bool }
+                    { on  } { \bool_set_true:N  \l_MRTthesis_new_math_bool }
+                  }
+                  {
+                    \bool_set_true:N \l_MRTthesis_new_math_bool
+                    \MRTifFloatTF { #1 }
+                      {
+                        \fp_set:Nn \l_MRTthesis_new_math_scale_fp { #1 }
+                      }
+                      {
+                        \msg_error:nnn { MRTthesis } { no~float }
+                          {
+                            the~value~\exp_not:n { #1 }~you~provided~to~
+                            `new~math`.
+                          }
+                      }
+                  }
+              }
+          }%<<<
+        ,new maths .initial:n = { 1.05 }
       }
   }%<<<
 %% <<<
@@ -190,6 +234,19 @@
 %% additional packages to achieve template formatting >>>
 %%=============================================================================
 \RequirePackage{MRTtab,MRTwuline}
+\bool_if:NTF \l_MRTthesis_british_bool
+  {% true >>>
+    \RequirePackage[main=british,ngerman]{babel}
+    \useshorthands{"}
+    \addto\extrasbritish{\languageshorthands{ngerman}}
+    \tl_set:Nn \l_MRTthesis_titlepage_von_tl { by }
+    \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Page }
+  }% <<<
+  {% false >>>
+    \RequirePackage[ngerman]{babel}
+    \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
+    \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Seite }
+  }% <<<
 \bool_if:NTF \c_MRTthesis_xetex_or_luatex_bool
   {% true >>>
     \RequirePackage[no-math]{fontspec}
@@ -219,19 +276,6 @@
     \RequirePackage{helvet}
   }%<<<
 \renewcommand\familydefault{\sfdefault}
-\bool_if:NTF \l_MRTthesis_british_bool
-  {% true >>>
-    \RequirePackage[main=british,ngerman]{babel}
-    \useshorthands{"}
-    \addto\extrasbritish{\languageshorthands{ngerman}}
-    \tl_set:Nn \l_MRTthesis_titlepage_von_tl { by }
-    \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Page }
-  }% <<<
-  {% false >>>
-    \RequirePackage[ngerman]{babel}
-    \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
-    \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Seite }
-  }% <<<
 \RequirePackage[singlespacing=true]{scrlayer-scrpage}
 \bool_if:NF \l_MRTthesis_no_geometry_bool
   {
@@ -255,6 +299,16 @@
 \RequirePackage{etoolbox}
 \RequirePackage[fleqn]{mathtools}
 % bad math fonts 
+\bool_if:NT \l_MRTthesis_new_math_bool
+  {
+    \RequirePackage{bm}
+    \RequirePackage[upint,slantedGreek]{newpxmath}
+    \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
+    \DeclareFontFamily{OML}{ztmcm}{\skewchar \font =127}
+    \DeclareFontShape{OML}{ztmcm}{m}{it}
+      { <-> s*[\fp_use:N \l_MRTthesis_new_math_scale_fp ] zptmcm7m }{}
+    \DeclareFontShape{OML}{ztmcm}{m}{sl}{<->ssub * ztmcm/m/it}{}
+  }
 \RequirePackage[italic,defaultmathsizes]{mathastext}
 \RequirePackage{isomath}
 \bool_if:NTF \l_MRTthesis_sfacc_height_bool

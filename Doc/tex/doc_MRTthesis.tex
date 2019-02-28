@@ -145,9 +145,9 @@ The following options are accessible with \cs{MRTthesisSetup}.
 \begin{describeopt}{number}[\meta{number}]
   The MRT report number displayed in the citation indications. Initially is
   empty. The typical pattern of these numbers is something like:
-  \texttt{TT-yy-mm-n} with \texttt{TT} the thesis type, e.\,g.\@ \texttt{BA} or
+  \texttt{TT-yy-mm-nn} with \texttt{TT} the thesis type, e.\,g.\@ \texttt{BA} or
   \texttt{MA}, \texttt{yy} the last two digits of the year, \texttt{mm} the
-  month, and \texttt{n} the number of the thesis in this month.
+  month, and \texttt{nn} the number of the thesis in this month.
 \end{describeopt}
 \begin{describeopt}{pos figure}[\meta{placement}]
   The \meta{placement} of floats of type \texttt{figure}.
@@ -473,6 +473,12 @@ formatting.%
         \item \pkg{lmodern}
         \item \pkg{helvet}
         \item \pkg{MRTlmscale} dependent on the \bverb|scale maths| key.
+        \item If \opt{new maths} is used
+          \begin{itemize}
+            \item \pkg{bm}
+            \item \pkg{newpxmath} [upint, slantedGreek]
+            \item The |ztmcm| font
+          \end{itemize}
       \end{itemize}
     \item \pkg{babel} [ngerman] or if \opt{british} is used with
       [main\Seq british, ngerman]

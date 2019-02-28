@@ -3,7 +3,7 @@
 
 \NeedsTeXFormat{LaTeX2e}
 
-\RequirePackage{expl3,xparse}
+\RequirePackage{expl3,xparse,MRTif}
 \ProvidesExplClass
   {MRTalone}          {\MRTalone@date}
   {\MRTalone@version} {standalone matching MRTthesis}
@@ -24,10 +24,14 @@
 \bool_new:N \l_MRTalone_british_bool
 \bool_new:N \l_MRTalone_sfacc_height_bool
 \bool_new:N \l_MRTalone_lmscale_bool
+\bool_new:N \l_MRTalone_new_math_bool
 % <<<
 % tl >>>
 \tl_const:Nn \c_MRTalone_setup_file_name_tl { ./MRTalone.setup.tex }
 \tl_const:Nn \c_MRTalone_options_file_name_tl { ./MRTalone.option.tex }
+% <<<
+% fp >>>
+\fp_new:N \l_MRTalone_new_math_scale_fp
 % <<<
 % <<<
 %%==========================================================================<<<
@@ -49,6 +53,15 @@
   {
     \token_to_str:N \MRTaloneOptions \c_space_tl may ~ only ~ be ~ used ~ in ~
     the ~ file ~ '\c_MRTalone_options_file_name_tl'.
+  }%<<<
+\msg_new:nnn { MRTalone } { no~float }%>>>
+  {
+    Parsing~says~you~didn't~provide~a~valid~float.~Please~provide~a
+    valid~float.\\
+    If~you're~sure~that~you~entered~a~valid~float,~please~report~the~bug
+    to~the\\
+    package~maintainer.\\
+    Error~occured~while~parsing~#1.%
   }%<<<
 %%==========================================================================<<<
 
@@ -80,19 +93,25 @@
   }%<<<
 \bool_if:NTF \c_MRTalone_xetex_or_luatex_bool
   {%>>>
+    \clist_map_inline:nn { scale maths, new maths }
+      {
+        \keys_define:nn { MRTalone / loadtime }
+          {
+            #1 .code:n =
+              {
+                \msg_error:nnnn { MRTalone } { wrong~engine } { key ~ `#1` }
+                  { pdftex }
+              }
+          }
+      }
     \keys_define:nn { MRTalone / loadtime }
       {
          font        .tl_set:N  = \l_MRTalone_font_tl
-        ,font        .initial:n = { TeX~Gyre~Heros }
+        ,font        .initial:n = { texgyreheros-regular.otf }
         ,serif font  .tl_set:N  = \l_MRTalone_serif_font_tl
-        ,serif font  .initial:n = { Latin Modern Roman }
+        ,serif font  .initial:n = { lmroman10-regular.otf }
         ,mono font   .tl_set:N  = \l_MRTalone_mono_font_tl
-        ,mono font   .initial:n = { Latin Modern Mono }
-        ,scale maths .code:n    =
-          {
-            \msg_error:nnnn { MRTalone } { wrong~engine }
-              { key ~ `scale~maths` } { pdftex }
-          }
+        ,mono font   .initial:n = { lmmono10-regular.otf }
       }
   }%<<<
   {%>>>
@@ -109,7 +128,7 @@
       }
     \keys_define:nn { MRTalone / loadtime }
       {
-        scale maths .code:n =
+        scale maths .code:n =%>>>
           {
             \tl_if_empty:nTF { #1 }
               {
@@ -128,8 +147,35 @@
                     \PassOptionsToPackage { #1 } { MRTlmscale }
                   }
               }
-          }
+          }%<<<
         ,scale maths .initial:n = {}
+        ,new maths .code:n = %>>>
+          {
+            \tl_if_empty:nTF { #1 }
+              { \bool_set_true:N \l_MRTalone_new_math_bool }
+              {
+                \str_case:nnF { #1 }
+                  {
+                    { off } { \bool_set_false:N \l_MRTalone_new_math_bool }
+                    { on  } { \bool_set_true:N  \l_MRTalone_new_math_bool }
+                  }
+                  {
+                    \bool_set_true:N \l_MRTalone_new_math_bool
+                    \MRTifFloatTF { #1 }
+                      {
+                        \fp_set:Nn \l_MRTalone_new_math_scale_fp { #1 }
+                      }
+                      {
+                        \msg_error:nnn { MRTalone } { no~float }
+                          {
+                            the~value~\exp_not:n { #1 }~you~provided~to~
+                            `new~math`.
+                          }
+                      }
+                  }
+              }
+          }%<<<
+        ,new maths .initial:n = { 1.05 }
       }
   }%<<<
 %% <<<
@@ -197,6 +243,16 @@
 \RequirePackage{enumitem}
 \RequirePackage[fleqn]{mathtools}
 % bad math fonts 
+\bool_if:NT \l_MRTalone_new_math_bool
+  {
+    \RequirePackage{bm}
+    \RequirePackage[upint,slantedGreek]{newpxmath}
+    \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
+    \DeclareFontFamily{OML}{ztmcm}{\skewchar \font =127}
+    \DeclareFontShape{OML}{ztmcm}{m}{it}
+      { <-> s*[\fp_use:N \l_MRTalone_new_math_scale_fp ] zptmcm7m }{}
+    \DeclareFontShape{OML}{ztmcm}{m}{sl}{<->ssub * ztmcm/m/it}{}
+  }
 \RequirePackage[italic,defaultmathsizes]{mathastext}
 \RequirePackage{isomath}
 \bool_if:NTF \l_MRTalone_sfacc_height_bool
