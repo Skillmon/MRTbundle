@@ -1,5 +1,5 @@
-\newcommand*\MRTutil@version{0.0.3}
-\newcommand*\MRTutil@date{2019-02-09}
+\newcommand*\MRTutil@version{0.0.4}
+\newcommand*\MRTutil@date{2019-03-24}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -21,7 +21,7 @@
   }%<<<
 \@ifdefinable\MRTutil@def@b%>>>
   {%
-    \protected\long\def\MRTutil@def@b#1#2#3#4#5{#2#1#3#4{#5}}%
+    \protected\long\def\MRTutil@def@b#1#2#3#4#5{\@ifdefinable#3{#2#1#3#4{#5}}}%
   }%<<<
 \@ifdefinable\MRTutil@def%>>>
   {%
