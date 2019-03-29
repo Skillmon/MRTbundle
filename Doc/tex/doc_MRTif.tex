@@ -74,6 +74,11 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
   \meta{arg}, \meta{num} will not be changed.
 \end{describemacroTF}
 
+\begin{describemacroTF}[G,N,GN]{MRTifNumTokenS}[\marg{num}\marg{arg}]
+  Like \cs{MRTifNumTokenTF} but this one uses \cs{MRTtllengthS} and therefore
+  captures spaces.
+\end{describemacroTF}
+
 \begin{describemacroTF}[G,N,GN]{MRTifLetter}[\marg{arg}]
   Tests if \meta{arg} is a letter, meaning of category code 11.
 \end{describemacroTF}
@@ -131,7 +136,11 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
 \begin{describemacro}{MRTtllength,MRTtllengthN}[\marg{arg}]
   Expands to the number of tokens or groups inside of \meta{arg}. Unprotected
   spaces are ignored. The ordinary version needs two expansions while the |N|
-  version needs four.
+  version needs four. A group is counted as one Token.
+\end{describemacro}
+
+\begin{describemacro}{MRTtllengthS,MRTtllengthSN}[\marg{arg}]
+  Like \cs{MRTtllength} but this version counts spaces, too.
 \end{describemacro}
 
 \begin{describemacro}{MRTifFexp,MRTifFexpI,MRTifFexpII}%

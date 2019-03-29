@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.7}
-\newcommand*\MRTif@date{2019-02-02}
+\newcommand*\MRTif@version{0.0.8}
+\newcommand*\MRTif@date{2019-03-29}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -36,10 +36,9 @@
 \MRTutil@def[\long]\MRTif@endMRTif@argument#1% >>>
   {%
     \ifx\endMRTif@argument#1%
-      \MRTif@fiAa
-    \else
-      \MRTif@fiBb
+      \MRTif@fiBTb
     \fi
+    \@secondoftwo
   }% <<<
 
 \MRTutil@def\MRTif@groupify@TF#1% >>>
@@ -301,39 +300,67 @@
 \MRTif@create@TandF@N@TandF{TwoTokenG}
 % <<<
 % MRTifNumToken>>>
-\MRTutil@def[\long]\MRTifNumTokenTF#1#2% >>>
+\MRTutil@def[\long]\MRTifNumTokenTF@common#1#2#3% >>>
   {%
-    \ifnum\MRTtllength{#2}=#1\relax
+    \ifnum#3{#2}=#1\relax
       \MRTif@fiBTb
     \fi
     \@secondoftwo
   }% <<<
-\MRTutil@def[\long]\MRTifNumTokenGTF#1#2% >>>
+\MRTutil@def[\long]\MRTifNumTokenGTF@common#1#2% >>>
   {%
     \MRTifGroupTF{#2}
-      {\MRTifNumTokenGTF{#1}#2}
-      {\MRTifNumTokenTF{#1}{#2}}
+      {\MRTifNumTokenGTF@common{#1}#2}
+      {\MRTifNumTokenTF@common{#1}{#2}}%
   }% <<<
-\MRTutil@def[\long]\MRTifNumTokenN@#1#2% >>>
+\MRTutil@def[\long]\MRTifNumTokenGN@common#1#2% >>>
   {%
-    \MRTifNumTokenTF{#2}{#1}%
+    \MRTifNumTokenGTF@common{#2}{#1}%
+  }% <<<
+\MRTutil@def[\long]\MRTifNumTokenGNTF@common#1#2% >>>
+  {%
+    \expandafter\MRTifNumTokenGN@common\expandafter{#2}{#1}%
+  }% <<<
+\MRTutil@def[\long]\MRTifNumTokenTF#1#2% >>>
+  {%
+    \MRTifNumTokenTF@common{#1}{#2}\MRTtllength
+  }% <<<
+\MRTutil@def[\long]\MRTifNumTokenSTF#1#2% >>>
+  {%
+    \MRTifNumTokenTF@common{#1}{#2}\MRTtllengthS
+  }% <<<
+\MRTutil@def[\long]\MRTifNumTokenGTF#1#2% >>>
+  {%
+    \MRTifNumTokenGTF@common{#1}{#2}\MRTtllength
+  }% <<<
+\MRTutil@def[\long]\MRTifNumTokenSGTF#1#2% >>>
+  {%
+    \MRTifNumTokenGTF@common{#1}{#2}\MRTtllengthS
   }% <<<
 \MRTutil@def[\long]\MRTifNumTokenNTF#1#2% >>>
   {%
-    \expandafter\MRTifNumTokenN@\expandafter{#2}{#1}%
+    \MRTifNumTokenTF@common{#1}{#2}\MRTtllengthN
   }% <<<
-\MRTutil@def[\long]\MRTifNumTokenGN@#1#2% >>>
+\MRTutil@def[\long]\MRTifNumTokenSNTF#1#2% >>>
   {%
-    \MRTifNumTokenGTF{#2}{#1}%
+    \MRTifNumTokenTF@common{#1}{#2}\MRTtllengthSN
   }% <<<
 \MRTutil@def[\long]\MRTifNumTokenGNTF#1#2% >>>
   {%
-    \expandafter\MRTifNumTokenGN@\expandafter{#2}{#1}%
+    \MRTifNumTokenGNTF@common{#1}{#2}\MRTtllength
+  }% <<<
+\MRTutil@def[\long]\MRTifNumTokenSGNTF#1#2% >>>
+  {%
+    \MRTifNumTokenGNTF@common{#1}{#2}\MRTtllengthS
   }% <<<
 \MRTif@create@TandF@twoargs{NumToken}
+\MRTif@create@TandF@twoargs{NumTokenS}
 \MRTif@create@TandF@twoargs{NumTokenG}
+\MRTif@create@TandF@twoargs{NumTokenSG}
 \MRTif@create@TandF@twoargs{NumTokenN}
+\MRTif@create@TandF@twoargs{NumTokenSN}
 \MRTif@create@TandF@twoargs{NumTokenGN}
+\MRTif@create@TandF@twoargs{NumTokenSGN}
 % <<<
 % MRTifLetter >>>
 \MRTutil@def[\long]\MRTifLetterTF#1% >>>
@@ -537,10 +564,9 @@
     \long\def\MRTifFloat@ifDot@a##1.##2\MRTifFloat@endargument% >>>
       {%
         \ifx?##2%
-          \MRTif@fiAb
-        \else
-          \MRTif@fiBa
+          \MRTif@fiBTc
         \fi
+        \@firstoftwo
       }% <<<
   }
 \MRTif@zz
@@ -640,6 +666,20 @@
   {%
     \expandafter\MRTtllength\expandafter{#1}%
   }% <<<
+\MRTutil@def[\long]\MRTtllengthS#1%>>>
+  {%
+    \the\numexpr0\MRTtllengthS@inner#1 \endMRTif@argument\endMRTtllengthS@inner
+  }%<<<
+\MRTutil@def[\long]\MRTtllengthS@inner#1 #2\endMRTtllengthS@inner%>>>
+  {%
+    \MRTif@endMRTif@argument{#2}
+      {\MRTtllength@inner#1\endMRTif@argument}
+      {+1\MRTtllengthS@inner#1#2\endMRTtllengthS@inner}%
+  }%<<<
+\MRTutil@def[\long]\MRTtllengthSN#1%>>>
+  {%
+    \expandafter\MRTtllengthS\expandafter{#1}%
+  }%<<<
 % <<<
 
 % MRTifFexp >>>
@@ -655,24 +695,18 @@
 \MRTutil@def[\long]\MRTifFexp@a#1% >>>
   {%
     \ifx\MRTifFexp@c#1%
-      \MRTif@fiAa
-    \else
-      \MRTif@fiBb
+      \MRTif@fiBTb
     \fi
-    {%
-      \MRTif@endfexp@gobble
-    }
-    {%
-      #1%
-    }
+    \@secondoftwo
+    {\MRTif@endfexp@gobble}
+    {#1}%
   }% <<<
 \MRTutil@def[\long]\MRTifFexp@b#1% >>>
   {%
     \ifx\MRTifFexp@c#1%
-      \MRTif@fiAa
-    \else
-      \MRTif@fiBb
+      \MRTif@fiBTb
     \fi
+    \@secondoftwo
     { % space ending the inner \romannumeral
       \MRTif@endfexp@firstofone
     }
