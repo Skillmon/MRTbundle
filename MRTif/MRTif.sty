@@ -32,7 +32,15 @@
 \long\def\MRTif@fiBTg\fi#1#2#3{\fi}
 % =<<
 
-\def\endMRTif@argument{\MRTif@IfYouSeeThisContactTheMaintainer}
+% Definition of \endMRTif@argument >>=
+\begingroup
+\catcode`\.=11
+\catcode`\ =11
+\@firstofone{%
+\endgroup
+\def\endMRTif@argument{\MRTif Please report.}%
+}
+% =<<
 \MRTutil@def[\long]\MRTif@endMRTif@argument#1% >>=
   {%
     \ifx\endMRTif@argument#1%
