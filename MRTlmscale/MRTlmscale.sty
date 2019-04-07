@@ -11,9 +11,9 @@
 
 \RequirePackage{MRTif,MRTutil}
 
-%% package options >>>
+%% package options >>=
 \MRTutil@def\MRTlmscale@scale{1.17647}% default
-\MRTutil@def[\long]\MRTlmscale@set#1%>>>
+\MRTutil@def[\long]\MRTlmscale@set#1%>>=
   {%
     \MRTifFloatTF{#1}
       {\def\MRTlmscale@scale{#1}}
@@ -27,13 +27,13 @@
             package maintainer.%
           }%
       }%
-  }%<<<
+  }%=<<
 \DeclareOption*{\expandafter\MRTlmscale@set\expandafter{\CurrentOption}}
 \ProcessOptions\relax
 \edef\MRTlmscale@scale{s*[\MRTlmscale@scale]}
-%<<<
+%=<<
 
-%% replacing the contents of omllmm.fd with the scaled variant >>>
+%% replacing the contents of omllmm.fd with the scaled variant >>=
 \DeclareFontFamily{OML}{lmm}{\skewchar\font127 }
 \DeclareFontShape{OML}{lmm}{m}{it}%
      {<-5.5>    \MRTlmscale@scale lmmi5     <5.5-6.5> \MRTlmscale@scale lmmi6
@@ -48,6 +48,8 @@
       }{}
 \DeclareFontShape{OML}{lmm}{bx}{it}%
      {<->ssub*lmm/b/it}{}
-% <<<
+% =<<
 
 \endinput
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

@@ -9,38 +9,38 @@
   {MRTfonts}          {\MRTfonts@date}
   {\MRTfonts@version} {Font setup for classes in the MRTbundle}
 
-%% variables >>>
+%% variables >>=
 %%=============================================================================
-% bool >>>
+% bool >>=
 \bool_new:N \l_MRTfonts_sfacc_height_bool
 \bool_new:N \l_MRTfonts_lmscale_bool
 \bool_new:N \l_MRTfonts_new_math_bool
 \bool_new:N \l_MRTfonts_mathsizes_bool
-% <<<
-% tl >>>
+% =<<
+% tl >>=
 \tl_new:N \l_MRTfonts_font_tl
 \tl_new:N \l_MRTfonts_serif_font_tl
 \tl_new:N \l_MRTfonts_mono_font_tl
-% <<<
-% fp >>>
+% =<<
+% fp >>=
 \fp_new:N \l_MRTfonts_new_math_scale_fp
-% <<<
-%%==========================================================================<<<
+% =<<
+%%===========================================================================<<
 
-%% constants >>>
+%% constants >>=
 %%=============================================================================
 \bool_const:Nn \c_MRTfonts_xetex_or_luatex_bool
   { \sys_if_engine_luatex_p: || \sys_if_engine_xetex_p: }
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% messages >>>
+%% messages >>=
 %%=============================================================================
-\msg_new:nnn { MRTfonts } { wrong~engine }%>>>
+\msg_new:nnn { MRTfonts } { wrong~engine }%>>=
   {
     The ~ used ~ #1 ~ is ~ not ~ available ~ under ~ \c_sys_engine_str. ~ You ~
     have ~ to ~ use ~ #2.
-  }%<<<
-\msg_new:nnn { MRTfonts } { no~float }%>>>
+  }%=<<
+\msg_new:nnn { MRTfonts } { no~float }%>>=
   {
     Parsing~says~you~didn't~provide~a~valid~float.~Please~provide~a
     valid~float.\\
@@ -48,26 +48,26 @@
     to~the\\
     package~maintainer.\\
     Error~occured~while~parsing~#1.%
-  }%<<<
-%%==========================================================================<<<
+  }%=<<
+%%===========================================================================<<
 
-%% variants of external macros >>>
+%% variants of external macros >>=
 %%=============================================================================
 \cs_generate_variant:Nn \keys_set:nn { nV }
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% KV setup >>>
+%% KV setup >>=
 %%=============================================================================
 \DeclareOption{mathsizes}{\bool_set_true:N \l_MRTfonts_mathsizes_bool}
 \DeclareOption{no mathsizes}{\bool_set_false:N \l_MRTfonts_mathsizes_bool}
-\keys_define:nn { MRTfonts }%>>>
+\keys_define:nn { MRTfonts }%>>=
   {
     sfacc .choice:
     ,sfacc / height .code:n = { \bool_set_true:N \l_MRTfonts_sfacc_height_bool}
     ,sfacc / list .code:n = { \bool_set_false:N \l_MRTfonts_sfacc_height_bool }
-  }%<<<
+  }%=<<
 \bool_if:NTF \c_MRTfonts_xetex_or_luatex_bool
-  {%>>>
+  {%>>=
     \clist_map_inline:nn { scale maths, new maths }
       {
         \keys_define:nn { MRTfonts }
@@ -88,8 +88,8 @@
         ,mono font   .tl_set:N = \l_MRTfonts_mono_font_tl
         ,mono font   .initial:n = { lmmono10-regular.otf }
       }
-  }%<<<
-  {%>>>
+  }%=<<
+  {%>>=
     \clist_map_inline:nn { font, serif font, mono font }
       {
         \keys_define:nn { MRTfonts }
@@ -103,7 +103,7 @@
       }
     \keys_define:nn { MRTfonts }
       {
-        scale maths .code:n =%>>>
+        scale maths .code:n =%>>=
           {
             \tl_if_empty:nTF { #1 }
               { \bool_set_true:N \l_MRTfonts_lmscale_bool }
@@ -118,9 +118,9 @@
                     \PassOptionsToPackage { #1 } { MRTlmscale }
                   }
               }
-          }%<<<
+          }%=<<
         ,scale maths .initial:n = {}
-        ,new maths .code:n = %>>>
+        ,new maths .code:n = %>>=
           {
             \tl_if_empty:nTF { #1 }
               { \bool_set_true:N \l_MRTfonts_new_math_bool }
@@ -152,19 +152,19 @@
                       }
                   }
               }
-          }%<<<
+          }%=<<
         ,new maths .initial:n = { 1.05 }
       }
-  }%<<<
+  }%=<<
 \DeclareOption* { \keys_set:nV { MRTfonts } \CurrentOption }
 \ExecuteOptions{mathsizes}
 \ProcessOptions\relax
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% font setup >>>
+%% font setup >>=
 %%=============================================================================
 \bool_if:NTF \c_MRTfonts_xetex_or_luatex_bool
-  {% true >>>
+  {% true >>=
     \RequirePackage[no-math]{fontspec}
     \defaultfontfeatures{Ligatures=TeX}
     \tl_if_empty:NTF \l_MRTfonts_font_tl
@@ -183,18 +183,18 @@
       { \exp_args:NV \setmainfont \l_MRTfonts_serif_font_tl }
     \tl_if_empty:NF \l_MRTfonts_mono_font_tl
       { \exp_args:NV \setmonofont \l_MRTfonts_mono_font_tl }
-  }% <<<
-  {% false >>>
+  }% =<<
+  {% false >>=
     \RequirePackage[T1]{fontenc}
     \RequirePackage[utf8]{inputenc}
     \RequirePackage{lmodern}
     \bool_if:NT \l_MRTfonts_lmscale_bool { \RequirePackage { MRTlmscale } }
     \RequirePackage{helvet}
-  }%<<<
+  }%=<<
 \renewcommand\familydefault{\sfdefault}
 % bad math fonts 
 \bool_if:NT \l_MRTfonts_new_math_bool
-  {%>>>
+  {%>>=
     \RequirePackage{bm}
     \RequirePackage[upint,slantedGreek]{newpxmath}
     \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
@@ -202,38 +202,40 @@
     \DeclareFontShape{OML}{ztmcm}{m}{it}
       { <-> s*[ \fp_use:N \l_MRTfonts_new_math_scale_fp ] zptmcm7m }{}
     \DeclareFontShape{OML}{ztmcm}{m}{sl}{<->ssub * ztmcm/m/it}{}
-  }%<<<
+  }%=<<
 \RequirePackage[italic,defaultmathsizes]{mathastext}
 \RequirePackage{isomath}
 \bool_if:NTF \l_MRTfonts_sfacc_height_bool
-  {%>>>
+  {%>>=
     \RequirePackage[height]{MRTsfacc}
-  }%<<<
-  {%>>>
+  }%=<<
+  {%>>=
     \RequirePackage[list]{MRTsfacc}
     \MRTsfaccLoadShiftList{helvet}
-  }%<<<
+  }%=<<
 \bool_if:NT \l_MRTfonts_mathsizes_bool
-  {%>>>
+  {%>>=
     \DeclareMathSizes{10.95pt}{10.95pt}{9pt}{7pt}
-  }%<<<
-%%==========================================================================<<<
+  }%=<<
+%%===========================================================================<<
 
-%% alternative lower case l for maths >>>
+%% alternative lower case l for maths >>=
 %%=============================================================================
 \DeclareSymbolFont{AREVletters}{OML}{zavm}{m}{it}
 \AtBeginDocument{\DeclareMathSymbol{\altlUnscaled}{\mathalpha}{AREVletters}{`l}}
 \MRTutil@def\altl{\mathalpha{\scalemath{.96}\altlUnscaled}}
-\MRTutil@def[\protected]\scalemath#1#2%>>>
+\MRTutil@def[\protected]\scalemath#1#2%>>=
   {%
     \mathpalette\MRTfonts@scalemath@a{{#1}{#2}}%
-  }%<<<
-\MRTutil@def\MRTfonts@scalemath@a#1#2%>>>
+  }%=<<
+\MRTutil@def\MRTfonts@scalemath@a#1#2%>>=
   {%
     \MRTfonts@scalemath@b#1#2%
-  }%<<<
-\MRTutil@def\MRTfonts@scalemath@b#1#2#3%>>>
+  }%=<<
+\MRTutil@def\MRTfonts@scalemath@b#1#2#3%>>=
   {%
     \scalebox{#2}{$#1#3$}%
-  }%<<<
-%%==========================================================================<<<
+  }%=<<
+%%===========================================================================<<
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

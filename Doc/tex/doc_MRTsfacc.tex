@@ -25,7 +25,7 @@ exact match of the approach's criterion or does only contain two tokens or
 groups (so in above example the \cs{bar} and the |{a}|) with the first one being
 a \cs{mathaccentV} using macro.
 
-\section{Options}%>>>
+\section{Options}%>>=
 The package has the following options:
 \begin{describeopt}{height}
   If this option is used the offset is dependent on the height of the accented
@@ -47,9 +47,9 @@ The package has the following options:
 Every other option is passed on to \cs{MRTsfaccSet}, its description is included
 in \autoref{sec:sfacc:height:macros}. This will have no effect if the \opt{list}
 option is used.
-%<<<
+%=<<
 
-\section{\opt{height} Variant}\label{sec:sfacc:height}%>>>
+\section{\opt{height} Variant}\label{sec:sfacc:height}%>>=
 This variant checks whether the argument is a single character with category
 code 11. If this test does not return true, the shift isn't applied.
 
@@ -58,7 +58,7 @@ approach is easier to adapt to other fonts -- one has to change only one
 parameter -- it is always a compromise trying to match every character as good
 as possible.
 
-\begin{MRTtable}% >>>
+\begin{MRTtable}% >>=
   [
     ,env={}
     ,label=tab:sfacc:height
@@ -69,27 +69,27 @@ as possible.
       }
   ]
   \includegraphics{img/sfacc_height_table-alone.pdf}
-\end{MRTtable}% <<<
+\end{MRTtable}% =<<
 
-\subsection{Macros}\label{sec:sfacc:height:macros}%>>>
-\begin{describemacro}{<accent>}[\meta{*/!}\marg{arg}]%>>>
+\subsection{Macros}\label{sec:sfacc:height:macros}%>>=
+\begin{describemacro}{<accent>}[\meta{*/!}\marg{arg}]%>>=
   \cs{<accent>} can be any of the maths accent macros using \cs{mathaccentV}
   internally (e.g. \cs{bar}, \cs{dot}, etc.).\\
   The \meta{*/!} can either be \texttt{*} or \texttt{!}\@ or omitted entirely.
   If the starred version is used, the shift is enforced regardless of the
   argument, if the exclamation mark is given it is prohibited.
-\end{describemacro}%<<<
+\end{describemacro}%=<<
 
-\begin{describemacro}{MRTsfaccSet}[\marg{float}]%>>>
+\begin{describemacro}{MRTsfaccSet}[\marg{float}]%>>=
   The shift width depends on a multiple of the box's height. The multiple can be
   set with this macro and should be a valid float. This is tested using
   \cs{MRTifFloatTF}. The package default for this share is
   \makeatletter\texttt{\MRTsfacc@share}\makeatother.
-\end{describemacro}%<<<
-%<<<
-%<<<
+\end{describemacro}%=<<
+%=<<
+%=<<
 
-\section{\opt{list} Variant}\label{sec:sfacc:list}%>>>
+\section{\opt{list} Variant}\label{sec:sfacc:list}%>>=
 This variant checks whether the argument is a known element from a list in which
 the offset is defined in the unit of \texttt{mu}.
 
@@ -99,7 +99,7 @@ stuff. The drawback is that everything has to be added that you want to be
 recognized.
 \autoref{tab:sfacc:list} shows the results of this approach.
 
-\begin{MRTtable}% >>>
+\begin{MRTtable}% >>=
   [
     ,env={}
     ,label=tab:sfacc:list
@@ -110,10 +110,10 @@ recognized.
       }%
   ]
   \includegraphics{img/sfacc_list_table-alone.pdf}
-\end{MRTtable}% <<<
+\end{MRTtable}% =<<
 
 \subsection{Macros}
-\begin{describemacro}{<accent>}[\oarg{opt}\marg{arg}]%>>>
+\begin{describemacro}{<accent>}[\oarg{opt}\marg{arg}]%>>=
   \cs{<accent>} can be any of the maths accent macros using \cs{mathaccentV}
   internally (e.g. \cs{bar}, \cs{dot}, etc.).\\
   \meta{opt} can either be a defined element from the list or a length in the
@@ -124,20 +124,20 @@ recognized.
   offset. If the optional argument isn't used at all, it'll be tested whether
   \meta{arg} is a known element and if so the appropriate offset will be used.
   Else no offset will be applied.
-\end{describemacro}%<<<
+\end{describemacro}%=<<
 
-\begin{describemacro}{MRTsfaccShift}[\marg{element}\marg{shift}]%>>>
+\begin{describemacro}{MRTsfaccShift}[\marg{element}\marg{shift}]%>>=
   Adds \meta{element} to the list of known arguments and saves \meta{shift} for
   it. If \meta{element} is already known it'll get redefined. \meta{shift} has
   to be given in \texttt{mu}.
-\end{describemacro}%<<<
+\end{describemacro}%=<<
 
-\begin{describemacro}{MRTsfaccShiftLet}%>>>
+\begin{describemacro}{MRTsfaccShiftLet}%>>=
   [\marg{element1}\marg{element2}]
   Adds \meta{element1} to the list of known arguments and defines the
   offset to be the one currently used by \meta{element2}.
   \meta{element2} has to be known, if it isn't an error will be thrown.
-\end{describemacro}%<<<
+\end{describemacro}%=<<
 
 \begin{describemacro}{MRTsfaccLoadShiftList}[\marg{list}]
   The package comes with definitions for some fonts (see
@@ -146,9 +146,9 @@ recognized.
   might contact me as described in \autoref{sec:bugs} and I'll gladly add it
   to the package.
 \end{describemacro}
-%<<<
+%=<<
 
-\begin{MRTtable}%>>>
+\begin{MRTtable}%>>=
   [
     ,col={>{\ttfamily}l >{\raggedright\arraybackslash}p{.55\linewidth}}
     ,cap={Available shift definition lists}
@@ -157,7 +157,7 @@ recognized.
     \normalfont List & To be used with\\
     helvet & \pkg{helvet} and \pkgWopt{mathastext}{italic,defaultmathsizes}
     \\
-\end{MRTtable}%<<<
+\end{MRTtable}%=<<
 
 \section{Additional macros}
 The package provides macros to use the accents used in text mode additionally in
@@ -166,7 +166,7 @@ the bundle's author's insufficient knowledge -- there is no really automated way
 to do so with a few macros. Instead you can define macros which will produce a
 symbol which is accented by one of the text accents.
 
-\begin{describemacro}%>>>
+\begin{describemacro}%>>=
   {%
     newsfhatmacro,defsfhatmacro,%
     newsfcheckmacro,defsfcheckmacro,%
@@ -202,9 +202,9 @@ symbol which is accented by one of the text accents.
   You could use \cs{mathord}, \cs{mathop}, \cs{mathbin}, \cs{mathrel},
   \cs{mathopen}, \cs{mathclose}, \cs{mathpunct}, \cs{mathinner}, or any other
   macro taking one argument.
-\end{describemacro}%<<<
+\end{describemacro}%=<<
 
-\begin{describemacro}{newsfaccmacro,defsfaccmacro}%>>>
+\begin{describemacro}{newsfaccmacro,defsfaccmacro}%>>=
   [%
     \sarg{horizontal}\oarg{vertical}\marg{cs}\oarg{type}\hspace{0pt}%
     \marg{accent}\marg{symbol}%
@@ -213,7 +213,7 @@ symbol which is accented by one of the text accents.
   macro you can specify the macro responsible for typesetting the accent using
   the \meta{accent} argument. The specified \meta{accent} should take at most
   one argument and this one will be empty.
-\end{describemacro}%<<<
+\end{describemacro}%=<<
 
 The results of these macros heavily depend on the used font. For
 \cls{MRTthesis}, using \hologo{pdfLaTeX}, the results don't look too bad. For
@@ -245,3 +245,5 @@ approach you use is up to you.
 \cs{MRTifTwoTokenTF}. It also depends on \pkg{amsmath} being loaded.
 Additionally it uses the \pkg{MRTutil} package for some of its macros'
 definitions.
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

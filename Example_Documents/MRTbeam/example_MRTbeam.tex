@@ -15,14 +15,14 @@
 \begin{document}
 \begingroup
 \OnlyOneTopRuletrue
-\begin{frame}%>>>
+\begin{frame}%>>=
 \maketitle
-\end{frame}%<<<
+\end{frame}%=<<
 \endgroup
 
-\begin{frame}{Contents}{}%>>>
+\begin{frame}{Contents}{}%>>=
 \tableofcontents
-\end{frame}%<<<
+\end{frame}%=<<
 
 \StartOfProgress
 \include{tex/introduction}
@@ -32,9 +32,9 @@
 
 \begin{whiteframes}
   \ShowGrid
-  \begin{frame}{\relax}{\relax}%>>>
+  \begin{frame}{\relax}{\relax}%>>=
     \PlaceAt(.5,.5){\Huge Thank you. Here is a grid for you.}
-  \end{frame}%<<<
+  \end{frame}%=<<
 \end{whiteframes}
 
 %% Put bibliography here
@@ -42,3 +42,5 @@
 
 
 \end{document}
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

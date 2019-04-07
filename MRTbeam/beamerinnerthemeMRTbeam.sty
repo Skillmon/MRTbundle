@@ -1,39 +1,39 @@
 \mode<presentation>
 
-% itemize symbols >>>
+% itemize symbols >>=
 \defbeamertemplate{itemize item}{small circle}{%
   \scalebox{0.69}{$\bullet$}}
 \setbeamertemplate{itemize items}[circle]
 %\setbeamertemplate{itemize item}[small circle]
 %\setbeamertemplate{itemize subitem}[circle]
 %\setbeamertemplate{itemize subsubitem}[circle]
-%<<<
+%=<<
 
-% ToC >>>
+% ToC >>=
 \setbeamertemplate{section in toc}[sections numbered]
 \setbeamertemplate{subsection in toc}[subsections numbered]
-%<<<
+%=<<
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{blocks}[rounded][shadow=true]  
 
-\setbeamertemplate{bibliography item}{%>>>
+\setbeamertemplate{bibliography item}{%>>=
   \insertbiblabel%
 }
-%<<<
+%=<<
 
-\setbeamertemplate{footnote}{%>>>
+\setbeamertemplate{footnote}{%>>=
   \llap{%
     \parindent 1em%
     \noindent\raggedleft\insertfootnotemark%
     \insertfootnotetext}%
   \par%
 }
-%<<<
+%=<<
 
-% footnote placement >>>
+% footnote placement >>=
 % based on https://tex.stackexchange.com/a/388811/117050
-\def\MRT@place@ftn{%>>>
+\def\MRT@place@ftn{%>>=
   \makebox[0pt][l]{%
     \hspace*{0.82109\paperwidth}%
     \begin{minipage}[b][0pt][l]{0pt}%
@@ -78,8 +78,8 @@
     \end{minipage}%
   }%
 }
-%<<<
-\def\beamer@autobreakframebox{%>>>
+%=<<
+\def\beamer@autobreakframebox{%>>=
   \global\setbox\beamer@splitbox=\box\voidb@x%
   \ifbeamer@autobreak%
     % Ok, frame was overful -> split it!
@@ -111,10 +111,10 @@
     \global\setbox\beamer@footins=\box\voidb@x%
   \fi%
   }
-%<<<
-%<<<
+%=<<
+%=<<
 
-% Title page >>>
+% Title page >>=
 \defbeamertemplate*{title page}{MRTbeam}[1][]
 {% 
   \LARGE%
@@ -136,7 +136,11 @@
   \small\insertdate
   \par%
 }
-%<<<
+%=<<
 
 \mode
 <all>
+
+\endinput
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

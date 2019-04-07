@@ -10,7 +10,7 @@
   {MRTtab}          {\MRTtab@date}
   {\MRTtab@version} {tables matching the style in MRT scripts}
 
-%% check whether the table option got used for xcolor >>>
+%% check whether the table option got used for xcolor >>=
 \cs_if_exist:NF \rowcolors
   {
     \msg_new:nnn { MRTtab } { rowcolors~unavailable }
@@ -23,9 +23,9 @@
       }
     \msg_error:nn { MRTtab } { rowcolors~unavailable }
   }
-%<<<
+%=<<
 
-%% package variables >>>
+%% package variables >>=
 %%=============================================================================
 \newcolumntype{\MRTtabRepeatCols}{!{\d@llarend&\span\@gobbletwo}}
 \definecolor{tablegray}{gray}{0.85}
@@ -37,9 +37,9 @@
 \int_gset:Nn \g__MRTtab_color_upto_int { -\c_max_int }
 \bool_new:N \l_MRTtab_longtable_bool
 \bool_new:N \l_MRTtab_bare_bool
-\bool_new:N \g__MRTtab_komaoptions_defined_bool% >>>
+\bool_new:N \g__MRTtab_komaoptions_defined_bool% >>=
 \bool_gset:Nn \g__MRTtab_komaoptions_defined_bool
-  { \cs_if_exist_p:N \KOMAoptions }% <<<
+  { \cs_if_exist_p:N \KOMAoptions }% =<<
 \bool_new:N \l_MRTtab_caption_above_bool
 \bool_new:N \g__MRTtab_head_bool
 \skip_new:N \l_MRTtab_in_text_sep_skip
@@ -52,7 +52,7 @@
 \tl_new:N \l__MRTtab_table_post_hook_tl
 \tl_new:N \l__MRTtab_env_begin_tl
 \tl_new:N \l__MRTtab_env_end_tl
-% messages >>>
+% messages >>=
 \msg_new:nnn { MRTtab } { patch~failed } { Patching~of~\string#1~failed. }
 \msg_new:nnn { MRTtab } { KOMA~not~loaded }
   { It~seems~like~KOMA~is~not~loaded.#1 } 
@@ -69,34 +69,34 @@
         therefore~the~key~#1~is~not~defined.
       }
   }
-% <<<
-%%==========================================================================<<<
+% =<<
+%%===========================================================================<<
 
 \DeclareOption { longtable } { \bool_set_true:N \l_MRTtab_longtable_bool }
 \ProcessOptions\relax
 
 \bool_if:NT \l_MRTtab_longtable_bool { \RequirePackage{longtable} }
 
-%% options >>>
+%% options >>=
 %%=============================================================================
-\cs_new:Npn \__MRTtab_caption_above:% >>>
+\cs_new:Npn \__MRTtab_caption_above:% >>=
   {
     \bool_if:NT \g__MRTtab_komaoptions_defined_bool
       { \KOMAoptions{captions=tableheading} }
     \bool_set_true:N \l_MRTtab_caption_above_bool
-  }% <<<
-\cs_new:Npn \__MRTtab_caption_below:% >>>
+  }% =<<
+\cs_new:Npn \__MRTtab_caption_below:% >>=
   {
     \bool_if:NT \g__MRTtab_komaoptions_defined_bool
       { \KOMAoptions{captions=tablesignature} }
     \bool_set_false:N \l_MRTtab_caption_above_bool
-  }% <<<
-\cs_new:Npn \__MRTtab_stretch_caption:n #1% >>>
+  }% =<<
+\cs_new:Npn \__MRTtab_stretch_caption:n #1% >>=
   {
     \__MRTtab_setkomafont:nn { caption }      { \setstretch { #1 } \normalfont }
     \__MRTtab_setkomafont:nn { captionlabel } { \setstretch { #1 } \normalfont }
-  }% <<<
-\cs_new:Npn \__MRTtab_setkomafont:nn #1 #2% >>>
+  }% =<<
+\cs_new:Npn \__MRTtab_setkomafont:nn #1 #2% >>=
   {
     \bool_if:NTF \g__MRTtab_komaoptions_defined_bool
       { \setkomafont { #1 } { #2 } }
@@ -104,20 +104,20 @@
         \msg_warning:nnn { MRTtab } { KOMA~not~loaded }
           { ~Therefore~\setkomafont~is~not~available. }
       }
-  }% <<<
-\cs_new:Npn \__MRTtab_table_stripe_invert:% >>>
+  }% =<<
+\cs_new:Npn \__MRTtab_table_stripe_invert:% >>=
   {
     \tl_set_eq:NN \l_MRTtab_tmpa_tl             \l_MRTtab_table_scolor_one_tl
     \tl_set_eq:NN \l_MRTtab_table_scolor_one_tl \l_MRTtab_table_scolor_two_tl
     \tl_set_eq:NN \l_MRTtab_table_scolor_two_tl \l_MRTtab_tmpa_tl
-  }% <<<
-\cs_new_protected:Npn \__MRTtab_table_label_key:n #1% >>>
+  }% =<<
+\cs_new_protected:Npn \__MRTtab_table_label_key:n #1% >>=
   {
     \tl_if_blank:nTF { #1 }
       { \tl_clear:N \l_MRTtab_table_lable_tl }
       { \tl_set:Nn \l_MRTtab_table_lable_tl { \label{#1} } }
-  }% <<<
-\keys_define:nn { MRTtab }% >>>
+  }% =<<
+\keys_define:nn { MRTtab }% >>=
   {
     ,caption~above   .code:n             = { \__MRTtab_caption_above: }
     ,caption~above   .value_forbidden:n  = true
@@ -212,10 +212,10 @@
     ,stripe~start    .tl_set:N           = \l_MRTtab_table_stripe_start_tl
     ,stripe~start    .initial:n          = { 2 }
     ,sstart          .meta:n             = { stripe~start = { #1 } }
-  }% <<<
-\bool_if:NTF \l_MRTtab_longtable_bool% >>>
+  }% =<<
+\bool_if:NTF \l_MRTtab_longtable_bool% >>=
   {
-    \keys_define:nn { MRTtab }% >>>
+    \keys_define:nn { MRTtab }% >>=
       {
         ,long                  .bool_set:N = \l_MRTtab_table_long_bool
         ,long                  .default:n  = { true }
@@ -227,11 +227,11 @@
         ,cont~with~cap         .default:n  = { true }
         ,cont~w~cap            .meta:n     = { continue~with~caption = { #1 } }
         ,cont~w~cap            .default:n  = { true }
-      }% <<<
+      }% =<<
   }
   {
     \bool_new:N \l_MRTtab_table_long_bool
-    \clist_map_inline:nn% >>>
+    \clist_map_inline:nn% >>=
       {
         long, continue~caption, cont~cap, continue~with~caption, cont~with~cap,
         cont~w~cap
@@ -242,84 +242,84 @@
             #1.code:n =
               { \msg_error:nnn { MRTtab } { option~longtable~not~used } { #1 } }
           }
-      }% <<<
-  }% <<<
-%%==========================================================================<<<
+      }% =<<
+  }% =<<
+%%===========================================================================<<
 
-%% package macros >>>
+%% package macros >>=
 %%=============================================================================
-\NewDocumentCommand \MRTtabSetup { +m }% >>>
+\NewDocumentCommand \MRTtabSetup { +m }% >>=
   {
     \keys_set:nn { MRTtab } { #1 }
-  }% <<<
-%%==========================================================================<<<
+  }% =<<
+%%===========================================================================<<
 
-%% MRTtabular >>>
+%% MRTtabular >>=
 %%=============================================================================
-\cs_new:Npn \MRTtab@BoLHook% >>>
+\cs_new:Npn \MRTtab@BoLHook% >>=
   {
     \g__MRTtab_bol_hook_private_tl
     \l__MRTtab_bol_hook_public_tl
-  }% <<<
-\cs_new:Npn \MRTtab@EoLHook% >>>
+  }% =<<
+\cs_new:Npn \MRTtab@EoLHook% >>=
   {
     \g__MRTtab_eol_hook_private_tl
     \l__MRTtab_eol_hook_public_tl
-  }% <<<
-\cs_new_protected:Npn \MRTtab@@arraystarthook% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab@@arraystarthook% >>=
   {
     \int_gset:Nn \g__MRTtab_current_row_int { \c_zero }
-  }% <<<
-\cs_new_protected:Npn \MRTtab_step_row:% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_step_row:% >>=
   {
     \int_gincr:N \g__MRTtab_current_row_int
-  }% <<<
-\cs_new_protected:Npn \MRTtab_addto_private_bol_hook:n #1% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_addto_private_bol_hook:n #1% >>=
   {
     \tl_gput_right:Nn \g__MRTtab_bol_hook_private_tl { #1 }
-  }% <<<
-\cs_new_protected:Npn \MRTtab_addto_private_eol_hook:n #1% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_addto_private_eol_hook:n #1% >>=
   {
     \tl_gput_right:Nn \g__MRTtab_eol_hook_private_tl { #1 }
-  }% <<<
-\cs_new_protected:Npn \MRTtab_clear_private_bol_hook:% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_clear_private_bol_hook:% >>=
   {
     \tl_gclear:N \g__MRTtab_bol_hook_private_tl
-  }% <<<
-\cs_new_protected:Npn \MRTtab_clear_private_eol_hook:% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_clear_private_eol_hook:% >>=
   {
     \tl_gclear:N \g__MRTtab_eol_hook_private_tl
-  }% <<<
-\cs_new_protected:Npn \MRTtab_addto_public_bol_hook:n #1% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_addto_public_bol_hook:n #1% >>=
   {
     \tl_put_right:Nn \l__MRTtab_bol_hook_public_tl { #1 }
-  }% <<<
-\cs_new_protected:Npn \MRTtab_addto_public_eol_hook:n #1% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_addto_public_eol_hook:n #1% >>=
   {
     \tl_put_right:Nn \l__MRTtab_eol_hook_public_tl { #1 }
-  }% <<<
-\cs_new_protected:Npn \MRTtab_clear_public_bol_hook:% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_clear_public_bol_hook:% >>=
   {
     \tl_clear:N \l__MRTtab_bol_hook_public_tl
-  }% <<<
-\cs_new_protected:Npn \MRTtab_clear_public_eol_hook:% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_clear_public_eol_hook:% >>=
   {
     \tl_clear:N \l__MRTtab_eol_hook_public_tl
-  }% <<<
-\cs_new_protected:Npn \MRTtab_patchcmd:Nnn #1 #2 #3% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_patchcmd:Nnn #1 #2 #3% >>=
   {
     \patchcmd #1 { #2 } { #3 } {} 
       { \msg_error:nnn { MRTtab } { patch~failed} { #1 } }
-  }% <<<
-\cs_new_protected:Npn \MRTtab_pretocmd:Nn #1 #2% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_pretocmd:Nn #1 #2% >>=
   {
     \pretocmd #1 { #2 } {} { \msg_error:nnn { MRTtab } { patch~failed } { #1 } }
-  }% <<<
-\cs_new_protected:Npn \MRTtab_apptocmd:Nn #1 #2% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_apptocmd:Nn #1 #2% >>=
   {
     \apptocmd #1 { #2 } {} { \msg_error:nnn { MRTtab } { patch~failed } { #1 } }
-  }% <<<
-\cs_new_protected:Npn \MRTtab@unpatcharray% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab@unpatcharray% >>=
   {
     \cs_set_eq:NN \@@array      \@@array_original
     \cs_set_eq:NN \@arraycr     \@arraycr_original
@@ -330,8 +330,8 @@
     \cs_set_eq:NN \endtabular   \endtabular_original
     \cs_set_eq:NN \array        \array_original
     \cs_set_eq:NN \endarray     \endarray_original
-  }% <<<
-\cs_new_protected:Npn \MRTtab_patch_array:% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTtab_patch_array:% >>=
   {
     \cs_set_eq:NN \@@array_original      \@@array
     \cs_set_eq:NN \@arraycr_original     \@arraycr
@@ -350,14 +350,14 @@
     \MRTtab_patchcmd:Nnn \@xarraycr    { \cr } { \cr \MRTtab@BoLHook }
     \MRTtab_patchcmd:Nnn \@xargarraycr { \cr } { \cr \MRTtab@BoLHook }
     \MRTtab_patchcmd:Nnn \@@array      { \cr } { \cr \noexpand \MRTtab@BoLHook }
-  }% <<<
-\cs_new:Npn \MRTtab_head_start_inner:% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_head_start_inner:% >>=
   {
     \int_compare:nNnF \g__MRTtab_current_row_int = \c_one
       { \MRTtab_surround_lines: }
     \headR
-  }% <<<
-\cs_new:Npn \MRTtab_declare_head_macro:% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_declare_head_macro:% >>=
   {
     \DeclareExpandableDocumentCommand \head { m }
       {
@@ -369,8 +369,8 @@
           }
       }
     \MRTtab_declare_head_macrosSRE:
-  }% <<<
-\cs_new:Npn \MRTtab_declare_head_macrosSRE:% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_declare_head_macrosSRE:% >>=
   {
     \DeclareExpandableDocumentCommand \headS { }
       {
@@ -386,14 +386,14 @@
         \noalign { \bool_gset_false:N \g__MRTtab_head_bool }
         \MRTtab_surround_lines:
       }
-  }% <<<
-\cs_new:Npn \MRTtab_surround_lines:% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_surround_lines:% >>=
   {
     \int_compare:nNnF
       { \g__MRTtab_color_upto_int + 1 } = { \g__MRTtab_current_row_int }
       { \crcr \hline }
-  }% <<<
-\cs_new:Npn \MRTtab_head_hook:% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_head_hook:% >>=
   {
     \int_compare:nNnTF \g__MRTtab_current_row_int > \g__MRTtab_color_upto_int
       {
@@ -404,11 +404,11 @@
       {
         \headR
       }
-  }% <<<
+  }% =<<
 \MRTtab_addto_private_bol_hook:n { \noalign { \MRTtab_step_row: } }
 \MRTtab_addto_private_bol_hook:n { \MRTtab_head_hook: }
-\NewDocumentEnvironment { MRTtabular } { O{} o +m o }% >>>
-  {% begin >>>
+\NewDocumentEnvironment { MRTtabular } { O{} o +m o }% >>=
+  {% begin >>=
     \MRTtab_patch_array:
     \MRTtab_declare_head_macro:
     \bool_gset_false:N \g__MRTtab_head_bool
@@ -422,44 +422,44 @@
     \setstretch { \l_MRTtab_stretch_tl }
     \begin{tabular_original}[#1]{#3}
       \MRTtab_surround_lines:
-  }% <<<
-  {% end >>>
+  }% =<<
+  {% end >>=
       \MRTtab_surround_lines:
       %\crcr\hline
     \end{tabular_original}
     \int_gset:Nn \g__MRTtab_color_upto_int { -\c_max_int }
-  }% <<<
-  % <<<
-\NewDocumentCommand \MRTtabAddtoBoLHook { +m }% >>>
+  }% =<<
+  % =<<
+\NewDocumentCommand \MRTtabAddtoBoLHook { +m }% >>=
   {
     \MRTtab_addto_public_bol_hook:n { #1 }
-  }% <<<
-\NewDocumentCommand \MRTtabAddtoEoLHook { +m }% >>>
+  }% =<<
+\NewDocumentCommand \MRTtabAddtoEoLHook { +m }% >>=
   {
     \MRTtab_addto_public_eol_hook:n { #1 }
-  }% <<<
-\NewDocumentCommand \MRTtabClearBoLHook {}% >>>
+  }% =<<
+\NewDocumentCommand \MRTtabClearBoLHook {}% >>=
   {
     \MRTtab_clear_public_bol_hook:
-  }% <<<
-\NewDocumentCommand \MRTtabClearEoLHook {}% >>>
+  }% =<<
+\NewDocumentCommand \MRTtabClearEoLHook {}% >>=
   {
     \MRTtab_clear_public_eol_hook:
-  }% <<<
-\NewExpandableDocumentCommand \MRTtabCurrentRow {}% >>>
+  }% =<<
+\NewExpandableDocumentCommand \MRTtabCurrentRow {}% >>=
   {
     \int_use:N \g__MRTtab_current_row_int
-  }% <<<
-\NewDocumentCommand \MRTtabDeclareHeadMacros {}% >>>
+  }% =<<
+\NewDocumentCommand \MRTtabDeclareHeadMacros {}% >>=
   {
     \MRTtab_declare_head_macrosSRE:
-  }% <<<
-%%==========================================================================<<<
+  }% =<<
+%%===========================================================================<<
 
-%% MRTcline >>>
+%% MRTcline >>=
 %%=============================================================================
 \tl_new:N \l__MRTtab_cline_output_tl
-\cs_new:Npn \MRTtab_cline_output_single:nNnnnn #1 #2 #3 #4 #5 #6% >>>
+\cs_new:Npn \MRTtab_cline_output_single:nNnnnn #1 #2 #3 #4 #5 #6% >>=
   {
     % #1 fill color
     % #2 if star
@@ -490,9 +490,9 @@
         \cr
         \noalign{\vskip-\arrayrulewidth}
       }
-  }% <<<
+  }% =<<
 \cs_generate_variant:Nn \MRTtab_cline_output_single:nNnnnn { xNxxxx }
-\cs_new:Npn \MRTtab_cline_output_strip:nNnnnn #1 #2 #3 #4 #5 #6% >>>
+\cs_new:Npn \MRTtab_cline_output_strip:nNnnnn #1 #2 #3 #4 #5 #6% >>=
   {
     % #1 fill color
     % #2 if star
@@ -507,8 +507,8 @@
       { \tl_trim_spaces:n { #4 } }
       { \tl_trim_spaces:n { #5 } }
       { \tl_trim_spaces:n { #6 } }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_split_columns:nNnnw #1 #2 #3 #4 #5 - #6 \q_stop% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_split_columns:nNnnw #1 #2 #3 #4 #5 - #6 \q_stop% >>=
   {
     % #1 fill color
     % #2 if star
@@ -517,8 +517,8 @@
     % #5 start column
     % #6 end column
     \MRTtab_cline_output_strip:nNnnnn { #1 } #2 { #3 } { #4 } { #5 } { #6 }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_get_columns:nNnnw #1 #2 #3 #4 #5 \q_stop% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_get_columns:nNnnw #1 #2 #3 #4 #5 \q_stop% >>=
   {
     % #1 fill color
     % #2 if star
@@ -538,8 +538,8 @@
             { #5 }
           }
       }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_column_group:nNnnn #1 #2 #3 #4 #5% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_column_group:nNnnn #1 #2 #3 #4 #5% >>=
   {
     % #1 fill color
     % #2 if star
@@ -556,8 +556,8 @@
         \int_compare:nNnT \l_MRTtab_tmpb_int > 0
           { \tl_put_right:Nn \l__MRTtab_cline_output_tl { \omit } }
       }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_peek_column_group:nNnn #1 #2 #3 #4% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_peek_column_group:nNnn #1 #2 #3 #4% >>=
   {
     % #1 fill color
     % #2 if star
@@ -566,8 +566,8 @@
     \peek_meaning_ignore_spaces:NTF \c_group_begin_token
       { \MRTtab_cline_column_group:nNnnw { #1 } #2 { #3 } { #4 } }
       { \MRTtab_cline_get_columns:nNnnw { #1 } #2 { #3 } { #4 } }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_get_right_skip:nNnw #1 #2 #3 [ #4 ]% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_get_right_skip:nNnw #1 #2 #3 [ #4 ]% >>=
   {
     % #1 fill color
     % #2 if star
@@ -575,8 +575,8 @@
     % #4 right skip
     %\MRTtab_cline_peek_column_group:nNnn { #1 } #2 { #3 } { #4 }
     \MRTtab_cline_get_columns:nNnnw { #1 } #2 { #3 } { #4 }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_peek_right_skip:nNn #1 #2 #3% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_peek_right_skip:nNn #1 #2 #3% >>=
   {
     % #1 fill color
     % #2 if star
@@ -584,8 +584,8 @@
     \peek_meaning_ignore_spaces:NTF [%]
       { \MRTtab_cline_get_right_skip:nNnw { #1 } #2 { #3 } }
       { \MRTtab_cline_get_columns:nNnnw { #1 } #2 { #3 } { .5\tabcolsep } }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_peek_right:nNn #1 #2 #3% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_peek_right:nNn #1 #2 #3% >>=
   {
     % #1 fill color
     % #2 if star
@@ -593,52 +593,52 @@
     \peek_meaning_remove_ignore_spaces:NTF >
       { \MRTtab_cline_peek_right_skip:nNn { #1 } #2 { #3 } }
       { \MRTtab_cline_get_columns:nNnnw { #1 } #2 { #3 } { 0pt } }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_get_left_skip:nNw #1 #2 [ #3 ]% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_get_left_skip:nNw #1 #2 [ #3 ]% >>=
   {
     % #1 fill color
     % #2 if star
     % #3 left skip
     \MRTtab_cline_peek_right:nNn { #1 } #2 { #3 }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_peek_left_skip:nN #1 #2% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_peek_left_skip:nN #1 #2% >>=
   {
     % #1 fill color
     % #2 if star
     \peek_meaning_ignore_spaces:NTF [%]
       { \MRTtab_cline_get_left_skip:nNw { #1 } #2 }
       { \MRTtab_cline_peek_right:nNn { #1 } #2 { .5\tabcolsep } }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_peek_left:nN #1 #2% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_peek_left:nN #1 #2% >>=
   {
     % #1 fill color
     % #2 if star
     \peek_meaning_remove_ignore_spaces:NTF <
       { \MRTtab_cline_peek_left_skip:nN { #1 } #2 }
       { \MRTtab_cline_peek_right:nNn { #1 } #2 { 0pt } }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_individual_color:Nw #1 [ #2 ]% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_individual_color:Nw #1 [ #2 ]% >>=
   {
     % #1 if star
     % #2 fill color
     \MRTtab_cline_peek_left:nN { #2 } #1
-  }% <<<
-\cs_new:Npn \MRTtab_cline_peek_color:nN #1 #2% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_peek_color:nN #1 #2% >>=
   {
     % #1 fill color
     % #2 if star
     \peek_meaning_ignore_spaces:NTF [%]
       { \MRTtab_cline_individual_color:Nw #2 }
       { \MRTtab_cline_peek_left:nN { #1 } #2 }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_peek_star:n #1% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_peek_star:n #1% >>=
   {
     % #1 fill color
     \peek_meaning_remove_ignore_spaces:NTF *
       { \MRTtab_cline_peek_color:nN { #1 } \c_true_bool }
       { \MRTtab_cline_peek_color:nN { #1 } \c_false_bool }
-  }% <<<
-\cs_new:Npn \MRTtab_cline_arg_parser:nnn #1 #2 #3% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_cline_arg_parser:nnn #1 #2 #3% >>=
   {
     % #1 if everything coloured
     % #2 fill colour
@@ -664,18 +664,18 @@
         \int_compare:nNnT \l_MRTtab_tmpa_int > 0
           { \tl_put_right:Nn \l__MRTtab_cline_output_tl { \omit } }
       }
-  }% <<<
+  }% =<<
 \cs_generate_variant:Nn \MRTtab_cline_arg_parser:nnn { nxn }
-\NewExpandableDocumentCommand \clineReveal { }% >>>
+\NewExpandableDocumentCommand \clineReveal { }% >>=
   {
     \noalign { \vskip \arrayrulewidth }
-  }% <<<
-\NewExpandableDocumentCommand \MRTcline { }% >>>
+  }% =<<
+\NewExpandableDocumentCommand \MRTcline { }% >>=
   {
     \omit
     \MRTtab@cline
-  }% <<<
-\NewDocumentCommand \MRTtab@cline { t! o m }% >>>
+  }% =<<
+\NewDocumentCommand \MRTtab@cline { t! o m }% >>=
   {
     \MRTtab_cline_arg_parser:nxn
       { #1 }
@@ -702,29 +702,29 @@
           \g__MRTtab_current_row_int > \g__MRTtab_color_upto_int
       }
       { \headR }
-  }% <<<
-%%==========================================================================<<<
+  }% =<<
+%%===========================================================================<<
 
-%% MRTtable >>>
+%% MRTtable >>=
 %%=============================================================================
 %\cs_generate_variant:Nn \exp_last_unbraced:NNNV { NnNV }
-\cs_new:Npn \MRTtab_table_addto_pre_hook:n #1% >>>
+\cs_new:Npn \MRTtab_table_addto_pre_hook:n #1% >>=
   {
     \tl_put_right:Nn \l__MRTtab_table_pre_hook_tl { #1 }
-  }% <<<
-\cs_new:Npn \MRTtab_table_clear_pre_hook:% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_table_clear_pre_hook:% >>=
   {
     \tl_clear:N \l__MRTtab_table_pre_hook_tl
-  }% <<<
-\cs_new:Npn \MRTtab_table_addto_post_hook:n #1% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_table_addto_post_hook:n #1% >>=
   {
     \tl_put_right:Nn \l__MRTtab_table_post_hook_tl { #1 }
-  }% <<<
-\cs_new:Npn \MRTtab_table_clear_post_hook:% >>>
+  }% =<<
+\cs_new:Npn \MRTtab_table_clear_post_hook:% >>=
   {
     \tl_clear:N \l__MRTtab_table_post_hook_tl
-  }% <<<
-\cs_new:Npn \__MRTtab_table_caption:% >>>
+  }% =<<
+\cs_new:Npn \__MRTtab_table_caption:% >>=
   {
     \tl_if_blank:VF \l_MRTtab_table_cap_tl
       {
@@ -738,8 +738,8 @@
               { \l_MRTtab_table_cap_tl \l_MRTtab_table_lable_tl }
           }
       }
-  }% <<<
-\cs_new:Npn \__MRTtab_table_normal_start:% >>>
+  }% =<<
+\cs_new:Npn \__MRTtab_table_normal_start:% >>=
   {
     \bool_if:NTF \l_MRTtab_bare_bool
       {
@@ -775,8 +775,8 @@
     \l__MRTtab_table_pre_hook_tl
     \tl_if_empty:NF \l__MRTtab_env_begin_tl
       { \exp_args:NV \l__MRTtab_env_begin_tl \l_MRTtab_table_col_tl }
-  }% <<<
-\cs_new:Npn \__MRTtab_table_normal_end:% >>>
+  }% =<<
+\cs_new:Npn \__MRTtab_table_normal_end:% >>=
   {
     \l__MRTtab_env_end_tl
     \l__MRTtab_table_post_hook_tl
@@ -795,8 +795,8 @@
               { \vskip \l_MRTtab_in_text_sep_skip }
           }
       }
-  }% <<<
-\cs_new:Npn \__MRTtab_table_long_start:% >>>
+  }% =<<
+\cs_new:Npn \__MRTtab_table_long_start:% >>=
   {
     \msg_if_exist:nnF { MRTtab } { long~not~implemented }
       {
@@ -809,14 +809,14 @@
     \msg_error:nn { MRTtab } { long~not~implemented }
     \cs_gset_eq:NN \__MRTtab_table_long_end: \__MRTtab_table_normal_end:
     \__MRTtab_table_normal_start:
-  }% <<<
-\cs_new:Npn \__MRTtab_table_long_end:% >>>
+  }% =<<
+\cs_new:Npn \__MRTtab_table_long_end:% >>=
   {
     \end { longtable }
     \l__MRTtab_table_post_hook_tl
-  }% <<<
-\NewDocumentEnvironment { MRTtable } { +O{} }% >>>
-  {% begin >>>
+  }% =<<
+\NewDocumentEnvironment { MRTtable } { +O{} }% >>=
+  {% begin >>=
     \MRTtabDeclareHeadMacros
     \MRTtabSetup { head = 1 }
     \MRTtabSetup { #1 }
@@ -828,32 +828,32 @@
     \bool_if:NTF \l_MRTtab_table_long_bool
       { \__MRTtab_table_long_start: }
       { \__MRTtab_table_normal_start: }
-  }% <<<
-  {% end >>>
+  }% =<<
+  {% end >>=
     \bool_if:NTF \l_MRTtab_table_long_bool
       { \__MRTtab_table_long_end: }
       { \__MRTtab_table_normal_end: }
-  }% <<<
-  % <<<
-\NewDocumentCommand \MRTtabAddtoPreHook { +m }% >>>
+  }% =<<
+  % =<<
+\NewDocumentCommand \MRTtabAddtoPreHook { +m }% >>=
   {
     \MRTtab_table_addto_pre_hook:n { #1 }
-  }% <<<
-\NewDocumentCommand \MRTtabAddtoPostHook { +m }% >>>
+  }% =<<
+\NewDocumentCommand \MRTtabAddtoPostHook { +m }% >>=
   {
     \MRTtab_table_addto_post_hook:n { #1 }
-  }% <<<
-\NewDocumentCommand \MRTtabClearPreHook {}% >>>
+  }% =<<
+\NewDocumentCommand \MRTtabClearPreHook {}% >>=
   {
     \MRTtab_table_clear_pre_hook:
-  }% <<<
-\NewDocumentCommand \MRTtabClearPostHook {}% >>>
+  }% =<<
+\NewDocumentCommand \MRTtabClearPostHook {}% >>=
   {
     \MRTtab_table_clear_post_hook:
-  }% <<<
-%%==========================================================================<<<
+  }% =<<
+%%===========================================================================<<
 
-%% \endfirstfoot addition to longtable >>>
+%% \endfirstfoot addition to longtable >>=
 %%=============================================================================
 % code from: https://tex.stackexchange.com/questions/68439/
 % it should allow a \endfirstfoot in longtable
@@ -937,11 +937,11 @@
         \copy\LT@head\nobreak
     \fi
 }
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% MRTtable[long] >>>
+%% MRTtable[long] >>=
 %%=============================================================================
-%\cs_new_protected:Npn \MRTtab_patch_array_long:% >>>
+%\cs_new_protected:Npn \MRTtab_patch_array_long:% >>=
   %{
     %\cs_set_eq:NN \@@array_original      \@@array
     %\cs_set_eq:NN \@arraycr_original     \@arraycr
@@ -958,15 +958,15 @@
     %\MRTtab_apptocmd:Nn  \@yargarraycr { \MRTtab@long@BoLHook }
     %\MRTtab_patchcmd:Nnn \@xarraycr    { \cr } { \cr \MRtab@long@BoLHook }
     %\MRTtab_patchcmd:Nnn \@xargarraycr { \cr } { \cr \MRtab@long@BoLHook }
-  %}% <<<
+  %}% =<<
 %\cs_new:Npn \__MRTtab_table_long_start:
   %{
   %}
 %\cs_new:Npn \__MRTtab_table_long_end:
   %{
   %}
-%%==========================================================================<<<
+%%===========================================================================<<
 
 \endinput
 
-% vim: ft=tex fdm=marker fmr=>>>,<<< sw=2 ts=2 tw=80
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

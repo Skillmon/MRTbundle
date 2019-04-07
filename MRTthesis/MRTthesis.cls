@@ -10,25 +10,25 @@
 
 \prop_gput:Nnn \g_msg_module_type_prop { MRTthesis } { Class }
 
-%% variants of external macros >>>
+%% variants of external macros >>=
 %%=============================================================================
 \cs_generate_variant:Nn \keys_set:nn { nV }
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% variables >>>
+%% variables >>=
 %%=============================================================================
-% boxes >>>
+% boxes >>=
 \newbox\MRTthesis@TestBoxA
-% <<<
-% dimens >>>
+% =<<
+% dimens >>=
 \newdimen\MRTthesis@pageheadOffset
 \newdimen\MRTthesis@headingsfix
-% <<<
-% ifs >>>
+% =<<
+% ifs >>=
 \newif\ifMRTbibliography
-% <<<
-% l3 variables >>>
-% bool >>>
+% =<<
+% l3 variables >>=
+% bool >>=
 \bool_new:N \l_MRTthesis_minimal_bool
 \bool_new:N \l_MRTthesis_british_bool
 \bool_new:N \l_MRTthesis_no_geometry_bool
@@ -42,18 +42,18 @@
 \bool_new:N \l_MRTthesis_lot_front_bool
 \bool_new:N \l_MRTthesis_toc_front_bool
 \bool_new:N \l_MRTthesis_hyperref_code_executed_bool
-% <<<
-% box >>>
+% =<<
+% box >>=
 \box_new:N \l_MRTthesis_tmpa_box
-% <<<
-% clist >>>
+% =<<
+% clist >>=
 \clist_new:N \l_MRTthesis_tmpa_clist
-% <<<
-% seq >>>
+% =<<
+% seq >>=
 \seq_new:N \g_MRTthesis_authors_seq
 \seq_new:N \l_MRTthesis_tmpa_seq
-% <<<
-% tl >>>
+% =<<
+% tl >>=
 \tl_new:N \l_MRTthesis_tmpa_tl
 \tl_new:N \l_MRTthesis_tmpb_tl
 \tl_new:N \l_MRTthesis_titlepage_von_tl
@@ -61,33 +61,33 @@
 \tl_new:N \l_MRTthesis_auto_frontmatter_addo_tl
 \tl_new:N \l_MRTthesis_auto_backmatter_addo_tl
 \tl_new:N \l_MRTthesis_auto_backmatter_after_tl
-% <<<
-% <<<
-%%==========================================================================<<<
+% =<<
+% =<<
+%%===========================================================================<<
 
-%% messages >>>
+%% messages >>=
 %%=============================================================================
-\msg_new:nnnn { MRTthesis } { afterafterhyperref }%>>>
+\msg_new:nnnn { MRTthesis } { afterafterhyperref }%>>=
   {
     \exp_not:N \MRTafterhyperref
     ~used~too~late.~It~has~to~be~used~before~\exp_not:N \begin \{document\}.
   }
-  { Seriously,~which~information~do~you~miss~from~the~above? }%<<<
-\msg_new:nnn { MRTthesis } { degree~undefined }%>>>
+  { Seriously,~which~information~do~you~miss~from~the~above? }%=<<
+\msg_new:nnn { MRTthesis } { degree~undefined }%>>=
   {
     The~degree~option~wasn't~used~and~guessing~the~degree~from~the~thesis~type~
     failed.
-  }%<<<
-\msg_new:nnn { MRTthesis } { wrong~engine }%>>>
+  }%=<<
+\msg_new:nnn { MRTthesis } { wrong~engine }%>>=
   {
     The ~ used ~ #1 ~ is ~ not ~ available ~ under ~ \c_sys_engine_str. ~ You ~
     have ~ to ~ use ~ #2.
-  }%<<<
-\msg_new:nnn { MRTthesis } { patch~failed }%>>>
+  }%=<<
+\msg_new:nnn { MRTthesis } { patch~failed }%>>=
   {
     Patching~`\token_to_str:N #1`~failed.~Please~contact~MRTbundle's~maintainer.
-  }%<<<
-\msg_new:nnn { MRTthesis } { no~float }%>>>
+  }%=<<
+\msg_new:nnn { MRTthesis } { no~float }%>>=
   {
     Parsing~says~you~didn't~provide~a~valid~float.~Please~provide~a
     valid~float.\\
@@ -95,16 +95,16 @@
     to~the\\
     package~maintainer.\\
     Error~occured~while~parsing~#1.%
-  }%<<<
-%%==========================================================================<<<
+  }%=<<
+%%===========================================================================<<
 
-%% constants >>>
+%% constants >>=
 %%=============================================================================
 \bool_const:Nn \c_MRTthesis_xetex_or_luatex_bool
   { \sys_if_engine_luatex_p: || \sys_if_engine_xetex_p: }
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% Class options and loading scrreprt >>>
+%% Class options and loading scrreprt >>=
 %%=============================================================================
 \input{MRTfonts.forward.keys.tex}
 \MRTfonts_setup_forwarded_from:n { MRTthesis }
@@ -133,24 +133,24 @@
   {scrreprt}
 \ProcessOptions\relax
 \LoadClass{scrreprt}
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% additional packages to achieve template formatting >>>
+%% additional packages to achieve template formatting >>=
 %%=============================================================================
 \RequirePackage{MRTtab,MRTwuline}
 \bool_if:NTF \l_MRTthesis_british_bool
-  {% true >>>
+  {% true >>=
     \RequirePackage[main=british,ngerman]{babel}
     \useshorthands{"}
     \addto\extrasbritish{\languageshorthands{ngerman}}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { by }
     \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Page }
-  }% <<<
-  {% false >>>
+  }% =<<
+  {% false >>=
     \RequirePackage[ngerman]{babel}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
     \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Seite }
-  }% <<<
+  }% =<<
 \RequirePackage[singlespacing=true]{scrlayer-scrpage}
 \bool_if:NF \l_MRTthesis_no_geometry_bool
   {
@@ -186,7 +186,7 @@
         \bool_gset_true:N \l_MRTthesis_hyperref_code_executed_bool
       }
   }
-\bool_if:NF \l_MRTthesis_minimal_bool%>>>
+\bool_if:NF \l_MRTthesis_minimal_bool%>>=
   {
     \cs_new:Npn \MRTthesis_range_phrase:n #1
       {
@@ -214,12 +214,12 @@
     \setcounter{biburllcpenalty}{9900}
     \setcounter{biburlucpenalty}{9000}
     \RequirePackage{csquotes}
-  }%<<<
-%%==========================================================================<<<
+  }%=<<
+%%===========================================================================<<
 
-%% setup options >>>
+%% setup options >>=
 %%=============================================================================
-\keys_define:nn { MRTthesis/setup }% >>>
+\keys_define:nn { MRTthesis/setup }% >>=
   {
     ,advisor          .tl_set:N   = \l_MRTthesis_advisor_tl
     ,author           .tl_set:N   = \l_MRTthesis_authors_tl
@@ -268,10 +268,10 @@
     ,sign~width~max   .dim_set:N  = \l_MRTthesis_sign_width_max_dim
     ,sign~width~min   .dim_set:N  = \l_MRTthesis_sign_width_dim
     ,stretch~caption  .code:n     =
-      {% >>>
+      {% >>=
         \setkomafont { caption }      { \setstretch { #1 } \normalfont }
         \setkomafont { captionlabel } { \setstretch { #1 } \normalfont }
-      }% <<<
+      }% =<<
     ,stretch~cap      .meta:n     = { stretch~caption={#1} }
     ,stretch~tabular  .code:n     = { \MRTtabSetup { stretch~tab={#1} } }
     ,stretch~tab      .meta:n     = { stretch~tabular={#1} }
@@ -342,9 +342,9 @@
     ,bib              .bool_set:N = \l_MRTthesis_backmatter_bibliography_bool
     ,bibliography     .meta:n     =
       { \tl_if_empty:nTF { #1 } { bib } { bib=#1 } }
-  }% <<<
-% defaults >>>
-\keys_set:nn { MRTthesis/setup }% >>>
+  }% =<<
+% defaults >>=
+\keys_set:nn { MRTthesis/setup }% >>=
   {
     ,advisor = {\textcolor{blue}{Mein~Betreuer}}
     ,examiner = {Univ.-Professor~Dr.-Ing.~Gerhard~Fischerauer}
@@ -378,17 +378,17 @@
     ,toc = front
     ,bib = true
     ,appendix~ragged = true
-  }% <<<
-% <<<
-%%==========================================================================<<<
+  }% =<<
+% =<<
+%%===========================================================================<<
 
-%% macros >>>
+%% macros >>=
 %%=============================================================================
-% auxiliary like>>>
+% auxiliary like>>=
 \long\def\@firstofthree#1#2#3{#1}
 \long\def\@secondofthree#1#2#3{#2}
 \long\def\@thirdofthree#1#2#3{#3}
-\NewDocumentCommand \ifNoWidthTF { +m }% >>>
+\NewDocumentCommand \ifNoWidthTF { +m }% >>=
   {%
     \bgroup
     \setbox\MRTthesis@TestBoxA\hbox{#1}%
@@ -399,16 +399,16 @@
       \egroup
       \expandafter\@secondoftwo
     \fi
-  }% <<<
-\NewExpandableDocumentCommand \vfillmult { m }% >>>
+  }% =<<
+\NewExpandableDocumentCommand \vfillmult { m }% >>=
   {%
     \vskip 0pt plus #1fill\relax
-  }% <<<
-\NewExpandableDocumentCommand \hfillmult { m }% >>>
+  }% =<<
+\NewExpandableDocumentCommand \hfillmult { m }% >>=
   {%
     \hskip 0pt plus #1fill\relax
-  }% <<<
-\cs_new:Npn \MRTthesis_display_logo:n #1% >>>
+  }% =<<
+\cs_new:Npn \MRTthesis_display_logo:n #1% >>=
   {
     \exp_args:Nx \tl_if_empty:nF { \tl_use:c { l_MRTthesis_logo #1 _tl } }
       {
@@ -416,28 +416,28 @@
           { \dim_use:c { l_MRTthesis_logo #1 _height_dim } }
           { \tl_use:c { l_MRTthesis_logo #1 _tl } }
       }
-  }% <<<
-\cs_new:Npn \MRTthesis_display_logo_expanded:nn #1 #2% >>>
+  }% =<<
+\cs_new:Npn \MRTthesis_display_logo_expanded:nn #1 #2% >>=
   {
     \includegraphics[height=#1]{#2}
-  }% <<<
+  }% =<<
 \cs_generate_variant:Nn \MRTthesis_display_logo_expanded:nn { xx }
 \MRTutil@def\MRTthesis@fntsel#1#2{\fontsize{#1bp}{#2bp}\selectfont}
-% <<<
-% \MRTafterhyperref >>>
-\NewDocumentCommand \MRTafterhyperref { +m }% >>>
+% =<<
+% \MRTafterhyperref >>=
+\NewDocumentCommand \MRTafterhyperref { +m }% >>=
   {
     \tl_gput_right:Nn \MRTthesis@after@hyperref { #1 }
-  }% <<<
+  }% =<<
 \MRTutil@def\MRTthesis@after@hyperref{}
-\MRTafterhyperref% redefine itself after hyperref to throw an error >>>
+\MRTafterhyperref% redefine itself after hyperref to throw an error >>=
   {
     \cs_set_protected:Npn \MRTafterhyperref #1
       { \msg_error:nn { MRTthesis } { afterafterhyperref } }
-  }% <<<
-% <<<
-% ToC related >>>
-\NewDocumentCommand \DeclareTOCStyleEntryMRTSectionLike% >>>
+  }% =<<
+% =<<
+% ToC related >>=
+\NewDocumentCommand \DeclareTOCStyleEntryMRTSectionLike% >>=
   { O{\l_MRTthesis_toc_section_indent_tl} m }
   {%
     \expandafter\DeclareTOCStyleEntry\expandafter
@@ -446,8 +446,8 @@
         ,indent=#1%
       ]
       {tocline}{#2}%
-  }% <<<
-\NewDocumentCommand \DeclareTOCStyleEntryMRTChapterLike% >>>
+  }% =<<
+\NewDocumentCommand \DeclareTOCStyleEntryMRTChapterLike% >>=
   { O{\l_MRTthesis_toc_chapter_indent_tl} m }
   {%
     \expandafter\DeclareTOCStyleEntry\expandafter
@@ -456,40 +456,40 @@
         ,indent=#1%
       ]
       {tocline}{#2}%
-  }% <<<
-% <<<
+  }% =<<
+% =<<
 \def\MRTthesis@HeadingsUline{\WUline}
-\NewDocumentCommand \MRTthesisSetup { +m }%>>>
+\NewDocumentCommand \MRTthesisSetup { +m }%>>=
   {
     \keys_set:nn { MRTthesis/setup } { #1 }
-  }%<<<
-% title, author, ... >>>
-\RenewDocumentCommand \title { +m }%>>>
+  }%=<<
+% title, author, ... >>=
+\RenewDocumentCommand \title { +m }%>>=
   {
     \keys_set:nn { MRTthesis/setup } { title={#1} }
-  }%<<<
-\RenewDocumentCommand \subtitle { +m }%>>>
+  }%=<<
+\RenewDocumentCommand \subtitle { +m }%>>=
   {
     \keys_set:nn { MRTthesis/setup } { subtitle={#1} }
-  }%<<<
-\RenewDocumentCommand \author { o m }%>>>
+  }%=<<
+\RenewDocumentCommand \author { o m }%>>=
   {
     \keys_set:nn { MRTthesis/setup } { author = { #2 } }
     \IfNoValueF { #1 }
       {
         \keys_set:nn { MRTthesis/setup } { short~author = { #1 } }
       }
-  }%<<<
-% <<<
+  }%=<<
+% =<<
 \NewDocumentCommand \sethead { m } { \markboth{#1}{#1} }
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% labels and other ngerman stuff >>>
+%% labels and other ngerman stuff >>=
 %%=============================================================================
 \renewcommand*\theequation{\hbox{(\thechapter-\arabic{equation})}}
 \renewcommand*\thefigure  {\hbox{\thechapter-\arabic{figure}}}
 \renewcommand*\thetable   {\hbox{\thechapter-\arabic{table}}}
-\MRTutil@def\MRTthesis@setautorefnames% >>>
+\MRTutil@def\MRTthesis@setautorefnames% >>=
   {%
     \addto\extrasngerman
       {%
@@ -502,32 +502,32 @@
         \gdef\equationautorefname{Eq.\@}%
         \gdef\appendixautorefname{Appendix}%
       }%
-  }% <<<
+  }% =<<
 \MRTafterhyperref{\MRTthesis@setautorefnames}
-\addto\captionsngerman% >>>
+\addto\captionsngerman% >>=
   {%
     \renewcommand*\figurename{\bfseries Bild}%
     \renewcommand*\tablename{\bfseries Tabelle}%
     \renewcommand*\listfigurename{Bildverzeichnis}%
-  }% <<<
-\addto\captionsbritish% >>>
+  }% =<<
+\addto\captionsbritish% >>=
   {%
     \renewcommand*\figurename{\bfseries Figure}%
     \renewcommand*\tablename{\bfseries Table}%
-  }% <<<
+  }% =<<
 %correctly set the equation labels
 \def\tagform@#1{\maketag@@@{\ignorespaces#1\unskip\@@italiccorr}\hspace{6.7mm}}
-\long\def\eqref#1% >>>
+\long\def\eqref#1% >>=
   {%
     \textup{\maketag@@@{\ignorespaces\ref{#1}\unskip\@@italiccorr}}%
-  }% <<<
+  }% =<<
 %% Ugly stuff which resembles the word template
 \renewcommand*\captionformat{\normalfont :\ }% no bold colon
 \setcapindent{0pt}% no indent in captions beneath the label
 \setcapdynwidth[c]{0.905\textwidth}% reduce the maximum width of captions
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% lengths >>>
+%% lengths >>=
 %%=============================================================================
 \setlength{\arrayrulewidth}{0.6pt}
 \setlength{\parindent}{13pt} % default 15pt
@@ -542,42 +542,42 @@
   }
 \setlist[itemize]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
 \setlist[enumerate]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% sectioning commands >>>
+%% sectioning commands >>=
 %%=============================================================================
-\RedeclareSectionCommand[% chapter >>>
+\RedeclareSectionCommand[% chapter >>=
     ,beforeskip=-1.2em plus -1pt minus -1pt%
     ,afterskip=0.1em plus 1pt minus 1pt%
-]{chapter}% <<<
-\RedeclareSectionCommand[% section >>>
+]{chapter}% =<<
+\RedeclareSectionCommand[% section >>=
     ,beforeskip=-0.57em plus -1pt minus -1pt%
     ,afterskip=0.045em plus 1pt minus 1pt%
-]{section}% <<<
-\RedeclareSectionCommand[% subsection >>>
+]{section}% =<<
+\RedeclareSectionCommand[% subsection >>=
     ,beforeskip=-0.57em plus -1pt minus -1pt%
     ,afterskip=0.045em plus 1pt minus 1pt%
-]{subsection}% <<<
-\RedeclareSectionCommand[% subsubsection >>>
+]{subsection}% =<<
+\RedeclareSectionCommand[% subsubsection >>=
     ,beforeskip=-0.57em plus -1pt minus -1pt%
     ,afterskip=0.045em plus 1pt minus 1pt%
-]{subsubsection}% <<<
-\RedeclareSectionCommand[% paragraph >>>
+]{subsubsection}% =<<
+\RedeclareSectionCommand[% paragraph >>=
     ,beforeskip=-0.57em plus -1pt minus -1pt%
     ,afterskip=1sp plus -1sp minus 1sp%0.045em plus 1pt minus 1pt%
-]{paragraph}% <<<
-\RedeclareSectionCommand[% subparagraph >>>
+]{paragraph}% =<<
+\RedeclareSectionCommand[% subparagraph >>=
     ,beforeskip=-0.57em plus -1pt minus -1pt%
     ,afterskip=1sp plus -1sp minus 1sp%0.045em plus 1pt minus 1pt%
     ,indent=0pt%
-]{subparagraph}% <<<
+]{subparagraph}% =<<
 \MRTthesis@headingsfix=2pt
-\renewcommand\chapterlinesformat[3]% >>>
+\renewcommand\chapterlinesformat[3]% >>=
   {%
     \MRTthesis@headingsformat {} { #2 } { \MRTthesis@HeadingsUline { #3 } }
   }
-% <<<
-\renewcommand\sectionlinesformat[4]% >>>
+% =<<
+\renewcommand\sectionlinesformat[4]% >>=
   {%
     \begingroup
     \MRTifStringsMatchTF{#1}{paragraph}
@@ -593,8 +593,8 @@
     \MRTthesis@headingsformat { #2 } { #3 } { #4 }
     \endgroup
   }
-% <<<
-\MRTutil@def[\long]\MRTthesis@headingsformat#1#2#3%>>>
+% =<<
+\MRTutil@def[\long]\MRTthesis@headingsformat#1#2#3%>>=
   {
     \begingroup
     \setbox \MRTthesis@TestBoxA \hbox
@@ -620,33 +620,33 @@
       }
       { #3 }
     \endgroup
-  }%<<<
-% sectioning fonts >>>
+  }%=<<
+% sectioning fonts >>=
 \setkomafont{chapter}{\large\sffamily\bfseries}
 \setkomafont{section}{\sffamily\bfseries}
 \setkomafont{subsection}{\sffamily\bfseries}
 \setkomafont{subsubsection}{\sffamily\bfseries}
 \setkomafont{paragraph}{\sffamily\bfseries}
 \setkomafont{subparagraph}{\normalfont\sffamily\itshape}
-% <<<
-% Sectionformat >>>
+% =<<
+% Sectionformat >>=
 % I don't know why this works, but it seems working.
 \MRTutil@def\Sectionformat#1#2{\MRTthesis@HeadingsUline{#1}}
-% <<<
-%%==========================================================================<<<
+% =<<
+%%===========================================================================<<
 
-%% page layout from beginning >>>
+%% page layout from beginning >>=
 %%=============================================================================
-\setkomafont{pageheadfoot}%>>>
+\setkomafont{pageheadfoot}%>>=
   {
     \mbox{}\vspace{-4.4pt}
     \selectfont\normalfont\small
-  }%<<<
+  }%=<<
 \pagenumbering{Roman}
-\KOMAoptions{% >>>
+\KOMAoptions{% >>=
     ,numbers=noendperiod%
     ,headsepline=0.5pt% line below pagehead
-}% <<<
+}% =<<
 \ihead*{\headmark}%\headmark at the inner side of the page
 \chead*{}%empty middle
 \ohead*{\pagemark}%page numbers at the outer side
@@ -657,11 +657,11 @@
 \automark*[section]{}%if there is a section right head containing section
 \pagestyle{scrheadings}%use the aforesaid definition for the headers
 \renewcommand*{\chapterpagestyle}{scrheadings}%first side of chapters, too
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% formatting switches for other parts >>>
+%% formatting switches for other parts >>=
 %%=============================================================================
-\RenewDocumentCommand \appendix {}% >>>
+\RenewDocumentCommand \appendix {}% >>=
   {%
     \automark[chapter]{chapter}% from here on use chapters in headmark
     \renewcommand*{\thesection}{\Alph{section}}%
@@ -678,18 +678,18 @@
         \msg_error:nnn
           { MRTthesis } { patch~failed } { \hyper@makecurrent }
       }%
-  }% <<<
-\NewDocumentCommand \mainpart {}% >>>
+  }% =<<
+\NewDocumentCommand \mainpart {}% >>=
   {%
     \cleardoublepage
     \pagenumbering{arabic}%
-  }% <<<
+  }% =<<
 \let\mainmatter\mainpart
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% hyperref patches for appendix autoref >>>
+%% hyperref patches for appendix autoref >>=
 %%=============================================================================
-\MRTutil@def\MRTthesis@hyper@patch#1%>>>
+\MRTutil@def\MRTthesis@hyper@patch#1%>>=
   {%
     \edef\Hy@param
       {%
@@ -697,17 +697,17 @@
           {appendix}
           {#1}%
       }%
-  }%<<<
-%%==========================================================================<<<
+  }%=<<
+%%===========================================================================<<
 
-%% bibliography >>>
+%% bibliography >>=
 %%=============================================================================
 \bool_if:NTF \l_MRTthesis_minimal_bool
-  {% true >>>
+  {% true >>=
     \MRTbibliographyfalse
     \MRTthesisSetup { bib = false }
-  }% <<<
-  {% false >>>
+  }% =<<
+  {% false >>=
     \MRTbibliographytrue
     \MRTthesisSetup { bib = true }
     \renewcommand*{\newunitpunct}{,~}% between each unit in one bib-entry
@@ -717,9 +717,9 @@
         ,in={}% removes 'In:' in front of journal name
         ,andothers={et\,al\adddot}%
       }
-    % changing the order of units in article-entries. >>>
+    % changing the order of units in article-entries. >>=
     % The definitions are taken from standard.bbx and altered
-    \DeclareBibliographyDriver{article}% >>>
+    \DeclareBibliographyDriver{article}% >>=
       {%
         \usebibmacro{bibindex}%
         \usebibmacro{begentry}%
@@ -759,8 +759,8 @@
                 \usebibmacro{related}}
             {}%
         \usebibmacro{finentry}%
-      }% <<<
-    \newbibmacro*{MRT+journal+issuetitle}% >>>
+      }% =<<
+    \newbibmacro*{MRT+journal+issuetitle}% >>=
       {%
         \usebibmacro{journal}%
         \setunit*{\addspace}%
@@ -775,8 +775,8 @@
         \setunit{\addcolon\space}%
         \usebibmacro{issue}%
         \newunit
-      }% <<<
-    \newbibmacro*{MRT+issue}% >>>
+      }% =<<
+    \newbibmacro*{MRT+issue}% >>=
       {%
         \iffieldundef{issue}
           {}
@@ -787,51 +787,51 @@
                 \newunit
               }
           }%
-      }% <<<
-    % <<<
-  }% <<<
-%%==========================================================================<<<
+      }% =<<
+    % =<<
+  }% =<<
+%%===========================================================================<<
 
-%% tableofcontents/listof... formatting >>>
+%% tableofcontents/listof... formatting >>=
 %%=============================================================================
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
-\AtBeginDocument% >>>
+\AtBeginDocument% >>=
   {%
     \addtoeachtocfile{\null\hfill\l_MRTthesis_toc_Seite_tl\par}%
-  }% <<<
-\AtAddToTocList% >>>
+  }% =<<
+\AtAddToTocList% >>=
   {%
     \setuptoc{\@currext}{totoc}%
-  }% <<<
+  }% =<<
 %\DeclareTOCStyleEntry[<options>]{<style>}{<section-layer>}
-\MRTutil@def\MRTthesis@chapter@dotfill% >>>
+\MRTutil@def\MRTthesis@chapter@dotfill% >>=
   {%
     \def\@dotsep{0.072}\TOCLineLeaderFill[\textbf{.}]%
-  }% <<<
-\MRTutil@def\MRTthesis@section@dotfill% >>>
+  }% =<<
+\MRTutil@def\MRTthesis@section@dotfill% >>=
   {%
     \def\@dotsep{0.072}\TOCLineLeaderFill
-  }% <<<
-\MRTutil@def\MRTthesis@toc@default@all% >>>
+  }% =<<
+\MRTutil@def\MRTthesis@toc@default@all% >>=
   {%
     pagenumberbox=\makebox%
     ,dynnumwidth=true%
     ,numsep=0.29em%
     ,numwidth=0pt%
-  }% <<<
-\edef\MRTthesis@toc@default@section% >>>
+  }% =<<
+\edef\MRTthesis@toc@default@section% >>=
   {%
     \unexpanded\expandafter{\MRTthesis@toc@default@all}%
     ,linefill=\noexpand\MRTthesis@section@dotfill
     ,beforeskip=0pt plus .2pt%
-  }% <<<
-\edef\MRTthesis@toc@default@chapter% >>>
+  }% =<<
+\edef\MRTthesis@toc@default@chapter% >>=
   {%
     \unexpanded\expandafter{\MRTthesis@toc@default@all}%
     ,linefill=\noexpand\MRTthesis@chapter@dotfill
     ,beforeskip=1.16em plus 1pt%
-  }% <<<
+  }% =<<
 \DeclareTOCStyleEntryMRTChapterLike{chapter}
 \DeclareTOCStyleEntryMRTSectionLike{section}
 \DeclareTOCStyleEntryMRTSectionLike[\l_MRTthesis_toc_subsection_indent_tl]
@@ -840,20 +840,20 @@
   {subsubsection}
 \DeclareTOCStyleEntryMRTSectionLike{table}
 \DeclareTOCStyleEntryMRTSectionLike{figure}
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% affidavit >>>
+%% affidavit >>=
 %%=============================================================================
-\ExplSyntaxOff%>>>
-\MRTutil@def\affidavittext@base% >>>
+\ExplSyntaxOff%>>=
+\MRTutil@def\affidavittext@base% >>=
   {%
     Hiermit versichere ich an Eides statt, dass ich die vorliegende Arbeit
     selbst\"andig und unter Angabe aller Hilfsmittel und Referenzen angefertigt
     habe. Eine Ausnahme bilden die pers\"onlichen Mitteilungen der Betreuer der
     Arbeit, die st\"andig eingeflossen sind und daher nicht im Einzelnen
     nachgewiesen werden.%
-  }% <<<
-\MRTutil@def\affidavittext@usagerights% >>>
+  }% =<<
+\MRTutil@def\affidavittext@usagerights% >>=
   {%
     Der Universit\"at Bayreuth, vertreten durch den Lehrstuhl f\"ur Mess- und
     Regeltechnik (Prof. Dr.-Ing. Fischerauer), habe ich das Nutzungs- und
@@ -864,25 +864,25 @@
     der Arbeit in der Liste der am Lehrstuhl angefertigten Arbeiten bin ich
     einverstanden. Ich erkl\"are ferner, dass ich die Inhalte der Arbeit
     meinerseits nicht ohne Zustimmung des Lehrstuhls publizieren werde.%
-  }% <<<
-\MRTutil@def\affidavittext@degree% >>>
+  }% =<<
+\MRTutil@def\affidavittext@degree% >>=
   {%
     Hiermit erkl\"are ich, dass ich die vorliegende Arbeit mit dem Thema
     „\csname l_MRTthesis_title_tl\endcsname“ noch nicht anderweitig zur
     Erlangung eines akademischen Grades eingereicht habe.%
-  }% <<<
-\ExplSyntaxOn%<<<
-\MRTutil@def\affidavittext% >>>
+  }% =<<
+\ExplSyntaxOn%=<<
+\MRTutil@def\affidavittext% >>=
   {
     \affidavittext@base
     \bool_if:NF \l_MRTthesis_no_usage_bool { \par \affidavittext@usagerights }
     \bool_if:NF \l_MRTthesis_no_degree_bool { \par \affidavittext@degree }
-  }% <<<
-\MRTutil@def\affidavittitle%>>>
+  }% =<<
+\MRTutil@def\affidavittitle%>>=
   {
     Eidesstattliche~Erkl\"arung
-  }%<<<
-\MRTutil@def[\protected]\affidavit% >>>
+  }%=<<
+\MRTutil@def[\protected]\affidavit% >>=
   {
     \cleardoublepage
     \chapter*{Eidesstattliche~Erkl\"arung}
@@ -909,8 +909,8 @@
     \MRTthesis_affidavit_get_sign_width:
     \seq_map_function:NN \g_MRTthesis_authors_seq
       \MRTthesis_affidavit_sign_authors:n
-  }% <<<
-\cs_new_protected:Npn \MRTthesis_affidavit_sign_authors:n #1% >>>
+  }% =<<
+\cs_new_protected:Npn \MRTthesis_affidavit_sign_authors:n #1% >>=
   {
     \mbox{}\hfill
     \parbox[t]{\l_MRTthesis_sign_width_dim}
@@ -927,8 +927,8 @@
           }
       }
     \vskip\l_MRTthesis_sign_height_dim
-  }% <<<
-\cs_new:Npn \MRTthesis_affidavit_get_sign_width:% >>>
+  }% =<<
+\cs_new:Npn \MRTthesis_affidavit_get_sign_width:% >>=
   {
     \seq_map_inline:Nn \g_MRTthesis_authors_seq
       {
@@ -949,33 +949,33 @@
         \dim_min:nn
           { \l_MRTthesis_sign_width_max_dim } { \l_MRTthesis_sign_width_dim }
       }
-  }% <<<
-%%==========================================================================<<<
+  }% =<<
+%%===========================================================================<<
 
-%% title page >>>
+%% title page >>=
 %%=============================================================================
-\RenewDocumentCommand \maketitle {}% >>>
+\RenewDocumentCommand \maketitle {}% >>=
   {%
     \thispagestyle{empty}
     \newgeometry{left=25mm,right=25mm,top=9mm,bottom=23.4mm}
     \MRTthesis_parse_authors:
     \setbox\MRTthesis@TestBoxA\vbox
-      {% >>>
+      {% >>=
         \setstretch{1}
         \noindent
         \MRTthesis_display_logo:n { L }
         \hfill
         \MRTthesis_display_logo:n { R }
         \vfillmult{9}
-        \begin{center}% >>>
-          \group_begin:% >>>
+        \begin{center}% >>=
+          \group_begin:% >>=
             \bfseries
             \MRTthesis_titlepage_place_title:\\
             \vfillmult{3}
             \MRTthesis@fntsel{12}{12}\l_MRTthesis_titlepage_von_tl\\
             \vfillmult{2}
             \MRTthesis_titlepage_place_authors:
-          \group_end:% <<<
+          \group_end:% =<<
           \vfillmult{4}
           \bool_if:nF
             {
@@ -984,7 +984,7 @@
             }
             { \MRTthesis_titlepage_place_thesis_block: }
           \vfillmult{5}
-          \bool_if:NF \l_MRTthesis_no_examiner_bool% ausgegeben von >>>
+          \bool_if:NF \l_MRTthesis_no_examiner_bool% ausgegeben von >>=
             {
               \group_begin:
                 \MRTthesis@fntsel{12}{16}
@@ -1000,9 +1000,9 @@
                     \textbf{\l_MRTthesis_advisor_tl}\strut\\
                   }
               \group_end:
-            }% <<<
+            }% =<<
           \vfillmult{5}
-          \bool_if:NF \l_MRTthesis_no_chair_bool% chair >>>
+          \bool_if:NF \l_MRTthesis_no_chair_bool% chair >>=
             {
               \group_begin:
                 \MRTthesis@fntsel{12}{16}
@@ -1011,13 +1011,13 @@
                 Fakult\"at~f\"ur~Ingenieurwissenschaften,~Universität~Bayreuth
                 \strut\\
               \group_end:
-            }% <<<
+            }% =<<
           \vfillmult{2}
           \MRTthesis@fntsel{12}{16}\textbf{\@date}\strut\\
-        \end{center}% <<<
+        \end{center}% =<<
         \vfillmult{5}
         \MRTthesis_titlepage_place_citation:
-      }% <<<
+      }% =<<
     \ifdim\ht\MRTthesis@TestBoxA>.9622879\textheight
       \msg_error:nn { MRTthesis } { titlepage~too~long }
     \else
@@ -1025,8 +1025,8 @@
     \fi
     \cleardoublepage
     \restoregeometry
-  }% <<<
-\cs_new_protected_nopar:Npn \MRTthesis_parse_authors:% >>>
+  }% =<<
+\cs_new_protected_nopar:Npn \MRTthesis_parse_authors:% >>=
   {
     \seq_gset_split:NnV \g_MRTthesis_authors_seq
       { \and } \l_MRTthesis_authors_tl
@@ -1125,9 +1125,9 @@
           }
       }
       { \tl_gset_eq:NN \g_MRTthesis_s_author_tl \l_MRTthesis_s_author_tl }
-  }% <<<
+  }% =<<
 \cs_new:Npn \MRTthesis_only_first_token:w #1#2\q_nil { #1 }
-\cs_new_nopar:Npn \MRTthesis_titlepage_place_title:% >>>
+\cs_new_nopar:Npn \MRTthesis_titlepage_place_title:% >>=
   {
     \MRTthesis@fntsel{20}{34.5}
     \ifcsname MRTFirstTitle\endcsname
@@ -1146,8 +1146,8 @@
         \strut
         \group_end:
       }
-  }% <<<
-\cs_new_nopar:Npn \MRTthesis_titlepage_place_authors:% >>>
+  }% =<<
+\cs_new_nopar:Npn \MRTthesis_titlepage_place_authors:% >>=
   {
     \seq_set_eq:NN \l_MRTthesis_tmpa_seq \g_MRTthesis_authors_seq
     \MRTthesis@fntsel{12}{12}
@@ -1157,8 +1157,8 @@
         \MRTthesis_typeout_author:V \l_MRTthesis_tmpa_tl
         \\\vfill
       }
-  }% <<<
-\cs_new_nopar:Npn \MRTthesis_titlepage_place_thesis_block:% >>>
+  }% =<<
+\cs_new_nopar:Npn \MRTthesis_titlepage_place_thesis_block:% >>=
   {
     \MRTthesis@fntsel{12}{15}\textbf{\l_MRTthesis_thesis_tl}\strut
     \bool_if:NF \l_MRTthesis_no_degree_bool
@@ -1189,8 +1189,8 @@
         \strut
         \\
       }
-  }% <<<
-\cs_new_nopar:Npn \MRTthesis_titlepage_place_citation:% >>>
+  }% =<<
+\cs_new_nopar:Npn \MRTthesis_titlepage_place_citation:% >>=
   {
     \bool_if:NTF \l_MRTthesis_no_citation_bool
       {
@@ -1227,8 +1227,8 @@
             \strut
           }
       }
-  }% <<<
-\cs_new:Npn \MRTthesis_typeout_author:n #1%>>>
+  }% =<<
+\cs_new:Npn \MRTthesis_typeout_author:n #1%>>=
   {
     \tl_if_in:nnTF { #1 } { , }
       {
@@ -1240,23 +1240,23 @@
         #1
       }
     \strut
-  }%<<<
+  }%=<<
 \cs_generate_variant:Nn \MRTthesis_typeout_author:n { V }
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% automatic front- and backmatter >>>
+%% automatic front- and backmatter >>=
 %%=============================================================================
-\AfterEndPreamble%>>>
+\AfterEndPreamble%>>=
   {
     \bool_if:NT \l_MRTthesis_auto_frontmatter_bool
       { \MRTthesis_auto_frontmatter: }
-  }%<<<
-\AtEndDocument%>>>
+  }%=<<
+\AtEndDocument%>>=
   {
     \bool_if:NT \l_MRTthesis_auto_backmatter_bool
       { \MRTthesis_auto_backmatter: }
-  }%<<<
-\cs_new_protected:Npn \MRTthesis_auto_frontmatter:%>>>
+  }%=<<
+\cs_new_protected:Npn \MRTthesis_auto_frontmatter:%>>=
   {
     \maketitle
     \bool_if:NT \l_MRTthesis_affidavit_front_bool
@@ -1271,8 +1271,8 @@
       { \listoftables }
     \l_MRTthesis_auto_frontmatter_addo_tl
     \mainpart
-  }%<<<
-\cs_new_protected:Npn \MRTthesis_auto_backmatter:%>>>
+  }%=<<
+\cs_new_protected:Npn \MRTthesis_auto_backmatter:%>>=
   {
     \appendix
     \bool_if:NT \l_MRTthesis_backmatter_bibliography_bool
@@ -1294,21 +1294,21 @@
     \l_MRTthesis_auto_backmatter_after_tl
     \bool_if:NT \l_MRTthesis_affidavit_back_bool
       { \affidavit }
-  }%<<<
-\NewDocumentCommand \MRTthesisAddToFront   { +m }%>>>
+  }%=<<
+\NewDocumentCommand \MRTthesisAddToFront   { +m }%>>=
   {
     \tl_put_right:Nn \l_MRTthesis_auto_frontmatter_addo_tl { #1 }
-  }%<<<
-\NewDocumentCommand \MRTthesisAddToBack    { +m }%>>>
+  }%=<<
+\NewDocumentCommand \MRTthesisAddToBack    { +m }%>>=
   {
     \tl_put_right:Nn \l_MRTthesis_auto_backmatter_addo_tl { #1 }
-  }%<<<
-\NewDocumentCommand \MRTthesisAddAfterBack { +m }%>>>
+  }%=<<
+\NewDocumentCommand \MRTthesisAddAfterBack { +m }%>>=
   {
     \tl_put_right:Nn \l_MRTthesis_auto_backmatter_after_tl { #1 }
-  }%<<<
-%%==========================================================================<<<
+  }%=<<
+%%===========================================================================<<
 
 \endinput
 
-% vim: ft=tex fdm=marker fmr=>>>,<<< sw=2 ts=2 tw=80
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

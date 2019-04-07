@@ -9,14 +9,14 @@
 \newcommand*\file[1]{\texttt{\detokenize{#1}}}
 \long\def\eatspace#1 #2{#1#2}
 \newcommand*\cs{\texorpdfstring{\cs@TeXString}{\cs@PDFString}}
-\protected\def\cs@TeXString#1%>>>
+\protected\def\cs@TeXString#1%>>=
   {%
     \texttt{\cs@PDFString{#1}}%
-  }%<<<
+  }%=<<
 \edef\cs@PDFString#1{\expandafter\eatspace\string\ \noexpand\detokenize{#1}}
 \protected\def\meta#1{\texttt{$\langle${\itshape\meta@a{#1}}\kern.05em$\rangle$}}
 \ExplSyntaxOn
-\newcommand\meta@a[1]%>>>
+\newcommand\meta@a[1]%>>=
   {
     \group_begin:
     \tl_set:Nn \l_docMRTbundle_tmp_tl { #1 }
@@ -24,7 +24,7 @@
       \l_docMRTbundle_tmp_tl
     \l_docMRTbundle_tmp_tl
     \group_end:
-  }%<<<
+  }%=<<
 \ExplSyntaxOff
 \newcommand*\metaEnclosed[3]{\texttt{#1}\meta{#2}\texttt{#3}}
 \newcommand*\marg[1]{\metaEnclosed\{{#1}\}}
@@ -33,20 +33,20 @@
 \newcommand*\sarg[1]{\metaEnclosed<{#1}>}
 \newcommand*\carg[2]{\texttt{(}\meta{#1},\meta{#2}\texttt{)}}
 \newcommand*\tfarg{\texttt{\textit{TF}}}
-\newcommand*\luaxetex%>>>
+\newcommand*\luaxetex%>>=
   {%
     \luaxe{}%
-  }%<<<
-\newcommand*\luaxelatex%>>>
+  }%=<<
+\newcommand*\luaxelatex%>>=
   {%
     \luaxe{La}%
-  }%<<<
-\newcommand*\luaxe[1]%>>>
+  }%=<<
+\newcommand*\luaxe[1]%>>=
   {%
     \@ifstar
       {\hologo{Lua#1TeX} and \hologo{Xe#1TeX}}
       {\hologo{Lua#1TeX} or  \hologo{Xe#1TeX}}%
-  }%<<<
+  }%=<<
 \ExplSyntaxOn
 \int_new:N \g_docMRTbundle_dsctable_lines_int
 \int_new:N \l_docMRTbundle_fakeit_level_int
@@ -56,34 +56,34 @@
 \dim_new:N \l_docMRTbundle_fakeit_indent_dim
 \tl_new:N  \l_docMRTbundle_tmp_tl
 \clist_new:N \l_docMRTbundle_fakeit_symbols_clist
-\clist_set:Nn \l_docMRTbundle_fakeit_symbols_clist% >>>
+\clist_set:Nn \l_docMRTbundle_fakeit_symbols_clist% >>=
   {
     \textbullet
     ,\normalfont\bfseries\textendash
     ,\textasteriskcentered
     ,\textperiodcentered
-  }% <<<
+  }% =<<
 \clist_new:N \l_docMRTbundle_bverb_both_points_clist
 \clist_new:N \l_docMRTbundle_bverb_pre_points_clist
 \clist_new:N \l_docMRTbundle_bverb_post_points_clist
-\clist_set:Nx \l_docMRTbundle_bverb_both_points_clist%>>>
+\clist_set:Nx \l_docMRTbundle_bverb_both_points_clist%>>=
   {
     =
-  }%<<<
-\clist_set:Nx \l_docMRTbundle_bverb_pre_points_clist%>>>
+  }%=<<
+\clist_set:Nx \l_docMRTbundle_bverb_pre_points_clist%>>=
   {
     [
     ,(
     ,\char_generate:nn { `\{ } { 12 }
     ,\char_generate:nn { `\\ } { 12 }
-  }%<<<
-\clist_set:Nx \l_docMRTbundle_bverb_post_points_clist%>>>
+  }%=<<
+\clist_set:Nx \l_docMRTbundle_bverb_post_points_clist%>>=
   {
     \char_generate:nn { `\} } { 12 }
     ,)
     ,]
-  }%<<<
-\cs_new:Nn \__docMRTbundle_dscmac_end:%>>>
+  }%=<<
+\cs_new:Nn \__docMRTbundle_dscmac_end:%>>=
   {
     \par
     \int_compare:nNnT { \prevgraf } < { \g_docMRTbundle_dsctable_lines_int }
@@ -95,19 +95,19 @@
             \relax
           }
       }
-  }%<<<
-\MRTafterhyperref%>>>
+  }%=<<
+\MRTafterhyperref%>>=
   {
     \hbox_set:Nn \l_tmpa_box { \cs{PrependSubsectionsfalse} }
     \dim_set:Nn \l_docMRTbundle_dscmac_widest_dim { \box_wd:N \l_tmpa_box }
     \dim_set:Nn \l_docMRTbundle_dscmac_indent_dim
       { \l_docMRTbundle_dscmac_widest_dim - \marginparwidth }
-  }%<<<
-\cs_new:Nn \docMRTbundle_dscmacTF_table_element:n% >>>
+  }%=<<
+\cs_new:Nn \docMRTbundle_dscmacTF_table_element:n% >>=
   {
     \exp_args:Nx \cs{\l_docMRTbundle_macro_name_tl #1}\tfarg\\
-  }% <<<
-\cs_new_protected:Nn \docMRTbundle_dscmacTF_widest:n% >>>
+  }% =<<
+\cs_new_protected:Nn \docMRTbundle_dscmacTF_widest:n% >>=
   {
     \hbox_set:Nn \l_tmpa_box
       { \exp_args:Nx \cs{\l_docMRTbundle_macro_name_tl #1}\tfarg }
@@ -117,8 +117,8 @@
         \dim_set:Nn \l_docMRTbundle_dscmac_widest_dim
           { \box_wd:N \l_tmpa_box } 
       }
-  }% <<<
-\NewDocumentEnvironment { describemacroTF } { o m O{} }% >>>
+  }% =<<
+\NewDocumentEnvironment { describemacroTF } { o m O{} }% >>=
   {
     \par\noindent
     \int_gzero:N \g_docMRTbundle_dsctable_lines_int
@@ -155,18 +155,18 @@
     \noindent
     \ignorespaces
   }
-  {\__docMRTbundle_dscmac_end:}% <<<
-\cs_new:Nn \docMRTbundle_dscmac_table_element:n% >>>
+  {\__docMRTbundle_dscmac_end:}% =<<
+\cs_new:Nn \docMRTbundle_dscmac_table_element:n% >>=
   {
     \int_gincr:N \g_docMRTbundle_dsctable_lines_int
     \exp_args:Nx \cs{\l_docMRTbundle_macro_name_tl #1}\\
-  }% <<<
-\cs_new:Nn \docMRTbunndle_dscmac_multiple_mac:n% >>>
+  }% =<<
+\cs_new:Nn \docMRTbunndle_dscmac_multiple_mac:n% >>=
   {
     \int_gincr:N \g_docMRTbundle_dsctable_lines_int
     \cs { #1 } \\
-  }% <<<
-\cs_new_protected:Nn \docMRTbundle_dscmac_widest:n% >>>
+  }% =<<
+\cs_new_protected:Nn \docMRTbundle_dscmac_widest:n% >>=
   {
     \hbox_set:Nn \l_tmpa_box
       { \exp_args:Nx \cs{\l_docMRTbundle_macro_name_tl #1} }
@@ -176,8 +176,8 @@
         \dim_set:Nn \l_docMRTbundle_dscmac_widest_dim
           { \box_wd:N \l_tmpa_box } 
       }
-  }% <<<
-\NewDocumentEnvironment { describemacro } { o m O{} }% >>>
+  }% =<<
+\NewDocumentEnvironment { describemacro } { o m O{} }% >>=
   {
     \par\noindent
     \int_gzero:N \g_docMRTbundle_dsctable_lines_int
@@ -230,13 +230,13 @@
     \noindent
     \ignorespaces
   }
-  {\__docMRTbundle_dscmac_end:}% <<<
-\cs_new:Nn \docMRTbundle_dscenv_table_element:n% >>>
+  {\__docMRTbundle_dscmac_end:}% =<<
+\cs_new:Nn \docMRTbundle_dscenv_table_element:n% >>=
   {
     \int_gincr:N \g_docMRTbundle_dsctable_lines_int
     \exp_args:Nx \env{\l_docMRTbundle_macro_name_tl #1}\\
-  }% <<<
-\cs_new_protected:Nn \docMRTbundle_dscenv_widest:n% >>>
+  }% =<<
+\cs_new_protected:Nn \docMRTbundle_dscenv_widest:n% >>=
   {
     \hbox_set:Nn \l_tmpa_box
       { \exp_args:Nx \env{\l_docMRTbundle_macro_name_tl #1} }
@@ -246,8 +246,8 @@
         \dim_set:Nn \l_docMRTbundle_dscmac_widest_dim
           { \box_wd:N \l_tmpa_box } 
       }
-  }% <<<
-\NewDocumentEnvironment { describeenv } { o m O{} }% >>>
+  }% =<<
+\NewDocumentEnvironment { describeenv } { o m O{} }% >>=
   {
     \par\noindent
     \int_gzero:N \g_docMRTbundle_dsctable_lines_int
@@ -285,18 +285,18 @@
     \noindent
     \ignorespaces
   }
-  {\__docMRTbundle_dscmac_end:}% <<<
-\cs_new:Nn \docMRTbundle_dscopt_table_element:n% >>>
+  {\__docMRTbundle_dscmac_end:}% =<<
+\cs_new:Nn \docMRTbundle_dscopt_table_element:n% >>=
   {
     \int_gincr:N \g_docMRTbundle_dsctable_lines_int
     \exp_args:Nx \opt{\l_docMRTbundle_macro_name_tl #1}\\
-  }% <<<
-\cs_new:Nn \docMRTbunndle_dscopt_multiple_mac:n% >>>
+  }% =<<
+\cs_new:Nn \docMRTbunndle_dscopt_multiple_mac:n% >>=
   {
     \int_gincr:N \g_docMRTbundle_dsctable_lines_int
     \opt { #1 } \\
-  }% <<<
-\cs_new_protected:Nn \docMRTbundle_dscopt_widest:n% >>>
+  }% =<<
+\cs_new_protected:Nn \docMRTbundle_dscopt_widest:n% >>=
   {
     \hbox_set:Nn \l_tmpa_box
       { \exp_args:Nx \opt{\l_docMRTbundle_macro_name_tl #1} }
@@ -306,8 +306,8 @@
         \dim_set:Nn \l_docMRTbundle_dscmac_widest_dim
           { \box_wd:N \l_tmpa_box } 
       }
-  }% <<<
-\NewDocumentEnvironment { describeopt } { o m o }%>>>
+  }% =<<
+\NewDocumentEnvironment { describeopt } { o m o }%>>=
   {
     \par\noindent
     \int_gzero:N \g_docMRTbundle_dsctable_lines_int
@@ -361,15 +361,15 @@
   }
   {
     \__docMRTbundle_dscmac_end:
-  }% <<<
-\NewDocumentCommand \dscremaininglines { m }%>>>
+  }% =<<
+\NewDocumentCommand \dscremaininglines { m }%>>=
   {
     \vskip
       \dimexpr
         #1\baselineskip - 1.5\baselineskip + 1.2ex
       \relax
-  }%<<<
-\NewDocumentCommand \docIndividualVersions {}%>>>
+  }%=<<
+\NewDocumentCommand \docIndividualVersions {}%>>=
   {
     \makeatletter
     % If one of the packages is not loaded, the version and date of it are not
@@ -409,8 +409,8 @@
       \versionline{lmscale}
       \versionline{util}
     \end{MRTtable}
-  }%<<<
-\NewDocumentCommand \bverb { v }%>>>
+  }%=<<
+\NewDocumentCommand \bverb { v }%>>=
   {
     \group_begin:
     \tl_set:Nn \l_docMRTbundle_tmp_tl { #1 }
@@ -428,9 +428,9 @@
     \frenchspacing
     \l_docMRTbundle_tmp_tl
     \group_end:
-  }%<<<
-\NewDocumentEnvironment { fakeitemize } {}%>>>
-  {% begin >>>
+  }%=<<
+\NewDocumentEnvironment { fakeitemize } {}%>>=
+  {% begin >>=
     \dim_set:Nn \l_docMRTbundle_fakeit_indent_dim { 2em }
     \int_incr:N \l_docMRTbundle_fakeit_level_int
     \int_compare:nNnT { \l_docMRTbundle_fakeit_level_int } = { \c_zero }
@@ -446,14 +446,14 @@
               { \l_docMRTbundle_fakeit_level_int + \c_one }
           }
       }
-  }%<<<
-  {% end >>>
+  }%=<<
+  {% end >>=
     \int_compare:nNnTF { \l_docMRTbundle_fakeit_level_int } = { \c_zero }
       { \null\\[1ex] }
       { \null\\[\dimexpr.1ex-\baselineskip\relax] }
-  }%<<<
-%<<<
-\NewDocumentCommand \dangerzone { O{1} }%>>>
+  }%=<<
+%=<<
+\NewDocumentCommand \dangerzone { O{1} }%>>=
   {
     \scalebox{#1}
       {
@@ -463,8 +463,8 @@
             \makebox[0pt][c]{\color{red}$\bigtriangleup$}
           }
       }
-  }%<<<
-\NewDocumentCommand \dangerzoneAlt { O{1} }%>>>
+  }%=<<
+\NewDocumentCommand \dangerzoneAlt { O{1} }%>>=
   { % requires installed fourier package
     \group_begin:
     \scalebox{#1}
@@ -475,8 +475,8 @@
         \char 66
       }
     \group_end:
-  }%<<<
-\NewDocumentCommand \dangermargin { s O{\Huge} D(){1} }%>>>
+  }%=<<
+\NewDocumentCommand \dangermargin { s O{\Huge} D(){1} }%>>=
   {
     \group_begin:
     \IfBooleanT { #1 } { \reversemarginpar }
@@ -486,18 +486,18 @@
         \dangerzone[#3]
       }
     \group_end:
-  }%<<<
-\NewExpandableDocumentCommand \easysout {}%>>>
+  }%=<<
+\NewExpandableDocumentCommand \easysout {}%>>=
   {
     \texorpdfstring{\easysout@}{\@firstofone}
-  }%<<<
-\NewDocumentCommand \easysout@ {}%>>>
+  }%=<<
+\NewDocumentCommand \easysout@ {}%>>=
   {
     \bgroup
     \markoverwith { \rule [.4ex ] { .1ex } { .15ex } }
     \ULon
-  }%<<<
-\NewDocumentCommand \plannedsection { O{} o m }%>>>
+  }%=<<
+\NewDocumentCommand \plannedsection { O{} o m }%>>=
   {
     \use:c { #1section }
       [ \easysout { \IfValueTF { #2 } { #2 } { #3 } } \PlannedSecLabel ]
@@ -505,14 +505,14 @@
     \leavevmode
     \dangermargin*
     \NotImplementedMessage{#1}
-  }%<<<
-\NewExpandableDocumentCommand \PlannedSecLabel {}%>>>
+  }%=<<
+\NewExpandableDocumentCommand \PlannedSecLabel {}%>>=
   {
     \texorpdfstring
       { \ \ \textsc { [Planned] } }
       { ~[Planned] }
-  }%<<<
-\NewDocumentCommand \Seq {}%>>>
+  }%=<<
+\NewDocumentCommand \Seq {}%>>=
   {
     \mbox{}
     \spacefactor100\relax
@@ -520,9 +520,9 @@
     =
     \spacefactor100\relax
     \space
-  }%<<<
-\NewDocumentEnvironment { incompatibilities } { m }%>>>
-  {%>>>
+  }%=<<
+\NewDocumentEnvironment { incompatibilities } { m }%>>=
+  {%>>=
     \hbox_set:Nn \l_tmpa_box { v00.00.00 }
     \hbox_set:Nn \l_tmpb_box { Version }
     \dim_compare:nNnT { \box_wd:N \l_tmpa_box } > { \box_wd:N \l_tmpb_box }
@@ -558,24 +558,24 @@
     \endhead
     \hline
     \endfoot
-  }%<<<
-  { \end { longtable } }%<<<
-\cs_new_protected:Npx \__docMRTbundle_replace_verb_newline:Nn #1 #2%>>>
+  }%=<<
+  { \end { longtable } }%=<<
+\cs_new_protected:Npx \__docMRTbundle_replace_verb_newline:Nn #1 #2%>>=
   {
     \tl_replace_all:Nnn #1
       { \char_generate:nn { 13 } { 12 } }
       { #2 }
-  }%<<<
-\cs_new_protected:Npx \__docMRTbundle_replace_verb_newline_newline:Nn #1 #2%>>>
+  }%=<<
+\cs_new_protected:Npx \__docMRTbundle_replace_verb_newline_newline:Nn #1 #2%>>=
   {
     \tl_replace_all:Nnn #1
       { \char_generate:nn { 13 } { 12 } \char_generate:nn { 13 } { 12 } }
       { #2 }
-  }%<<<
+  }%=<<
 \tl_new:N \l__docMRTbundle_doandprint_tl
 \cs_set_eq:NN \__docMRTbundle_everyeof:w \tex_everyeof:D
 \cs_set_eq:NN \__docMRTbundle_scantokens:w \tex_scantokens:D
-\NewDocumentCommand \DoAndPrint { +v }%>>>
+\NewDocumentCommand \DoAndPrint { +v }%>>=
   {
     \tl_set:Nn \l__docMRTbundle_doandprint_tl { #1 }
     \__docMRTbundle_replace_verb_newline_newline:Nn
@@ -605,23 +605,23 @@
       \l__docMRTbundle_doandprint_tl
       \endtrivlist
     \group_end:
-  }%<<<
+  }%=<<
 \ExplSyntaxOff
 
-\NewDocumentCommand \NotImplementedMessage { m +O{} }%>>>
+\NewDocumentCommand \NotImplementedMessage { m +O{} }%>>=
   {%
     \emph{Not Implemented yet!}
     Everything in this #1section is mostly inside of the documentation to remind
     me that I still have to code this and to give me a specification what has to
     be inside the final version. #2\par
-  }%<<<
+  }%=<<
 
 %Shamelessly copied from doc.sty
-\def\MakeShortVerb{%>>>
+\def\MakeShortVerb{%>>=
   \@ifstar
     {\def\@shortvrbdef{\verb*}\@MakeShortVerb}%
-    {\def\@shortvrbdef{\bverb}\@MakeShortVerb}}%<<<
-\def\@MakeShortVerb#1{%>>>
+    {\def\@shortvrbdef{\bverb}\@MakeShortVerb}}%=<<
+\def\@MakeShortVerb#1{%>>=
   \expandafter\ifx\csname cc\string#1\endcsname\relax
     \@shortvrbinfo{Made }{#1}\@shortvrbdef
     \add@special{#1}%
@@ -637,8 +637,8 @@
     \global\catcode`#1\active
   \else
     \@shortvrbinfo\@empty{#1 already}{\@empty\verb(*)}%
-  \fi}%<<<
-\def\DeleteShortVerb#1{%>>>
+  \fi}%=<<
+\def\DeleteShortVerb#1{%>>=
   \expandafter\ifx\csname cc\string#1\endcsname\relax
     \@shortvrbinfo\@empty{#1 not}{\@empty\verb(*)}%
   \else
@@ -652,18 +652,18 @@
         \lowercase{%
           \global\expandafter\let\expandafter~%
           \csname ac\string#1\endcsname}%
-      \endgroup \fi \fi}%<<<
-\def\@shortvrbinfo#1#2#3{%>>>
+      \endgroup \fi \fi}%=<<
+\def\@shortvrbinfo#1#2#3{%>>=
   \PackageInfo{doc}{%
      #1\expandafter\@gobble\string#2 a short reference
-                                          for \expandafter\string#3}}%<<<
-\def\add@special#1{%>>>
+                                          for \expandafter\string#3}}%=<<
+\def\add@special#1{%>>=
   \rem@special{#1}%
   \expandafter\gdef\expandafter\dospecials\expandafter
     {\dospecials \do #1}%
   \expandafter\gdef\expandafter\@sanitize\expandafter
-    {\@sanitize \@makeother #1}}%<<<
-\def\rem@special#1{%>>>
+    {\@sanitize \@makeother #1}}%=<<
+\def\rem@special#1{%>>=
   \def\do##1{%
     \ifnum`#1=`##1 \else \noexpand\do\noexpand##1\fi}%
   \xdef\dospecials{\dospecials}%
@@ -671,7 +671,9 @@
     \def\@makeother##1{%
       \ifnum`#1=`##1 \else \noexpand\@makeother\noexpand##1\fi}%
     \xdef\@sanitize{\@sanitize}%
-  \endgroup}%<<<
+  \endgroup}%=<<
 \AtBeginDocument{\MakeShortVerb \|}
 \AtEndDocument{\DeleteShortVerb \|}
 \makeatother
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

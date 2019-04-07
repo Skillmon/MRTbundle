@@ -1,11 +1,11 @@
 \mode<presentation>
 
-\setbeamertemplate{background}{%>>>
+\setbeamertemplate{background}{%>>=
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle(\paperwidth,\paperheight);
     \ifwhiteframes
       %\fill[white,opacity=1] (0,0) rectangle(\paperwidth,\paperheight);
-    \else%>>>
+    \else%>>=
       %% logos
       \ifx\MRTbeam@llogo\@empty\else
         \node at (0.085\paperwidth,0.878\paperheight) {%
@@ -34,7 +34,7 @@
           (0.085\paperwidth,0.731\paperheight) --
             (0.915\paperwidth,0.731\paperheight);
       \fi%
-    \fi%<<< whiteframes
+    \fi%=<< whiteframes
     \if@MRTbeam@Grid@
       \draw[MRTbeam@Grid@options] (0,0) grid (\paperwidth,\paperheight);
     \fi
@@ -43,24 +43,24 @@
     \end{scope}
   \end{tikzpicture}\MRT@PlacedStuff@clear%
 }
-%<<<
+%=<<
 
-\setbeamertemplate{headline}{%>>>
+\setbeamertemplate{headline}{%>>=
   \vskip0.215\paperheight
 }
-%<<<
+%=<<
 
-\defbeamertemplate*{frametitle}{MRTbeam}[1][]{%>>>
+\defbeamertemplate*{frametitle}{MRTbeam}[1][]{%>>=
   \MRTbeam@frametitle{\insertframetitle}%
 }
-%<<<
+%=<<
 
-\setbeamertemplate{noframetitle}{%>>>
+\setbeamertemplate{noframetitle}{%>>=
   \MRTbeam@frametitle{\cursec}%
 }
-%<<<
+%=<<
 
-%% Invoke `noframetitle` if no frametitle was given >>>
+%% Invoke `noframetitle` if no frametitle was given >>=
 %% Code based on https://tex.stackexchange.com/a/389258/117050
 \renewenvironment{beamer@frameslide}{%
   \ifbeamer@autobreak\else%
@@ -173,9 +173,9 @@
   \beamer@undolabels%
   \beamer@framenotesend%
   \box\beamer@framebox}
-%<<<
+%=<<
 
-\setbeamertemplate{footline}{%>>>
+\setbeamertemplate{footline}{%>>=
   \begin{tikzpicture}%
     \useasboundingbox (0,0) rectangle(\paperwidth,.13\paperheight);%
     \ifwhiteframes%
@@ -191,6 +191,10 @@
   \end{tikzpicture}%
   %\vskip0.115\paperheight%
 }
-%<<<
+%=<<
 
 \mode<all>
+
+\endinput
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

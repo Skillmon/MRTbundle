@@ -15,7 +15,7 @@
 \DeclareOption{tUline}{\ExecuteOptions{tikzunderline}}
 \ProcessOptions\relax
 
-% \WUline >>>
+% \WUline >>=
 \NewDocumentCommand \WUline { o m }
   {
     \mode_if_math:TF
@@ -54,9 +54,9 @@
   }
 \MRTutil@def\MRTwuline@mathheight{0.21ex}%
 \MRTutil@def\MRTwuline@textheight{-0.42ex}%
-% <<<
+% =<<
 
-% \tUline >>>
+% \tUline >>=
 \if@MRTwuline@tikzuline@
   \ExplSyntaxOff
   \RequirePackage{tikz}
@@ -65,21 +65,21 @@
   \MRTutil@def\MRTwuline@tUline@width{0.185ex}
   \newlength\MRTwuline@tUline@length
   \newcount\MRTwuline@tUline@count
-  \MRTutil@def\MRTwuline@gettikzxy#1#2#3% >>>
+  \MRTutil@def\MRTwuline@gettikzxy#1#2#3% >>=
     % https://tex.stackexchange.com/a/58590/121799
     {%
       \tikz@scan@one@point\pgfutil@firstofone#1\relax
       \xdef#2{\the\pgf@x}%
       \xdef#3{\the\pgf@y}%
-    }% <<<
+    }% =<<
   \tikzset{MRTwuline@tUline/.style={line width=\MRTwuline@tUline@width}}
-  \MRTutil@def\MRTwuline@EmptyOProcessor#1#2% >>>
+  \MRTutil@def\MRTwuline@EmptyOProcessor#1#2% >>=
     {%
       \MRTifEmptyTF{#2}%
         {\def\ProcessedArgument{#1}}%
         {\def\ProcessedArgument{#2}}%
-    }% <<<
-  \NewDocumentCommand{\tUline}% >>>
+    }% =<<
+  \NewDocumentCommand{\tUline}% >>=
     {
       >{\MRTwuline@EmptyOProcessor{-0.35ex}}O{} % height
       >{\MRTwuline@EmptyOProcessor{0pt}}O{}     % overhang
@@ -123,8 +123,8 @@
           \fi
         \fi
       \end{tikzpicture}%
-    }% <<<
-  \MRTutil@def\tUline@drawMultipleLines#1#2% >>>
+    }% =<<
+  \MRTutil@def\tUline@drawMultipleLines#1#2% >>=
     {%
       \MRTwuline@tUline@length=#2
       \MRTwuline@tUline@count=1
@@ -140,13 +140,15 @@
           (0,\MRTwuline@tUline@count\MRTwuline@tUline@length)$);
       \advance\MRTwuline@tUline@count by 1
       \repeat
-    }% <<<
-  \MRTutil@def\tUline@drawBtoE#1% >>>
+    }% =<<
+  \MRTutil@def\tUline@drawBtoE#1% >>=
     {%
       \draw[MRTwuline@tUline]
         ($(Begin.base)+(0,#1)$) -- ($(Begin.base -| EastLine)+(0,#1)$)
         ($(End.base)+(0,#1)$) -- ($(End.base -| WestLine)+(0,#1)$);%
-    }% <<<
+    }% =<<
   \ExplSyntaxOn
 \fi
-% <<<
+% =<<
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

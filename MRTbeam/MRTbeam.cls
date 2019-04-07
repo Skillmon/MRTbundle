@@ -5,22 +5,22 @@
 
 \RequirePackage{expl3,xparse}
 
-%% options and class loading >>>
+%% options and class loading >>=
 %%=============================================================================
 \newif\if@MRTbeam@sfacc@height@
 \ExplSyntaxOn
 \input{MRTfonts.forward.keys.tex}
 \MRTfonts_setup_forwarded_from:n { MRTbeam }
-\keys_define:nn { MRTbeam / loadtime }%>>>
+\keys_define:nn { MRTbeam / loadtime }%>>=
   {
     unknown .code:n = { \PassOptionsToClass { \CurrentOption } { beamer } }
-  }%<<<
+  }%=<<
 \DeclareOption* { \keys_set:nV { MRTbeam / loadtime } \CurrentOption }
 \ProcessOptions\relax
 \ExplSyntaxOff
 \LoadClass{beamer}
 \usefonttheme{professionalfonts} % so that MRTfonts can do its stuff
-%%==========================================================================<<<
+%%===========================================================================<<
 
 \ProvidesExplClass
   {MRTbeam}          {\MRTbeam@date}
@@ -32,7 +32,7 @@
 
 \usetheme{MRTbeam}
 
-\NewDocumentCommand \ProgressBarStyle { s m }% >>>
+\NewDocumentCommand \ProgressBarStyle { s m }% >>=
   {%
     \IfBooleanT { #1 } { \ProgressBartrue }
     \str_case:nnF { #2 }
@@ -44,9 +44,10 @@
       {
         \ClassError{MRTbeam}{The~style~'\exp_not:n { #1 }'~is~unknown.}{}
       }
-  }% <<<
+  }% =<<
 
 \ExplSyntaxOff
 
 \endinput
-% vim: ft=tex fdm=marker foldmarker=>>>,<<<
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

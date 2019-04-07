@@ -1,5 +1,5 @@
 \ProvidesFile{MRTfonts.forward.keys.tex}
-%% keys forwarded to MRTfonts>>>
+%% keys forwarded to MRTfonts>>=
 \cs_new_protected:Npn \MRTfonts_setup_forwarded_from:n #1
   {
     \clist_map_inline:nn
@@ -17,4 +17,5 @@
         #2 .code:n = { \PassOptionsToPackage { #2 = ##1 } { MRTfonts } }
       }
   }
-%% <<<
+%% =<<
+% vim: fdm=marker foldmarker=>>=,=<< ft=tex

@@ -10,44 +10,44 @@
 
 \prop_gput:Nnn \g_msg_module_type_prop { MRTalone } { Class }
 
-%% variants of external macros >>>
+%% variants of external macros >>=
 %%=============================================================================
 \cs_generate_variant:Nn \keys_set:nn { nV }
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% variables >>>
+%% variables >>=
 %%=============================================================================
-% l3 variables >>>
-% bool >>>
+% l3 variables >>=
+% bool >>=
 \bool_new:N \l_MRTalone_minimal_bool
 \bool_new:N \l_MRTalone_british_bool
-% <<<
-% tl >>>
+% =<<
+% tl >>=
 \tl_const:Nn \c_MRTalone_setup_file_name_tl { ./MRTalone.setup.tex }
 \tl_const:Nn \c_MRTalone_options_file_name_tl { ./MRTalone.option.tex }
-% <<<
-% <<<
-%%==========================================================================<<<
+% =<<
+% =<<
+%%===========================================================================<<
 
-%% constants >>>
+%% constants >>=
 %%=============================================================================
 \bool_const:Nn \c_MRTalone_xetex_or_luatex_bool
   { \sys_if_engine_luatex_p: || \sys_if_engine_xetex_p: }
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% messages >>>
+%% messages >>=
 %%=============================================================================
-\msg_new:nnn { MRTalone } { wrong~engine }%>>>
+\msg_new:nnn { MRTalone } { wrong~engine }%>>=
   {
     The ~ used ~ #1 ~ is ~ not ~ available ~ under ~ \c_sys_engine_str. ~ You ~
     have ~ to ~ use ~ #2.
-  }%<<<
-\msg_new:nnn { MRTalone } { options~too~late }%>>>
+  }%=<<
+\msg_new:nnn { MRTalone } { options~too~late }%>>=
   {
     \token_to_str:N \MRTaloneOptions \c_space_tl may ~ only ~ be ~ used ~ in ~
     the ~ file ~ '\c_MRTalone_options_file_name_tl'.
-  }%<<<
-\msg_new:nnn { MRTalone } { no~float }%>>>
+  }%=<<
+\msg_new:nnn { MRTalone } { no~float }%>>=
   {
     Parsing~says~you~didn't~provide~a~valid~float.~Please~provide~a
     valid~float.\\
@@ -55,15 +55,15 @@
     to~the\\
     package~maintainer.\\
     Error~occured~while~parsing~#1.%
-  }%<<<
-%%==========================================================================<<<
+  }%=<<
+%%===========================================================================<<
 
-\NewDocumentCommand \MRTaloneSetup { +m }%>>>
+\NewDocumentCommand \MRTaloneSetup { +m }%>>=
   {
     \keys_set:nn { MRTalone/setup } { #1 }
-  }%<<<
+  }%=<<
 
-%% Class options and loading standalone >>>
+%% Class options and loading standalone >>=
 %%=============================================================================
 \input{MRTfonts.forward.keys.tex}
 \MRTfonts_setup_forwarded_from:n { MRTalone }
@@ -78,10 +78,10 @@
 \DeclareOption{english}{\ExecuteOptions{british}}
 \DeclareOption{tikz}
   {\PassOptionsToPackage{table}{xcolor}\PassOptionsToClass{tikz}{standalone}}
-\keys_define:nn { MRTalone / loadtime }%>>>
+\keys_define:nn { MRTalone / loadtime }%>>=
   {
     unknown .code:n = { \PassOptionsToClass { \CurrentOption } { standalone } }
-  }%<<<
+  }%=<<
 \DeclareOption* { \keys_set:nV { MRTalone / loadtime } \CurrentOption }
 \PassOptionsToClass{11pt}{standalone}
 \file_if_exist:nT { \c_MRTalone_options_file_name_tl }
@@ -100,23 +100,23 @@
   }
 \ProcessOptions\relax
 \LoadClass{standalone}
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% additional packages to achieve template formatting >>>
+%% additional packages to achieve template formatting >>=
 %%=============================================================================
 \RequirePackage{MRTtab,MRTwuline}
 \bool_if:NTF \l_MRTalone_british_bool
-  {% true >>>
+  {% true >>=
     \RequirePackage[main=british,ngerman]{babel}
-  }% <<<
-  {% false >>>
+  }% =<<
+  {% false >>=
     \RequirePackage[ngerman]{babel}
-  }% <<<
+  }% =<<
 \RequirePackage{setspace}
 \RequirePackage{enumitem}
 \RequirePackage[fleqn]{mathtools}
 \RequirePackage{MRTfonts}
-\bool_if:NF \l_MRTalone_minimal_bool%>>>
+\bool_if:NF \l_MRTalone_minimal_bool%>>=
   {
     \cs_new:Npn \MRTalone_range_phrase:n #1
       {
@@ -131,22 +131,22 @@
       { \sisetup{ locale=DE, range-phrase=\MRTalone_range_phrase:n { bis } } }
     \addto\extrasbritish
       { \sisetup{ locale=UK, range-phrase=\MRTalone_range_phrase:n { to } } }
-  }%<<<
-%%==========================================================================<<<
+  }%=<<
+%%===========================================================================<<
 
-%% setup options >>>
+%% setup options >>=
 %%=============================================================================
-\keys_define:nn { MRTalone/setup }% >>>
+\keys_define:nn { MRTalone/setup }% >>=
   {
     ,caption~above   .code:n     = { \MRTtabSetup { caption~above } }
     ,caption~above   .value_forbidden:n = true
     ,caption~below   .code:n     = { \MRTtabSetup { caption~below } }
     ,caption~below   .value_forbidden:n = true
     ,stretch~caption .code:n     = {}
-      %{% >>>
+      %{% >>=
         %\setkomafont { caption }      { \setstretch { #1 } \normalfont }
         %\setkomafont { captionlabel } { \setstretch { #1 } \normalfont }
-      %}% <<<
+      %}% =<<
     ,stretch~cap     .meta:n     = { stretch~caption={#1} }
     ,stretch~tabular .code:n     = { \MRTtabSetup { stretch~tab={#1} } }
     ,stretch~tab     .meta:n     = { stretch~tabular={#1} }
@@ -157,18 +157,18 @@
     ,table~spacing   .default:n  = { true }
     ,tab~spacing     .meta:n     = { table~spacing={#1} }
     ,tab~spacing     .default:n  = { true }
-  }% <<<
-% defaults >>>
-\keys_set:nn { MRTalone/setup }% >>>
+  }% =<<
+% defaults >>=
+\keys_set:nn { MRTalone/setup }% >>=
   {
     ,caption~below
     ,stretches = 1.408
     ,tab~spacing
-  }% <<<
-% <<<
-%%==========================================================================<<<
+  }% =<<
+% =<<
+%%===========================================================================<<
 
-%% lengths >>>
+%% lengths >>=
 %%=============================================================================
 \setlength{\arrayrulewidth}{0.6pt}
 \setlength{\parindent}{13pt} % default 15pt
@@ -183,9 +183,9 @@
   }
 \setlist[itemize]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
 \setlist[enumerate]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% set page dimensions >>>
+%% set page dimensions >>=
 %% equal to the ones in MRTthesis 
 %%=============================================================================
 %% Using geometry doesn't lead to the exact same dimensions, so we do it by hand
@@ -194,14 +194,14 @@
 \paperwidth=597.50793pt
 \textwidth=455.24417pt
 \textheight=682.285pt
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% Setting up MRTtab to work in standalone by default >>>
+%% Setting up MRTtab to work in standalone by default >>=
 %%=============================================================================
 \MRTtabSetup{in~text~sep=\c_zero_skip,no~float}
-%%==========================================================================<<<
+%%===========================================================================<<
 
-%% look for a setup file >>>
+%% look for a setup file >>=
 %%=============================================================================
 \file_if_exist:nT { \c_MRTalone_setup_file_name_tl }
   {
@@ -209,4 +209,6 @@
     \file_input:n { \c_MRTalone_setup_file_name_tl }
     \ExplSyntaxOn
   }
-%%==========================================================================<<<
+%%===========================================================================<<
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

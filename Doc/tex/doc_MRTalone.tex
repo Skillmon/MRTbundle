@@ -2,7 +2,7 @@
 The \cls{standalone} version of \cls{MRTthesis}. The aim is to provide a class
 to produce simple \LaTeX\ based images which match the look of \cls{MRTthesis}.
 
-\section{Options and Setup Files}\label{sec:alone:files}%>>>
+\section{Options and Setup Files}\label{sec:alone:files}%>>=
 \cls{MRTalone} allows you to use a shared options file and a shared setup file
 for your project. The files get sourced if they are available.
 
@@ -16,10 +16,10 @@ at the end of the class and might contain any valid \LaTeX\ code, of course
 including some \cs{MRTaloneSetup} instructions. See \autoref{sec:alone:macros}
 for \cs{MRTaloneSetup} and \autoref{sec:alone:setup} for the available setup
 options.
-%<<<
+%=<<
 
-\section{Options}%>>>
-\subsection{Load time options}\label{sec:alone:options}%>>>
+\section{Options}%>>=
+\subsection{Load time options}\label{sec:alone:options}%>>=
 The class features a few load time options.
 \begin{describeopt}{longtable}
   Is forwarded to \pkg{MRTtab} see its description in \autoref{sec:tab:options}.
@@ -52,8 +52,8 @@ The class features a few load time options.
 
 \noindent
 Every other given option will be passed on to \cls{standalone}.
-%<<<
-\subsection{Setup options}\label{sec:alone:setup}%>>>
+%=<<
+\subsection{Setup options}\label{sec:alone:setup}%>>=
 The following options are accessible with \cs{MRTaloneSetup}.
 \begin{describeopt}{caption above}
   Is forwarded to \pkg{MRTtab} and its \cs{MRTtabSetup}. See its description in
@@ -77,24 +77,24 @@ The following options are accessible with \cs{MRTaloneSetup}.
   Sets \opt{stretch cap}, \opt{stretch tab}, and \opt{stretch text} in one go.
   Initially set to \texttt{1.408}.
 \end{describeopt}
-%<<<
-%<<<
+%=<<
+%=<<
 
-\section{Macros}\label{sec:alone:macros}%>>>
-\begin{describemacro}{MRTaloneSetup}[\marg{options}]%>>>
+\section{Macros}\label{sec:alone:macros}%>>=
+\begin{describemacro}{MRTaloneSetup}[\marg{options}]%>>=
   You can use this macro to set the options listed in \autoref{sec:alone:setup}.
-\end{describemacro}%<<<
-\begin{describemacro}{MRTaloneOptions}[\marg{options}]%>>>
+\end{describemacro}%=<<
+\begin{describemacro}{MRTaloneOptions}[\marg{options}]%>>=
   You can use this macro to set the options listed in
   \autoref{sec:alone:options}. It is only available inside of the
   \file{./MRTalone.option.tex} file (see \autoref{sec:alone:files}).
-\end{describemacro}%<<<
-%<<<
+\end{describemacro}%=<<
+%=<<
 
-\section{Dependencies}\label{sec:alone:dep}%>>>
+\section{Dependencies}\label{sec:alone:dep}%>>=
 The class is based on \cls{standalone}, therefore it naturally depends on that
 and all its dependencies. Additional dependencies are:
-\begin{multicols}{2}%>>>
+\begin{multicols}{2}%>>=
   \begin{itemize}[leftmargin=10pt]
     \item \pkg{expl3}
     \item \pkg{xparse}
@@ -124,5 +124,7 @@ and all its dependencies. Additional dependencies are:
           set to either \texttt{to} or \texttt{bis} with spaces around it.
       \end{itemize}
   \end{itemize}
-\end{multicols}%<<<
-%<<<
+\end{multicols}%=<<
+%=<<
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

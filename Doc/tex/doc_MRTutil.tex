@@ -6,7 +6,7 @@ facing macros. As a general rule of thumb the user level is therefore moved one
 layer down, user facing macros have a single \texttt{@} in their names, while
 internal macros have at least two.
 
-\section{Defining Macros}%>>>
+\section{Defining Macros}%>>=
 Since the author of this bundle often finds the possibilities of the \LaTeXe\
 macro family of \cs{newcommand} too restricting, the package provides some
 macros which use the syntax of \TeX's \cs{def} but still check whether the macro
@@ -22,9 +22,9 @@ is already defined.
   and \cs{def} in that they only define a new command but keep the versatility
   of \cs{def}. There is a usage example in \autoref{sec:util:example}.
 \end{describemacro}
-%<<<
+%=<<
 
-\section{Optional Argument Parsing}%>>>
+\section{Optional Argument Parsing}%>>=
 Since the author really likes what \pkg{xparse} allows in defining macros with
 many optional arguments but doesn't want to force the complete \pkg{expl3} onto
 the user (since it's huge), if a user is only interested in one or two of the
@@ -106,9 +106,9 @@ same behaviour encountered in \LaTeXe's optional arguments).
   defined that does the argument grabbing. \meta{cs} should include the leading
   backslash. There is a usage example in \autoref{sec:util:example}.
 \end{describemacro}
-%<<<
+%=<<
 
-\subsection{Example}\label{sec:util:example}%>>>
+\subsection{Example}\label{sec:util:example}%>>=
 In the following example we'll define a macro that takes two optional arguments
 -- one delimited by |[]| and one delimited by |<>| -- and a mandatory one. We'll
 need one auxiliary macro per optional argument.
@@ -189,4 +189,6 @@ arguments. A few usage examples are shown in \autoref{tab:util:ourmacro}.
   |[foo]<bar>{baz}| & [foo]<bar>{baz} \\
 \end{MRTtable}
 \endgroup
-%<<<
+%=<<
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

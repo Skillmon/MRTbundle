@@ -2,16 +2,16 @@
 The package provides a MS Word like looking line breakable underlining. It does
 so by using \pkg{ulem} or \pkg{stackengine}.
 
-\section{Options}\label{sec:wuline:options}%>>>
+\section{Options}\label{sec:wuline:options}%>>=
 \begin{describeopt}{tUline,tikzunderline}
   If this option is passed \TikZ\ will be added as a required package and an
   alternative underlining macro defined called \cs{tUline}, see its description
   in \autoref{sec:wuline:mac}.
 \end{describeopt}
-%<<<
+%=<<
 
-\section{Macros}\label{sec:wuline:mac}%>>>
-\begin{describemacro}{WUline}[\oarg{height}\marg{text}]%>>>
+\section{Macros}\label{sec:wuline:mac}%>>=
+\begin{describemacro}{WUline}[\oarg{height}\marg{text}]%>>=
   This sets \meta{text} and underlines it in a way that looks like MS Word
   underlining -- at least in the headings. It is usable both in math mode and in
   text mode. Though in math mode you should use \cs{underline}.\\[\parskip]
@@ -21,8 +21,8 @@ so by using \pkg{ulem} or \pkg{stackengine}.
   needed \meta{height} to achieve the same height of the line differs quite a
   lot. By default in math mode \texttt{\csuse{MRTwuline@mathheight}} is
   used, in text mode \texttt{\csuse{MRTwuline@textheight}}.
-\end{describemacro}%<<<
-\begin{describemacro}{tUline}%>>>
+\end{describemacro}%=<<
+\begin{describemacro}{tUline}%>>=
   [\oarg{height}\oarg{overhang}\oarg{thickness}\marg{text}]
   This macro can be used to underline bigger portions of text. You should never
   need it, I guess. Just use \cs{WUline} instead. If you need it, you'll have to
@@ -35,11 +35,11 @@ so by using \pkg{ulem} or \pkg{stackengine}.
   assumed that the lines are equally separated with \cs{baselineskip} -- so if
   your material does stretch the baseline skip, you can't use \cs{tUline}. It
   needs at least two runs to be displayed correctly.
-\end{describemacro}%<<<
-%<<<
+\end{describemacro}%=<<
+%=<<
 
-\section{Dependencies}%>>>
-\begin{multicols}{2}%>>>
+\section{Dependencies}%>>=
+\begin{multicols}{2}
   \begin{itemize}[leftmargin=10pt]
     \item \pkg{expl3}
     \item \pkg{xparse}
@@ -56,4 +56,6 @@ so by using \pkg{ulem} or \pkg{stackengine}.
       \end{itemize}
   \end{itemize}
 \end{multicols}
-%<<<
+%=<<
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

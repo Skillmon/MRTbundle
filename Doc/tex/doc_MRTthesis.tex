@@ -6,8 +6,8 @@ of TeX should create better line breaking than Word's but if one doesn't know on
 what to pay attention or for an untrained eye the distinction won't be possible
 (at least I hope so, as that was the goal in the first place).
 
-\section{Options}%>>>
-\subsection{Load time options}\label{sec:thesis:opt}%>>>
+\section{Options}%>>=
+\subsection{Load time options}\label{sec:thesis:opt}%>>=
 The class features a few load time options.
 \begin{describeopt}{longtable}
   Is forwarded to \pkg{MRTtab} see its description in \autoref{sec:tab:options}.
@@ -51,8 +51,8 @@ The class features a few load time options.
 
 \noindent
 Every other given option will be passed on to \cls{scrreprt}.
-%<<<
-\subsection{Setup options}\label{sec:thesis:setup}%>>>
+%=<<
+\subsection{Setup options}\label{sec:thesis:setup}%>>=
 The following options are accessible with \cs{MRTthesisSetup}.
 \begin{describeopt}{advisor}[\meta{name}]
   Sets the name of the advisor of this thesis. One typical value could be
@@ -249,7 +249,7 @@ The following options are accessible with \cs{MRTthesisSetup}.
   is false.
 \end{describeopt}
 
-\subsubsection{Options concerning automatically added contents}%>>>
+\subsubsection{Options concerning automatically added contents}%>>=
 \label{sec:autoopt}
 The following additional options can be set with \cs{MRTthesisSetup}. They all
 resolve around automatically added contents.
@@ -329,11 +329,11 @@ resolve around automatically added contents.
   \meta{choice}s are |front| and |off|. If |off| is used it doesn't get added
   automatically. Default value is |front|.
 \end{describeopt}
-%<<<
-%<<<
-%<<<
+%=<<
+%=<<
+%=<<
 
-\section{Macros}\label{sec:thesis:mac}%>>>
+\section{Macros}\label{sec:thesis:mac}%>>=
 The following macros are provided:
 \begin{describemacroTF}{ifNoWidth}[\marg{arg}]
   Typesets the argument in a box (so the code is actually executed). If the
@@ -383,8 +383,8 @@ The following macros are provided:
   afterwards (comma separated). \autoref{tab:thesis:tocindents} shows an
   overview of the class's default indentations.
 \end{describemacro}
-\begin{MRTtable}%>>>
-  [%>>>
+\begin{MRTtable}%>>=
+  [%>>=
     ,label=tab:thesis:tocindents
     ,cap=
       {
@@ -395,7 +395,7 @@ The following macros are provided:
     ,scap=
       {Indents of different ToC entry types and the macro they are stored in}
     ,col=llc
-  ]%<<<
+  ]%=<<
   entry-layer & macro name & default length \\
 
   chapter       & \cs{l_MRTthesis_toc_chapter_indent_tl}       & 0.01em\\
@@ -404,7 +404,7 @@ The following macros are provided:
   subsubsection & \cs{l_MRTthesis_toc_subsubsection_indent_tl} & 6.38em\\
   table         & \cs{l_MRTthesis_toc_section_indent_tl}       & 1.32em\\
   figure        & \cs{l_MRTthesis_toc_section_indent_tl}       & 1.32em\\
-\end{MRTtable}%<<<
+\end{MRTtable}%=<<
 \begin{describemacro}{MRTthesisSetup}[\marg{options}]
   You can use this macro to set the options listed in
   \autoref{sec:thesis:setup}.
@@ -435,9 +435,9 @@ The following macros are provided:
 Additionally the macros \cs{author}, \cs{title}, and \cs{subtitle} have been
 redefined to internally use \cs{MRTthesisSetup} to set the corresponding
 options.
-%<<<
+%=<<
 
-\section{Dependencies}\label{sec:thesis:dep}%>>>
+\section{Dependencies}\label{sec:thesis:dep}%>>=
 As this class is based on \cls{scrreprt}, it depends on that class and all of
 its dependencies, of course. Additionally the following packages are loaded
 (used options given in brackets). Those are quite some but unfortunately most of
@@ -451,7 +451,7 @@ formatting.%
 \footnote
   {Don't remove it though, the current code for section headings relies on it.}
 
-\begin{multicols}{2}%>>>
+\begin{multicols}{2}%>>=
   \begin{itemize}[leftmargin=10pt]
     \item \pkg{expl3}
     \item \pkg{xparse}
@@ -493,5 +493,7 @@ formatting.%
         \item \pkg{csquotes}
       \end{itemize}
   \end{itemize}
-\end{multicols}%<<<
-%<<<
+\end{multicols}%=<<
+%=<<
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

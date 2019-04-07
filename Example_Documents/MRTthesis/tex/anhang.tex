@@ -2,7 +2,7 @@
 \color{blue}
 \addchap{Anhang}
 \section{Lange Rechnung}
-\begin{align}%>>>
+\begin{align}%>>=
     1+1&=2\\
     1+2&=3\\
     1+3&=4\\
@@ -23,7 +23,7 @@
     1+18&=19\\
     1+19&=20\\
     1+20&=21
-\end{align}%<<<
+\end{align}%=<<
 
 \section{Lange Tabelle}
 \begin{MRTtable}
@@ -70,7 +70,7 @@ Für die Einbindung von Code würde ich das Paket \textrm{listings} mit der
 angewandt.
 % slightly reduced spacing (looks better here, IMHO)
 \bgroup\MRTthesisSetup{stretch text=1.2}
-%\begin{verbatim}>>>
+%\begin{verbatim}>>=
 \begin{verbatim}
 from mpl_pgfpre import *
 from random import seed,random
@@ -91,7 +91,7 @@ for i in range(3):
         plt.plot(points[i][j][0],points[i][j][1],"ko")
 
 savefig("img/2b")
-\end{verbatim}%<<<
+\end{verbatim}%=<<
 \egroup
 
 \section{Bilder}
@@ -105,3 +105,5 @@ savefig("img/2b")
   \captionof{figure}{Großes Bild einer Ente im Anhang}
 \end{minipage}
 \endgroup
+
+% vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80
