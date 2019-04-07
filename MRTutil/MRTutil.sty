@@ -38,10 +38,12 @@
 \begingroup
 \lccode`\M=`\M   \lccode`\R=`\R   \lccode`\T=`\T
 \lccode`\:=`\M   \lccode`\;=`\_   \lccode`\A=`\-
+\lccode`\*=`\F
 \lowercase
   {%
     \endgroup
     \MRTutil@def\MRTutil@@mark{AMRTutil;:ark-}%
+    \MRTutil@def\MRTutil@@false{AMRTutil;*alse-}%
   }
 % =<<
 \MRTutil@def[\long]\MRTutil@fiBTb\fi#1#2#3{\fi#2}
@@ -96,11 +98,27 @@
   }%=<<
 \MRTutil@def[\protected\long]\MRTutil@Earg#1#2#3%>>=
   {%
-    \@ifnextchar#1{\@firstoftwo{#3}}{#3{#2}}%
+    \@ifnextchar#1{\MRTutil@Earg@{#3}}{#3{#2}}%
+  }%=<<
+\MRTutil@def[\protected\long]\MRTutil@Earg@#1%>>=
+  {%
+    \def\MRTutil@Earg@@{#1}%
+    \afterassignment\MRTutil@Earg@@
+    \let\MRTutil@gobbled=%
   }%=<<
 \MRTutil@def[\protected\long]\MRTutil@earg#1%>>=
   {%
     \MRTutil@Earg#1\MRTutil@@mark
+  }%=<<
+\MRTutil@def[\protected\long]\MRTutil@targ#1#2%>>=
+  {%
+    \@ifnextchar#1{\MRTutil@targ@{#2}}{#2{\MRTutil@@false}}%
+  }%=<<
+\MRTutil@def[\protected\long]\MRTutil@targ@#1%>>=
+  {%
+    \def\MRTutil@targ@@{#1{\MRTutil@@mark}}%
+    \afterassignment\MRTutil@targ@@
+    \let\MRTutil@gobbled=%
   }%=<<
 % =<<
 
