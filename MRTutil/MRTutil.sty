@@ -34,7 +34,16 @@
 % =<<
 
 %% opt arg parsing >>=
-\MRTutil@def\MRTutil@@mark{\MRTutil@@mark}
+% Definition of MRTutil@@mark >>=
+\begingroup
+\lccode`\M=`\M   \lccode`\R=`\R   \lccode`\T=`\T
+\lccode`\:=`\M   \lccode`\;=`\_   \lccode`\A=`\-
+\lowercase
+  {%
+    \endgroup
+    \MRTutil@def\MRTutil@@mark{AMRTutil;:ark-}%
+  }
+% =<<
 \MRTutil@def[\long]\MRTutil@fiBTb\fi#1#2#3{\fi#2}
 \MRTutil@def[\long]\MRTutil@ifmark#1%>>=
   {%
