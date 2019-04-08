@@ -1,5 +1,5 @@
-\newcommand*\MRTtab@version{0.0.5}
-\newcommand*\MRTtab@date{2018-02-09}
+\newcommand*\MRTtab@version{0.0.6}
+\newcommand*\MRTtab@date{2019-04-08}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -50,6 +50,8 @@
 \tl_new:N \l__MRTtab_eol_hook_public_tl
 \tl_new:N \l__MRTtab_table_pre_hook_tl
 \tl_new:N \l__MRTtab_table_post_hook_tl
+\tl_new:N \l_MRTtab_table_cap_tl
+\tl_new:N \l_MRTtab_table_scap_tl
 \tl_new:N \l__MRTtab_env_begin_tl
 \tl_new:N \l__MRTtab_env_end_tl
 % messages >>=
@@ -146,7 +148,10 @@
     ,cline~version   .initial:n          = 2
     % for MRTtable
     ,align           .tl_set:N           = \l_MRTtab_table_align_tl
-    ,caption         .tl_set:N           = \l_MRTtab_table_cap_tl
+    ,caption         .code:n             =
+      {
+        \tl_set:Nx \l_MRTtab_table_cap_tl { \tl_trim_spaces:n { #1 } }
+      }
     ,cap             .meta:n             = { caption = { #1 } }
     ,columns         .tl_set:N           = \l_MRTtab_table_col_tl
     ,columns         .initial:n          = { l\MRTtabRepeatCols c }
@@ -191,7 +196,10 @@
     ,post            .meta:n             = { pre~tab = { #1 } }
     ,pre~tab         .code:n             = { \MRTtabAddtoPreHook  { #1 } }
     ,pre             .meta:n             = { pre~tab = { #1 } }
-    ,short caption   .tl_set:N           = \l_MRTtab_table_scap_tl
+    ,short caption   .code:n             =
+      {
+        \tl_set:Nx \l_MRTtab_table_scap_tl { \tl_trim_spaces:n { #1 } }
+      }
     ,short cap       .meta:n             = { short caption = { #1 } }
     ,scap            .meta:n             = { short caption = { #1 } }
     ,striped         .bool_set:N         = \l_MRTtab_table_striped_bool
