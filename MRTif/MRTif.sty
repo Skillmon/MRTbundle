@@ -113,14 +113,12 @@
     \long\expandafter\edef\csname MRTif#1T\endcsname##1%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}%
-          {\noexpand\@firstofone}
-          {\noexpand\@gobble}%
+        \unexpanded{\@firstofone\@gobble}%
       }%
     \long\expandafter\edef\csname MRTif#1F\endcsname##1%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}%
-          {\noexpand\@gobble}
-          {\noexpand\@firstofone}%
+        \unexpanded{\@gobble\@firstofone}%
       }%
   }% =<<
 \MRTutil@def\MRTif@create@TandF@twoargs#1% >>=
@@ -128,57 +126,53 @@
     \long\expandafter\edef\csname MRTif#1T\endcsname##1##2%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}{##2}%
-          {\noexpand\@firstofone}
-          {\noexpand\@gobble}%
+        \unexpanded{\@firstofone\@gobble}%
       }%
     \long\expandafter\edef\csname MRTif#1F\endcsname##1##2%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}{##2}%
-          {\noexpand\@gobble}
-          {\noexpand\@firstofone}%
+        \unexpanded{\@gobble\@firstofone}%
       }%
   }% =<<
 \MRTutil@def\MRTif@create@N@TandF#1% >>=
   {%
     \long\expandafter\edef\csname MRTif#1NTF\endcsname##1%
       {%
-        \noexpand\expandafter
-        \expandafter\noexpand\csname MRTif#1TF\endcsname
-        \noexpand\expandafter{##1}%
+        \unexpanded{\expandafter}%
+        \unexpanded\expandafter{\csname MRTif#1TF\endcsname\expandafter}%
+        {##1}%
       }%
     \MRTif@create@TandF{#1N}%
   }% =<<
+\MRTutil@def[\long]\MRTif@NN@helper#1#2#3%>>=
+  {%
+    \expandafter#3\expandafter{#2}{#1}%
+  }%=<<
+\MRTutil@def[\long]\MRTif@nN@helper#1#2#3%>>=
+  {%
+    #3{#2}{#1}%
+  }%=<<
 \MRTutil@def\MRTif@create@N@TandF@twoargs#1% >>=
   {%
     \long\expandafter\edef\csname MRTif#1NNTF\endcsname##1##2%
       {%
-        \noexpand\expandafter
-        \expandafter\noexpand\csname MRTif#1NNTF@a\endcsname
-        \noexpand\expandafter{##2}{##1}%
-      }%
-    \long\expandafter\edef\csname MRTif#1NNTF@a\endcsname##1##2%
-      {%
-        \noexpand\expandafter
-        \expandafter\noexpand\csname MRTif#1TF\endcsname
-        \noexpand\expandafter{##2}{##1}%
+        \unexpanded{\expandafter\MRTif@NN@helper\expandafter}%
+        {##2}{##1}%
+        \unexpanded\expandafter{\csname MRTif#1TF\endcsname}%
       }%
     \MRTif@create@TandF@twoargs{#1NN}%
     \long\expandafter\edef\csname MRTif#1NnTF\endcsname##1##2%
       {%
-        \noexpand\expandafter
-        \expandafter\noexpand\csname MRTif#1TF\endcsname
-        \noexpand\expandafter{##1}{##2}%
+        \unexpanded{\expandafter}%
+        \unexpanded\expandafter{\csname MRTif#1TF\endcsname\expandafter}%
+        {##1}{##2}%
       }%
     \MRTif@create@TandF@twoargs{#1Nn}%
     \long\expandafter\edef\csname MRTif#1nNTF\endcsname##1##2%
       {%
-        \noexpand\expandafter
-        \expandafter\noexpand\csname MRTif#1nNTF@a\endcsname
-        \noexpand\expandafter{##2}{##1}%
-      }%
-    \long\expandafter\edef\csname MRTif#1nNTF@a\endcsname##1##2%
-      {%
-        \expandafter\noexpand\csname MRTif#1TF\endcsname{##2}{##1}
+        \unexpanded{\expandafter\MRTif@nN@helper\expandafter}%
+        {##2}{##1}%
+        \unexpanded\expandafter{\csname MRTif#1TF\endcsname}%
       }%
     \MRTif@create@TandF@twoargs{#1nN}%
   }% =<<
@@ -252,10 +246,8 @@
 \MRTif@create@TandF@N@TandF{GroupNoSpaces}
 % =<<
 % MRTifStringsMatch >>=
-\MRTutil@def[\long]\MRTifStringsMatchTF#1#2% >>=
-  {%
-    \MRTifStringsMatchXXTF{\detokenize{#1}}{\detokenize{#2}}
-  }% =<<
+\MRTifCreateBranchingIfs{MRTifStringsMatch}{TF=ab,T=yn,F=ny}{2}
+  {\ifnum\pdf@strcmp{\detokenize{#1}}{\detokenize{#2}}=0 }
 \MRTutil@def[\long]\MRTifStringsMatchGTF#1#2% >>=
   {%
     \MRTifGroupTF{#1}
@@ -266,7 +258,7 @@
           {\MRTifStringsMatchTF{#1}{#2}}
       }%
   }% =<<
-\MRTif@create@TandF@N@TandF@twoargs{StringsMatch}
+\MRTif@create@N@TandF@twoargs{StringsMatch}
 \MRTif@create@TandF@N@TandF@twoargs{StringsMatchG}
 % =<<
 % MRTifStringsMatchXX >>=
