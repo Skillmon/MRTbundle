@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.8}
-\newcommand*\MRTif@date{2019-03-29}
+\newcommand*\MRTif@version{0.0.9}
+\newcommand*\MRTif@date{2019-04-08}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -11,26 +11,30 @@
 \RequirePackage{pdftexcmds,MRTutil}
 
 % MRTif@fi macros >>=
-\long\def\MRTif@fiAa#1\fi#2#3{\fi#2}
-\long\def\MRTif@fiAb#1\fi#2#3{\fi#3}
-\long\def\MRTif@fiBa\fi#1#2{\fi#1}
-\long\def\MRTif@fiBb\fi#1#2{\fi#2}
 \long\def\MRTif@fiAy#1\fi#2{\fi#2}
 \long\def\MRTif@fiAn#1\fi#2{\fi}
+\long\def\MRTif@fiAa#1\fi#2#3{\fi#2}
+\long\def\MRTif@fiAb#1\fi#2#3{\fi#3}
 \long\def\MRTif@fiBy\fi#1{\fi#1}
 \long\def\MRTif@fiBn\fi#1{\fi}
+\long\def\MRTif@fiBa\fi#1#2{\fi#1}
+\long\def\MRTif@fiBb\fi#1#2{\fi#2}
+\long\def\MRTif@fiBg\fi#1#2{\fi}
+\long\def\MRTif@fiBTa\fi#1#2#3{\fi#1}
+\long\def\MRTif@fiBTb\fi#1#2#3{\fi#2}
+\long\def\MRTif@fiBTc\fi#1#2#3{\fi#3}
+\long\def\MRTif@fiBTg\fi#1#2#3{\fi}
 \long\def\MRTif@fifiAa#1\fi\fi#2#3{\fi#2}
 \long\def\MRTif@fifiAb#1\fi\fi#2#3{\fi#3}
 \long\def\MRTif@fifiBAa#1\fi\fi#2#3{\fi\fi#2}
 \long\def\MRTif@fifiBAb#1\fi\fi#2#3{\fi\fi#3}
 \long\def\MRTif@fifiBBa\fi\fi#1#2{\fi\fi#1}
 \long\def\MRTif@fifiBBb\fi\fi#1#2{\fi\fi#2}
-\long\def\MRTif@fiBTa\fi#1#2#3{\fi#1}
-\long\def\MRTif@fiBTb\fi#1#2#3{\fi#2}
-\long\def\MRTif@fiBTc\fi#1#2#3{\fi#3}
-\long\def\MRTif@fiBg\fi#1#2{\fi}
-\long\def\MRTif@fiBTg\fi#1#2#3{\fi}
 % =<<
+\MRTutil@def[\long]\MRTif@ifxothercase#1#2%>>=
+  {%
+    \fi\ifx#1#2\MRTif@fiAa
+  }%=<<
 
 % Definition of \endMRTif@argument >>=
 \begingroup
@@ -49,9 +53,55 @@
     \@secondoftwo
   }% =<<
 
+% CreateBranchingIfs >>=
+\MRTutil@def[\protected\long]\MRTifCreateBranchingIfs#1#2#3#4%>>=
+  {%
+    \def\MRTif@cbi@args##1#3##2\endMRTif@argument{##1#3}%
+    \expandafter\MRTif@cbi@a\expandafter
+    {\MRTif@cbi@args 0##1##2##3##4##5##6##7##8##9\endMRTif@argument}
+    {#4}{#1}#2,\endMRTif@argument=\endMRTif@argument,%
+  }%=<<
+\MRTutil@def[\protected]\MRTif@cbi@a#1%>>=
+  {%
+    \expandafter\MRTif@cbi@b\expandafter{\@gobble#1}%
+  }%=<<
+\MRTutil@def[\long]\MRTif@cbi@b#1#2#3#4=#5,%>>=
+  {%
+    \ifx\endMRTif@argument#4%
+      \MRTif@fiBg
+    \fi
+    \@firstofone
+      {%
+        \@ifundefined{MRTif@cbi@def@#5}
+          {%
+            \PackageError{MRTif}
+              {%
+                \string\MRTifCreateBranchingIfs\space Error:
+                Unknown branching variant '#5', skipping definition of
+                '\expandafter\@gobble\string\\#3#4'%
+              }
+              {}%
+          }
+          {%
+            \csname MRTif@cbi@def@#5\expandafter\endcsname\csname #3#4\endcsname
+              {#1}{#2}%
+          }%
+        \MRTif@cbi@b{#1}{#2}{#3}%
+      }%
+  }%=<<
+\MRTutil@def[\long]\MRTif@cbi@def@common#1#2#3#4#5%>>=
+  {%
+    \MRTutil@def[\long]#3#4{#5#1\fi#2}%
+  }%=<<
+\MRTutil@def\MRTif@cbi@def@ab{\MRTif@cbi@def@common\MRTif@fiBTb\@secondoftwo}
+\MRTutil@def\MRTif@cbi@def@ba{\MRTif@cbi@def@common\MRTif@fiBTc\@firstoftwo}
+\MRTutil@def\MRTif@cbi@def@yn{\MRTif@cbi@def@common\MRTif@fiBb\@gobble}
+\MRTutil@def\MRTif@cbi@def@ny{\MRTif@cbi@def@common\MRTif@fiBg\@firstofone}
+% =<<
+
 \MRTutil@def\MRTif@groupify@TF#1% >>=
   {%
-    \expandafter\long\expandafter\edef\csname MRTif#1GTF\endcsname##1%
+    \long\expandafter\edef\csname MRTif#1GTF\endcsname##1%
       {%
         \unexpanded{\MRTifGroupTF}{##1}%
           {\unexpanded\expandafter{\csname MRTif#1GTF\endcsname}##1}%
@@ -60,13 +110,13 @@
   }% =<<
 \MRTutil@def\MRTif@create@TandF#1% >>=
   {%
-    \expandafter\long\expandafter\edef\csname MRTif#1T\endcsname##1%
+    \long\expandafter\edef\csname MRTif#1T\endcsname##1%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}%
           {\noexpand\@firstofone}
           {\noexpand\@gobble}%
       }%
-    \expandafter\long\expandafter\edef\csname MRTif#1F\endcsname##1%
+    \long\expandafter\edef\csname MRTif#1F\endcsname##1%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}%
           {\noexpand\@gobble}
@@ -75,13 +125,13 @@
   }% =<<
 \MRTutil@def\MRTif@create@TandF@twoargs#1% >>=
   {%
-    \expandafter\long\expandafter\edef\csname MRTif#1T\endcsname##1##2%
+    \long\expandafter\edef\csname MRTif#1T\endcsname##1##2%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}{##2}%
           {\noexpand\@firstofone}
           {\noexpand\@gobble}%
       }%
-    \expandafter\long\expandafter\edef\csname MRTif#1F\endcsname##1##2%
+    \long\expandafter\edef\csname MRTif#1F\endcsname##1##2%
       {%
         \unexpanded\expandafter{\csname MRTif#1TF\endcsname}{##1}{##2}%
           {\noexpand\@gobble}
@@ -90,7 +140,7 @@
   }% =<<
 \MRTutil@def\MRTif@create@N@TandF#1% >>=
   {%
-    \expandafter\long\expandafter\edef\csname MRTif#1NTF\endcsname##1%
+    \long\expandafter\edef\csname MRTif#1NTF\endcsname##1%
       {%
         \noexpand\expandafter
         \expandafter\noexpand\csname MRTif#1TF\endcsname
@@ -100,33 +150,33 @@
   }% =<<
 \MRTutil@def\MRTif@create@N@TandF@twoargs#1% >>=
   {%
-    \expandafter\long\expandafter\edef\csname MRTif#1NNTF\endcsname##1##2%
+    \long\expandafter\edef\csname MRTif#1NNTF\endcsname##1##2%
       {%
         \noexpand\expandafter
         \expandafter\noexpand\csname MRTif#1NNTF@a\endcsname
         \noexpand\expandafter{##2}{##1}%
       }%
-    \expandafter\long\expandafter\edef\csname MRTif#1NNTF@a\endcsname##1##2%
+    \long\expandafter\edef\csname MRTif#1NNTF@a\endcsname##1##2%
       {%
         \noexpand\expandafter
         \expandafter\noexpand\csname MRTif#1TF\endcsname
         \noexpand\expandafter{##2}{##1}%
       }%
     \MRTif@create@TandF@twoargs{#1NN}%
-    \expandafter\long\expandafter\edef\csname MRTif#1NnTF\endcsname##1##2%
+    \long\expandafter\edef\csname MRTif#1NnTF\endcsname##1##2%
       {%
         \noexpand\expandafter
         \expandafter\noexpand\csname MRTif#1TF\endcsname
         \noexpand\expandafter{##1}{##2}%
       }%
     \MRTif@create@TandF@twoargs{#1Nn}%
-    \expandafter\long\expandafter\edef\csname MRTif#1nNTF\endcsname##1##2%
+    \long\expandafter\edef\csname MRTif#1nNTF\endcsname##1##2%
       {%
         \noexpand\expandafter
         \expandafter\noexpand\csname MRTif#1nNTF@a\endcsname
         \noexpand\expandafter{##2}{##1}%
       }%
-    \expandafter\long\expandafter\edef\csname MRTif#1nNTF@a\endcsname##1##2%
+    \long\expandafter\edef\csname MRTif#1nNTF@a\endcsname##1##2%
       {%
         \expandafter\noexpand\csname MRTif#1TF\endcsname{##2}{##1}
       }%
@@ -157,41 +207,19 @@
       }%
   }% =<<
 % MRTifEmpty >>=
-\MRTutil@def[\long]\MRTifEmptyTF#1% >>=
-  {%
-    \if\relax\detokenize{#1}\relax
-      \MRTif@fiBTb
-    \fi
-    \@secondoftwo
-  }% =<<
-\MRTutil@def[\long]\MRTifEmptyT#1% >>=
-  {%
-    \if\relax\detokenize{#1}\relax
-      \MRTif@fiBb
-    \fi
-    \@gobble
-  }% =<<
-\MRTutil@def[\long]\MRTifEmptyF#1% >>=
-  {%
-    \if\relax\detokenize{#1}\relax
-      \MRTif@fiBg
-    \fi
-    \@firstofone
-  }% =<<
-\MRTutil@def[\long]\MRTifEmptyNTF#1% >>=
-  {%
-    \expandafter\MRTifEmptyTF\expandafter{#1}%
-  }% =<<
-\MRTutil@def[\long]\MRTifEmptyNT#1% >>=
-  {%
-    \expandafter\MRTifEmptyT\expandafter{#1}%
-  }% =<<
-\MRTutil@def[\long]\MRTifEmptyNF#1% >>=
-  {%
-    \expandafter\MRTifEmptyF\expandafter{#1}%
-  }% =<<
+\MRTifCreateBranchingIfs{MRTifEmpty}{TF=ab,T=yn,F=ny}{1}
+  {\if\relax\detokenize{#1}\relax}
+\MRTifCreateBranchingIfs{MRTifEmptyN}{TF=ab,T=yn,F=ny}{1}
+  {\if\relax\detokenize\expandafter{#1}\relax}
 \MRTif@groupify@TF{Empty}
 \MRTif@create@TandF@N@TandF{EmptyG}
+% =<<
+% MRTifBlank >>=
+\MRTifCreateBranchingIfs{MRTifBlank}{TF=ab,T=yn,F=ny}{1}
+  {\if\relax\detokenize\expandafter{\@gobble#1.}\relax}
+\MRTif@groupify@TF{Blank}
+\MRTif@create@N@TandF{Blank}
+\MRTif@create@TandF@N@TandF{BlankG}
 % =<<
 % MRTifGroup >>=
 \MRTutil@def[\long]\MRTifGroupTF#1% >>=
@@ -242,13 +270,8 @@
 \MRTif@create@TandF@N@TandF@twoargs{StringsMatchG}
 % =<<
 % MRTifStringsMatchXX >>=
-\MRTutil@def[\long]\MRTifStringsMatchXXTF#1#2% >>=
-  {%
-    \ifnum\pdf@strcmp{#1}{#2}=0
-      \MRTif@fiBTb
-    \fi
-    \@secondoftwo
-  }% =<<
+\MRTifCreateBranchingIfs{MRTifStringsMatchXX}{TF=ab,T=yn,F=ny}{2}
+  {\ifnum\pdf@strcmp{#1}{#2}=0 }
 \MRTutil@def[\long]\MRTifStringsMatchXXGTF#1#2% >>=
   {%
     \MRTifGroupTF{#1}
@@ -259,7 +282,6 @@
           {\MRTifStringsMatchXXTF{#1}{#2}}%
       }%
   }% =<<
-\MRTif@create@TandF@twoargs{StringsMatchXX}
 \MRTif@create@TandF@twoargs{StringsMatchXXG}
 % =<<
 % MRTifOneToken >>=
@@ -308,65 +330,36 @@
 \MRTif@create@TandF@N@TandF{TwoTokenG}
 % =<<
 % MRTifNumToken>>=
-\MRTutil@def[\long]\MRTifNumTokenTF@common#1#2#3% >>=
+\MRTifCreateBranchingIfs{MRTifNumToken}{TF=ab,T=yn,F=ny}{2}%>>=
+  {\ifnum#1=\MRTtllength{#2} }%=<<
+\MRTifCreateBranchingIfs{MRTifNumTokenN}{TF=ab,T=yn,F=ny}{2}%>>=
+  {\ifnum#1=\MRTtllengthN{#2} }%=<<
+\MRTifCreateBranchingIfs{MRTifNumTokenS}{TF=ab,T=yn,F=ny}{2}%>>=
+  {\ifnum#1=\MRTtllengthS{#2} }%=<<
+\MRTifCreateBranchingIfs{MRTifNumTokenSN}{TF=ab,T=yn,F=ny}{2}%>>=
+  {\ifnum#1=\MRTtllengthSN{#2} }%=<<
+\MRTutil@def[\long]\MRTifNumTokenG@common#1#2#3%>>=
   {%
-    \ifnum#3{#2}=#1\relax
-      \MRTif@fiBTb
-    \fi
-    \@secondoftwo
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenGTF@common#1#2% >>=
+    \MRTifGroupTF{#3}
+      {\MRTifNumTokenG@common#1{#2}#3}
+      {#1{#2}{#3}}%
+  }%=<<
+\MRTutil@def\MRTifNumTokenGTF{\MRTifNumTokenG@common\MRTifNumTokenTF}
+\MRTutil@def\MRTifNumTokenSGTF{\MRTifNumTokenG@common\MRTifNumTokenSTF}
+\MRTutil@def[\long]\MRTifNumTokenGN@common#1#2#3%>>=
   {%
-    \MRTifGroupTF{#2}
-      {\MRTifNumTokenGTF@common{#1}#2}
-      {\MRTifNumTokenTF@common{#1}{#2}}%
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenGN@common#1#2% >>=
+    \MRTifNumTokenG@common#3{#2}{#1}%
+  }%=<<
+\MRTutil@def[\long]\MRTifNumTokenGNTF#1#2%>>=
   {%
-    \MRTifNumTokenGTF@common{#2}{#1}%
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenGNTF@common#1#2% >>=
+    \expandafter\MRTifNumTokenGN@common\expandafter{#2}{#1}\MRTifNumTokenTF
+  }%=<<
+\MRTutil@def[\long]\MRTifNumTokenSGNTF#1#2%>>=
   {%
-    \expandafter\MRTifNumTokenGN@common\expandafter{#2}{#1}%
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenTF#1#2% >>=
-  {%
-    \MRTifNumTokenTF@common{#1}{#2}\MRTtllength
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenSTF#1#2% >>=
-  {%
-    \MRTifNumTokenTF@common{#1}{#2}\MRTtllengthS
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenGTF#1#2% >>=
-  {%
-    \MRTifNumTokenGTF@common{#1}{#2}\MRTtllength
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenSGTF#1#2% >>=
-  {%
-    \MRTifNumTokenGTF@common{#1}{#2}\MRTtllengthS
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenNTF#1#2% >>=
-  {%
-    \MRTifNumTokenTF@common{#1}{#2}\MRTtllengthN
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenSNTF#1#2% >>=
-  {%
-    \MRTifNumTokenTF@common{#1}{#2}\MRTtllengthSN
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenGNTF#1#2% >>=
-  {%
-    \MRTifNumTokenGNTF@common{#1}{#2}\MRTtllength
-  }% =<<
-\MRTutil@def[\long]\MRTifNumTokenSGNTF#1#2% >>=
-  {%
-    \MRTifNumTokenGNTF@common{#1}{#2}\MRTtllengthS
-  }% =<<
-\MRTif@create@TandF@twoargs{NumToken}
-\MRTif@create@TandF@twoargs{NumTokenS}
+    \expandafter\MRTifNumTokenGN@common\expandafter{#2}{#1}\MRTifNumTokenSTF
+  }%=<<
 \MRTif@create@TandF@twoargs{NumTokenG}
 \MRTif@create@TandF@twoargs{NumTokenSG}
-\MRTif@create@TandF@twoargs{NumTokenN}
-\MRTif@create@TandF@twoargs{NumTokenSN}
 \MRTif@create@TandF@twoargs{NumTokenGN}
 \MRTif@create@TandF@twoargs{NumTokenSGN}
 % =<<
@@ -395,18 +388,11 @@
 %\MRTutil@def[\long]\MRTifLetter@core#1% >>=
 \begingroup
 \catcode`z=11 % just to make sure z has catcode 11 in the following
-\def\MRTif@zz
+\@firstofone
   {%
     \endgroup
-    \MRTutil@def[\long]\MRTifLetter@core##1%
-      {%
-        \ifcat\noexpand##1z%
-          \MRTif@fiBTb
-        \fi
-        \@secondoftwo
-      }%
+    \MRTifCreateBranchingIfs{MRTifLetter@core}{=ab}{1}{\ifcat\noexpand#1z}%
   }
-\MRTif@zz
 % =<<
 \MRTif@create@TandF@N@TandF{Letter}
 \MRTif@create@TandF@N@TandF{LetterG}
@@ -454,27 +440,23 @@
 \MRTutil@def[\long]\MRTifDigitTF#1% >>=
   {%
     \MRTifOneTokenNoGroupTF{#1}
-      {\MRTifDigit@a{#1}}
+      {\MRTifDigit@core{#1}}
       {\@secondoftwo}%
   }% =<<
-\MRTutil@def[\long]\MRTifDigit@a#1% >>=
+\MRTutil@def[\long]\MRTifDigit@core#1% >>=
   {%
     \ifx0#1\MRTif@fiAa
-    \else\MRTifDigit@b1#1%
-    \else\MRTifDigit@b2#1%
-    \else\MRTifDigit@b3#1%
-    \else\MRTifDigit@b4#1%
-    \else\MRTifDigit@b5#1%
-    \else\MRTifDigit@b6#1%
-    \else\MRTifDigit@b7#1%
-    \else\MRTifDigit@b8#1%
-    \else\MRTifDigit@b9#1%
+    \else\MRTif@ifxothercase1#1%
+    \else\MRTif@ifxothercase2#1%
+    \else\MRTif@ifxothercase3#1%
+    \else\MRTif@ifxothercase4#1%
+    \else\MRTif@ifxothercase5#1%
+    \else\MRTif@ifxothercase6#1%
+    \else\MRTif@ifxothercase7#1%
+    \else\MRTif@ifxothercase8#1%
+    \else\MRTif@ifxothercase9#1%
     \else\MRTif@fiBb
     \fi
-  }% =<<
-\MRTutil@def[\long]\MRTifDigit@b#1#2% >>=
-  {%
-    \fi\ifx#1#2\MRTif@fiAa
   }% =<<
 \MRTutil@def[\long]\MRTifDigitGTF#1% >>=
   {%
@@ -482,7 +464,7 @@
       {\MRTifDigitGTF#1}
       {%
         \MRTifOneTokenTF{#1}
-          {\MRTifDigit@a{#1}}
+          {\MRTifDigit@core{#1}}
           {\@secondoftwo}%
       }%
   }% =<<
@@ -492,8 +474,7 @@
 % MRTifNumber >>=
 \MRTutil@def[\long]\MRTifNumberTF#1% >>=
   {%
-    \MRTif@notEmpty@noGroup@noSpace
-      {#1}
+    \MRTif@notEmpty@noGroup@noSpace{#1}
       {\MRTifNumber@ifSign#1\endMRTif@argument}%
   }% =<<
 \MRTutil@def[\long]\MRTifNumber@ifSign#1% >>=
@@ -515,7 +496,7 @@
     \MRTif@endMRTif@argument{#1}
       {\@firstoftwo}
       {%
-        \MRTifDigit@a{#1}
+        \MRTifDigit@core{#1}
           {\MRTifNumber@ifDigit}
           {\MRTifNumber@false}%
       }%
@@ -525,7 +506,7 @@
     \MRTif@endMRTif@argument{#1}
       {\@secondoftwo}
       {%
-        \MRTifDigit@a{#1}
+        \MRTifDigit@core{#1}
           {\MRTifNumber@ifDigit}
           {\MRTifNumber@false}%
       }%
@@ -551,33 +532,32 @@
 % MRTifFloat >>=
 \MRTutil@def[\long]\MRTifFloatTF#1% >>=
   {%
-    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloat@a{#1}}
+    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloat@a{#1}}%
   }% =<<
 %\MRTutil@def\MRTifFloat@a \MRTutil@def\MRTifFloat@ifDot >>=
 \begingroup
 \catcode`\?=4
-\def\MRTif@zz
+\@firstofone
   {%
     \endgroup
-    \MRTutil@def[\long]\MRTifFloat@a##1% >>=
+    \MRTutil@def[\long]\MRTifFloat@a#1% >>=
       {%
-        \MRTifFloat@ifDot{##1}
-          {\MRTifFloat@withDot##1\MRTifFloat@endargument}
-          {\MRTifNumber@ifSign##1\endMRTif@argument}%
+        \MRTifFloat@ifDot{#1}
+          {\MRTifFloat@withDot#1\MRTifFloat@endargument}
+          {\MRTifNumber@ifSign#1\endMRTif@argument}%
       }% =<<
-    \MRTutil@def[\long]\MRTifFloat@ifDot##1% >>=
+    \MRTutil@def[\long]\MRTifFloat@ifDot#1% >>=
       {%
-        \MRTifFloat@ifDot@a##1.?\MRTifFloat@endargument
+        \MRTifFloat@ifDot@a#1.?\MRTifFloat@endargument
       }% =<<
-    \long\def\MRTifFloat@ifDot@a##1.##2\MRTifFloat@endargument% >>=
+    \long\def\MRTifFloat@ifDot@a#1.#2\MRTifFloat@endargument% >>=
       {%
-        \ifx?##2%
+        \ifx?#2%
           \MRTif@fiBTc
         \fi
         \@firstoftwo
       }% =<<
   }
-\MRTif@zz
 % =<<
 \long\def\MRTifFloat@withDot#1.#2\MRTifFloat@endargument% >>=
   {%
@@ -596,7 +576,7 @@
 % MRTifFloatNoSign >>=
 \MRTutil@def[\long]\MRTifFloatNoSignTF#1% >>=
   {%
-    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloatNoSpace@a{#1}}
+    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloatNoSpace@a{#1}}%
   }% =<<
 \MRTutil@def[\long]\MRTifFloatNoSpace@a#1% >>=
   {%
