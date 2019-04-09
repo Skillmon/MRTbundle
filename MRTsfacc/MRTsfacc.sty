@@ -1,5 +1,5 @@
-\newcommand*\MRTsfacc@version{0.0.5}
-\newcommand*\MRTsfacc@date{2019-01-30}
+\newcommand*\MRTsfacc@version{0.0.6}
+\newcommand*\MRTsfacc@date{2019-04-09}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -12,10 +12,6 @@
 \RequirePackage{MRTutil}
 \RequirePackage{MRTif}
 \RequirePackage{amsmath}
-
-\long\def\MRTsfacc@fifiATa#1\fi\fi#2#3#4{\fi#2}
-\long\def\MRTsfacc@fifiBATb#1\fi\fi#2#3#4{\fi\fi#3}
-\long\def\MRTsfacc@fifiBBTc\fi\fi#1#2#3{\fi\fi#3}
 
 %% Package options >>=
 \def\MRTsfacc@share{0.25}
@@ -126,10 +122,9 @@
             $#2$%
           }%
         \if@MRTsfacc@found@known@
-          \MRTif@fiAa
-        \else
-          \MRTif@fiBb
+          \MRTif@fiBTb
         \fi
+        \@secondoftwo
       }
       {\@secondoftwo}%
   }% =<<
@@ -179,12 +174,12 @@
   \MRTutil@def\mathaccentV@a#1% >>=
     {%
       \expandafter\ifx\next!%
-        \MRTsfacc@fifiATa
+        \MRTif@fifiATa
       \else
         \expandafter\ifx\next*%
-          \MRTsfacc@fifiBATb
+          \MRTif@fifiBATb
         \else
-          \MRTsfacc@fifiBBTc
+          \MRTif@fifiBBTc
         \fi
       \fi
       {\expandafter\MRTsfacc@mathaccentV\mathaccentV@args}
