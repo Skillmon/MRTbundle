@@ -24,10 +24,74 @@ your contacting. Please do the same if you get any other undefined control
 sequence errors containing \texttt{MRTif} in the control sequence's name.
 
 \section{Macros}
+\begin{describemacro}{MRTifCreateBranchingIfs}
+  [\marg{base}\marg{branches}\marg{args}\marg{if}]
+  This macro creates different branching if-tests from a \TeX-like \meta{if}.
+  \meta{base} is the base name of the new macros (e.\,g.\@ |MRTifEmpty|),
+  \meta{branches} is a comma separated list of different name extensions and
+  branches (a detailed description follows), \meta{args} is the number of
+  arguments the \TeX-like \meta{if} will take and \meta{if} should be a
+  \TeX-like \meta{if}, meaning an \cs{if...} test which would need a \cs{fi}.\\
+  The \meta{branches} can be an arbitrary number (though more than four don't
+  make sense) of \texttt{\meta{key}=\meta{value}} pairs separated by commas, you
+  should make sure that they don't contain any spaces as those aren't stripped.
+  \meta{key} can be anything and will append the \meta{base} name to form the
+  individual macro name while \meta{value} should be one of the values shown in
+  \autoref{tab:if:cbi}. Each resulting macro name built from \meta{base} and
+  \meta{key} must be undefined else it will be skipped (the other names might
+  still become defined).\\
+  For example the \cs{MRTifNumToken...} macros are defined
+  using:\\[\smallskipamount]
+  \begin{minipage}[c]
+    {%
+      \dimexpr
+      \textwidth + \marginparwidth -
+      \csname l_docMRTbundle_dscmac_widest_dim\endcsname
+      \relax
+    }
+\begin{verbatim}
+\MRTifCreateBranchingIfs{MRTifNumToken}{TF=ab,T=yn,F=ny}{2}
+  {\ifnum#1=\MRTtllength{#2} }
+\end{verbatim}
+  \end{minipage}\strut\\[\smallskipamount]
+  The space after |{#2}| is intended there to end the number parsing of |\ifnum|
+  and does no harm (just in case you wondered). With |TF=ab| we define that the
+  macro ending with |TF| should execute the first branch if the |\ifnum| yields
+  |true| and else execute the second branch. Similarly |T=yn| defines the |T|
+  macro to execute the next branch if |\ifnum| is true and else gobbles it.
+  \begin{MRTtable}
+    [
+      ,col=>{\ttfamily}cccc
+      ,cap=
+        {
+          Possible \meta{value}s in \cs{MRTifCreateBranchingIfs}'s
+          \meta{branches} argument, how many branches they'll create and which
+          branch will be executed.
+        }
+      ,scap=
+        {
+          Possible \meta{value}s in \cs{MRTifCreateBranchingIfs}'s
+          \meta{branches} argument.
+        }
+      ,label=tab:if:cbi
+    ]
+    \multicolumn{1}{c}{\meta{value}} & number of branches & if true & if false\\
+    ab & 2 & first  & second \\
+    ba & 2 & second & first  \\
+    yn & 1 & first  & gobble \\
+    ny & 1 & gobble & first  \\
+  \end{MRTtable}
+\end{describemacro}
+
 \begin{describemacroTF}[G,N,GN]{MRTifEmpty}[\marg{arg}]
   Tests if \meta{arg} is completely empty.
 \end{describemacroTF}
-\dscremaininglines{3}
+\dscremaininglines{2}
+
+\begin{describemacroTF}[G,N,GN]{MRTifBlank}[\marg{arg}]
+  Tests if \meta{arg} is completely empty or contains only spaces.
+\end{describemacroTF}
+\dscremaininglines{2}
 
 \begin{describemacroTF}[N]{MRTifGroup}[\marg{arg}]
   Tests if \meta{arg} is a single group no matter what the contents of that
@@ -44,7 +108,7 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
   Tests if \meta{string1} and \meta{string2} match, the strings are
   \cs{detokenize}d prior to the comparison.
 \end{describemacroTF}
-\dscremaininglines{5}
+\dscremaininglines{4}
 
 \begin{describemacroTF}[G]{MRTifStringsMatchXX}[\marg{string1}\marg{string2}]
   Tests if \meta{string1} and \meta{string2} match, the strings are fully
@@ -54,7 +118,7 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
 \begin{describemacroTF}[G,N,GN]{MRTifOneToken}[\marg{arg}]
   Tests if \meta{arg} is only a single token or group.
 \end{describemacroTF}
-\dscremaininglines{3}
+\dscremaininglines{2}
 
 \begin{describemacroTF}[N]{MRTifOneTokenNoGroup}[\marg{arg}]
   Tests if \meta{arg} is only a single token. A single group is also
@@ -64,7 +128,7 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
 \begin{describemacroTF}[G,N,GN]{MRTifTwoToken}[\marg{arg}]
   Tests if \meta{arg} is exactly two tokens or groups.
 \end{describemacroTF}
-\dscremaininglines{3}
+\dscremaininglines{2}
 
 \begin{describemacroTF}[G,N,GN]{MRTifNumToken}[\marg{num}\marg{arg}]
   Tests if \meta{arg} is exactly \meta{num} tokens long. It uses
@@ -82,7 +146,7 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
 \begin{describemacroTF}[G,N,GN]{MRTifLetter}[\marg{arg}]
   Tests if \meta{arg} is a letter, meaning of category code 11.
 \end{describemacroTF}
-\dscremaininglines{3}
+\dscremaininglines{2}
 
 \begin{describemacroTF}[NN,Nn,nN,G,GNN,GNn,GnN]{MRTifTokensMatch}%
   [\marg{arg1}\marg{arg2}]
@@ -91,25 +155,25 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
   the arguments is contained in a group. If that's the case the \meta{false}
   branch is executed.
 \end{describemacroTF}
-\dscremaininglines{5}
+\dscremaininglines{4}
 
 \begin{describemacroTF}[G,N,GN]{MRTifDigit}[\marg{arg}]
   Tests if \meta{arg} is a single token and a digit. The implementation might be
   suboptimal.
 \end{describemacroTF}
-\dscremaininglines{2}
+\dscremaininglines{1}
 
 \begin{describemacroTF}[G,N,GN]{MRTifNumber}[\marg{arg}]
   Tests if \meta{arg} is a number, meaning it consists out of an optional
   \texttt{+} or \texttt{-} sign and digits. The implementation might be
   suboptimal.
 \end{describemacroTF}
-\dscremaininglines{2}
+\dscremaininglines{1}
 
 \begin{describemacroTF}[G,N,GN]{MRTifNumberNoSign}[\marg{arg}]
   Same as \cs{MRTifNumberTF} but also returns \meta{false} for a leading sign.
 \end{describemacroTF}
-\dscremaininglines{3}
+\dscremaininglines{2}
 
 \begin{describemacroTF}[G,N,GN]{MRTifFloat}[\marg{arg}]
   Tests if \meta{arg} is a float, meaning it consists out of an optional
@@ -121,17 +185,28 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
 \begin{describemacroTF}[G,N,GN]{MRTifFloatNoSign}[\marg{arg}]
   Same as \cs{MRTifFloatTF} but also returns \meta{false} for a leading sign.
 \end{describemacroTF}
-\dscremaininglines{3}
+\dscremaininglines{2}
 
 \begin{describemacroTF}[G,N,GN]{MRTifContainsGroup}[\marg{arg}]
   Tests if \meta{arg} contains any braced groups.
 \end{describemacroTF}
-\dscremaininglines{3}
+\dscremaininglines{2}
 
 \begin{describemacroTF}[G,N,GN]{MRTifContainsSpace}[\marg{arg}]
   Tests if \meta{arg} contains spaces which are not enclosed by inner groups.
 \end{describemacroTF}
-\dscremaininglines{3}
+\dscremaininglines{2}
+
+\begin{describemacroTF}[NN,Nn,nN,G,GNN,GNn,GnN]{MRTifTokenIn}
+  [\marg{token}\marg{token list}]
+  Tests whether \meta{token list} contains \meta{token}. The group variant only
+  strips outer groups for \meta{token list}. Any inner group in \meta{token
+  list} is skipped (so one can hide tokens from this search). The test is slower
+  than non-expandable alternatives doing the same because it scans \meta{token
+  list} recursively. \meta{token} should be a single token, if it's empty the
+  test is true, if it is a space \cs{MRTifContainsSpaceTF} is used, if it is
+  more than a single token (and not a single group) the test is false.
+\end{describemacroTF}
 
 \begin{describemacro}{MRTtllength,MRTtllengthN}[\marg{arg}]
   Expands to the number of tokens or groups inside of \meta{arg}. Unprotected

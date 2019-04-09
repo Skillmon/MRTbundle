@@ -386,15 +386,20 @@
         \ior_close:N \l_docMRTbundle_unloaded_ior
       }
     \makeatother
+    \begingroup
     \begin{MRTtable}
       [
-        ,col=llc
+        ,col=lcc
         ,float=false
         ,caption={Versions~of~Individual~Packages}
         ,pre=
-          \def\versionline##1%
+          \setbox0\hbox{0.0.00}%
+          \edef\versionline##1%
             {
-              \pkg{MRT##1} & \csuse{MRT##1@date} & \csuse{MRT##1@version}\\
+              \noexpand\pkg{MRT##1}
+              \noexpand& \noexpand\csuse{MRT##1@date}
+              \noexpand& \noexpand\makebox[\the\wd0][l]{\noexpand\csuse{MRT##1@version}}
+              \noexpand\\
             }
       ]
       Package & Date & Version\\
@@ -409,6 +414,7 @@
       \versionline{lmscale}
       \versionline{util}
     \end{MRTtable}
+    \endgroup
   }%=<<
 \NewDocumentCommand \bverb { v }%>>=
   {

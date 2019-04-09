@@ -1,6 +1,7 @@
 # User defined variables {{{
 ##########################################
 TEX     = pdflatex
+TEXFOT  = texfot --quiet $(TEX)
 FLAGS   = -halt-on-error
 # relative path to included TeX-files
 TEXF    = ./tex
@@ -31,6 +32,9 @@ FMT    = $(NAME).fmt
 quick: img $(FMT)
 	$(TEX) $(FLAGS) -fmt="$(NAME)" $(FILE)
 	#$(TEX) $(FLAGS) $(FILE);
+# }}}
+quiet: img $(FMT)# {{{
+	$(TEXFOT) $(FLAGS) -fmt="$(NAME)" $(FILE)
 # }}}
 all: $(OUT) #bib
 $(OUT): $(FILE) $(SFILES) $(PREAMB)# {{{
