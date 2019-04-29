@@ -493,6 +493,12 @@
       }
     \group_end:
   }%=<<
+\NewDocumentCommand \dangerleft { O{\Huge} D(){1} }%>>=
+  {
+    \leavevmode
+    \llap { \smash { #1 \dangerzone[#2] \hskip \marginparsep } }
+    \ignorespaces
+  }%=<<
 \NewExpandableDocumentCommand \easysout {}%>>=
   {
     \texorpdfstring{\easysout@}{\@firstofone}

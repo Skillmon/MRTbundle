@@ -185,14 +185,15 @@ is not possible with the standard \cs{cline} as far as I know.
 \section{The \env{MRTtable} environment}\label{sec:tab:table}%>>=
 The \env{MRTtable} environment is a wrapper around an \env{MRTtabular} inside of
 a \env{table} environment. There might be a severe difference in the
-implementation of the \texttt{long} version, but as of now it is \emph{not
-implemented}.
+implementation of the \texttt{long} version but for the user this shouldn't be
+noticeable.
 
 \begin{describeenv}{MRTtable}[\oarg{key=value}]
   \env{MRTtable} sets its contents in an \env{MRTtabular} environment. It
   features several \meta{key}s you are encouraged to use.
   \\[\parskip]
-  All available \meta{key}s are listed in \autoref{sec:tab:options:setup}.
+  All available \meta{key}s are listed in \autoref{sec:tab:options:setup}. An
+  example can be seen in \autoref{sec:tab:example}.
 \end{describeenv}
 %=<<
 
@@ -247,7 +248,11 @@ provided:
   definitions which follow this macro are repeated indefinitely to match the
   required columns for the tables body. E.g., \bverb|l \MRTtabRepeatCols c| does
   set the first column left aligned and every following column centred. It has
-  to be preceded by at least one valid column definition.
+  to be preceded by at least one valid column definition.\\[\parskip]
+  \dangerleft
+  It is known that the used approach doesn't work with \env{longtable} and as
+  such, it also doesn't work if you use it inside of \env{MRTtable} if it is
+  using the \opt{long} option.
 \end{describemacro}
 %=<<
 
@@ -255,8 +260,7 @@ provided:
 The package only features one load time option, which is \texttt{longtable}. If
 it is specified the \pkg{longtable} package is loaded and some more options of
 \env{MRTtable} become available which are focused around the usage of
-\env{longtable} inside of \env{MRTtable}. Note however that the \texttt{long}
-version of \env{MRTtable} is not yet implemented.
+\env{longtable} inside of \env{MRTtable}.
 
 \subsection{Setup Options}\label{sec:tab:options:setup}
 The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
@@ -390,7 +394,7 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
   set to \texttt{2}.
 \end{describeopt}%=<<
 
-\plannedsection[subsub]{\pkg{longtable} related options}
+\subsubsection{\pkg{longtable} related options}
 The following options are only available if the \opt{longtable} option was used
 during package load time.
 
@@ -400,7 +404,7 @@ during package load time.
   \env{MRTtable} manually as the automatic detection might fail terribly in
   conjunction with \env{longtable}.
 \end{describeopt}%=<<
-\begin{describeopt}{continue caption, cont cap}[\meta{caption}]%>>=
+\begin{describeopt}{continue caption, cont cap, ccap}[\meta{caption}]%>>=
   If specified following pages use this \meta{caption} instead of the \opt{short
   caption} or the normal \opt{caption}.
 \end{describeopt}%=<<
@@ -410,7 +414,55 @@ during package load time.
   caption} or \opt{continue caption}. Defaults to true and initially is set to
   false.
 \end{describeopt}%=<<
+\begin{describeopt}{continue text, cont text, ctext}[\meta{text}]%>>=
+  The caption on following pages will be appended by this \meta{text}, this is
+  true regardless of wether \opt{caption}, \opt{short caption} or \opt{continue
+  caption} is used. Initially this is set to \bverb|(\emph{Fortsetzung})| (if
+  \cls{MRTthesis} with the English language is used, this will be set to
+  \bverb|(\emph{continued})|).
+\end{describeopt}%=<<
 %=<<
+
+\section{Example}\label{sec:tab:example}
+\autoref{tab:tab:example} shows an example usage of the \env{MRTtable}
+environment. The code to produce it is shown below. The \opt{bare} option is
+used since I placed it manually inside of a \env{minipage} right of the verbatim
+listing.
+
+\noindent
+\begin{minipage}[]{.5\textwidth}
+\begin{verbatim}
+\begin{MRTtable}
+  [
+    cap=Boring Table,
+    label=tab:tab:example,
+    bare
+  ]
+  This & is & the & boring & head \\
+  This & is & the & first  & line \\
+  This & is & the & second & line \\
+  This & is & the & third  & line \\
+  This & is & the & fifth  & line \\
+  This & is & the & sixth  & line \\
+\end{MRTtable}
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[]{.5\textwidth}
+  \centering
+  \begin{MRTtable}
+    [
+      cap=Boring Table,
+      label=tab:tab:example,
+      bare
+    ]
+    This & is & the & boring & head \\
+    This & is & the & first  & line \\
+    This & is & the & second & line \\
+    This & is & the & third  & line \\
+    This & is & the & fifth  & line \\
+    This & is & the & sixth  & line \\
+  \end{MRTtable}
+\end{minipage}
 
 \section{Dependencies}%>>=
 The package requires the following packages and their dependencies:

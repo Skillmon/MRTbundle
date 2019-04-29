@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.12}
-\newcommand*\MRTthesis@date{2019-02-28}
+\newcommand*\MRTthesis@version{0.0.13}
+\newcommand*\MRTthesis@date{2019-04-29}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -145,6 +145,8 @@
     \addto\extrasbritish{\languageshorthands{ngerman}}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { by }
     \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Page }
+    \bool_if:NT \l_MRTtab_longtable_bool
+      { \MRTtabSetup { ctext=(\emph{continued}) } }
   }% =<<
   {% false >>=
     \RequirePackage[ngerman]{babel}
