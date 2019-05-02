@@ -1,5 +1,5 @@
-\newcommand*\MRTtab@version{0.0.7}
-\newcommand*\MRTtab@date{2019-04-29}
+\newcommand*\MRTtab@version{0.0.8}
+\newcommand*\MRTtab@date{2019-05-02}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -1100,6 +1100,7 @@
       { \bool_if:NT \l_MRTtab_table_striped_bool { \showrowcolors } }
     \cs_new:Npn \__MRTtab_table_long_start:%>>=
       {
+        \setstretch { \l_MRTtab_stretch_tl }
         \MRTtab_patch_array_long:
         \tl_if_in:NnT \l_MRTtab_table_col_tl { \MRTtabRepeatCols }
           {
