@@ -376,7 +376,7 @@
     % defined. So we have to read the first two lines containing those
     % definitions.
     \ior_new:N \l_docMRTbundle_unloaded_ior
-    \clist_map_inline:nn { MRTbeam.cls, MRTalone.cls }
+    \clist_map_inline:nn { MRTbeam.cls, MRTalone.cls, MRTlmscale.sty }
       {
         \ior_open:Nn \l_docMRTbundle_unloaded_ior { ##1 }
         \ior_get:NN \l_docMRTbundle_unloaded_ior \l_tmpa_tl
@@ -394,18 +394,19 @@
         ,caption={Versions~of~Individual~Packages}
         ,pre=
           \setbox0\hbox{0.0.00}%
-          \edef\versionline##1%
+          \edef\versionlineAUX##1##2%
             {
-              \noexpand\pkg{MRT##1}
-              \noexpand& \noexpand\csuse{MRT##1@date}
-              \noexpand& \noexpand\makebox[\the\wd0][l]{\noexpand\csuse{MRT##1@version}}
+              ##1{MRT##2}
+              \noexpand& \noexpand\csuse{MRT##2@date}
+              \noexpand& \noexpand\makebox[\the\wd0][l]{\noexpand\csuse{MRT##2@version}}
               \noexpand\\
             }
+          \protected\def\versionline{\MRTutil@Oarg{\pkg}\versionlineAUX}
       ]
       Package & Date & Version\\
-      \versionline{thesis}
-      \versionline{beam}
-      \versionline{alone}
+      \versionline[\cls]{thesis}
+      \versionline[\cls]{beam}
+      \versionline[\cls]{alone}
       \versionline{tab}
       \versionline{fonts}
       \versionline{if}
