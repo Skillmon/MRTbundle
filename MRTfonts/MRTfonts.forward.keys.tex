@@ -4,11 +4,10 @@
   {
     \clist_map_inline:nn
       { sfacc, scale maths, new maths, font, serif font, mono font }
-      {
-        \__MRTfonts_setup_forward_from_aux:nn { #1 } { ##1 }
-      }
-    \DeclareOption{no mathsizes}{\PassOptionsToPackage{no mathsizes}{MRTfonts}}
-    \DeclareOption{mathsizes}{\PassOptionsToPackage{mathsizes}{MRTfonts}}
+      { \__MRTfonts_setup_forward_from_aux:nn { #1 } { ##1 } }
+    \clist_map_inline:nn
+      { no mathsizes, mathsizes, alt l, std l, scale macro, pmb }
+      { \DeclareOption { ##1 } { \PassOptionsToPackage { ##1 } { MRTfonts } } }
   }
 \cs_new_protected:Npn \__MRTfonts_setup_forward_from_aux:nn #1 #2
   {

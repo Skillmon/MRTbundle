@@ -13,7 +13,8 @@ character or a defined offset in a list of possible arguments.
 
 The package is designed with \pkg{mathastext} with the \opt{italics} option in
 mind. It might work for other sans serif maths solutions as well. It requires
-\pkg{amsmath} to be loaded.
+\pkg{amsmath} to be loaded. It is incompatible with the \pkg{accents} package,
+as that one changes the accents to no longer use \cs{mathaccentV} internally.
 
 Independent on the used approach the accent macros check whether their argument
 is one meeting a special criterion (a character of category 11 or a known
@@ -233,11 +234,12 @@ in this case. The following formula uses this \cs{hateq} definition,
 \end{equation*}
 \endgroup
 
-Unfortunately these accents don't look good in combination with Greek letters
-(see for yourself: $\hat{\alpha}$ vs.
-\begingroup\defsfhatmacro[-.1ex]\hatalpha\alpha$\hatalpha$\endgroup), and one
-shouldn't mix the two types of accents in a document. The decision which
-approach you use is up to you.
+Unfortunately these accents don't look too good in combination with Greek
+letters (see for yourself: $\hat{\alpha}$ vs.
+\begingroup\defsfhatmacro<.2mu>[0ex]\hatalpha\alpha$\hatalpha$\endgroup), and
+one probably shouldn't mix the two types of accents in a document. The decision
+which approach you use is up to you but you'd have to define a whole lot of
+custom macros for every character you might want to use accented.
 
 \section{Dependencies}
 \pkg{MRTsfacc} loads the \pkg{MRTif} package and uses its tests

@@ -1,9 +1,9 @@
-\newcommand*\MRTfonts@version{0.0.2}
-\newcommand*\MRTfonts@date{2019-04-07}
+\newcommand*\MRTfonts@version{0.0.3}
+\newcommand*\MRTfonts@date{2019-05-02}
 
 \NeedsTeXFormat{LaTeX2e}
 
-\RequirePackage{expl3,MRTif,MRTutil,graphics}
+\RequirePackage{expl3,MRTif,MRTutil}
 
 \ProvidesExplPackage
   {MRTfonts}          {\MRTfonts@date}
@@ -16,6 +16,9 @@
 \bool_new:N \l_MRTfonts_lmscale_bool
 \bool_new:N \l_MRTfonts_new_math_bool
 \bool_new:N \l_MRTfonts_mathsizes_bool
+\bool_new:N \l_MRTfonts_alt_l_bool
+\bool_new:N \l_MRTfonts_scalemath_bool
+\bool_new:N \l_MRTfonts_pmb_bool
 % =<<
 % tl >>=
 \tl_new:N \l_MRTfonts_font_tl
@@ -60,6 +63,10 @@
 %%=============================================================================
 \DeclareOption{mathsizes}{\bool_set_true:N \l_MRTfonts_mathsizes_bool}
 \DeclareOption{no mathsizes}{\bool_set_false:N \l_MRTfonts_mathsizes_bool}
+\DeclareOption{alt l}{\bool_set_true:N \l_MRTfonts_alt_l_bool}
+\DeclareOption{std l}{\bool_set_false:N \l_MRTfonts_alt_l_bool}
+\DeclareOption{scale macro}{\bool_set_true:N \l_MRTfonts_scalemath_bool}
+\DeclareOption{pmb}{\bool_set_true:N \l_MRTfonts_pmb_bool}
 \keys_define:nn { MRTfonts }%>>=
   {
     sfacc .choice:
@@ -127,13 +134,15 @@
               {
                 \str_case:nnF { #1 }
                   {
-                    { off } { \bool_set_false:N \l_MRTfonts_new_math_bool }
-                    { on  } { \bool_set_true:N  \l_MRTfonts_new_math_bool }
+                    { off   } { \bool_set_false:N \l_MRTfonts_new_math_bool }
+                    { false } { \bool_set_false:N \l_MRTfonts_new_math_bool }
+                    { on    } { \bool_set_true:N  \l_MRTfonts_new_math_bool }
+                    { true  } { \bool_set_true:N  \l_MRTfonts_new_math_bool }
                   }
                   {
-                    \bool_set_true:N \l_MRTfonts_new_math_bool
                     \MRTifFloatTF { #1 }
                       {
+                        \bool_set_true:N \l_MRTfonts_new_math_bool
                         \fp_set:Nn \l_MRTfonts_new_math_scale_fp { #1 }
                       }
                       {
@@ -150,7 +159,7 @@
       }
   }%=<<
 \DeclareOption* { \keys_set:nV { MRTfonts } \CurrentOption }
-\ExecuteOptions{mathsizes}
+\ExecuteOptions{mathsizes, alt l}
 \ProcessOptions\relax
 %%===========================================================================<<
 
@@ -180,22 +189,26 @@
   {% false >>=
     \RequirePackage[T1]{fontenc}
     \RequirePackage[utf8]{inputenc}
-    \RequirePackage{lmodern}
-    \bool_if:NT \l_MRTfonts_lmscale_bool { \RequirePackage { MRTlmscale } }
-    \RequirePackage{helvet}
   }%=<<
 \renewcommand\familydefault{\sfdefault}
 % bad math fonts 
-\bool_if:NT \l_MRTfonts_new_math_bool
+\bool_if:NTF \l_MRTfonts_new_math_bool
   {%>>=
-    \RequirePackage{bm}
-    \RequirePackage[upint,slantedGreek]{newpxmath}
+    \RequirePackage[nomath]{lmodern}
     \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
     \DeclareFontFamily{OML}{ztmcm}{\skewchar \font =127}
     \DeclareFontShape{OML}{ztmcm}{m}{it}
       { <-> s*[ \fp_use:N \l_MRTfonts_new_math_scale_fp ] zptmcm7m }{}
     \DeclareFontShape{OML}{ztmcm}{m}{sl}{<->ssub * ztmcm/m/it}{}
+    \RequirePackage[upint,smallerops,nosymbolsc,noamssymbols]{newpxmath}
+    % no, newpxmath, you don't get the letters
+    \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
   }%=<<
+  {%>>=
+    \RequirePackage{lmodern}
+    \bool_if:NT \l_MRTfonts_lmscale_bool { \RequirePackage { MRTlmscale } }
+  }%=<<
+\RequirePackage{helvet}
 \RequirePackage[italic,defaultmathsizes]{mathastext}
 \RequirePackage{isomath}
 \bool_if:NTF \l_MRTfonts_sfacc_height_bool
@@ -215,29 +228,112 @@
 %% alternative lower case l for maths >>=
 %%=============================================================================
 \DeclareSymbolFont{AREVletters}{OML}{zavm}{m}{it}
-\AtBeginDocument{\DeclareMathSymbol{\altlUnscaled}{\mathalpha}{AREVletters}{`l}}
-\MRTutil@def\altl{\mathalpha{\scalemath{.96}\altlUnscaled}}
-\MRTutil@def[\protected]\scalemath#1#2%>>=
-  {%
-    \mathpalette\MRTfonts@scalemath@a{{#1}{#2}}%
-  }%=<<
-\MRTutil@def\MRTfonts@scalemath@a#1#2%>>=
-  {%
-    \MRTfonts@scalemath@b#1#2%
-  }%=<<
-\MRTutil@def\MRTfonts@scalemath@b#1#2#3%>>=
-  {%
-    \scalebox{#2}{$#1#3$}%
-  }%=<<
-\AtBeginDocument
-  {%
-    % if MRTsfacc is loaded and uses list define a shift width for the two
-    \@ifundefined{MRTsfaccShift}{}
-      {%
-        \MRTsfaccShift{\altl}{1.6mu}%
-        \MRTsfaccShift{\altlUnscaled}{1.66667mu}%
-      }%
+\DeclareSymbolFontAlphabet{\arev}{AREVletters}
+\DeclareFontFamily{OML}{zavm}{\skewchar\font=127}
+\DeclareFontShape{OML}{zavm}{m}{it}{<->s*[.96]zavmri7m}{}
+\AtBeginDocument{\DeclareMathSymbol{\altl}{\mathalpha}{AREVletters}{`l}}
+\MRTutil@def\stdl{}
+\group_begin:
+\char_set_lccode:nn { `\~ } { `\l }
+\char_set_catcode_active:N \~
+\tex_lowercase:D
+  {
+    \group_end:
+    \AtBeginDocument
+      {
+        \mst@do@az \expandafter { \the\mst@do@az \let \stdl ~ }
+        % if MRTsfacc is loaded and uses list define a shift width for the two
+        \cs_if_exist:NT \MRTsfaccShift
+          {
+            \MRTsfaccShift \altl { 1.6mu }
+            \MRTsfaccShiftLet \stdl l
+          }
+      }
+    \bool_if:NT \l_MRTfonts_alt_l_bool
+      {
+        \AtBeginDocument
+          {
+            \mst@do@az \expandafter { \the\mst@do@az \let ~ \altl }
+            \cs_if_exist:NT \MRTsfaccShift { \MRTsfaccShiftLet l \altl }
+          }
+      }
   }
+%%===========================================================================<<
+
+%% scalemath >>=
+%%=============================================================================
+\bool_if:NT \l_MRTfonts_scalemath_bool
+  {%>>=
+    \RequirePackage{graphics}
+    \MRTutil@def[\protected]\scalemath#1#2%>>=
+      {%
+        \mathpalette\MRTfonts@scalemath@a{{#1}{#2}}%
+      }%=<<
+    \MRTutil@def\MRTfonts@scalemath@a#1#2%>>=
+      {%
+        \MRTfonts@scalemath@b#1#2%
+      }%=<<
+    \MRTutil@def\MRTfonts@scalemath@b#1#2#3%>>=
+      {%
+        \scalebox{#2}{$#1#3$}%
+      }%=<<
+  }%=<<
+%%===========================================================================<<
+
+%% pmb >>=
+%%=============================================================================
+\bool_if:NT \l_MRTfonts_pmb_bool
+  {%>>=
+    \cs_new:Npn \__MRTfonts_pmb_mvdbl:nn #1 #2%>>=
+      {
+        \mkern #1mu \copy\z@ \mkern #2mu \kern\dimen@
+        \mkern #1mu \raise\wd8\copy\z@ \mkern #2mu
+      }%=<<
+    \cs_new:Npn \__MRTfonts_pmb_tvdbl:nn #1 #2%>>=
+      {
+        \kern #1\ex@ \copy\z@ \kern #2\ex@ \kern\dimen@
+        \kern #1\ex@ \raise.05\ex@\copy\z@ \kern #2\ex@
+      }%=<<
+    \AtBeginDocument%>>=
+      {
+        % maths version of pmb
+        \def\pmb@#1#2%>>=
+          {%
+            \setboxz@h{$\m@th#1{#2}$}%
+            \setbox8\hbox{$\m@th#1\mkern.1mu$}%
+            \binrel@{#2}%
+            \dimen@-\wd\z@
+            \binrel@@
+              {%
+                \__MRTfonts_pmb_mvdbl:nn { -.5 } {  .5 } \kern\dimen@
+                \__MRTfonts_pmb_mvdbl:nn { -.4 } {  .4 } \kern\dimen@
+                \__MRTfonts_pmb_mvdbl:nn { -.3 } {  .3 } \kern\dimen@
+                \__MRTfonts_pmb_mvdbl:nn { -.2 } {  .2 } \kern\dimen@
+                \__MRTfonts_pmb_mvdbl:nn { -.1 } {  .1 } \kern\dimen@
+                \__MRTfonts_pmb_mvdbl:nn {   0 } {   0 } \kern\dimen@
+                \__MRTfonts_pmb_mvdbl:nn {  .1 } { -.1 } \kern\dimen@
+                \__MRTfonts_pmb_mvdbl:nn {  .2 } { -.2 }
+              }%
+          }%=<<
+        % text version of pmb
+        \def\pmb@@#1#2#3%>>=
+          {%
+            \leavevmode
+            \setboxz@h{#3}%
+            \dimen@-\wdz@
+            \__MRTfonts_pmb_tvdbl:nn { -.3125 } {  .3125 } \kern\dimen@
+            \__MRTfonts_pmb_tvdbl:nn { -.25   } {  .25   } \kern\dimen@
+            \__MRTfonts_pmb_tvdbl:nn { -.1875 } {  .1875 } \kern\dimen@
+            \__MRTfonts_pmb_tvdbl:nn { -.125  } {  .125  } \kern\dimen@
+            \__MRTfonts_pmb_tvdbl:nn { -.0625 } {  .0625 } \kern\dimen@
+            \__MRTfonts_pmb_tvdbl:nn {   0    } {   0    } \kern\dimen@
+            \__MRTfonts_pmb_tvdbl:nn {  .0625 } { -.0625 } \kern\dimen@
+            \__MRTfonts_pmb_tvdbl:nn {  .125  } { -.125  }
+          }%=<<
+        \cs_if_exist:NT \bm@pmb
+          { \def \bm@pmb #1 { \bm@add { \mathpalette \pmb@ { #1 } } } }
+      }%=<<
+  }%=<<
 %%===========================================================================<<
 
 % vim: ft=tex fdm=marker fmr=>>=,=<< sw=2 ts=2 tw=80

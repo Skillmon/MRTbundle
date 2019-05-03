@@ -7,9 +7,26 @@ something close to the old behaviour.
 This chapter should list all those ground breaking changes (which might be
 really minor, though).
 
-\section{\pkg{MRTtab}}
 \begin{incompatibilities}{\pkg{MRTtab}}
-  2019-02-09 & v0.0.5 & \cs{MRTcline} & By default the entire line is coloured
-  first and then the effects of \cs{MRTcline} are applied. Reversible with the
-  \opt{cline version} key (see \autoref{sec:tab:options:setup}). \\
+  2019-02-09 & v0.0.5 & \cs{MRTcline}
+    & By default the entire line is coloured first and then the effects of
+    \cs{MRTcline} are applied. Reversible with the \opt{cline version} key (see
+    \autoref{sec:tab:options:setup}). \\
+\end{incompatibilities}
+
+\begin{incompatibilities}{\pkg{MRTfonts}}
+  2019-05-02 & v0.0.3 & \cs{altlUnscaled}
+    & The entire macro got removed and will not come back. \\
+  2019-05-02 & v0.0.3 & \cs{scalemath}
+    & The macro is only available if the \opt{scale macro} option got used (see
+    \autoref{sec:fonts:options}) \\
+  2019-05-02 & v0.0.3 & \opt{new maths}
+    & The \pkg{bm} package is no longer automatically loaded if you use the
+    \opt{new maths} option. Additionally the maths fonts of \pkg{lmodern} and
+    \pkg{MRTlmscale} will not be loaded at all. \\
+  2019-05-02 & v0.0.3 & maths letter |l|
+    & By default the \opt{alt l} option will be used replacing the letter |l| in
+    maths by a letter distinct from an upper case |I|. You can revert to the
+    previous behaviour using the \opt{std l} option (see
+    \autoref{sec:fonts:options}) \\
 \end{incompatibilities}

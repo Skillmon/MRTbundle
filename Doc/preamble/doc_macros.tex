@@ -533,45 +533,32 @@
     \spacefactor100\relax
     \space
   }%=<<
-\NewDocumentEnvironment { incompatibilities } { m }%>>=
+\NewDocumentEnvironment { incompatibilities } { O{} m o }%>>=
   {%>>=
+    \use:c { #1 section } { #2 } \IfValueT { #3 } { \label { #3 } }
     \hbox_set:Nn \l_tmpa_box { v00.00.00 }
     \hbox_set:Nn \l_tmpb_box { Version }
     \dim_compare:nNnT { \box_wd:N \l_tmpa_box } > { \box_wd:N \l_tmpb_box }
       { \box_set_eq:NN \l_tmpb_box \l_tmpa_box }
     \hbox_set:Nn \l_tmpa_box { 0000-00-00 }
-    \MRTtabDeclareHeadMacros
     \dim_set:Nn \l_tmpa_dim
       {
         \linewidth - \box_wd:N \l_tmpa_box - \box_wd:N \l_tmpb_box - 8\tabcolsep
       }
-    %\exp_args:Nnx
-    \setstretch { 1.408 }
-    \begin{ longtable }
-      {
-        W { l } { \box_wd:N \l_tmpa_box }
-        W { c } { \box_wd:N \l_tmpb_box }
-        >{ \raggedright \setstretch { 1 } } p { .3 \l_tmpa_dim }
-        >{ \setstretch { 1 } } p { .7 \l_tmpa_dim }
-      }
-    \caption{Downwards~Incompatibilities~in~#1~introduced~by~Date~and~Version}\\
-    \headS
+    \begin{MRTtable}
+      [
+        ,long
+        ,caption=
+          Downwards~Incompatibilities~in~#2~introduced~by~Date~and~Version
+        ,col=
+          W { l } { \box_wd:N \l_tmpa_box }
+          W { c } { \box_wd:N \l_tmpb_box }
+          >{ \raggedright \setstretch { 1 } } p { .3 \l_tmpa_dim }
+          >{ \setstretch { 1 } } p { .7 \l_tmpa_dim }
+      ]
     Date & Version & Affected & Description \\
-    \headE
-    \endfirsthead
-    \caption[]
-      {%
-        Downwards~Incompatibilities~in~#1~introduced~by~Date~and~Version~
-        (\textit{continued})%
-      }\\
-    \headS
-    Date & Version & Affected & Description \\
-    \headE
-    \endhead
-    \hline
-    \endfoot
   }%=<<
-  { \end { longtable } }%=<<
+  { \end { MRTtable } }%=<<
 \cs_new_protected:Npx \__docMRTbundle_replace_verb_newline:Nn #1 #2%>>=
   {
     \tl_replace_all:Nnn #1

@@ -3,11 +3,53 @@
 giving a uniform look to the documents.
 
 \section{Options}\label{sec:fonts:options}
+%>>=
+\begin{describeopt}{mathsizes}
+  Opposite of \opt{no mathsizes}. If used (which it by default is) the maths
+  sizes are set according to the MS Word template. Note that those weren't set
+  by \pkg{mrtarbeit} and if you alter the default font size won't be set.
+\end{describeopt}
+\begin{describeopt}{no mathsizes}
+  Opposite of \opt{mathsizes}. If used the maths sizes are not changed from the
+  defaults of the base class in use (so \cls{scrreprt}, \cls{standalone} or
+  \cls{beamer}).
+\end{describeopt}
 \begin{describeopt}{sfacc}[\meta{choice}]
   \meta{choice} must be \opt{height} or \opt{list}. Sets the approach used by
   \pkg{MRTsfacc} (see \autoref{sec:sfacc}) and if \opt{list} is in use the shift
   list for \pkg{helvet} will also be loaded. If it is not specified the
   \opt{list} variant is used.
+\end{describeopt}
+\begin{describeopt}{scale macro}
+  If you use this option the macro \cs{scalemath} will be available. It is no
+  longer needed for \cs{altl} but if you really need it this option can provide
+  downward compatibility.
+\end{describeopt}
+\begin{describeopt}{pmb}
+  If you use this option the macro \cs{pmb} will be redefined to give, imho,
+  better looking results. Of course, one shouldn't use \cs{pmb} anyway, but
+  unfortunately the Greek letters used with \opt{new maths} don't feature bold
+  glyphs, so if you want to use bold Greek letters, you'll have to use it. If
+  \pkg{bm} is loaded in the preamble its version of \textit{poor man's bold}
+  will be redefined, too. The effect is that instead of three overlapping
+  slightly shifted symbols a whooping sixteen will be used. Compare and guess
+  which one is the original and which one is the altered version:\\
+  \null\hfill
+  \scalebox{2.5}{$\alpha$}
+  \includegraphics[trim=1pt 1pt 1pt 0pt,clip,scale=2.5]
+    {img/fonts_pmb_mine-alone}
+  \includegraphics[trim=1pt 1pt 1pt 0pt,clip,scale=2.5]
+    {img/fonts_pmb_orig-alone}
+  \hfill\null
+\end{describeopt}
+\begin{describeopt}{alt l}
+  If this option is used the letter |l| in maths will result in the same as the
+  \cs{altl} macro (see \autoref{sec:fonts:macros}). This option is used by
+  default.
+\end{describeopt}
+\begin{describeopt}{std l}
+  If this option is used the letter |l| in maths will result in the same as the
+  \cs{stdl} macro (see \autoref{sec:fonts:macros}).
 \end{describeopt}
 \begin{describeopt}{font}[\meta{font}]
   This is only available if you're using \luaxetex. With this you can set the
@@ -34,10 +76,12 @@ giving a uniform look to the documents.
   Available \meta{choice}s are |off| or |false| to turn this off, |on| or |true|
   to turn this on, and a valid float, to set the scale of the Greek letters and
   activate the feature.  By default |1.05| will be used.\\
-  The number of usable fonts will be used exhaustively. The \pkg{newpxmath} will
-  be loaded with its \opt{upint} and \opt{slantedGreek}, the math letters of
-  \pkg{mathptmx} will be loaded with a scale factor. \pkg{bm} will be loaded so
-  that you can use the bold symbols of the Latin Modern fonts for Greek letters.
+  The number of usable fonts will be used exhaustively. \pkg{newpxmath} will be
+  loaded with its options \opt{upint}, \opt{smallerops}, \opt{nosymbolsc} and
+  \opt{noamssymbols} to get operators and the like, the maths letters of
+  \pkg{mathptmx} will be loaded with a scale factor to get the Greek letters.
+  The \pkg{lmodern} package will be loaded with the \opt{nomath} option, and
+  \pkg{MRTlmscale} will not be loaded at all.
 \end{describeopt}
 \begin{describeopt}{scale maths}[\meta{choice}]
   This is only available if you're using \hologo{pdfTeX}. With this you can
@@ -47,25 +91,49 @@ giving a uniform look to the documents.
   in \pkg{MRTlmscale} not being used, and any valid float, resulting in
   \pkg{MRTlmscale} being used with the specified float as its scale factor. See
   \autoref{sec:lmscale} for more about \pkg{MRTlmscale}. By default,
-  \pkg{MRTlmscale} will be used with its default scale factor.
+  \pkg{MRTlmscale} will be used with its default scale factor if \pkg{lmodern}
+  is loaded with its maths fonts.
 \end{describeopt}
+%=<<
 
-\section{Macros}
+\section{Macros}\label{sec:fonts:macros}
+%>>=
+\begin{describemacro}{stdl}
+  \cs{stdl} will result in the lower case |l| from the \pkg{helvet} font in
+  maths (\bverb|$\stdl$| results in $\stdl$).
+\end{describemacro}
 \begin{describemacro}{altl}
   \cs{altl} provides an alternative lower case |l| for use in maths which is
-  distinct from an upper case |I|. Compare: $lI$ (that is |$lI$|) and $\altl I$
-  (that is |$\altl I$|).
+  distinct from an upper case |I|. Compare: $\stdl I$ (that is |$\stdl I$|) and
+  $\altl I$ (that is |$\altl I$|). There is no bold version of \cs{altl}
+  provided by the package, nor any other maths alphabet version. Instead the
+  standard fonts will be the ones used there.
 \end{describemacro}
-\begin{describemacro}{altlUnscaled}
-  \cs{altl} is a scaled version of the letter it uses. \cs{altlUnscaled} is the
-  unscaled original version. Compare: $\altl I\altlUnscaled$ (that is
-  |$\altl I\altlUnscaled$|). Don't change its definition, as it is used by
-  \cs{altl} internally.
+\begin{describemacro}{arev}[\marg{symbols}]
+  This is another maths font (similar to \cs{mathbf} or \cs{mathcal}), that will
+  use the maths font of \pkg{arevmath}, from which \cs{altl} is taken. Take a
+  look at the following (the first group uses the standard maths fonts, the
+  second is typeset using \cs{arev}):\\[\parskip]
+  $abcdefghijk\stdl mnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$\\
+  $
+    0123456789
+    \alpha\beta\gamma\delta\varepsilon\epsilon\zeta\eta\theta\iota\kappa\lambda
+    \mu\nu\xi\pi\rho\sigma\varsigma\tau\upsilon\phi\chi\psi\omega
+    \Gamma\Delta\Theta\Lambda\Xi\Sigma\Phi\Psi\Omega
+  $\\[\parskip]
+  $\arev{abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ}$\\
+  $\arev{
+    0123456789
+    \alpha\beta\gamma\delta\varepsilon\epsilon\zeta\eta\theta\iota\kappa\lambda
+    \mu\nu\xi\pi\rho\sigma\varsigma\tau\upsilon\phi\chi\psi\omega
+    \Gamma\Delta\Theta\Lambda\Xi\Sigma\Phi\Psi\Omega
+  }$
 \end{describemacro}
 \begin{describemacro}{scalemath}[\marg{float}\marg{text}]
-  This is a version of \cs{scalebox} to be used in maths. It is used by
-  \cs{altl} to scale down \cs{altlUnscaled}. 
+  This is a version of \cs{scalebox} to be used in maths. It is only available
+  if you use the \opt{scale macro} option.
 \end{describemacro}
+%=<<
 
 \section{Dependencies}
 \begin{multicols}{2}%>>=
@@ -73,10 +141,12 @@ giving a uniform look to the documents.
     \item \pkg{expl3}
     \item \pkg{MRTif}
     \item \pkg{MRTutil}
-    \item \pkg{graphics}
+    \item \pkg{MRTsfacc}
+    \item If the \opt{scale macro} option is used \pkg{graphics}
     \item If \hologo{XeTeX} or \hologo{LuaTeX} are used
       \begin{itemize}[topsep=0pt]
-        \item \pkg{fontspec} and \bverb|\defaultfontfeatures{Ligatures=TeX}|
+        \item \pkg{fontspec} [no-math] and additionally
+          \bverb|\defaultfontfeatures{Ligatures=TeX}|
         \item the fonts \texttt{TeX Gyre Heros}, \texttt{Latin Mod\-ern Roman}
           and \texttt{Latin Modern Mono}, dependent on the |font| keys.
       \end{itemize}
@@ -84,16 +154,21 @@ giving a uniform look to the documents.
       \begin{itemize}[topsep=0pt]
         \item \pkg{fontenc} [T1]
         \item \pkg{inputenc} [utf8]
-        \item \pkg{lmodern}
         \item \pkg{helvet}
-        \item \pkg{MRTlmscale} dependent on the \bverb|scale maths| key.
         \item If \opt{new maths} is used
-          \begin{itemize}
-            \item \pkg{bm}
-            \item \pkg{newpxmath} [upint, slantedGreek]
+          \begin{itemize}[topsep=0pt]
+            \item \pkg{lmodern} [nomath]
+            \item \pkg{newpxmath} [upint, smallerops, nosymbolsc, noamssymbols]
             \item The |ztmcm| font
           \end{itemize}
+          else
+          \begin{itemize}[topsep=0pt]
+            \item \pkg{lmodern}
+            \item \pkg{MRTlmscale} dependent on the \opt{scale maths} key
+          \end{itemize}
       \end{itemize}
+    \item \pkg{mathastext} [italic, defaultmathsizes]
+    \item \pkg{isomath}
   \end{itemize}
 \end{multicols}%=<<
 
