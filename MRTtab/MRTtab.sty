@@ -1,5 +1,5 @@
-\newcommand*\MRTtab@version{0.0.8}
-\newcommand*\MRTtab@date{2019-05-02}
+\newcommand*\MRTtab@version{0.0.9}
+\newcommand*\MRTtab@date{2019-05-03}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -1107,6 +1107,7 @@
             \msg_error:nn { MRTtab } { auto~cols~in~long }
           }
         \int_gset:Nn \g__MRTtab_current_row_int { 1 }
+        \l__MRTtab_table_pre_hook_tl
         \exp_args:NnV \begin { longtable } \l_MRTtab_table_col_tl
           \bool_if:NTF \l_MRTtab_caption_above_bool
             {
