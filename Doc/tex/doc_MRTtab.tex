@@ -46,7 +46,11 @@ An ordinary description as done with other environments in this documentation:
   rows as head rows, you can use \cs{head} to set the next \meta{num} rows as
   head rows. This does not only work at the beginning of the environment but
   anywhere you want. Alternatively you can use the macros described in
-  \autoref{sec:tab:explicit}.
+  \autoref{sec:tab:explicit}. It is not supported in other implementations of
+  tables. If you use it in \env{MRTtable} it'll throw an undefined error if
+  \env{MRTtabular} isn't used internally (e.g., when you use the
+  \opt{long} option or an alternative inner \env{tabular}-like environment via
+  the \opt{env} keys).
 \end{describemacro}%=<<
 
 \begin{describemacro}{MRTtabAddtoBoLHook}[\marg{content}]%>>=
@@ -185,8 +189,10 @@ is not possible with the standard \cs{cline} as far as I know.
 \section{The \env{MRTtable} environment}\label{sec:tab:table}%>>=
 The \env{MRTtable} environment is a wrapper around an \env{MRTtabular} inside of
 a \env{table} environment. There might be a severe difference in the
-implementation of the \texttt{long} version but for the user this shouldn't be
-noticeable.
+implementation of the \opt{long} version but for the user this shouldn't be
+noticeable. Most importantly the provided hooks at the start and end of each
+line should work in the \opt{long} version, too, however they won't work if you
+use another inner \env{tabular}-like environment via the \opt{env} keys.
 
 \begin{describeenv}{MRTtable}[\oarg{key=value}]
   \env{MRTtable} sets its contents in an \env{MRTtabular} environment. It
@@ -195,6 +201,14 @@ noticeable.
   All available \meta{key}s are listed in \autoref{sec:tab:options:setup}. An
   example can be seen in \autoref{sec:tab:example}.
 \end{describeenv}
+
+\subsection{Known Bugs}
+If you use the \opt{long} option together with \opt{caption below} and the table
+only needs one page (so ends on the same page it started on), the caption will
+be the one which would be placed on the continued pages, not the one actually
+belonging on the first page. That's a limitation of the used method to place a
+different foot on the first page which is not supported by \pkg{longtable}. The
+method is taken from \url{https://tex.stackexchange.com/a/68448/117050}.
 %=<<
 
 \section{Explicit head rows}\label{sec:tab:explicit}%>>=

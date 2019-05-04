@@ -1,5 +1,5 @@
-\newcommand*\MRTtab@version{0.0.9}
-\newcommand*\MRTtab@date{2019-05-03}
+\newcommand*\MRTtab@version{0.0.10}
+\newcommand*\MRTtab@date{2019-05-04}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -868,7 +868,7 @@
 
 %% \endfirstfoot addition to longtable >>=
 %%=============================================================================
-% code from: https://tex.stackexchange.com/questions/68439/
+% code from: https://tex.stackexchange.com/a/68448/117050
 % it should allow a \endfirstfoot in longtable
 \bool_if:NT \l_MRTtab_longtable_bool
   {
@@ -1154,6 +1154,8 @@
               \bool_if:NT \l_MRTtab_table_striped_bool
                 { \noalign { \global \rownum \c_one_int } }
             }
+          \l__MRTtab_bol_hook_public_tl
+          \ignorespaces
       }%=<<
     \cs_new:Npn \__MRTtab_table_long_end:% >>=
       {
