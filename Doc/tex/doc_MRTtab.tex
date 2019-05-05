@@ -41,6 +41,13 @@ An ordinary description as done with other environments in this documentation:
   which the head row markup relies).
 \end{describeenv}%=<<
 
+\begin{describeenv}{MRTarray}%>>=
+  [\oarg{valign}\marg{preamble}\oarg{head rows}]
+  This is to \env{MRTtabular} what \env{array} is to \env{tabular}, so all in
+  all the same but every cell is formatted as maths and it should be used only
+  inside of a maths context. All the hooks from \env{MRTtabular} work here, too.
+\end{describeenv}%=<<
+
 \begin{describemacro}{head}[\marg{num}]%>>=
   Additionally to the optional argument of \env{MRTtabular} to set the first $n$
   rows as head rows, you can use \cs{head} to set the next \meta{num} rows as
@@ -59,8 +66,8 @@ An ordinary description as done with other environments in this documentation:
   text, if you want to use stuff like \cs{multicolumn}, \cs{rowcolor}, or
   \cs{cline} at the beginning of the line -- as this hook will be executed prior
   to that and \cs{noalign} and \cs{omit} won't work in that case. If you need
-  something unexpandable you can enclose it in \cs{noalign}. The addition is
-  made locally.
+  something unexpandable that doesn't produce text you can enclose it in
+  \cs{noalign}. The addition is made locally.
 \end{describemacro}%=<<
 
 \begin{describemacro}{MRTtabClearBoLHook}%>>=
@@ -322,7 +329,9 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
   Uses the tabular like environment \meta{name} instead of \env{MRTtabular}. If
   an empty argument is provided, no inner environment will be used. This is
   useful if you want to use an environment that grabs its contents and has to be
-  explicitly used, e.g. \env{tabularx} can only be used like this.
+  explicitly used, e.g. \env{tabularx} can only be used like this. If you
+  specify \bverb|MRTarray| as the argument, the math mode will automatically be
+  set.
 \end{describeopt}%=<<
 \begin{describeopt}{env begin}[\meta{begin}]%>>=
   Uses \meta{begin} as the start of the tabular like environment. This way you

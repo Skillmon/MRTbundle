@@ -1,5 +1,5 @@
-\newcommand*\MRTtab@version{0.0.10}
-\newcommand*\MRTtab@date{2019-05-04}
+\newcommand*\MRTtab@version{0.0.11}
+\newcommand*\MRTtab@date{2019-05-05}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -57,13 +57,17 @@
 \tl_new:N \l__MRTtab_cline_output_tl
 % messages >>=
 \msg_new:nnn { MRTtab } { patch~failed } { Patching~of~\string#1~failed. }
-\msg_new:nnn { MRTtab } { KOMA~not~loaded }
-  { It~seems~like~KOMA~is~not~loaded.#1 } 
-\msg_new:nnn { MRTtab } { deprecated~syntax }
+\msg_new:nnn { MRTtab } { KOMA~not~loaded }%>>=
+  { It~seems~like~KOMA~is~not~loaded.#1 } %=<<
+\msg_new:nnn { MRTtab } { deprecated~syntax }%>>=
   {
     The~used~syntax~for~`#1`~\tl_if_empty:nF { #2 } { to~#2~ } is~deprecated~
     (but~should~still~work).~Please~take~a~look~at~`MRTtab`s~documentation.
-  }
+  }%=<<
+\msg_new:nnn { MRTtab } { unmatched~math~end }%>>=
+  {
+    There~was~an~unmatched~MRTtab~end~math~control~sequence.
+  }%=<<
 % =<<
 %%===========================================================================<<
 
@@ -186,10 +190,20 @@
               }
           }
           {
-            \keys_set:nn { MRTtab }
+            \str_if_eq:eeTF { MRTarray } { #1 }
               {
-                env~begin = { \begin{#1} },
-                env~end = { \end{#1} }
+                \keys_set:nn { MRTtab }
+                  {
+                    env~begin = { \c_math_toggle_token \begin{#1} },
+                    env~end = { \end{#1} \c_math_toggle_token }
+                  }
+              }
+              {
+                \keys_set:nn { MRTtab }
+                  {
+                    env~begin = { \begin{#1} },
+                    env~end = { \end{#1} }
+                  }
               }
           }
       }
@@ -282,6 +296,12 @@
   {
     \keys_set:nn { MRTtab } { #1 }
   }% =<<
+\cs_new_protected:Npn \__MRTtab_kill_spaces:nw #1%>>=
+  {
+    \peek_meaning_remove:NTF \c_space_token
+      { \__MRTtab_kill_spaces:nw { #1 } }
+      { #1 }
+  }%=<<
 %%===========================================================================<<
 
 %% MRTtabular >>=
@@ -291,6 +311,10 @@
     \g__MRTtab_bol_hook_private_tl
     \l__MRTtab_bol_hook_public_tl
   }% =<<
+\cs_new:Npn \MRTtab@BoLHook@private%>>=
+  {
+    \g__MRTtab_bol_hook_private_tl
+  }%=<<
 \cs_new:Npn \MRTtab@EoLHook% >>=
   {
     \g__MRTtab_eol_hook_private_tl
@@ -383,7 +407,8 @@
     \MRTtab_apptocmd:Nn  \@yargarraycr { \MRTtab@BoLHook }
     \MRTtab_patchcmd:Nnn \@xarraycr    { \cr } { \cr \MRTtab@BoLHook }
     \MRTtab_patchcmd:Nnn \@xargarraycr { \cr } { \cr \MRTtab@BoLHook }
-    \MRTtab_patchcmd:Nnn \@@array      { \cr } { \cr \noexpand \MRTtab@BoLHook }
+    \MRTtab_patchcmd:Nnn \@@array      { \cr }
+      { \cr \noexpand \MRTtab@BoLHook@private }
   }% =<<
 \cs_new:Npn \MRTtab_head_start_inner:% >>=
   {
@@ -441,8 +466,8 @@
   }% =<<
 \MRTtab_addto_private_bol_hook:n { \noalign { \MRTtab_step_row: } }
 \MRTtab_addto_private_bol_hook:n { \MRTtab_head_hook: }
-\NewDocumentEnvironment { MRTtabular } { O{} o +m o }% >>=
-  {% begin >>=
+\cs_new_protected:Npn \__MRTtab_tabular_start:nnnnn #1 #2 #3 #4 #5
+  {
     \MRTtab_patch_array:
     \MRTtab_declare_head_macro:
     \bool_gset_false:N \g__MRTtab_head_bool
@@ -454,16 +479,41 @@
       }
     \IfValueT { #4 } { \int_gset:Nn \g__MRTtab_color_upto_int { #4 } }
     \setstretch { \l_MRTtab_stretch_tl }
-    \begin{tabular_original}[#1]{#3}
+    \begin { #5 } [ #1 ] { #3 }
       \MRTtab_surround_lines:
-  }% =<<
-  {% end >>=
-      \MRTtab_surround_lines:
-      %\crcr\hline
-    \end{tabular_original}
+      \l__MRTtab_bol_hook_public_tl
+  }
+\cs_new:Npn \__MRTtab_tabular_end:n #1% >>=
+  {
+    \MRTtab_surround_lines:
+    %\crcr\hline
+    \end { #1 }
     \int_gset:Nn \g__MRTtab_color_upto_int { -\c_max_int }
   }% =<<
-  % =<<
+\NewDocumentEnvironment { MRTtabular } { O{} o +m o }% >>=
+  {% begin >>=
+    \__MRTtab_kill_spaces:nw
+      {
+        \__MRTtab_tabular_start:nnnnn
+          { #1 } { #2 } { #3 } { #4 } { tabular_original }
+      }
+  }% =<<
+  {% end >>=
+    \__MRTtab_tabular_end:n { tabular_original }
+  }% =<<
+% =<<
+\NewDocumentEnvironment { MRTarray } { O{} o +m o }% >>=
+  {% begin >>=
+    \__MRTtab_kill_spaces:nw
+      {
+        \__MRTtab_tabular_start:nnnnn
+          { #1 } { #2 } { #3 } { #4 } { array_original }
+      }
+  }% =<<
+  {% end >>=
+    \__MRTtab_tabular_end:n { array_original }
+  }% =<<
+% =<<
 \NewDocumentCommand \MRTtabAddtoBoLHook { +m }% >>=
   {
     \MRTtab_addto_public_bol_hook:n { #1 }
@@ -1100,6 +1150,10 @@
       { \bool_if:NT \l_MRTtab_table_striped_bool { \showrowcolors } }
     \cs_new:Npn \__MRTtab_table_long_start:%>>=
       {
+        \__MRTtab_kill_spaces:nw { \__MRTtab_table_long_start_aux: }
+      }%=<<
+    \cs_new:Npn \__MRTtab_table_long_start_aux:%>>=
+      {
         \setstretch { \l_MRTtab_stretch_tl }
         \MRTtab_patch_array_long:
         \tl_if_in:NnT \l_MRTtab_table_col_tl { \MRTtabRepeatCols }
@@ -1155,7 +1209,6 @@
                 { \noalign { \global \rownum \c_one_int } }
             }
           \l__MRTtab_bol_hook_public_tl
-          \ignorespaces
       }%=<<
     \cs_new:Npn \__MRTtab_table_long_end:% >>=
       {
