@@ -1,5 +1,5 @@
-\newcommand*\MRTfonts@version{0.0.3}
-\newcommand*\MRTfonts@date{2019-05-02}
+\newcommand*\MRTfonts@version{0.0.4}
+\newcommand*\MRTfonts@date{2019-05-05}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -305,14 +305,16 @@
             \dimen@-\wd\z@
             \binrel@@
               {%
-                \__MRTfonts_pmb_mvdbl:nn { -.5 } {  .5 } \kern\dimen@
+                \mkern-.5mu \raise.5\wd8\copy\z@ \mkern.5mu \kern\dimen@
+                %\__MRTfonts_pmb_mvdbl:nn { -.5 } {  .5 } \kern\dimen@
                 \__MRTfonts_pmb_mvdbl:nn { -.4 } {  .4 } \kern\dimen@
                 \__MRTfonts_pmb_mvdbl:nn { -.3 } {  .3 } \kern\dimen@
                 \__MRTfonts_pmb_mvdbl:nn { -.2 } {  .2 } \kern\dimen@
                 \__MRTfonts_pmb_mvdbl:nn { -.1 } {  .1 } \kern\dimen@
                 \__MRTfonts_pmb_mvdbl:nn {   0 } {   0 } \kern\dimen@
                 \__MRTfonts_pmb_mvdbl:nn {  .1 } { -.1 } \kern\dimen@
-                \__MRTfonts_pmb_mvdbl:nn {  .2 } { -.2 }
+                \mkern.2mu \raise.5\wd8\copy\z@ \mkern-.2mu
+                %\__MRTfonts_pmb_mvdbl:nn {  .2 } { -.2 }
               }%
           }%=<<
         % text version of pmb
@@ -321,14 +323,16 @@
             \leavevmode
             \setboxz@h{#3}%
             \dimen@-\wdz@
-            \__MRTfonts_pmb_tvdbl:nn { -.3125 } {  .3125 } \kern\dimen@
+            \kern-.3125\ex@ \raise.025\ex@\copy\z@ \kern.3125\ex@ \kern\dimen@
+            %\__MRTfonts_pmb_tvdbl:nn { -.3125 } {  .3125 } \kern\dimen@
             \__MRTfonts_pmb_tvdbl:nn { -.25   } {  .25   } \kern\dimen@
             \__MRTfonts_pmb_tvdbl:nn { -.1875 } {  .1875 } \kern\dimen@
             \__MRTfonts_pmb_tvdbl:nn { -.125  } {  .125  } \kern\dimen@
             \__MRTfonts_pmb_tvdbl:nn { -.0625 } {  .0625 } \kern\dimen@
             \__MRTfonts_pmb_tvdbl:nn {   0    } {   0    } \kern\dimen@
             \__MRTfonts_pmb_tvdbl:nn {  .0625 } { -.0625 } \kern\dimen@
-            \__MRTfonts_pmb_tvdbl:nn {  .125  } { -.125  }
+            \kern.125\ex@ \raise.025\ex@\copy\z@ \kern-.125\ex@
+            %\__MRTfonts_pmb_tvdbl:nn {  .125  } { -.125  }
           }%=<<
         \cs_if_exist:NT \bm@pmb
           { \def \bm@pmb #1 { \bm@add { \mathpalette \pmb@ { #1 } } } }
