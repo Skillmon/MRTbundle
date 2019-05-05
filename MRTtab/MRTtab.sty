@@ -375,27 +375,27 @@
   }% =<<
 \cs_new_protected:Npn \MRTtab_backup_array:%>>=
   {
-    \cs_set_eq:NN \@@array_original      \@@array
-    \cs_set_eq:NN \@arraycr_original     \@arraycr
-    \cs_set_eq:NN \@xarraycr_original    \@xarraycr
-    \cs_set_eq:NN \@xargarraycr_original \@xargarraycr
-    \cs_set_eq:NN \@yargarraycr_original \@yargarraycr
-    \cs_set_eq:NN \tabular_original      \tabular
-    \cs_set_eq:NN \endtabular_original   \endtabular
-    \cs_set_eq:NN \array_original        \array
-    \cs_set_eq:NN \endarray_original     \endarray
+    \cs_set_eq:NN \@@array_unpatched      \@@array
+    \cs_set_eq:NN \@arraycr_unpatched     \@arraycr
+    \cs_set_eq:NN \@xarraycr_unpatched    \@xarraycr
+    \cs_set_eq:NN \@xargarraycr_unpatched \@xargarraycr
+    \cs_set_eq:NN \@yargarraycr_unpatched \@yargarraycr
+    \cs_set_eq:NN \tabular_unpatched      \tabular
+    \cs_set_eq:NN \endtabular_unpatched   \endtabular
+    \cs_set_eq:NN \array_unpatched        \array
+    \cs_set_eq:NN \endarray_unpatched     \endarray
   }%=<<
 \cs_new_protected:Npn \MRTtab@unpatcharray% >>=
   {
-    \cs_set_eq:NN \@@array      \@@array_original
-    \cs_set_eq:NN \@arraycr     \@arraycr_original
-    \cs_set_eq:NN \@xarraycr    \@xarraycr_original
-    \cs_set_eq:NN \@xargarraycr \@xargarraycr_original
-    \cs_set_eq:NN \@yargarraycr \@yargarraycr_original
-    \cs_set_eq:NN \tabular      \tabular_original
-    \cs_set_eq:NN \endtabular   \endtabular_original
-    \cs_set_eq:NN \array        \array_original
-    \cs_set_eq:NN \endarray     \endarray_original
+    \cs_set_eq:NN \@@array      \@@array_unpatched
+    \cs_set_eq:NN \@arraycr     \@arraycr_unpatched
+    \cs_set_eq:NN \@xarraycr    \@xarraycr_unpatched
+    \cs_set_eq:NN \@xargarraycr \@xargarraycr_unpatched
+    \cs_set_eq:NN \@yargarraycr \@yargarraycr_unpatched
+    \cs_set_eq:NN \tabular      \tabular_unpatched
+    \cs_set_eq:NN \endtabular   \endtabular_unpatched
+    \cs_set_eq:NN \array        \array_unpatched
+    \cs_set_eq:NN \endarray     \endarray_unpatched
   }% =<<
 \cs_new_protected:Npn \MRTtab_patch_array:% >>=
   {
@@ -466,7 +466,7 @@
   }% =<<
 \MRTtab_addto_private_bol_hook:n { \noalign { \MRTtab_step_row: } }
 \MRTtab_addto_private_bol_hook:n { \MRTtab_head_hook: }
-\cs_new_protected:Npn \__MRTtab_tabular_start:nnnnn #1 #2 #3 #4 #5
+\cs_new_protected:Npn \__MRTtab_tabular_start:nnnnN #1 #2 #3 #4 #5
   {
     \MRTtab_patch_array:
     \MRTtab_declare_head_macro:
@@ -479,39 +479,39 @@
       }
     \IfValueT { #4 } { \int_gset:Nn \g__MRTtab_color_upto_int { #4 } }
     \setstretch { \l_MRTtab_stretch_tl }
-    \begin { #5 } [ #1 ] { #3 }
+    #5 [ #1 ] { #3 }
       \MRTtab_surround_lines:
       \l__MRTtab_bol_hook_public_tl
   }
-\cs_new:Npn \__MRTtab_tabular_end:n #1% >>=
+\cs_new:Npn \__MRTtab_tabular_end:N #1% >>=
   {
     \MRTtab_surround_lines:
     %\crcr\hline
-    \end { #1 }
+    #1
     \int_gset:Nn \g__MRTtab_color_upto_int { -\c_max_int }
   }% =<<
 \NewDocumentEnvironment { MRTtabular } { O{} o +m o }% >>=
   {% begin >>=
     \__MRTtab_kill_spaces:nw
       {
-        \__MRTtab_tabular_start:nnnnn
-          { #1 } { #2 } { #3 } { #4 } { tabular_original }
+        \__MRTtab_tabular_start:nnnnN
+          { #1 } { #2 } { #3 } { #4 } \tabular_unpatched
       }
   }% =<<
   {% end >>=
-    \__MRTtab_tabular_end:n { tabular_original }
+    \__MRTtab_tabular_end:N \endtabular_unpatched
   }% =<<
 % =<<
 \NewDocumentEnvironment { MRTarray } { O{} o +m o }% >>=
   {% begin >>=
     \__MRTtab_kill_spaces:nw
       {
-        \__MRTtab_tabular_start:nnnnn
-          { #1 } { #2 } { #3 } { #4 } { array_original }
+        \__MRTtab_tabular_start:nnnnN
+          { #1 } { #2 } { #3 } { #4 } \array_unpatched
       }
   }% =<<
   {% end >>=
-    \__MRTtab_tabular_end:n { array_original }
+    \__MRTtab_tabular_end:N \endarray_unpatched
   }% =<<
 % =<<
 \NewDocumentCommand \MRTtabAddtoBoLHook { +m }% >>=
