@@ -159,10 +159,6 @@ is not possible with the standard \cs{cline} as far as I know.
   g & h & i\\
   j & k & l\\
 \end{MRTtabular}}}
-\end{multicols}%=<<
-\begin{multicols}{2}%>>=
-  \MRTthesisSetup{stretch tab=1}
-  \noindent
 \vbox{\DoAndPrint{\begin{MRTtabular}{lll}[2]
   a & b & c\\
   \MRTcline{1-2}
@@ -177,7 +173,7 @@ is not possible with the standard \cs{cline} as far as I know.
   g & h & i\\
   j & k & l\\
 \end{MRTtabular}}}
-  \columnbreak
+  %\columnbreak
 \vbox{\DoAndPrint{\begin{MRTtabular}{lll}[2]
   a & b & c\\
   \cline{1-2}

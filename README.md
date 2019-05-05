@@ -50,7 +50,7 @@ any other provided package or class.
 
 ### Licensing ###
 
-Copyright (C) 2018 Jonathan P. Spratte
+Copyright (C) 2018-2019 Jonathan P. Spratte
 
 These files are distributed in the hope that they will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
