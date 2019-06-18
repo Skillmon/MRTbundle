@@ -68,13 +68,14 @@ overlap if you specify really long contents.
 
 \section{Options}
 The class passes almost all options given to it on to \cls{beamer}. The few
-handled by the class are:
+handled differently are described here.
 
 \input{tex/doc_shared_class_options.tex}
 
 There are still some more class specific options which you can set with some
-macros. The macros in this section are only provided to set specific options,
-other macros are described in \autoref{sec:beam:macros}.
+macros instead of a key=value interface. The macros in this section are only
+provided to set specific options, other macros provided by \cls{MRTbeam} are
+described in \autoref{sec:beam:macros}.
 
 \begin{describemacro}{advisor}[\meta{*}\oarg{title}\marg{name}]
   Sets \meta{name} as the current advisor. It also redefines itself, any
@@ -263,6 +264,18 @@ other macros are described in \autoref{sec:beam:macros}.
   it or the current subsection is starred, this macro inserts the current
   subsections name, else the name is prepended by the current subsections
   number.
+\end{describemacro}
+
+\begin{describemacro}{maketitle}
+  [\oarg{options}\marg{title}\marg{subtitle}]
+  The \cs{maketitle} macro is redefined compared to the definition made by
+  \cls{beamer}. It accepts arguments, all of which are optional, even the ones
+  enclosed by curly braces. If you use \cs{maketitle} inside of a \env{frame}
+  environment, the arguments are gobbled and the same behaviour as in
+  \cls{beamer} is used. If you're using it outside of \env{frame}, it'll issue a
+  \env{frame} environment with the \meta{options}, \meta{title} and
+  \meta{subtitle} arguments forwarded to it. The title page will be set with
+  \cs{OnlyOneTopRuletrue} if you didn't use the \meta{title} argument.
 \end{describemacro}
 
 \begin{describeenv}{whiteframes}

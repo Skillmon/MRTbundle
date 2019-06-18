@@ -28,7 +28,7 @@
 
 \prop_gput:Nnn \g_msg_module_type_prop { MRTbeam } { Class }
 
-\RequirePackage{MRTfonts}
+\RequirePackage{MRTfonts,MRTutil}
 
 \usetheme{MRTbeam}
 
@@ -42,10 +42,30 @@
         { spratte } { \SetProgressBar{c}{\paperwidth}{2pt}{3pt} }
       }
       {
-        \ClassError{MRTbeam}{The~style~'\exp_not:n { #1 }'~is~unknown.}{}
+        \ClassError{MRTbeam}{The~style~'\exp_not:n { #2 }'~is~unknown.}{}
       }
   }% =<<
 
+\RenewDocumentCommand \maketitle
+  { >{\MRTbeam@forwardOarg}O{\MRTutil@@mark} G{\MRTutil@@mark} G{\relax} }
+  {
+    \ifbeamer@inframe
+      \titlepage
+    \else
+      \group_begin:
+      \MRTutil@ifmark{#2}{\OnlyOneTopRuletrue}{}
+      \begin{frame}#1{\MRTutil@ifmark{#2}{\relax}{#2}}{#3}
+        \titlepage
+      \end{frame}
+      \group_end:
+    \fi
+  }
+\protected\long\def\MRTbeam@forwardOarg#1
+  {
+    \MRTutil@ifmark{#1}
+      {\def\ProcessedArgument{}}
+      {\def\ProcessedArgument{[{#1}]}}
+  }
 \ExplSyntaxOff
 
 \endinput
