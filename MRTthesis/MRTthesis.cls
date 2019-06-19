@@ -352,8 +352,8 @@
     ,examiner = {Univ.-Professor~Dr.-Ing.~Gerhard~Fischerauer}
     ,caption~below
     ,citation~width = .5\textwidth
-    ,logoL = {MRTthesis_logo_UBT2.pdf}
-    ,logoR = {MRTthesis_logo_MRT2.pdf}
+    ,logoL = {MRTresources_logo_UBT2.pdf}
+    ,logoR = {MRTresources_logo_MRT2.pdf}
     ,logoL~height = 10.85mm
     ,logoR~height = 11.9mm
     ,number = {\textcolor{blue}{XX-00-00-0}}
