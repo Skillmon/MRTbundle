@@ -1,5 +1,5 @@
-\newcommand*\MRTbeam@version{0.0.6}
-\newcommand*\MRTbeam@date{2019-02-28}
+\newcommand*\MRTbeam@version{0.0.7}
+\newcommand*\MRTbeam@date{2019-06-21}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -26,14 +26,15 @@
   {MRTbeam}          {\MRTbeam@date}
   {\MRTbeam@version} {beamer template for MRT - University of Bayreuth}
 
-\prop_gput:Nnn \g_msg_module_type_prop { MRTbeam } { Class }
+\@ifpackagelater{expl3}{2018/10/10}
+  { \prop_gput:Nnn \g_msg_module_type_prop { MRTbeam } { Class } } {}
 
 \RequirePackage{MRTfonts,MRTutil}
 
 \usetheme{MRTbeam}
 
 \NewDocumentCommand \ProgressBarStyle { s m }% >>=
-  {%
+  {
     \IfBooleanT { #1 } { \ProgressBartrue }
     \str_case:nnF { #2 }
       {
@@ -44,6 +45,15 @@
       {
         \ClassError{MRTbeam}{The~style~'\exp_not:n { #2 }'~is~unknown.}{}
       }
+  }% =<<
+\cs_new:Npn \MRTbeam_progress_bar_colors:nn #1 #2% >>=
+  {
+    \IfValueTF { #2 } { \definecolor { #1 } { #2 } } { \colorlet { #1 } }
+  }% =<<
+\NewDocumentCommand \ProgressBarColors { o m o m }% >>=
+  {
+    \MRTbeam_progress_bar_colors:nn { progressed } { #1 } { #2 }
+    \MRTbeam_progress_bar_colors:nn { noprogress } { #3 } { #4 }
   }% =<<
 
 \RenewDocumentCommand \maketitle

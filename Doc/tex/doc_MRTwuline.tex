@@ -20,7 +20,10 @@ so by using \pkg{ulem} or \pkg{stackengine}.
   change the default height of the underlining. In text mode and math mode the
   needed \meta{height} to achieve the same height of the line differs quite a
   lot. By default in math mode \texttt{\csuse{MRTwuline@mathheight}} is
-  used, in text mode \texttt{\csuse{MRTwuline@textheight}}.
+  used, in text mode \texttt{\csuse{MRTwuline@textheight}}.\\[\parskip]
+  While the text mode version is line breakable it disables automatic
+  hyphenation in its argument, you can still use \cs{-} to set hyphenation
+  points.
 \end{describemacro}%=<<
 \begin{describemacro}{tUline}%>>=
   [\oarg{height}\oarg{overhang}\oarg{thickness}\marg{text}]

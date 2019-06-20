@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.13}
-\newcommand*\MRTthesis@date{2019-04-29}
+\newcommand*\MRTthesis@version{0.0.15}
+\newcommand*\MRTthesis@date{2019-06-21}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -8,7 +8,8 @@
   {MRTthesis}          {\MRTthesis@date}
   {\MRTthesis@version} {thesis template for MRT - University of Bayreuth}
 
-\prop_gput:Nnn \g_msg_module_type_prop { MRTthesis } { Class }
+\@ifpackagelater{expl3}{2018/10/10}
+  { \prop_gput:Nnn \g_msg_module_type_prop { MRTthesis } { Class } } {}
 
 %% variants of external macros >>=
 %%=============================================================================
@@ -466,14 +467,13 @@
     \keys_set:nn { MRTthesis/setup } { #1 }
   }%=<<
 % title, author, ... >>=
-\RenewDocumentCommand \title { +m }%>>=
+\cs_new_protected:Npn \__MRTthesis_long_setup_macro:nn #1 #2%>>=
   {
-    \keys_set:nn { MRTthesis/setup } { title={#1} }
+    \cs_if_exist:NTF #1 { \RenewDocumentCommand } { \NewDocumentCommand } #1
+      { +m } { \keys_set:nn { MRTthesis/setup } { #2 = { ##1 } } }
   }%=<<
-\RenewDocumentCommand \subtitle { +m }%>>=
-  {
-    \keys_set:nn { MRTthesis/setup } { subtitle={#1} }
-  }%=<<
+\__MRTthesis_long_setup_macro:nn \title    { title }
+\__MRTthesis_long_setup_macro:nn \subtitle { subtitle }
 \RenewDocumentCommand \author { o m }%>>=
   {
     \keys_set:nn { MRTthesis/setup } { author = { #2 } }

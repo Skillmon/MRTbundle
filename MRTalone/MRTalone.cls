@@ -1,5 +1,5 @@
-\newcommand*\MRTalone@version{0.0.7}
-\newcommand*\MRTalone@date{2018-02-28}
+\newcommand*\MRTalone@version{0.0.8}
+\newcommand*\MRTalone@date{2018-06-21}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -8,7 +8,8 @@
   {MRTalone}          {\MRTalone@date}
   {\MRTalone@version} {standalone matching MRTthesis}
 
-\prop_gput:Nnn \g_msg_module_type_prop { MRTalone } { Class }
+\@ifpackagelater{expl3}{2018/10/10}
+  { \prop_gput:Nnn \g_msg_module_type_prop { MRTalone } { Class } } {}
 
 %% variants of external macros >>=
 %%=============================================================================

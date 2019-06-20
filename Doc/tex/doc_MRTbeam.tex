@@ -43,8 +43,9 @@ You can specify the used logos using \cs{uselogo}. The default is the UBT logo
 on the left, no logo in the centre, and the MRT logo on the right side.
 
 If you specify no or an empty frame title the current section is used (with its
-numbering). The frame's subtitle can be prepended with the current subsection
-(with its numbering) followed by a colon. This depends on the current value of
+numbering). If you don't want any frame title pass in \cs{relax} is the title.
+The frame's subtitle can be prepended with the current subsection (with its
+numbering) followed by a colon. This depends on the current value of
 \cs{ifPrependSubsections}.
 
 The left footer contains the \texttt{occasion}, the \texttt{shorttitle}, and the
@@ -95,9 +96,10 @@ described in \autoref{sec:beam:macros}.
   \texttt{c}, and \texttt{r} available. The \meta{file} is included using
   \cs{includegraphics} with the specified \meta{options} (defaulting to
   \texttt{height=0.056\cs{paperwidth}}). If \meta{file} is an empty argument
-  there is no logo used at the specified position. \file{MRTbeam_logo_UBT2.pdf}
-  is used for the left logo and \file{MRTbeam_logo_MRT2.pdf} for the right one
-  by default. The centre logo is initially empty.
+  there is no logo used at the specified position.
+  \file{MRTresources_logo_UBT2.pdf} is used for the left logo and
+  \file{MRTresources_logo_MRT2.pdf} for the right one by default. The centre
+  logo is initially empty.
 \end{describemacro}
 
 \begin{describemacro}{ShowGrid}[\oarg{options}]
@@ -164,6 +166,20 @@ described in \autoref{sec:beam:macros}.
     \end{tabularx}
     \vspace{-1ex}
   \end{MRTtable}
+\end{describemacro}
+
+\begin{describemacro}{ProgressBarColors}
+  [\oarg{model-list1}\marg{color1}\oarg{model-list2}\marg{color2}]
+  Sets the colours of the progress bar in one macro. If you use either of the
+  optional arguments the respective colour is defined using \cs{definecolor} and
+  the \meta{color} arguments are the \meta{spec-list} arguments of \pkg{xcolor},
+  if the optional arguments aren't used the definition is done using
+  \cs{colorlet} and the \meta{color} arguments match the colour expressions of
+  \pkg{xcolor}. \meta{model-list1} and \meta{color1} set the |progressed| colour
+  and \meta{model-list2} and \meta{color2} set the |noprogress| colour. For
+  example to set the |progressed| colour to \SI{85}{\percent} grey scale and the
+  |noprogress| colour to a $50\mkern-1.5mu:50$ mixture of red and green, you can
+  use |\ProgressBarColors[gray]{0.85}{red!50!green}|.
 \end{describemacro}
 
 \subsection{Footnote related}

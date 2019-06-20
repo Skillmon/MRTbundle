@@ -2,9 +2,9 @@
 \cls{MRTthesis} provides the template to write a thesis at the MRT. It sports a
 layout which looks confusingly similar to the MS Word template provided by the
 chair. Of course there are some minor differences and the typesetting algorithm
-of TeX should create better line breaking than Word's but if one doesn't know on
-what to pay attention or for an untrained eye the distinction won't be possible
-(at least I hope so, as that was the goal in the first place).
+of \TeX\ should create better line breaking than Word's but if one doesn't know
+what to pay attention on or for an untrained eye the distinction won't be
+possible (at least I hope so, as that was the goal in the first place).
 
 \section{Options}%>>=
 \subsection{Load time options}\label{sec:thesis:opt}%>>=
@@ -85,7 +85,7 @@ The following options are accessible with \cs{MRTthesisSetup}.
 \end{describeopt}
 \begin{describeopt}{logoL}[\meta{file}]
   The image file for the left logo on the titlepage.
-  \file{MRTthesis_logo_UBT2.pdf} is the initial value. If \meta{file} is an
+  \file{MRTresources_logo_UBT2.pdf} is the initial value. If \meta{file} is an
   empty argument no left logo will be used.
 \end{describeopt}
 \begin{describeopt}{logoL height}[\meta{dimen}]
@@ -93,8 +93,8 @@ The following options are accessible with \cs{MRTthesisSetup}.
 \end{describeopt}
 \begin{describeopt}{logoR}[\meta{file}]
   The image file for the right logo on the titlepage.
-  \file{MRTthesis_logo_MRT2.pdf} is the initial value. If \meta{file} is an
-  empty argument no right logo will be used.
+  \file{MRTresources_logo_MRT2.}\-\file{pdf} is the initial value. If
+  \meta{file} is an empty argument no right logo will be used.
 \end{describeopt}
 \begin{describeopt}{logoR height}[\meta{dimen}]
   The height the right logo is displayed in. Initial value is \verb|11.9mm|.
@@ -171,7 +171,7 @@ The following options are accessible with \cs{MRTthesisSetup}.
   The abbreviated name of the examiner. This is needed for the citation
   indications and not parsed automatically from the \opt{examiner}, as the name
   contains academic titles, but the abbreviation should not and parsing would be
-  hard to do correctly. Initially value is \texttt{G.\@ Fischerauer}.
+  hard to do correctly. Initial value is \texttt{G.\@ Fischerauer}.
 \end{describeopt}
 \begin{describeopt}{sign height}[\meta{dimen}]
   The height reserved for each signature below the affidavit text. Initial value
@@ -425,7 +425,8 @@ The following macros are provided:
 \end{describemacro}
 Additionally the macros \cs{author}, \cs{title}, and \cs{subtitle} have been
 redefined to internally use \cs{MRTthesisSetup} to set the corresponding
-options.
+options. \cs{author} takes an optional argument with which you can set the
+abbreviated list of authors.
 %=<<
 
 \section{Dependencies}\label{sec:thesis:dep}%>>=

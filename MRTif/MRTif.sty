@@ -43,10 +43,7 @@
 \begingroup
 \catcode`\.=11
 \catcode`\ =11
-\@firstofone{%
-\endgroup
-\def\endMRTif@argument{\MRTif Please report.}%
-}
+\@firstofone{\endgroup\def\endMRTif@argument{\MRTif Error. Please report.}}
 % =<<
 \MRTutil@def[\long]\MRTif@endMRTif@argument#1% >>=
   {%
