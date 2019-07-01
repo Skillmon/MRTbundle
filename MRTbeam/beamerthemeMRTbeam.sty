@@ -31,6 +31,7 @@
 \newif\ifPrependSubsections
 \newif\ifExplicitCiteOnce
 \newif\ifNoExplicitCite
+\newif\ifNoJournalCite
 \newif\ifProgressBar
 \let\ifOnlyOneTopRule\iffalse
 \def\OnlyOneTopRulefalse
@@ -407,9 +408,12 @@
       \textcolor{gray}{[\usebibmacro{cite}]}%
       \setunit{\addnbspace}%
       \printnames{labelname}%
-      \UseAndIfEmptyTF[, ]{\emph{\printfield{shortjournal}}}%
-        {\UseAndIfEmptyTF[, ]{\emph{\printfield{journaltitle}}}{}{}}%
-        {}%
+      \ifNoJournalCite
+      \else
+        \UseAndIfEmptyTF[, ]{\emph{\printfield{shortjournal}}}%
+          {\UseAndIfEmptyTF[, ]{\emph{\printfield{journaltitle}}}{}{}}%
+          {}%
+      \fi
       \UseAndIfEmptyTF[, ]{\printfield{year}}%
         {\UseAndIfEmptyTF[, ]{\printfield{eventyear}}{}{}}%
         {}%
@@ -428,9 +432,12 @@
       \textcolor{gray}{[\usebibmacro{cite}]}%
       \setunit{\addnbspace}%
       \printnames{labelname}%
-      \UseAndIfEmptyTF[, ]{\emph{\printfield{shortjournal}}}%
-        {\UseAndIfEmptyTF[, ]{\emph{\printfield{journaltitle}}}{}{}}%
-        {}%
+      \ifNoJournalCite
+      \else
+        \UseAndIfEmptyTF[, ]{\emph{\printfield{shortjournal}}}%
+          {\UseAndIfEmptyTF[, ]{\emph{\printfield{journaltitle}}}{}{}}%
+          {}%
+      \fi
       \UseAndIfEmptyTF[, ]{\printfield{year}}%
         {\UseAndIfEmptyTF[, ]{\printfield{eventyear}}{}{}}%
         {}%
