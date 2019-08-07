@@ -150,7 +150,7 @@
       { \MRTtabSetup { ctext=(\emph{continued}) } }
   }% =<<
   {% false >>=
-    \RequirePackage[ngerman]{babel}
+    \RequirePackage[main=ngerman,british]{babel}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
     \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Seite }
   }% =<<
@@ -493,16 +493,15 @@
 \renewcommand*\thetable   {\hbox{\thechapter-\arabic{table}}}
 \MRTutil@def\MRTthesis@setautorefnames% >>=
   {%
-    \addto\extrasngerman
+    \bool_if:NTF \l_MRTthesis_british_bool
+      {%
+        \gdef\equationautorefname{Eq.\@}%
+        \gdef\appendixautorefname{Appendix}%
+      }
       {%
         \gdef\figureautorefname{Bild}%
         \gdef\equationautorefname{Gl.\@}%
         \gdef\appendixautorefname{Anhang}%
-      }%
-    \addto\extrasbritish
-      {%
-        \gdef\equationautorefname{Eq.\@}%
-        \gdef\appendixautorefname{Appendix}%
       }%
   }% =<<
 \MRTafterhyperref{\MRTthesis@setautorefnames}
