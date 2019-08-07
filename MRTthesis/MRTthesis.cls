@@ -130,9 +130,12 @@
 \DeclareOption* { \keys_set:nV { MRTthesis / loadtime } \CurrentOption }
 \ExecuteOptions{hidelinks}
 \PassOptionsToClass
-  {twoside,fontsize=11pt,a4paper,toc=listof,toc=bib,fleqn,ngerman}
+  {twoside,fontsize=11pt,a4paper,toc=listof,toc=bib,fleqn}
   {scrreprt}
 \ProcessOptions\relax
+\bool_if:NTF \l_MRTthesis_british_bool
+  { \PassOptionsToClass { british } { scrreprt } }
+  { \PassOptionsToClass { ngerman } { scrreprt } }
 \LoadClass{scrreprt}
 %%===========================================================================<<
 
