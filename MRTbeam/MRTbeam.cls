@@ -1,19 +1,68 @@
-\newcommand*\MRTbeam@version{0.0.8}
-\newcommand*\MRTbeam@date{2019-07-01}
+\newcommand*\MRTbeam@version{0.0.9}
+\newcommand*\MRTbeam@date{2019-08-07}
 
 \NeedsTeXFormat{LaTeX2e}
 
-\RequirePackage{expl3,xparse}
+\RequirePackage{expl3,xparse,MRTif}
 
 %% options and class loading >>=
 %%=============================================================================
 \newif\if@MRTbeam@sfacc@height@
+\newif\if@MRTbeam@aspect@
 \ExplSyntaxOn
 \input{MRTfonts.forward.keys.tex}
+\msg_new:nnn { MRTbeam } { bad~aspect~component }%>>=
+  {
+    The ~ specified ~ aspect ~ component ~ '#1' ~ is ~ no ~
+    unsigned ~ integer. ~ Ignoring ~ option.
+  }%=<<
+\cs_new_protected:Npn \MRTbeam_handle_aspect:n #1%>>=
+  {
+    \MRTbeam_handle_aspect_aux:x { \tl_to_str:n { #1 } }
+  }%=<<
+\cs_new_protected:Npn \MRTbeam_handle_aspect_aux:n #1%>>=
+  {
+    \str_if_in:nnTF { #1 } { : }
+      {
+        \MRTbeam_handle_aspect:w #1 \q_stop
+      }
+      {
+        \msg_new:nnn { MRTbeam } { bad~aspect }
+          {
+            The ~ specified ~ aspect ~ '#1' ~ doesn't ~ contain ~
+            a ~ colon. ~ Ignoring ~ option.
+          }
+        \msg_error:nn { MRTbeam } { bad~aspect }
+        \@MRTbeam@aspect@false
+      }
+  }%=<<
+\cs_generate_variant:Nn \MRTbeam_handle_aspect_aux:n { x }
+\use:x 
+  {
+    \cs_set_protected:Npn
+    \exp_not:N \MRTbeam_handle_aspect:w ##1 \c_colon_str ##2 \exp_not:N \q_stop
+  }
+  {
+    \MRTifNumberNoSignTF { #1 }
+      {
+        \cs_set:Npn \MRTbeam@aspect@x { #1 }
+        \MRTifNumberNoSignTF { #2 }
+          { \cs_set:Npn \MRTbeam@aspect@y { #2 } }
+          {
+            \msg_error:nnn { MRTbeam } { bad~aspect~component } { #2 }
+            \@MRTbeam@aspect@false
+          }
+      }
+      {
+        \msg_error:nnn { MRTbeam } { bad~aspect~component } { #1 }
+        \@MRTbeam@aspect@false
+      }
+  }%=<<
 \MRTfonts_setup_forwarded_from:n { MRTbeam }
 \keys_define:nn { MRTbeam / loadtime }%>>=
   {
-    unknown .code:n = { \PassOptionsToClass { \CurrentOption } { beamer } }
+    ,aspect  .code:n = { \@MRTbeam@aspect@true \MRTbeam_handle_aspect:n { #1 } }
+    ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { beamer } }
   }%=<<
 \DeclareOption* { \keys_set:nV { MRTbeam / loadtime } \CurrentOption }
 \ProcessOptions\relax

@@ -281,7 +281,8 @@ resolve around automatically added contents.
 \begin{describeopt}{acknowledgement}[\meta{file}]
   Sets the acknowledgements file added if \bverb|frontmatter=auto| is used. If
   \meta{file} (the argument) is empty no file will be added. By default it is
-  empty.
+  empty. The \meta{file} will be added using \cs{include}, so you should drop
+  the \bverb|.tex| ending.
 \end{describeopt}
 \begin{describeopt}{affidavit}[\meta{choice}]
   Sets where the \cs{affidavit} is added. Possible \meta{choice}s are |front|,
@@ -292,7 +293,8 @@ resolve around automatically added contents.
 \begin{describeopt}{appendix}[\meta{file}]
   Sets the appendix file added if \bverb|backmatter=auto| is used. If
   \meta{file} (the argument) is empty no file will be added. By default it is
-  empty.
+  empty. The \meta{file} will be added using \cs{include}, so you should drop
+  the \bverb|.tex| ending.
 \end{describeopt}
 \begin{describeopt}{appendix ragged}[\meta{bool}]
   If set |true| the contents of the |appendix| file will be typeset

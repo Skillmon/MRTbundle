@@ -88,23 +88,17 @@
 }%=<<
 \MRTutil@def\MRTbeam@putlogo#1%>>=
   {%
-    \expandafter\MRTbeam@putlogo@a\expandafter
-      {\csname MRTbeam@#1logo@options\endcsname}
-      {\csname MRTbeam@#1logo\endcsname}%
+    \expandafter\MRTbeam@putlogo@a
+      \csname MRTbeam@#1logo@options\expandafter\endcsname
+      \csname MRTbeam@#1logo\endcsname
   }%=<<
 \MRTutil@def\MRTbeam@putlogo@a#1#2%>>=
   {%
     % #1 options (macro)
-    % #2 file (csname)
+    % #2 file (macro)
     \expandafter\MRTbeam@putlogo@b\expandafter{#2}{#1}%
   }%=<<
 \MRTutil@def\MRTbeam@putlogo@b#1#2%>>=
-  {%
-    % #1 file (macro)
-    % #2 options (macro)
-    \expandafter\MRTbeam@putlogo@c\expandafter{#1}{#2}%
-  }%=<<
-\MRTutil@def\MRTbeam@putlogo@c#1#2%>>=
   {%
     % #1 file (string)
     % #2 options (macro)
@@ -126,11 +120,11 @@
   \else
     \parbox[t][0pt][t]{\textwidth}{%
       \usebeamerfont{frametitle}%
-      \vskip-0.103\paperheight%TODO adjust the skip
+      \vskip-0.1125\paperheight%TODO adjust the skip
       \raggedright%
-      {\LARGE#1}\mbox{}\\%
+      {\LARGE\strut#1}\mbox{}\\[-0.285ex]%
       \hskip 0.4pt\parbox[t]{\dimexpr\textwidth-0.8pt\relax}{{%
-        \fontseries{mc}\selectfont%
+        \fontseries{mc}\selectfont\strut
         \ifPrependSubsections%
           \UseAndIfEmptyTF{\curssec}{}{\ifx\insertframesubtitle\@empty\else:~\fi}%
         \fi%
@@ -179,7 +173,11 @@
       \if@MRTbeam@StarredSubsection@%
       \else%
         \ifnum\c@subsection>0\relax%
-          \makebox[24pt][l]{\the\beamer@tocsectionnumber.\thesubsection}%
+          \if@MRTbeam@StarredSection@
+            \makebox[18pt][l]{\thesubsection}%
+          \else
+            \makebox[24pt][l]{\the\beamer@tocsectionnumber.\thesubsection}%
+          \fi
         \fi%
       \fi%
     }%
@@ -202,6 +200,14 @@
 \NewDocumentCommand{\occasion}{m}{\gdef\@occasion{#1}}
 \gdef\@occasion{}
 % Footnotes related >>=
+\MRTutil@def\MRT@ftn@add#1#2%>>=
+  {%
+    \xdef#1%
+      {%
+        \unexpanded\expandafter{#1${}$\uncover#2}%
+          {\unexpanded\expandafter{\MRTbeam@temp}}\noexpand\\%
+      }%
+  }%=<<
 \NewDocumentCommand{\AddToRightFoot}{s t+ >{\MRT@process@visibility}D<>{} o m}{%>>=
   \bgroup
   \ifTabularNotes
@@ -222,10 +228,10 @@
   }%
   \ifdim\wd\MRTbeam@box>0pt\relax
     \IfBooleanTF{#1}% persistent or not
-      {\xdef\MRT@ftn@p{\MRT@ftn@p${}$\uncover#3{\MRTbeam@temp}\\}}%
+      {\MRT@ftn@add\MRT@ftn@p{#3}}%
       {\IfBooleanTF{#2}%
-        {\xdef\MRT@ftn@c{\MRT@ftn@c${}$\uncover#3{\MRTbeam@temp}\\}}%
-        {\xdef\MRT@ftn{\MRT@ftn${}$\uncover#3{\MRTbeam@temp}\\}}%
+        {\MRT@ftn@add\MRT@ftn@c{#3}}%
+        {\MRT@ftn@add\MRT@ftn{#3}}%
       }%
   \fi
   \egroup
@@ -236,7 +242,7 @@
   \gdef\MRT@ftn@c{}}
 %=<<
 %=<<
-\NewDocumentCommand{\uselogo}{m O{height=0.056\paperwidth} m}%>>=
+\NewDocumentCommand{\uselogo}{m O{height=0.080864\paperheight} m}%>>=
   {%
     \def\MRTbeam@tempa{#1}%
     \def\MRTbeam@tempb{l}%
@@ -372,8 +378,13 @@
 \newdimen\MRTbeam@paperheight
 \newdimen\contentwidth
 \newdimen\contentheight
-\MRTbeam@paperwidth=16.81057cm\relax% 10.83in * 11 / 18 (so that 11pt looks like 18pt)
 \MRTbeam@paperheight=11.64167cm\relax% 7.5in * 11 / 18 (same aspect ratio)
+\if@MRTbeam@aspect@
+  \MRTbeam@paperwidth=%
+    \dimexpr\MRTbeam@aspect@x\MRTbeam@paperheight/\MRTbeam@aspect@y\relax
+\else
+  \MRTbeam@paperwidth=16.81057cm\relax% 10.83in * 11 / 18 (so that 11pt looks like 18pt)
+\fi
 \setbeamersize{% resets paperwidth and heigh
   sidebar width left=0pt,%
   sidebar width right=0pt,%
@@ -524,9 +535,10 @@
     }%
   }%
 %=<<
-\RenewDocumentCommand{\cite}{>{\MRT@process@visibility}D<>{} O{} O{} m}{%>>=
-  \MRTbeam@ifentryseen{#4}{}{\AddToRightFoot+#1{\insertcite{#4}}}%
-  \textcolor{gray}{\inlinecite[#2][#3]{#4}}}
+\RenewDocumentCommand{\cite}{>{\MRT@process@visibility}D<>{} s O{} O{} m}{%>>=
+  \IfBooleanF{#2}
+    {\MRTbeam@ifentryseen{#5}{}{\AddToRightFoot+#1{\insertcite{#5}}}}%
+  \textcolor{gray}{\inlinecite[#3][#4]{#5}}}
 %=<<
 \NewDocumentCommand{\bibliographyframe}{s t! O{\small} G{Quellen} G{}}{%>>=
   \bgroup%
