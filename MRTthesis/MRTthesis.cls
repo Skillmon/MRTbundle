@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.15}
-\newcommand*\MRTthesis@date{2019-06-21}
+\newcommand*\MRTthesis@version{0.0.16}
+\newcommand*\MRTthesis@date{2019-08-11}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -144,7 +144,7 @@
 \RequirePackage{MRTtab,MRTwuline}
 \bool_if:NTF \l_MRTthesis_british_bool
   {% true >>=
-    \RequirePackage[main=british,ngerman]{babel}
+    \RequirePackage[ngerman,british]{babel}
     \useshorthands{"}
     \addto\extrasbritish{\languageshorthands{ngerman}}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { by }
@@ -153,7 +153,7 @@
       { \MRTtabSetup { ctext=(\emph{continued}) } }
   }% =<<
   {% false >>=
-    \RequirePackage[main=ngerman,british]{babel}
+    \RequirePackage[british,ngerman]{babel}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
     \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Seite }
   }% =<<
@@ -491,22 +491,47 @@
 
 %% labels and other ngerman stuff >>=
 %%=============================================================================
-\renewcommand*\theequation{\hbox{(\thechapter-\arabic{equation})}}
+\renewcommand*\theequation{\hbox{\thechapter-\arabic{equation}}}
 \renewcommand*\thefigure  {\hbox{\thechapter-\arabic{figure}}}
 \renewcommand*\thetable   {\hbox{\thechapter-\arabic{table}}}
-\MRTutil@def\MRTthesis@setautorefnames% >>=
+\ExplSyntaxOff
+\MRTutil@def\MRTthesis@setautorefnames
   {%
-    \bool_if:NTF \l_MRTthesis_british_bool
-      {%
-        \gdef\equationautorefname{Eq.\@}%
-        \gdef\appendixautorefname{Appendix}%
+    \addto\extrasbritish
+      {\gdef\equationautorefname~##1\null{\MRTthesis@eqname.\@~(##1)\null}}%
+    \addto\extrasngerman
+      {\gdef\equationautorefname~##1\null{\MRTthesis@eqname.\@~(##1)\null}}%
+    \MRTthesis@setautorefnames@language
+  }
+\ExplSyntaxOn
+\MRTutil@def\MRTthesis@setautorefnames@language% >>=
+  {%
+    \addto\extrasbritish
+      {
+        \gdef\MRTthesis@eqname{Eq}
+        \gdef\appendixautorefname{Appendix}
       }
-      {%
-        \gdef\figureautorefname{Bild}%
-        \gdef\equationautorefname{Gl.\@}%
-        \gdef\appendixautorefname{Anhang}%
-      }%
+    \addto\extrasngerman
+      {
+        \gdef\MRTthesis@eqname{Gl}
+        \gdef\figureautorefname{Bild}
+        \gdef\appendixautorefname{Anhang}
+      }
+    \patchcmd\@setref{\Hy@setref@link}{\MRTthesis@hyper@eq@patch}{}
+      {
+        \msg_error:nnn
+          { MRTthesis } { patch~failed } { \@setref }
+      }
   }% =<<
+\cs_new_protected:Npn \MRTthesis@hyper@eq@patch #1 #2 #3 #4 #5 #6 \@nil #7
+  {
+    \MRTthesis_hyper_if_eq:nn { #4 }
+      { \Hy@setref@link { #1 } { #2 } { #3 } { #4 } { #5 } { #6 } \@nil { #7 } }
+  }
+\cs_new:Npn \MRTthesis_hyper_if_eq:nn #1 #2
+  {
+    \tl_if_in:nnTF { #1 } { equation } { ( #2 ) } { #2 }
+  }
 \MRTafterhyperref{\MRTthesis@setautorefnames}
 \addto\captionsngerman% >>=
   {%
@@ -520,7 +545,7 @@
     \renewcommand*\tablename{\bfseries Table}%
   }% =<<
 %correctly set the equation labels
-\def\tagform@#1{\maketag@@@{\ignorespaces#1\unskip\@@italiccorr}\hspace{6.7mm}}
+\def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip\@@italiccorr)}\hspace{6.7mm}}
 \long\def\eqref#1% >>=
   {%
     \textup{\maketag@@@{\ignorespaces\ref{#1}\unskip\@@italiccorr}}%
