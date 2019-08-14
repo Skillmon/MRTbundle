@@ -361,20 +361,25 @@ The following macros are provided:
   \bverb|backmatter=auto| was used. See \autoref{sec:autoopt} for more
   information.
 \end{describemacro}
+\begin{describemacro}{MRTthesisAddToAppendixSwitch}[\marg{content}]
+  Adds \meta{content} to the \cs{appendix} switch. This is useful if you need
+  the behaviour of some other packages changed during the appendix.
+\end{describemacro}
 \begin{describemacro}{DeclareTOCStyleEntryMRTChapterLike}%
-  [\oarg{indent}\hskip0pt\marg{entry-layer}]
+  [\oarg{indent}\hskip0pt\marg{entry-layer}\hskip0pt\oarg{options}]
   See the description of \cs{DeclareTOCStyleEntryMRTSectionLike}. The difference
   is that this sets the entries how the chapters are formatted. Also the
   \meta{indent} defaults to the one of chapters.
 \end{describemacro}
 \begin{describemacro}{DeclareTOCStyleEntryMRTSectionLike}%
-  [\oarg{indent}\hskip0pt\marg{entry-layer}]
+  [\oarg{indent}\hskip0pt\marg{entry-layer}\hskip0pt\oarg{options}]
   The macro calls the KOMA macro \cs{DeclareTOCStyleEntry} and sets the options
   how they are used for the section entries in the table of contents.
   \meta{indent} defaults to the indent length of section entries. It is possible
   to use an \meta{indent} but give more options in that optional argument
   afterwards (comma separated). \autoref{tab:thesis:tocindents} shows an
-  overview of the class's default indentations.
+  overview of the class's default indentations. With the \meta{options} argument
+  you can specify further options past the indent to \cs{DeclareTOCStyleEntry}.
 \end{describemacro}
 \begin{MRTtable}%>>=
   [%>>=

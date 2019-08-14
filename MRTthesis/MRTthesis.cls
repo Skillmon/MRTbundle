@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.16}
-\newcommand*\MRTthesis@date{2019-08-11}
+\newcommand*\MRTthesis@version{0.0.17}
+\newcommand*\MRTthesis@date{2019-08-14}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -59,9 +59,10 @@
 \tl_new:N \l_MRTthesis_tmpb_tl
 \tl_new:N \l_MRTthesis_titlepage_von_tl
 \tl_new:N \l_MRTthesis_toc_Seite_tl
-\tl_new:N \l_MRTthesis_auto_frontmatter_addo_tl
-\tl_new:N \l_MRTthesis_auto_backmatter_addo_tl
-\tl_new:N \l_MRTthesis_auto_backmatter_after_tl
+\tl_new:N \g_MRTthesis_auto_frontmatter_addo_tl
+\tl_new:N \g_MRTthesis_auto_backmatter_addo_tl
+\tl_new:N \g_MRTthesis_auto_backmatter_after_tl
+\tl_new:N \g_MRTthesis_appendix_switch_tl
 % =<<
 % =<<
 %%===========================================================================<<
@@ -444,22 +445,24 @@
 % =<<
 % ToC related >>=
 \NewDocumentCommand \DeclareTOCStyleEntryMRTSectionLike% >>=
-  { O{\l_MRTthesis_toc_section_indent_tl} m }
+  { O{\l_MRTthesis_toc_section_indent_tl} m O{} }
   {%
     \expandafter\DeclareTOCStyleEntry\expandafter
       [%
         \MRTthesis@toc@default@section
         ,indent=#1%
+        ,#3
       ]
       {tocline}{#2}%
   }% =<<
 \NewDocumentCommand \DeclareTOCStyleEntryMRTChapterLike% >>=
-  { O{\l_MRTthesis_toc_chapter_indent_tl} m }
+  { O{\l_MRTthesis_toc_chapter_indent_tl} m O{} }
   {%
     \expandafter\DeclareTOCStyleEntry\expandafter
       [%
         \MRTthesis@toc@default@chapter
         ,indent=#1%
+        ,#3
       ]
       {tocline}{#2}%
   }% =<<
@@ -487,6 +490,11 @@
   }%=<<
 % =<<
 \NewDocumentCommand \sethead { m } { \markboth{#1}{#1} }
+% \MRTthesisAddToAppendixSwitch >>=
+\NewDocumentCommand \MRTthesisAddToAppendixSwitch { +m }
+  {
+    \tl_gput_right:Nn \g_MRTthesis_appendix_switch_tl { #1 }
+  }%=<<
 %%===========================================================================<<
 
 %% labels and other ngerman stuff >>=
@@ -495,20 +503,21 @@
 \renewcommand*\thefigure  {\hbox{\thechapter-\arabic{figure}}}
 \renewcommand*\thetable   {\hbox{\thechapter-\arabic{table}}}
 \ExplSyntaxOff
-\MRTutil@def\MRTthesis@setautorefnames
+\MRTutil@def\MRTthesis@setautorefnames%>>=
   {%
     \addto\extrasbritish
       {\gdef\equationautorefname~##1\null{\MRTthesis@eqname.\@~(##1)\null}}%
     \addto\extrasngerman
       {\gdef\equationautorefname~##1\null{\MRTthesis@eqname.\@~(##1)\null}}%
     \MRTthesis@setautorefnames@language
-  }
+  }%=<<
 \ExplSyntaxOn
 \MRTutil@def\MRTthesis@setautorefnames@language% >>=
   {%
     \addto\extrasbritish
       {
         \gdef\MRTthesis@eqname{Eq}
+        \gdef\figureautorefname{Figure}
         \gdef\appendixautorefname{Appendix}
       }
     \addto\extrasngerman
@@ -523,15 +532,15 @@
           { MRTthesis } { patch~failed } { \@setref }
       }
   }% =<<
-\cs_new_protected:Npn \MRTthesis@hyper@eq@patch #1 #2 #3 #4 #5 #6 \@nil #7
+\cs_new_protected:Npn \MRTthesis@hyper@eq@patch #1 #2 #3 #4 #5 #6 \@nil #7%>>=
   {
     \MRTthesis_hyper_if_eq:nn { #4 }
       { \Hy@setref@link { #1 } { #2 } { #3 } { #4 } { #5 } { #6 } \@nil { #7 } }
-  }
-\cs_new:Npn \MRTthesis_hyper_if_eq:nn #1 #2
+  }%=<<
+\cs_new:Npn \MRTthesis_hyper_if_eq:nn #1 #2%>>=
   {
     \tl_if_in:nnTF { #1 } { equation } { ( #2 ) } { #2 }
-  }
+  }%=<<
 \MRTafterhyperref{\MRTthesis@setautorefnames}
 \addto\captionsngerman% >>=
   {%
@@ -545,7 +554,10 @@
     \renewcommand*\tablename{\bfseries Table}%
   }% =<<
 %correctly set the equation labels
-\def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip\@@italiccorr)}\hspace{6.7mm}}
+\def\tagform@#1%>>=
+  {%
+    \maketag@@@{(\ignorespaces#1\unskip\@@italiccorr)}\hspace{6.7mm}%
+  }%=<<
 \long\def\eqref#1% >>=
   {%
     \textup{\maketag@@@{\ignorespaces\ref{#1}\unskip\@@italiccorr}}%
@@ -707,6 +719,7 @@
         \msg_error:nnn
           { MRTthesis } { patch~failed } { \hyper@makecurrent }
       }%
+    \g_MRTthesis_appendix_switch_tl
   }% =<<
 \NewDocumentCommand \mainpart {}% >>=
   {%
@@ -1298,7 +1311,7 @@
       { \listoffigures }
     \bool_if:NT \l_MRTthesis_lot_front_bool
       { \listoftables }
-    \l_MRTthesis_auto_frontmatter_addo_tl
+    \g_MRTthesis_auto_frontmatter_addo_tl
     \mainpart
   }%=<<
 \cs_new_protected:Npn \MRTthesis_auto_backmatter:%>>=
@@ -1311,7 +1324,7 @@
       { \listoffigures }
     \bool_if:NT \l_MRTthesis_lot_back_bool
       { \listoftables }
-    \l_MRTthesis_auto_backmatter_addo_tl
+    \g_MRTthesis_auto_backmatter_addo_tl
     \tl_if_empty:NF \l_MRTthesis_backmatter_appendix_tl
       {
         \group_begin:
@@ -1320,21 +1333,21 @@
           \include { \l_MRTthesis_backmatter_appendix_tl }
         \group_end:
       }
-    \l_MRTthesis_auto_backmatter_after_tl
+    \g_MRTthesis_auto_backmatter_after_tl
     \bool_if:NT \l_MRTthesis_affidavit_back_bool
       { \affidavit }
   }%=<<
 \NewDocumentCommand \MRTthesisAddToFront   { +m }%>>=
   {
-    \tl_put_right:Nn \l_MRTthesis_auto_frontmatter_addo_tl { #1 }
+    \tl_gput_right:Nn \g_MRTthesis_auto_frontmatter_addo_tl { #1 }
   }%=<<
 \NewDocumentCommand \MRTthesisAddToBack    { +m }%>>=
   {
-    \tl_put_right:Nn \l_MRTthesis_auto_backmatter_addo_tl { #1 }
+    \tl_gput_right:Nn \g_MRTthesis_auto_backmatter_addo_tl { #1 }
   }%=<<
 \NewDocumentCommand \MRTthesisAddAfterBack { +m }%>>=
   {
-    \tl_put_right:Nn \l_MRTthesis_auto_backmatter_after_tl { #1 }
+    \tl_gput_right:Nn \g_MRTthesis_auto_backmatter_after_tl { #1 }
   }%=<<
 %%===========================================================================<<
 
