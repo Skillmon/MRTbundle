@@ -534,12 +534,14 @@
   }% =<<
 \cs_new_protected:Npn \MRTthesis@hyper@eq@patch #1 #2 #3 #4 #5 #6 \@nil #7%>>=
   {
-    \MRTthesis_hyper_if_eq:nn { #4 }
+    \MRTthesis_hyper_if_eq:nnn { #4 } { #7 }
       { \Hy@setref@link { #1 } { #2 } { #3 } { #4 } { #5 } { #6 } \@nil { #7 } }
   }%=<<
-\cs_new:Npn \MRTthesis_hyper_if_eq:nn #1 #2%>>=
+\cs_new:Npn \MRTthesis_hyper_if_eq:nnn #1 #2 #3%>>=
   {
-    \tl_if_in:nnTF { #1 } { equation } { ( #2 ) } { #2 }
+    \tl_if_eq:nnTF { #2 } { \@firstoffive }
+      { \tl_if_in:nnTF { #1 } { equation } { ( #3 ) } { #3 } }
+      { #3 }
   }%=<<
 \MRTafterhyperref{\MRTthesis@setautorefnames}
 \addto\captionsngerman% >>=
