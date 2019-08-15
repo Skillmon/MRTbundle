@@ -1,5 +1,5 @@
-\newcommand*\MRTalone@version{0.0.8}
-\newcommand*\MRTalone@date{2018-06-21}
+\newcommand*\MRTalone@version{0.0.9}
+\newcommand*\MRTalone@date{2018-08-16}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -81,7 +81,9 @@
   {\PassOptionsToPackage{table}{xcolor}\PassOptionsToClass{tikz}{standalone}}
 \keys_define:nn { MRTalone / loadtime }%>>=
   {
-    unknown .code:n = { \PassOptionsToClass { \CurrentOption } { standalone } }
+     languages .tl_set:N = \l_MRTthesis_add_languages_tl
+    ,langs   .meta:n = { languages = { #1 } }
+    ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { standalone } }
   }%=<<
 \DeclareOption* { \keys_set:nV { MRTalone / loadtime } \CurrentOption }
 \PassOptionsToClass{11pt}{standalone}
@@ -100,6 +102,9 @@
     \msg_error:nn { MRTalone } { options~too~late }
   }
 \ProcessOptions\relax
+\bool_if:NTF \l_MRTthesis_british_bool
+  {}
+  { \tl_put_left:Nn \@classoptionslist { ngerman, } }
 \LoadClass{standalone}
 %%===========================================================================<<
 
@@ -108,10 +113,13 @@
 \RequirePackage{MRTtab,MRTwuline}
 \bool_if:NTF \l_MRTalone_british_bool
   {% true >>=
-    \RequirePackage[main=british,ngerman]{babel}
+    \exp_last_unbraced:NNV
+    \RequirePackage[\l_MRTthesis_add_languages_tl,ngerman,main=british]{babel}
   }% =<<
   {% false >>=
-    \RequirePackage[ngerman]{babel}
+    \exp_last_unbraced:NNV
+    \RequirePackage[\l_MRTthesis_add_languages_tl,british,main=ngerman]{babel}
+    \RequirePackage[british,main=ngerman]{babel}
   }% =<<
 \RequirePackage{setspace}
 \RequirePackage{enumitem}

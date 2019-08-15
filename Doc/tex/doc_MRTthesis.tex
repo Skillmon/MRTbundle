@@ -38,6 +38,14 @@ The class features a few load time options.
   please contact me as described in \autoref{sec:bugs}. English simplified (US)
   is not supported by the class.
 \end{describeopt}
+\begin{describeopt}{languages,langs}[\meta{options}]
+  With this you can define additional languages which should be loaded by the
+  \pkg{babel} package, \opt{ngerman} and \opt{british} will always be loaded and
+  one of them will be set as the main language. But if you for some reason need
+  more language definitions than that, you can load them with this key (you
+  could also pass other \meta{options} to the babel package with this key, they
+  are just forwarded as you enter them).
+\end{describeopt}
 \input{tex/doc_shared_class_options.tex}
 
 \noindent

@@ -1,5 +1,5 @@
 \newcommand*\MRTthesis@version{0.0.17}
-\newcommand*\MRTthesis@date{2019-08-14}
+\newcommand*\MRTthesis@date{2019-08-16}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -126,7 +126,9 @@
 \DeclareOption{showlinks}{\bool_set_false:N \l_MRTthesis_hyper_hidelinks_bool}
 \keys_define:nn { MRTthesis / loadtime }
   {
-    unknown .code:n = { \PassOptionsToClass { \CurrentOption } { scrreprt } }
+     languages .tl_set:N = \l_MRTthesis_add_languages_tl
+    ,langs   .meta:n = { languages = { #1 } }
+    ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { scrreprt } }
   }
 \DeclareOption* { \keys_set:nV { MRTthesis / loadtime } \CurrentOption }
 \ExecuteOptions{hidelinks}
@@ -145,7 +147,8 @@
 \RequirePackage{MRTtab,MRTwuline}
 \bool_if:NTF \l_MRTthesis_british_bool
   {% true >>=
-    \RequirePackage[ngerman,main=british]{babel}
+    \exp_last_unbraced:NNV
+    \RequirePackage[\l_MRTthesis_add_languages_tl,ngerman,main=british]{babel}
     \useshorthands{"}
     \addto\extrasbritish{\languageshorthands{ngerman}}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { by }
@@ -154,7 +157,8 @@
       { \MRTtabSetup { ctext=(\emph{continued}) } }
   }% =<<
   {% false >>=
-    \RequirePackage[british,main=ngerman]{babel}
+    \exp_last_unbraced:NNV
+    \RequirePackage[\l_MRTthesis_add_languages_tl,british,main=ngerman]{babel}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
     \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Seite }
   }% =<<
