@@ -376,7 +376,9 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
 \end{describeopt}%=<<
 \begin{describeopt}{pre tab, pre}[\meta{content}]%>>=
   A hook which is executed right before the \cs{begin} of the inner
-  \env{MRTtabular}.
+  \env{MRTtabular} (well, actually there is no explicit \cs{begin} following,
+  but the next thing which is done is dependent of the used variant and other
+  keys, so this is a close enough aproximation).
 \end{describeopt}%=<<
 \begin{describeopt}{short caption, short cap, scap}%>>=
   If caption and this option are used the list of tables will get this short
@@ -384,7 +386,8 @@ The following options are available for \cs{MRTtabSetup} and \env{MRTtable}.
 \end{describeopt}%=<<
 \begin{describeopt}{stretch tabular, stretch tab, stretch}[\meta{float}]%>>=
   Sets the stretch in \env{MRTtabular} to the specified \meta{float} using
-  \cs{setstretch}.
+  \cs{setstretch}. Should also apply to the contents of \env{MRTtable},
+  regardless of the inner environment.
 \end{describeopt}%=<<
 \begin{describeopt}{stretch caption, stretch cap, cstretch}[\meta{float}]%>>=
   Sets the stretch in the caption using \cs{setkomafont} and \cs{setstretch}.
