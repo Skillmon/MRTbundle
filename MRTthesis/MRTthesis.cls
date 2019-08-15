@@ -135,8 +135,8 @@
   {scrreprt}
 \ProcessOptions\relax
 \bool_if:NTF \l_MRTthesis_british_bool
-  { \PassOptionsToClass { british } { scrreprt } }
-  { \PassOptionsToClass { ngerman } { scrreprt } }
+  {}
+  { \tl_put_left:Nn \@classoptionslist { ngerman, } }
 \LoadClass{scrreprt}
 %%===========================================================================<<
 
@@ -145,7 +145,7 @@
 \RequirePackage{MRTtab,MRTwuline}
 \bool_if:NTF \l_MRTthesis_british_bool
   {% true >>=
-    \RequirePackage[ngerman,british]{babel}
+    \RequirePackage[ngerman,main=british]{babel}
     \useshorthands{"}
     \addto\extrasbritish{\languageshorthands{ngerman}}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { by }
@@ -154,7 +154,7 @@
       { \MRTtabSetup { ctext=(\emph{continued}) } }
   }% =<<
   {% false >>=
-    \RequirePackage[british,ngerman]{babel}
+    \RequirePackage[british,main=ngerman]{babel}
     \tl_set:Nn \l_MRTthesis_titlepage_von_tl { von }
     \tl_set:Nn \l_MRTthesis_toc_Seite_tl { Seite }
   }% =<<
