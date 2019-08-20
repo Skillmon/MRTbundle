@@ -718,7 +718,7 @@
     \@addtoreset{equation}{section}%
     \renewcommand*\thefigure{\hbox{\thesection-\arabic{figure}}}%
     \renewcommand*\thetable{\hbox{\thesection-\arabic{table}}}%
-    \renewcommand*\theequation{\hbox{(\thesection-\arabic{equation})}}%
+    \renewcommand*\theequation{\hbox{\thesection-\arabic{equation}}}%
     \addtokomafont{section}{\large}%
     \patchcmd\hyper@makecurrent{\edef\Hy@param}{\MRTthesis@hyper@patch}{}
       {%
