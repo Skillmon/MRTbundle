@@ -144,7 +144,7 @@
 
 %% additional packages to achieve template formatting >>=
 %%=============================================================================
-\RequirePackage{MRTtab,MRTwuline}
+\RequirePackage{MRTtab}
 \bool_if:NTF \l_MRTthesis_british_bool
   {% true >>=
     \exp_last_unbraced:NNV
@@ -184,7 +184,7 @@
 \RequirePackage{enumitem}
 \RequirePackage{etoolbox}
 \RequirePackage[fleqn]{mathtools}
-\RequirePackage{MRTfonts}
+\RequirePackage{MRTfonts,MRTwuline}
 % 
 \BeforeBeginEnvironment{document}
   {
@@ -729,7 +729,7 @@
   }% =<<
 \NewDocumentCommand \mainpart {}% >>=
   {%
-    \cleardoublepage
+    \cleardoubleoddpage
     \pagenumbering{arabic}%
   }% =<<
 \let\mainmatter\mainpart
@@ -932,7 +932,7 @@
   }%=<<
 \MRTutil@def[\protected]\affidavit% >>=
   {
-    \cleardoublepage
+    \cleardoubleoddpage
     \chapter*{Eidesstattliche~Erkl\"arung}
     \sethead{Eidesstattliche~Erkl\"arung}
     \strut
@@ -1071,7 +1071,7 @@
     \else
       \vbox to \textheight{\unvbox\MRTthesis@TestBoxA}
     \fi
-    \cleardoublepage
+    \cleardoubleoddpage
     \restoregeometry
   }% =<<
 \cs_new_protected_nopar:Npn \MRTthesis_parse_authors:% >>=

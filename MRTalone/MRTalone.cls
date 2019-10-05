@@ -81,7 +81,7 @@
   {\PassOptionsToPackage{table}{xcolor}\PassOptionsToClass{tikz}{standalone}}
 \keys_define:nn { MRTalone / loadtime }%>>=
   {
-     languages .tl_set:N = \l_MRTthesis_add_languages_tl
+     languages .tl_set:N = \l_MRTalone_add_languages_tl
     ,langs   .meta:n = { languages = { #1 } }
     ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { standalone } }
   }%=<<
@@ -102,7 +102,7 @@
     \msg_error:nn { MRTalone } { options~too~late }
   }
 \ProcessOptions\relax
-\bool_if:NTF \l_MRTthesis_british_bool
+\bool_if:NTF \l_MRTalone_british_bool
   {}
   { \tl_put_left:Nn \@classoptionslist { ngerman, } }
 \LoadClass{standalone}
@@ -110,21 +110,21 @@
 
 %% additional packages to achieve template formatting >>=
 %%=============================================================================
-\RequirePackage{MRTtab,MRTwuline}
+\RequirePackage{MRTtab}
 \bool_if:NTF \l_MRTalone_british_bool
   {% true >>=
     \exp_last_unbraced:NNV
-    \RequirePackage[\l_MRTthesis_add_languages_tl,ngerman,main=british]{babel}
+    \RequirePackage[\l_MRTalone_add_languages_tl,ngerman,main=british]{babel}
   }% =<<
   {% false >>=
     \exp_last_unbraced:NNV
-    \RequirePackage[\l_MRTthesis_add_languages_tl,british,main=ngerman]{babel}
+    \RequirePackage[\l_MRTalone_add_languages_tl,british,main=ngerman]{babel}
     \RequirePackage[british,main=ngerman]{babel}
   }% =<<
 \RequirePackage{setspace}
 \RequirePackage{enumitem}
 \RequirePackage[fleqn]{mathtools}
-\RequirePackage{MRTfonts}
+\RequirePackage{MRTfonts,MRTwuline}
 \bool_if:NF \l_MRTalone_minimal_bool%>>=
   {
     \cs_new:Npn \MRTalone_range_phrase:n #1
