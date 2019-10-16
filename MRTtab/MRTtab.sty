@@ -1,5 +1,5 @@
-\newcommand*\MRTtab@version{0.0.12}
-\newcommand*\MRTtab@date{2019-08-15}
+\newcommand*\MRTtab@version{0.0.13}
+\newcommand*\MRTtab@date{2019-10-16}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -84,9 +84,11 @@
 \bool_if:NTF \l_MRTtab_longtable_bool
   {
     \RequirePackage{longtable}
-    \tl_const:Nn \c__MRTtab_longtable_version_tl
-      { 2014/10/28~v4.11~Multi-page~Table~package~(DPC)+~FMi~change }
-    \tl_if_eq:cNF { ver@longtable.sty } \c__MRTtab_longtable_version_tl
+    \str_case_e:nnF { \use:c { ver@longtable.sty } }
+      {
+        { 2014/10/28~v4.11~Multi-page~Table~package~(DPC)+~FMi~change } {}
+        { 2019/02/06~v4.12~Multi-page~Table~package~(DPC) }             {}
+      }
       {
         \msg_new:nnn { MRTtab } { wrong~longtable~version }
           {
