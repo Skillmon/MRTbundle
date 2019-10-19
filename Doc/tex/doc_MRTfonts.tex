@@ -81,7 +81,11 @@ giving a uniform look to the documents.
   \opt{nosymbolsc} and \opt{noamssymbols} to get operators and the like, the
   maths letters of \pkg{mathptmx} will be loaded with a scale factor to get the
   Greek letters.  The \pkg{lmodern} package will be loaded with the \opt{nomath}
-  option, and \pkg{MRTlmscale} will not be loaded at all.
+  option, and \pkg{MRTlmscale} will not be loaded at all.\\
+  Unfortunately \pkg{newpxmath} v1.401 from 2019-10-02 has a bug (that is
+  already reported) in which the symbols of \cs{forall} and \cs{exists} aren't
+  the correct ones (instead $\hslash$ and $\hbar$ are used). There might be
+  other affected symbols, too, \pkg{MRTfonts} fixes these two for you.
 \end{describeopt}
 \begin{describeopt}{scale maths}[\meta{choice}]
   This is only available if you're using \hologo{pdfTeX}. With this you can

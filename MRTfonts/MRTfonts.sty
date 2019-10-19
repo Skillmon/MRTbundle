@@ -1,5 +1,5 @@
-\newcommand*\MRTfonts@version{0.0.4}
-\newcommand*\MRTfonts@date{2019-05-05}
+\newcommand*\MRTfonts@version{0.0.5}
+\newcommand*\MRTfonts@date{2019-10-16}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -204,6 +204,12 @@
     \RequirePackage[upint,smallerops,nosymbolsc,noamssymbols]{newpxmath}
     % no, newpxmath, you don't get the letters
     \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
+    % fixing newpxmath symbols
+    \str_if_eq:eeT { \use:c { ver@newpxmath.sty } } { 2019/10/02~v1.401 }
+      {
+        \DeclareMathSymbol{\forall}{\mathord}{symbols}{56}
+        \DeclareMathSymbol{\exists}{\mathord}{symbols}{57}
+      }
   }%=<<
   {%>>=
     \RequirePackage{lmodern}
