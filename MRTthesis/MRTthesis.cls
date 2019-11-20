@@ -903,15 +903,16 @@
   }% =<<
 \MRTutil@def\affidavittext@usagerights% >>=
   {%
-    Der Universit\"at Bayreuth, vertreten durch den Lehrstuhl f\"ur Mess- und
-    Regeltechnik (Prof. Dr.-Ing. Fischerauer), habe ich das Nutzungs- und
-    Verwertungsrecht an dieser Arbeit zu Zwecken der Lehre und Forschung, f\"ur
-    Gutachten und Publikationen erteilt. Bei einer Ver\"offentlichung von
-    Inhalten oder Ausz\"ugen der Arbeit ist in angemessener Weise auf meinen
-    Beitrag hinzuweisen. Mit der Ver\"offentlichung meines Namens und des Themas
-    der Arbeit in der Liste der am Lehrstuhl angefertigten Arbeiten bin ich
-    einverstanden. Ich erkl\"are ferner, dass ich die Inhalte der Arbeit
-    meinerseits nicht ohne Zustimmung des Lehrstuhls publizieren werde.%
+    Der Universit\"at Bayreuth, vertreten durch den Lehrstuhl f\"ur
+    Mess\nobreak\hbox{-~}und Regeltechnik (Prof.\ Dr.-Ing.\ Fischerauer), habe
+    ich das Nutzungs\nobreak\hbox{-~}und Verwertungsrecht an dieser Arbeit zu
+    Zwecken der Lehre und Forschung, f\"ur Gutachten und Publikationen erteilt.
+    Bei einer Ver\"offentlichung von Inhalten oder Ausz\"ugen der Arbeit ist in
+    angemessener Weise auf meinen Beitrag hinzuweisen. Mit der
+    Ver\"offentlichung meines Namens und des Themas der Arbeit in der Liste der
+    am Lehrstuhl angefertigten Arbeiten bin ich einverstanden. Ich erkl\"are
+    ferner, dass ich die Inhalte der Arbeit meinerseits nicht ohne Zustimmung
+    des Lehrstuhls publizieren werde.%
   }% =<<
 \MRTutil@def\affidavittext@degree% >>=
   {%
