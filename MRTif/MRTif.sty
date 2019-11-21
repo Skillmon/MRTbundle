@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.9}
-\newcommand*\MRTif@date{2019-04-09}
+\newcommand*\MRTif@version{0.0.10}
+\newcommand*\MRTif@date{2019-11-21}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -201,18 +201,61 @@
       }%
   }% =<<
 % MRTifEmpty >>=
-\MRTifCreateBranchingIfs{MRTifEmpty}{TF=ab,T=yn,F=ny}{1}
-  {\if\relax\detokenize{#1}\relax}
-\MRTifCreateBranchingIfs{MRTifEmptyN}{TF=ab,T=yn,F=ny}{1}
-  {\if\relax\detokenize\expandafter{#1}\relax}
+% obfuscated but *fast* ifempty, slightly less robust
+\begingroup
+\lccode`\$=127
+\lccode`\&=127
+\lowercase{\endgroup
+% standard version >>=
+\MRTutil@def[\long]\MRTifEmpty@true@T&$\@gobble#1{#1}
+\MRTutil@def[\long]\MRTifEmpty@true@F&$\@firstofone#1{}
+\MRTutil@def[\long]\MRTifEmpty@true@TF&$\@secondoftwo#1#2{#1}
+\MRTutil@def[\long]\MRTifEmpty@#1&${}
+\MRTutil@def[\long]\MRTifEmptyTF#1%
+  {\MRTifEmpty@&#1$\MRTifEmpty@true@TF&$\@secondoftwo}
+\MRTutil@def[\long]\MRTifEmptyT#1%
+  {\MRTifEmpty@&#1$\MRTifEmpty@true@T&$\@gobble}
+\MRTutil@def[\long]\MRTifEmptyF#1%
+  {\MRTifEmpty@&#1$\MRTifEmpty@true@F&$\@firstofone}
+% =<<
+% N-version >>=
+\MRTutil@def[\long]\MRTifEmptyNTF#1%
+  {\expandafter\MRTifEmpty@e#1$\MRTifEmpty@true@TF&$\@secondoftwo}
+\MRTutil@def[\long]\MRTifEmptyNT#1%
+  {\expandafter\MRTifEmpty@e#1$\MRTifEmpty@true@T&$\@gobble}
+\MRTutil@def[\long]\MRTifEmptyNF#1%
+  {\expandafter\MRTifEmpty@e#1$\MRTifEmpty@true@F&$\@firstofone}
+\MRTutil@def\MRTifEmpty@e{\MRTifEmpty@&}
+% =<<
+}
 \MRTif@groupify@TF{Empty}
 \MRTif@create@TandF@N@TandF{EmptyG}
 % =<<
 % MRTifBlank >>=
-\MRTifCreateBranchingIfs{MRTifBlank}{TF=ab,T=yn,F=ny}{1}
-  {\if\relax\detokenize\expandafter{\@gobble#1.}\relax}
+% obfuscated but *fast* ifblank, reuses internal of ifEmpty
+\begingroup
+\lccode`\$=127
+\lccode`\&=127
+\lowercase{\endgroup
+% standard version >>=
+\MRTutil@def[\long]\MRTifBlankTF#1%
+  {\MRTifBlank@#1.$\MRTifEmpty@true@TF&$\@secondoftwo}
+\MRTutil@def[\long]\MRTifBlankT#1%
+  {\MRTifBlank@#1.$\MRTifEmpty@true@T&$\@gobble}
+\MRTutil@def[\long]\MRTifBlankF#1%
+  {\MRTifBlank@#1.$\MRTifEmpty@true@F&$\@firstofone}
+\MRTutil@def[\long]\MRTifBlank@#1{\MRTifEmpty@&}
+% =<<
+% N-version >>=
+\MRTutil@def[\long]\MRTifBlankNTF#1%
+  {\expandafter\MRTifBlank@#1.$\MRTifEmpty@true@TF&$\@secondoftwo}
+\MRTutil@def[\long]\MRTifBlankNT#1%
+  {\expandafter\MRTifBlank@#1.$\MRTifEmpty@true@T&$\@gobble}
+\MRTutil@def[\long]\MRTifBlankNF#1%
+  {\expandafter\MRTifBlank@#1.$\MRTifEmpty@true@F&$\@firstofone}
+% =<<
+}
 \MRTif@groupify@TF{Blank}
-\MRTif@create@N@TandF{Blank}
 \MRTif@create@TandF@N@TandF{BlankG}
 % =<<
 % MRTifGroup >>=
