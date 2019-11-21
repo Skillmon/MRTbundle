@@ -7,6 +7,15 @@ to something close to the old behaviour.
 This chapter should list all those ground breaking changes (which might be
 really minor, though).
 
+\begin{incompatibilities}{\cls{MRTthesis}}
+  2019-11-20 & v0.0.18 & \cs{affidavit}
+    & From this version on the affidavit is available using singular and plural
+      forms, with the default being to automatically decide which one to use
+      based on the given \opt{author}. You can deactivate this using
+      \opt{affidavit plural=false} in \cs{MRTthesisSetup}. (See
+      \autoref{sec:thesis:setup})
+\end{incompatibilities}<++>
+
 \begin{incompatibilities}{\pkg{MRTtab}}
   2019-02-09 & v0.0.5 & \cs{MRTcline}
     & From this version on by default the entire line is coloured first and then

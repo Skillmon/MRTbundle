@@ -298,6 +298,13 @@ resolve around automatically added contents.
   value is |front|. |front| and |back| will only take effect if |frontmatter|
   and |backmatter| are set to |auto|, respectively.
 \end{describeopt}
+\begin{describeopt}{affidavit plural}[\meta{choice}]
+  The \cs{affidavit}'s default text can be typeset using first person plural or
+  singular forms. With this choice you can set whether you want this or not.
+  Viable choices are |auto|, the class will try to parse this from the given
+  |author|, |true|, meaning the affidavit will be typeset using plural forms, or
+  |false|, meaning the affidavit will be typeset using singular forms.
+\end{describeopt}
 \begin{describeopt}{appendix}[\meta{file}]
   Sets the appendix file added if \bverb|backmatter=auto| is used. If
   \meta{file} (the argument) is empty no file will be added. By default it is

@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.17}
-\newcommand*\MRTthesis@date{2019-08-16}
+\newcommand*\MRTthesis@version{0.0.18}
+\newcommand*\MRTthesis@date{2019-11-20}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -325,6 +325,21 @@
     ,affidavit   / off    .code:n =
       \bool_set_false:N \l_MRTthesis_affidavit_front_bool
       \bool_set_false:N \l_MRTthesis_affidavit_back_bool
+    ,affidavit~plural .choice:
+    ,affidavit~plural / auto .code:n =
+      \cs_set_protected:Npn \__MRTthesis_affidavit_plural_set:
+        {
+          \int_compare:nNnTF
+            \c_one_int < { \seq_count:N \g_MRTthesis_authors_seq }
+            { \cs_set_eq:NN \MRTthesis@IfPluralTF \use_i:nn }
+            { \cs_set_eq:NN \MRTthesis@IfPluralTF \use_ii:nn }
+        }
+    ,affidavit~plural / true .code:n =
+      \cs_set_protected:Npn \__MRTthesis_affidavit_plural_set:
+        { \cs_set_eq:NN \MRTthesis@IfPluralTF \use_i:nn }
+    ,affidavit~plural / false .code:n =
+      \cs_set_protected:Npn \__MRTthesis_affidavit_plural_set:
+        { \cs_set_eq:NN \MRTthesis@IfPluralTF \use_ii:nn }
     ,lof              .choice:
     ,lof         / front  .code:n =
       \bool_set_true:N  \l_MRTthesis_lof_front_bool
@@ -384,6 +399,7 @@
     ,toc~ssSecIndent = 6.38em
     % front- and backmatter related
     ,affidavit = front
+    ,affidavit~plural = auto
     ,lof = front
     ,lot = front
     ,toc = front
@@ -895,37 +911,61 @@
 \ExplSyntaxOff%>>=
 \MRTutil@def\affidavittext@base% >>=
   {%
-    Hiermit versichere ich an Eides statt, dass ich die vorliegende Arbeit
-    selbst\"andig und unter Angabe aller Hilfsmittel und Referenzen angefertigt
-    habe. Eine Ausnahme bilden die pers\"onlichen Mitteilungen der Betreuer der
+    Hiermit
+    \MRTthesis@IfPluralTF{versichern wir}{versichere ich}
+    an Eides statt, dass
+    \MRTthesis@IfPluralTF{wir}{ich}
+    die vorliegende Arbeit selbst\"andig und unter Angabe aller Hilfsmittel und
+    Referenzen angefertigt
+    \MRTthesis@IfPluralTF{haben}{habe}.
+    Eine Ausnahme bilden die pers\"onlichen Mitteilungen der Betreuer der
     Arbeit, die st\"andig eingeflossen sind und daher nicht im Einzelnen
     nachgewiesen werden.%
   }% =<<
 \MRTutil@def\affidavittext@usagerights% >>=
   {%
     Der Universit\"at Bayreuth, vertreten durch den Lehrstuhl f\"ur
-    Mess\nobreak\hbox{-~}und Regeltechnik (Prof.\ Dr.-Ing.\ Fischerauer), habe
-    ich das Nutzungs\nobreak\hbox{-~}und Verwertungsrecht an dieser Arbeit zu
+    Mess\nobreak\hbox{-~}und Regeltechnik (Prof.\ Dr.-Ing.\ Fischerauer),
+    \MRTthesis@IfPluralTF{haben wir}{habe ich}
+    das Nutzungs\nobreak\hbox{-~}und Verwertungsrecht an dieser Arbeit zu
     Zwecken der Lehre und Forschung, f\"ur Gutachten und Publikationen erteilt.
     Bei einer Ver\"offentlichung von Inhalten oder Ausz\"ugen der Arbeit ist in
-    angemessener Weise auf meinen Beitrag hinzuweisen. Mit der
-    Ver\"offentlichung meines Namens und des Themas der Arbeit in der Liste der
-    am Lehrstuhl angefertigten Arbeiten bin ich einverstanden. Ich erkl\"are
-    ferner, dass ich die Inhalte der Arbeit meinerseits nicht ohne Zustimmung
-    des Lehrstuhls publizieren werde.%
+    angemessener Weise auf
+    \MRTthesis@IfPluralTF{unseren}{meinen}
+    Beitrag hinzuweisen. Mit der Ver\"offentlichung
+    \MRTthesis@IfPluralTF{unserer Namen}{meines Namens}
+    und des Themas der Arbeit in der Liste der am Lehrstuhl angefertigten
+    Arbeiten
+    \MRTthesis@IfPluralTF{sind wir}{bin ich}
+    einverstanden.
+    \MRTthesis@IfPluralTF{Wir erkl\"aren}{Ich erkl\"are}
+    ferner, dass
+    \MRTthesis@IfPluralTF{wir}{ich}
+    die Inhalte der Arbeit
+    \MRTthesis@IfPluralTF{unsererseits}{meinerseits}
+    nicht ohne Zustimmung des Lehrstuhls publizieren
+    \MRTthesis@IfPluralTF{werden}{werde}.%
   }% =<<
 \MRTutil@def\affidavittext@degree% >>=
   {%
-    Hiermit erkl\"are ich, dass ich die vorliegende Arbeit mit dem Thema
+    Hiermit
+    \MRTthesis@IfPluralTF{erkl\"aren wir}{erkl\"are ich},
+    dass
+    \MRTthesis@IfPluralTF{wir}{ich}
+    die vorliegende Arbeit mit dem Thema
     „\csname l_MRTthesis_title_tl\endcsname“ noch nicht anderweitig zur
-    Erlangung eines akademischen Grades eingereicht habe.%
+    Erlangung eines akademischen Grades eingereicht
+    \MRTthesis@IfPluralTF{haben}{habe}.%
   }% =<<
 \ExplSyntaxOn%=<<
 \MRTutil@def\affidavittext% >>=
   {
+    \group_begin:
+    \__MRTthesis_affidavit_plural_set:
     \affidavittext@base
-    \bool_if:NF \l_MRTthesis_no_usage_bool { \par \affidavittext@usagerights }
+    \bool_if:NF \l_MRTthesis_no_usage_bool  { \par \affidavittext@usagerights }
     \bool_if:NF \l_MRTthesis_no_degree_bool { \par \affidavittext@degree }
+    \group_end:
   }% =<<
 \MRTutil@def\affidavittitle%>>=
   {
