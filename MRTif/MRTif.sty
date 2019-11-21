@@ -203,29 +203,29 @@
 % MRTifEmpty >>=
 % obfuscated but *fast* ifempty, slightly less robust
 \begingroup
-\lccode`\$=127
-\lccode`\&=127
+\lccode`\Q=127
+\lccode`\*=127
 \lowercase{\endgroup
 % standard version >>=
-\MRTutil@def[\long]\MRTifEmpty@true@T&$\@gobble#1{#1}
-\MRTutil@def[\long]\MRTifEmpty@true@F&$\@firstofone#1{}
-\MRTutil@def[\long]\MRTifEmpty@true@TF&$\@secondoftwo#1#2{#1}
-\MRTutil@def[\long]\MRTifEmpty@#1&${}
+\MRTutil@def[\long]\MRTifEmpty@true@T*Q\@gobble#1{#1}
+\MRTutil@def[\long]\MRTifEmpty@true@F*Q\@firstofone#1{}
+\MRTutil@def[\long]\MRTifEmpty@true@TF*Q\@secondoftwo#1#2{#1}
+\MRTutil@def[\long]\MRTifEmpty@#1*Q{}
 \MRTutil@def[\long]\MRTifEmptyTF#1%
-  {\MRTifEmpty@&#1$\MRTifEmpty@true@TF&$\@secondoftwo}
+  {\MRTifEmpty@*#1Q\MRTifEmpty@true@TF*Q\@secondoftwo}
 \MRTutil@def[\long]\MRTifEmptyT#1%
-  {\MRTifEmpty@&#1$\MRTifEmpty@true@T&$\@gobble}
+  {\MRTifEmpty@*#1Q\MRTifEmpty@true@T*Q\@gobble}
 \MRTutil@def[\long]\MRTifEmptyF#1%
-  {\MRTifEmpty@&#1$\MRTifEmpty@true@F&$\@firstofone}
+  {\MRTifEmpty@*#1Q\MRTifEmpty@true@F*Q\@firstofone}
 % =<<
 % N-version >>=
 \MRTutil@def[\long]\MRTifEmptyNTF#1%
-  {\expandafter\MRTifEmpty@e#1$\MRTifEmpty@true@TF&$\@secondoftwo}
+  {\expandafter\MRTifEmpty@e#1Q\MRTifEmpty@true@TF*Q\@secondoftwo}
 \MRTutil@def[\long]\MRTifEmptyNT#1%
-  {\expandafter\MRTifEmpty@e#1$\MRTifEmpty@true@T&$\@gobble}
+  {\expandafter\MRTifEmpty@e#1Q\MRTifEmpty@true@T*Q\@gobble}
 \MRTutil@def[\long]\MRTifEmptyNF#1%
-  {\expandafter\MRTifEmpty@e#1$\MRTifEmpty@true@F&$\@firstofone}
-\MRTutil@def\MRTifEmpty@e{\MRTifEmpty@&}
+  {\expandafter\MRTifEmpty@e#1Q\MRTifEmpty@true@F*Q\@firstofone}
+\MRTutil@def\MRTifEmpty@e{\MRTifEmpty@*}
 % =<<
 }
 \MRTif@groupify@TF{Empty}
@@ -234,25 +234,25 @@
 % MRTifBlank >>=
 % obfuscated but *fast* ifblank, reuses internal of ifEmpty
 \begingroup
-\lccode`\$=127
-\lccode`\&=127
+\lccode`\Q=127
+\lccode`\*=127
 \lowercase{\endgroup
 % standard version >>=
 \MRTutil@def[\long]\MRTifBlankTF#1%
-  {\MRTifBlank@#1.$\MRTifEmpty@true@TF&$\@secondoftwo}
+  {\MRTifBlank@#1.Q\MRTifEmpty@true@TF*Q\@secondoftwo}
 \MRTutil@def[\long]\MRTifBlankT#1%
-  {\MRTifBlank@#1.$\MRTifEmpty@true@T&$\@gobble}
+  {\MRTifBlank@#1.Q\MRTifEmpty@true@T*Q\@gobble}
 \MRTutil@def[\long]\MRTifBlankF#1%
-  {\MRTifBlank@#1.$\MRTifEmpty@true@F&$\@firstofone}
-\MRTutil@def[\long]\MRTifBlank@#1{\MRTifEmpty@&}
+  {\MRTifBlank@#1.Q\MRTifEmpty@true@F*Q\@firstofone}
+\MRTutil@def[\long]\MRTifBlank@#1{\MRTifEmpty@*}
 % =<<
 % N-version >>=
 \MRTutil@def[\long]\MRTifBlankNTF#1%
-  {\expandafter\MRTifBlank@#1.$\MRTifEmpty@true@TF&$\@secondoftwo}
+  {\expandafter\MRTifBlank@#1.Q\MRTifEmpty@true@TF*Q\@secondoftwo}
 \MRTutil@def[\long]\MRTifBlankNT#1%
-  {\expandafter\MRTifBlank@#1.$\MRTifEmpty@true@T&$\@gobble}
+  {\expandafter\MRTifBlank@#1.Q\MRTifEmpty@true@T*Q\@gobble}
 \MRTutil@def[\long]\MRTifBlankNF#1%
-  {\expandafter\MRTifBlank@#1.$\MRTifEmpty@true@F&$\@firstofone}
+  {\expandafter\MRTifBlank@#1.Q\MRTifEmpty@true@F*Q\@firstofone}
 % =<<
 }
 \MRTif@groupify@TF{Blank}
