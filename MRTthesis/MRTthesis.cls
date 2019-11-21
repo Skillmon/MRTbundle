@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.18}
-\newcommand*\MRTthesis@date{2019-11-20}
+\newcommand*\MRTthesis@version{0.0.19}
+\newcommand*\MRTthesis@date{2019-11-21}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -1247,34 +1247,49 @@
         \\\vfill
       }
   }% =<<
+\cs_new:Npn \MRTthesis_titlepage_place_thesis_block_degree:n #1
+  {
+    \\\MRTthesis@fntsel{12}{16}
+    zur~Erlangung~des~akademischen~Grades\strut\\
+    \MRTthesis@fntsel{12}{16}
+    #1\strut\\
+  }
 \cs_new_nopar:Npn \MRTthesis_titlepage_place_thesis_block:% >>=
   {
     \MRTthesis@fntsel{12}{15}\textbf{\l_MRTthesis_thesis_tl}\strut
     \bool_if:NF \l_MRTthesis_no_degree_bool
       {
-        \\\MRTthesis@fntsel{12}{16}
-        zur~Erlangung~des~akademischen~Grades\strut\\
-        \MRTthesis@fntsel{12}{16}
         \tl_if_empty:NTF \l_MRTthesis_degree_tl
           {
-            \str_case:onF { \l_MRTthesis_thesis_tl }
+            \bool_lazy_or:nnF
+              { \str_if_eq_p:on \l_MRTthesis_thesis_tl { Teamprojektarbeit } }
+              { \str_if_eq_p:on \l_MRTthesis_thesis_tl { Projektstudium } }
               {
-                { Masterarbeit }    { Master~of~Science }
-                { Bachelorarbeit }  { Bachelor~of~Science }
-                { Diplomarbeit }    { Diplom~Ingenieur }
-                { Bachelor Thesis } { Bachelor~of~Science }
-                { Bachelor thesis } { Bachelor~of~Science }
-                { Bachelorthesis }  { Bachelor~of~Science }
-                { Master Thesis }   { Master~of~Science }
-                { Master thesis }   { Master~of~Science }
-                { Masterthesis }    { Master~of~Science }
-              }
-              {
-                \msg_error:nn { MRTthesis } { degree~undefined }
-                \textcolor{blue}{Mein akademischer Grad}
+                \MRTthesis_titlepage_place_thesis_block_degree:n
+                  {
+                    \str_case:onF { \l_MRTthesis_thesis_tl }
+                      {
+                        { Masterarbeit    } { Master~of~Science }
+                        { Bachelorarbeit  } { Bachelor~of~Science }
+                        { Diplomarbeit    } { Diplom~Ingenieur }
+                        { Bachelor~Thesis } { Bachelor~of~Science }
+                        { Bachelor~thesis } { Bachelor~of~Science }
+                        { Bachelorthesis  } { Bachelor~of~Science }
+                        { Master~Thesis   } { Master~of~Science }
+                        { Master~thesis   } { Master~of~Science }
+                        { Masterthesis    } { Master~of~Science }
+                      }
+                      {
+                        \msg_error:nn { MRTthesis } { degree~undefined }
+                        \textcolor{blue}{Mein~akademischer~Grad}
+                      }
+                  }
               }
           }
-          { \l_MRTthesis_degree_tl }
+          {
+            \MRTthesis_titlepage_place_thesis_block_degree:n
+              \l_MRTthesis_degree_tl
+          }
         \strut
         \\
       }
