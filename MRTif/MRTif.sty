@@ -10,7 +10,7 @@
   ]
 \RequirePackage{pdftexcmds,MRTutil}
 
-% MRTif@fi macros >>=
+%\setminusMRTif@fi macros >>=
 \long\def\MRTif@fiAy#1\fi#2{\fi#2}
 \long\def\MRTif@fiAn#1\fi#2{\fi}
 \long\def\MRTif@fiAa#1\fi#2#3{\fi#2}
@@ -33,10 +33,15 @@
 \long\def\MRTif@fifiBBa\fi\fi#1#2{\fi\fi#1}
 \long\def\MRTif@fifiBBb\fi\fi#1#2{\fi\fi#2}
 \long\def\MRTif@fifiBBTc\fi\fi#1#2#3{\fi\fi#3}
+\long\def\MRTif@fi@gobble\fi\@firstofone#1{\fi}
+\long\def\MRTif@fi@firstofone\fi\@gobble#1{\fi#1}
+\long\def\MRTif@fi@firstoftwo\fi\@secondoftwo#1#2{\fi#1}
+\long\def\MRTif@fi@secondoftwo\fi\@firstoftwo#1#2{\fi#2}
 % =<<
+\MRTutil@def[\long]\MRTif@ifxothercase@true#1\else\MRTif@fiBb\fi#2#3{\fi#2}
 \MRTutil@def[\long]\MRTif@ifxothercase#1#2%>>=
   {%
-    \fi\ifx#1#2\MRTif@fiAa
+    \fi\ifx#1#2\MRTif@ifxothercase@true
   }%=<<
 
 % Definition of \endMRTif@argument >>=
@@ -48,7 +53,7 @@
 \MRTutil@def[\long]\MRTif@endMRTif@argument#1% >>=
   {%
     \ifx\endMRTif@argument#1%
-      \MRTif@fiBTb
+      \MRTif@fi@firstoftwo
     \fi
     \@secondoftwo
   }% =<<
@@ -68,7 +73,7 @@
 \MRTutil@def[\long]\MRTif@cbi@b#1#2#3#4=#5,%>>=
   {%
     \ifx\endMRTif@argument#4%
-      \MRTif@fiBg
+      \MRTif@fi@gobble
     \fi
     \@firstofone
       {%
@@ -93,10 +98,14 @@
   {%
     \MRTutil@def[\long]#3#4{#5#1\fi#2}%
   }%=<<
-\MRTutil@def\MRTif@cbi@def@ab{\MRTif@cbi@def@common\MRTif@fiBTb\@secondoftwo}
-\MRTutil@def\MRTif@cbi@def@ba{\MRTif@cbi@def@common\MRTif@fiBTc\@firstoftwo}
-\MRTutil@def\MRTif@cbi@def@yn{\MRTif@cbi@def@common\MRTif@fiBb\@gobble}
-\MRTutil@def\MRTif@cbi@def@ny{\MRTif@cbi@def@common\MRTif@fiBg\@firstofone}
+\MRTutil@def\MRTif@cbi@def@ab%>>=
+  {\MRTif@cbi@def@common\MRTif@fi@firstoftwo\@secondoftwo}%=<<
+\MRTutil@def\MRTif@cbi@def@ba%>>=
+  {\MRTif@cbi@def@common\MRTif@fi@secondoftwo\@firstoftwo}%=<<
+\MRTutil@def\MRTif@cbi@def@yn%>>=
+  {\MRTif@cbi@def@common\MRTif@fi@firstofone\@gobble}%=<<
+\MRTutil@def\MRTif@cbi@def@ny%>>=
+  {\MRTif@cbi@def@common\MRTif@fi@gobble\@firstofone}%=<<
 % =<<
 
 \MRTutil@def\MRTif@groupify@TF#1% >>=
@@ -191,15 +200,20 @@
     \MRTifEmptyTF{#1}
       {\@secondoftwo}
       {%
-        \MRTifContainsGroupTF{#1}
+        \MRTifContainsSpaceTF{#1}
           {\@secondoftwo}
           {%
-            \MRTifContainsSpaceTF{#1}
+            \MRTifContainsGroupTF{#1}
               {\@secondoftwo}
               {#2}%
           }%
       }%
   }% =<<
+% MRTifMathMode >>=
+\MRTutil@def\MRTifMathModeTF{\ifmmode\MRTif@fi@firstoftwo\fi\@secondoftwo}
+\MRTutil@def\MRTifMathModeT{\ifmmode\MRTif@fi@firstofone\fi\@gobble}
+\MRTutil@def\MRTifMathModeF{\ifmmode\MRTif@fi@gobble\fi\@firstofone}
+% =<<
 % MRTifEmpty >>=
 % obfuscated but *fast* ifempty, slightly less robust
 \begingroup
@@ -422,7 +436,7 @@
   }% =<<
 %\MRTutil@def[\long]\MRTifLetter@core#1% >>=
 \begingroup
-\catcode`z=11 % just to make sure z has catcode 11 in the following
+\catcode`\z=11 % just to make sure z has catcode 11 in the following
 \@firstofone
   {%
     \endgroup
@@ -460,7 +474,7 @@
         \MRTifOneTokenTF{#2}
           {%
             \ifx#1#2%
-              \MRTif@fiBTb
+              \MRTif@fi@firstoftwo
             \fi
             \@secondoftwo
           }
@@ -480,7 +494,7 @@
   }% =<<
 \MRTutil@def[\long]\MRTifDigit@core#1% >>=
   {%
-    \ifx0#1\MRTif@fiAa
+    \ifx0#1\MRTif@ifxothercase@true
     \else\MRTif@ifxothercase1#1%
     \else\MRTif@ifxothercase2#1%
     \else\MRTif@ifxothercase3#1%
@@ -569,31 +583,20 @@
   {%
     \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloat@a{#1}}%
   }% =<<
-%\MRTutil@def\MRTifFloat@a \MRTutil@def\MRTifFloat@ifDot >>=
-\begingroup
-\catcode`\?=4
-\@firstofone
+\MRTutil@def[\long]\MRTifFloat@a#1% >>=
   {%
-    \endgroup
-    \MRTutil@def[\long]\MRTifFloat@a#1% >>=
-      {%
-        \MRTifFloat@ifDot{#1}
-          {\MRTifFloat@withDot#1\MRTifFloat@endargument}
-          {\MRTifNumber@ifSign#1\endMRTif@argument}%
-      }% =<<
-    \MRTutil@def[\long]\MRTifFloat@ifDot#1% >>=
-      {%
-        \MRTifFloat@ifDot@a#1.?\MRTifFloat@endargument
-      }% =<<
-    \long\def\MRTifFloat@ifDot@a#1.#2\MRTifFloat@endargument% >>=
-      {%
-        \ifx?#2%
-          \MRTif@fiBTc
-        \fi
-        \@firstoftwo
-      }% =<<
-  }
-% =<<
+    \MRTifFloat@ifNoDot{#1}
+      {\MRTifNumber@ifSign#1\endMRTif@argument}
+      {\MRTifFloat@withDot#1\MRTifFloat@endargument}%
+  }% =<<
+\MRTutil@def[\long]\MRTifFloat@ifNoDot#1% >>=
+  {%
+    \MRTifFloat@ifNoDot@a#1.\endMRTif@argument\MRTifFloat@endargument
+  }% =<<
+\long\def\MRTifFloat@ifNoDot@a#1.#2\MRTifFloat@endargument% >>=
+  {%
+    \MRTif@endMRTif@argument{#2}%
+  }% =<<
 \long\def\MRTifFloat@withDot#1.#2\MRTifFloat@endargument% >>=
   {%
     \MRTifEmptyTF{#1}
@@ -611,13 +614,13 @@
 % MRTifFloatNoSign >>=
 \MRTutil@def[\long]\MRTifFloatNoSignTF#1% >>=
   {%
-    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloatNoSpace@a{#1}}%
+    \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloatNoSign@a{#1}}%
   }% =<<
-\MRTutil@def[\long]\MRTifFloatNoSpace@a#1% >>=
+\MRTutil@def[\long]\MRTifFloatNoSign@a#1% >>=
   {%
-    \MRTifFloat@ifDot{#1}
-      {\MRTifFloatNoSign@withDot#1\MRTifFloatNoSign@endargument}
-      {\MRTifNumber@ifDigit@noend#1\endMRTif@argument}%
+    \MRTifFloat@ifNoDot{#1}
+      {\MRTifNumber@ifDigit@noend#1\endMRTif@argument}
+      {\MRTifFloatNoSign@withDot#1\MRTifFloatNoSign@endargument}%
   }% =<<
 \long\def\MRTifFloatNoSign@withDot#1.#2\MRTifFloatNoSign@endargument% >>=
   {%
@@ -692,13 +695,13 @@
 \MRTutil@def[\long]\MRTifTokenIn@searchin#1#2#3%>>=
   {%
     \ifx#1#3%
-      \MRTif@fiBTb
+      \MRTif@fi@firstoftwo
     \fi
     \@secondoftwo
     \MRTifTokenIn@finaltrue
     {%
       \ifx\endMRTif@argument#3%
-        \MRTif@fiBTb
+        \MRTif@fi@firstoftwo
       \fi
       \@secondoftwo
       {#2}
@@ -779,7 +782,7 @@
 \MRTutil@def[\long]\MRTifFexp@a#1% >>=
   {%
     \ifx\MRTifFexp@c#1%
-      \MRTif@fiBTb
+      \MRTif@fi@firstoftwo
     \fi
     \@secondoftwo
     {\MRTif@endfexp@gobble}
@@ -788,7 +791,7 @@
 \MRTutil@def[\long]\MRTifFexp@b#1% >>=
   {%
     \ifx\MRTifFexp@c#1%
-      \MRTif@fiBTb
+      \MRTif@fi@firstoftwo
     \fi
     \@secondoftwo
     { % space ending the inner \romannumeral
