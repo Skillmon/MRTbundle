@@ -1,5 +1,5 @@
-\newcommand*\MRTsfacc@version{0.0.6}
-\newcommand*\MRTsfacc@date{2019-04-09}
+\newcommand*\MRTsfacc@version{0.0.7}
+\newcommand*\MRTsfacc@date{2019-11-23}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -122,7 +122,7 @@
             $#2$%
           }%
         \if@MRTsfacc@found@known@
-          \MRTif@fiBTb
+          \MRTif@fi@firstoftwo
         \fi
         \@secondoftwo
       }
@@ -157,14 +157,12 @@
     {%
       \protected\long\def\mathaccentV##1##2##3##4% >>=
         {%
-          \ifmmode
-            \def\mathaccentV@args{{##2}{##3}{##4}}%
-            \MRTif@fiAy
-          \else
-            \@xp\nonmatherr@\csname ##1\endcsname
-            \MRTif@fiBn
-          \fi
-          {\futurelet\next\mathaccentV@a}%
+          \MRTifMathModeTF
+            {%
+              \def\mathaccentV@args{{##2}{##3}{##4}}%
+              \futurelet\next\mathaccentV@a
+            }%
+            {\@xp\nonmatherr@\csname ##1\endcsname}%
         }% =<<
     }% =<<
   \MRTutil@def\MRTsfacc@kern% >>=
@@ -220,17 +218,13 @@
     {%
       \protected\def\mathaccentV##1##2##3##4% >>=
         {%
-          \ifmmode
-            \MRTif@fiAy
-          \else
-            \@xp\nonmatherr@\csname ##1\endcsname
-            \MRTif@fiBn
-          \fi
-          {%
-            \@ifnextchar[%]
-              {\mathaccentV@b{##2}{##3}{##4}}
-              {\mathaccentV@a{##2}{##3}{##4}}%
-          }%
+          \MRTifMathModeTF
+            {%
+              \@ifnextchar[%]
+                {\mathaccentV@b{##2}{##3}{##4}}
+                {\mathaccentV@a{##2}{##3}{##4}}%
+            }%
+            {\@xp\nonmatherr@\csname ##1\endcsname}%
         }% =<<
     }% =<<
   \MRTutil@def\MRTsfacc@ifknown#1%>>=

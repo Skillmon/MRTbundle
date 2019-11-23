@@ -83,6 +83,11 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
   \end{MRTtable}
 \end{describemacro}
 
+\begin{describemacroTF}{MRTifMathMode}
+  Tests if you're currently in math mode. This is just a wrapper around the
+  primitive \cs{ifmmode}.
+\end{describemacroTF}
+
 \begin{describemacroTF}[G,N,GN]{MRTifEmpty}[\marg{arg}]
   Tests if \meta{arg} is completely empty.
 \end{describemacroTF}
