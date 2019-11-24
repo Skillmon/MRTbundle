@@ -10,7 +10,11 @@
   ]
 \RequirePackage{pdftexcmds,MRTutil}
 
-%\setminusMRTif@fi macros >>=
+\long\def\@firstofthree#1#2#3{#1}
+\long\def\@secondofthree#1#2#3{#2}
+\long\def\@thirdofthree#1#2#3{#3}
+
+% MRTif@fi macros >>=
 \long\def\MRTif@fiAy#1\fi#2{\fi#2}
 \long\def\MRTif@fiAn#1\fi#2{\fi}
 \long\def\MRTif@fiAa#1\fi#2#3{\fi#2}
@@ -38,11 +42,6 @@
 \long\def\MRTif@fi@firstoftwo\fi\@secondoftwo#1#2{\fi#1}
 \long\def\MRTif@fi@secondoftwo\fi\@firstoftwo#1#2{\fi#2}
 % =<<
-\MRTutil@def[\long]\MRTif@ifxothercase@true#1\else\MRTif@fiBb\fi#2#3{\fi#2}
-\MRTutil@def[\long]\MRTif@ifxothercase#1#2%>>=
-  {%
-    \fi\ifx#1#2\MRTif@ifxothercase@true
-  }%=<<
 
 % Definition of \endMRTif@argument >>=
 \begingroup
@@ -224,6 +223,7 @@
 \MRTutil@def[\long]\MRTifEmpty@true@T*Q\@gobble#1{#1}
 \MRTutil@def[\long]\MRTifEmpty@true@F*Q\@firstofone#1{}
 \MRTutil@def[\long]\MRTifEmpty@true@TF*Q\@secondoftwo#1#2{#1}
+\MRTutil@def[\long]\MRTifEmpty@true@FT*Q\@firstoftwo#1#2{#2}
 \MRTutil@def[\long]\MRTifEmpty@#1*Q{}
 \MRTutil@def[\long]\MRTifEmptyTF#1%
   {\MRTifEmpty@*#1Q\MRTifEmpty@true@TF*Q\@secondoftwo}
@@ -294,10 +294,10 @@
 % MRTifGroupNoSpaces >>=
 \MRTutil@def[\long]\MRTifGroupNoSpacesTF#1% >>=
   {%
-    \MRTifStringsMatchXXTF
+    \MRTifStringsMatchXXT
       {\MRTifGroupNoSpaces@a#1\end@MRTifGroupNoSpaces@a}{#1}
-      {\@secondoftwo}
-      {\@firstoftwo}
+      \@thirdofthree
+      \@firstoftwo
   }% =<<
 \long\def\MRTifGroupNoSpaces@a#1\end@MRTifGroupNoSpaces@a{#1}
 \MRTif@create@TandF@N@TandF{GroupNoSpaces}
@@ -494,18 +494,7 @@
   }% =<<
 \MRTutil@def[\long]\MRTifDigit@core#1% >>=
   {%
-    \ifx0#1\MRTif@ifxothercase@true
-    \else\MRTif@ifxothercase1#1%
-    \else\MRTif@ifxothercase2#1%
-    \else\MRTif@ifxothercase3#1%
-    \else\MRTif@ifxothercase4#1%
-    \else\MRTif@ifxothercase5#1%
-    \else\MRTif@ifxothercase6#1%
-    \else\MRTif@ifxothercase7#1%
-    \else\MRTif@ifxothercase8#1%
-    \else\MRTif@ifxothercase9#1%
-    \else\MRTif@fiBb
-    \fi
+    \ifnum1<1\noexpand#1 \MRTif@fi@firstoftwo\fi\@secondoftwo
   }% =<<
 \MRTutil@def[\long]\MRTifDigitGTF#1% >>=
   {%
@@ -639,27 +628,38 @@
 % MRTifContainsGroup >>=
 \MRTutil@def[\long]\MRTifContainsGroupTF#1% >>=
   {%
-    \expandafter\MRTifContainsGroup@a
-      \MRTifContainsGroup@eat#1{}%
-    \MRTifContainsGroup@endargument
+    \MRTifContainsGroup@eat#1{}\MRTifContainsGroup@endargument
   }% =<<
-\long\def\MRTifContainsGroup@eat#1#{}
+\long\def\MRTifContainsGroup@eat#1#{\MRTifContainsGroup@a}
 \long\def\MRTifContainsGroup@a#1\MRTifContainsGroup@endargument% >>=
   {%
-    \MRTifEmptyTF{#1}
-      {\@secondoftwo}
-      {\@firstoftwo}%
+    \MRTifEmptyT{#1}\@thirdofthree\@firstoftwo
   }% =<<
 \MRTif@groupify@TF{ContainsGroup}
 \MRTif@create@TandF@N@TandF{ContainsGroup}
 \MRTif@create@TandF@N@TandF{ContainsGroupG}
 % =<<
 % MRTifContainsSpace >>=
-\MRTifCreateBranchingIfs{MRTifContainsSpace}{TF=ba,T=ny,F=yn}{1}%>>=
-  {\if\relax\detokenize\expandafter{\MRTifContainsSpace@eat#1 }\relax}%=<<
-\long\def\MRTifContainsSpace@eat#1 {}
+% obfuscated but *fast* ifContainsSpace, reuses internal of ifEmpty
+\begingroup
+\lccode`\Q=127
+\lccode`\*=127
+\lowercase{\endgroup
+\MRTutil@def[\long]\MRTifContainsSpaceTF#1%
+  {\MRTifContainsSpace@#1 Q\MRTifEmpty@true@FT*Q\@firstoftwo}
+\MRTutil@def[\long]\MRTifContainsSpaceT#1%
+  {\MRTifContainsSpace@#1 Q\MRTifEmpty@true@F*Q\@firstofone}
+\MRTutil@def[\long]\MRTifContainsSpaceF#1%
+  {\MRTifContainsSpace@#1 Q\MRTifEmpty@true@T*Q\@gobble}
+\MRTutil@def[\long]\MRTifContainsSpaceNTF#1%
+  {\expandafter\MRTifContainsSpace@#1 Q\MRTifEmpty@true@FT*Q\@firstoftwo}
+\MRTutil@def[\long]\MRTifContainsSpaceNT#1%
+  {\expandafter\MRTifContainsSpace@#1 Q\MRTifEmpty@true@F*Q\@firstofone}
+\MRTutil@def[\long]\MRTifContainsSpaceNF#1%
+  {\expandafter\MRTifContainsSpace@#1 Q\MRTifEmpty@true@T*Q\@gobble}
+\MRTutil@def[\long]\MRTifContainsSpace@#1 {\MRTifEmpty@*}
+}
 \MRTif@groupify@TF{ContainsSpace}
-\MRTif@create@N@TandF{ContainsSpace}
 \MRTif@create@TandF@N@TandF{ContainsSpaceG}
 % =<<
 % MRTifTokenIn >>=
