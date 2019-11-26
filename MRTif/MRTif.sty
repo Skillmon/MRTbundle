@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.10}
-\newcommand*\MRTif@date{2019-11-23}
+\newcommand*\MRTif@version{0.0.11}
+\newcommand*\MRTif@date{2019-11-26}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -41,6 +41,7 @@
 \long\def\MRTif@fi@firstofone\fi\@gobble#1{\fi#1}
 \long\def\MRTif@fi@firstoftwo\fi\@secondoftwo#1#2{\fi#1}
 \long\def\MRTif@fi@secondoftwo\fi\@firstoftwo#1#2{\fi#2}
+\long\def\MRTif@fifi@secondoftwo\fi\fi\@firstoftwo#1#2{\fi\fi#2}
 % =<<
 
 % Definition of \endMRTif@argument >>=
@@ -449,10 +450,10 @@
 % MRTifTokensMatch >>=
 \MRTutil@def[\long]\MRTifTokensMatchTF#1#2% >>=
   {%
-    \MRTifGroupTF{#1}
+    \MRTifContainsGroupTF{#1}
       {\@secondoftwo}
       {%
-        \MRTifGroupTF{#2}
+        \MRTifContainsGroupTF{#2}
           {\@secondoftwo}
           {\MRTifTokensMatch@a{#1}{#2}}%
       }%
@@ -469,9 +470,9 @@
   }% =<<
 \MRTutil@def[\long]\MRTifTokensMatch@a#1#2% >>=
   {%
-    \MRTifOneTokenTF{#1}
+    \MRTifNumTokenSTF{1}{#1}
       {%
-        \MRTifOneTokenTF{#2}
+        \MRTifNumTokenSTF{1}{#2}
           {%
             \ifx#1#2%
               \MRTif@fi@firstoftwo
@@ -488,7 +489,7 @@
 % MRTifDigit >>=
 \MRTutil@def[\long]\MRTifDigitTF#1% >>=
   {%
-    \MRTifOneTokenNoGroupTF{#1}
+    \MRTifOneTokenTF{#1} % groups will fail \MRTifDigit@core
       {\MRTifDigit@core{#1}}
       {\@secondoftwo}%
   }% =<<
@@ -515,19 +516,22 @@
     \MRTif@notEmpty@noGroup@noSpace{#1}
       {\MRTifNumber@ifSign#1\endMRTif@argument}%
   }% =<<
-\MRTutil@def[\long]\MRTifNumber@ifSign#1% >>=
+\MRTutil@def[\long]\MRTifNumber@ifSign@#1%
   {%
     \ifx+#1%
-      \MRTif@fifiAa
     \else
       \ifx-#1%
-        \MRTif@fifiBAa
       \else
-        \MRTif@fifiBBb
+        \MRTif@fifi@secondoftwo
       \fi
     \fi
-    {\MRTifNumber@ifDigit@noend}
-    {\MRTifNumber@ifDigit#1}
+    \@firstoftwo
+  }
+\MRTutil@def[\long]\MRTifNumber@ifSign#1% >>=
+  {%
+    \MRTifNumber@ifSign@{#1}
+      {\MRTifNumber@ifDigit@noend}
+      {\MRTifNumber@ifDigit#1}%
   }% =<<
 \MRTutil@def[\long]\MRTifNumber@ifDigit#1% >>=
   {%
@@ -572,6 +576,7 @@
   {%
     \MRTif@notEmpty@noGroup@noSpace{#1}{\MRTifFloat@a{#1}}%
   }% =<<
+
 \MRTutil@def[\long]\MRTifFloat@a#1% >>=
   {%
     \MRTifFloat@ifNoDot{#1}
@@ -582,18 +587,28 @@
   {%
     \MRTifFloat@ifNoDot@a#1.\endMRTif@argument\MRTifFloat@endargument
   }% =<<
-\long\def\MRTifFloat@ifNoDot@a#1.#2\MRTifFloat@endargument% >>=
+\MRTutil@def[\long]\MRTifFloat@ifNoDot@a#1.#2\MRTifFloat@endargument% >>=
   {%
     \MRTif@endMRTif@argument{#2}%
   }% =<<
-\long\def\MRTifFloat@withDot#1.#2\MRTifFloat@endargument% >>=
+\MRTutil@def[\long]\MRTifFloat@ifSign#1%>>=
+  {%
+    \MRTifNumber@ifSign@{#1}
+      {\MRTifNumber@ifDigit}
+      {\MRTifNumber@ifDigit#1}%
+  }%=<<
+\MRTutil@def[\long]\MRTifFloat@withDot#1.#2\MRTifFloat@endargument% >>=
   {%
     \MRTifEmptyTF{#1}
       {\MRTifNumber@ifDigit@noend#2\endMRTif@argument}
       {%
-        \MRTifNumber@ifSign#1\endMRTif@argument
-          {\MRTifNumber@ifDigit#2\endMRTif@argument}
-          {\@secondoftwo}%
+        \MRTifEmptyTF{#2}
+          {\MRTifNumber@ifSign#1\endMRTif@argument}
+          {%
+            \MRTifNumber@ifDigit#2\endMRTif@argument
+              {\MRTifFloat@ifSign#1\endMRTif@argument}
+              {\@secondoftwo}%
+          }%
       }%
   }% =<<
 \MRTif@groupify@TF{Float}
@@ -695,10 +710,9 @@
 \MRTutil@def[\long]\MRTifTokenIn@searchin#1#2#3%>>=
   {%
     \ifx#1#3%
-      \MRTif@fi@firstoftwo
+      \MRTifTokenIn@finaltrue
     \fi
-    \@secondoftwo
-    \MRTifTokenIn@finaltrue
+    \@firstofone
     {%
       \ifx\endMRTif@argument#3%
         \MRTif@fi@firstoftwo
@@ -720,8 +734,9 @@
   {%
     \MRTifTokenIn@b#1{#2}%
   }%=<<
-\MRTutil@def[\long]\MRTifTokenIn@finaltrue#1\end@MRTifTokenIn#2#3%>>=
+\MRTutil@def[\long]\MRTifTokenIn@finaltrue\fi\@firstofone#1\end@MRTifTokenIn#2#3%>>=
   {%
+    \fi
     #2%
   }%=<<
 \MRTutil@def[\long]\MRTifTokenIn@finalfalse#1\end@MRTifTokenIn#2#3%>>=
@@ -735,7 +750,7 @@
       {\MRTifTokenInTF{#1}{#2}}%
   }%=<<
 \MRTif@create@TandF@N@TandF@twoargs{TokenIn}
-\MRTif@create@TandF@N@TandF@twoargs{TokenIn}
+\MRTif@create@TandF@N@TandF@twoargs{TokenInG}
 % =<<
 %
 % MRTtllength >>=
@@ -753,15 +768,15 @@
   {%
     \expandafter\MRTtllength\expandafter{#1}%
   }% =<<
-\MRTutil@def[\long]\MRTtllengthS#1%>>=
+\MRTutil@edef[\long]\MRTtllengthS#1%>>=
   {%
-    \the\numexpr0\MRTtllengthS@inner#1 \endMRTif@argument\endMRTtllengthS@inner
+    \unexpanded{\the\numexpr\m@ne\MRTtllengthS@spaces}#1
+    \noexpand\endMRTif@argument\space
+    \noexpand\MRTtllength@inner#1\noexpand\endMRTif@argument
   }%=<<
-\MRTutil@def[\long]\MRTtllengthS@inner#1 #2\endMRTtllengthS@inner%>>=
+\MRTutil@def[\long]\MRTtllengthS@spaces#1 %>>=
   {%
-    \MRTif@endMRTif@argument{#2}
-      {\MRTtllength@inner#1\endMRTif@argument}
-      {+1\MRTtllengthS@inner#1#2\endMRTtllengthS@inner}%
+    \MRTif@endMRTif@argument{#1}{}{+1\MRTtllengthS@spaces}%
   }%=<<
 \MRTutil@def[\long]\MRTtllengthSN#1%>>=
   {%

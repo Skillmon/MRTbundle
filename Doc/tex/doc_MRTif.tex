@@ -163,15 +163,13 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
 \dscremaininglines{4}
 
 \begin{describemacroTF}[G,N,GN]{MRTifDigit}[\marg{arg}]
-  Tests if \meta{arg} is a single token and a digit. The implementation might be
-  suboptimal.
+  Tests if \meta{arg} is a single token and a digit.
 \end{describemacroTF}
-\dscremaininglines{1}
+\dscremaininglines{2}
 
 \begin{describemacroTF}[G,N,GN]{MRTifNumber}[\marg{arg}]
   Tests if \meta{arg} is a number, meaning it consists out of an optional
-  \texttt{+} or \texttt{-} sign and digits. The implementation might be
-  suboptimal.
+  \texttt{+} or \texttt{-} sign and digits.
 \end{describemacroTF}
 \dscremaininglines{1}
 
@@ -184,7 +182,7 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
   Tests if \meta{arg} is a float, meaning it consists out of an optional
   \texttt{+} or \texttt{-} sign, optional digits, an optional decimal marker
   (\texttt{.}) and digits (which are again optional if there were digits prior
-  to a decimal marker). The implementation might be suboptimal.
+  to a decimal marker).
 \end{describemacroTF}
 
 \begin{describemacroTF}[G,N,GN]{MRTifFloatNoSign}[\marg{arg}]
@@ -210,7 +208,8 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
   than non-expandable alternatives doing the same because it scans \meta{token
   list} recursively. \meta{token} should be a single token, if it's empty the
   test is true, if it is a space \cs{MRTifContainsSpaceTF} is used, if it is
-  more than a single token (and not a single group) the test is false.
+  more than a single token the test is false, also a single group as an argument
+  yields false.
 \end{describemacroTF}
 
 \begin{describemacro}{MRTtllength,MRTtllengthN}[\marg{arg}]
