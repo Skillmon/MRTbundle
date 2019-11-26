@@ -1,0 +1,50 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifLetterTF{a}{true}{false}}   {true}
+\smalltestexpandable{\MRTifLetterTF{{a}}{true}{false}} {false}
+\smalltestexpandable{\MRTifLetterTF{aa}{true}{false}}  {false}
+\smalltestexpandable{\MRTifLetterTF{}{true}{false}}    {false}
+\smalltestexpandable{\MRTifLetterTF{1}{true}{false}}   {false}
+\smalltestexpandable{\MRTifLetterTF{$}{true}{false}}   {false}
+\smalltestexpandable{\MRTifLetterTF{_}{true}{false}}   {false}
+\smalltestexpandable{\MRTifLetterTF{^}{true}{false}}   {false}
+\smalltestexpandable{\MRTifLetterTF{#}{true}{false}}   {false}
+\smalltestexpandable{\MRTifLetterTF{&}{true}{false}}   {false}
+\smalltestexpandable{\MRTifLetterTF{~}{true}{false}}   {false}
+\smalltestexpandable{\MRTifLetterTF{11}{true}{false}}  {false}
+\smalltestexpandable{\MRTifLetterTF{ }{true}{false}}   {false}
+
+\smalltestexpandable{\MRTifLetterT{a}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifLetterT{{a}}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifLetterT{aa}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifLetterT{}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifLetterT{1}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifLetterT{$}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifLetterT{_}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifLetterT{^}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifLetterT{#}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifLetterT{&}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifLetterT{~}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifLetterT{11}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifLetterT{ }{true}{false}}   {{false}}
+
+\smalltestexpandable{\MRTifLetterF{a}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifLetterF{{a}}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifLetterF{aa}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifLetterF{}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifLetterF{1}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifLetterF{$}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifLetterF{_}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifLetterF{^}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifLetterF{#}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifLetterF{&}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifLetterF{~}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifLetterF{11}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifLetterF{ }{true}{false}}   {true{false}}
+
+
+\begin{document}
+\end{document}

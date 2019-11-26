@@ -1,0 +1,13 @@
+\RequirePackage{expl3}
+\ExplSyntaxOn
+\msg_new:nnn { smalltests } { test~failed }
+  { Result~of~'#1'~was~'#2'.~Should~have~been~'#3'. }
+\cs_new_protected:Npn \smalltestexpandable #1 #2
+  {
+    \str_if_eq:eeF { #1 } { #2 }
+      {
+        \msg_error:nnxxx { smalltests } { test~failed }
+          { \exp_not:n { #1 } } { #1 } { #2 }
+      }
+  }
+\ExplSyntaxOff

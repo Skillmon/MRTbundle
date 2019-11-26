@@ -1,0 +1,14 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{../MRTif/MRTif}
+
+\smalltestexpandable{\MRTifEmptyTF{}{true}{false}}  {true}
+\smalltestexpandable{\MRTifEmptyTF{a}{true}{false}} {false}
+\smalltestexpandable{\MRTifEmptyT{}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifEmptyT{a}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifEmptyF{}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifEmptyF{a}{true}{false}}  {true{false}}
+
+\begin{document}
+\end{document}

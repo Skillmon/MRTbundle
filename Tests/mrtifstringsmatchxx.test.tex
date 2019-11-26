@@ -1,0 +1,20 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifStringsMatchXXTF{}{}{true}{false}}          {true}
+\smalltestexpandable{\MRTifStringsMatchXXTF{a}{a}{true}{false}}        {true}
+\smalltestexpandable{\MRTifStringsMatchXXTF{\empty a}{a}{true}{false}} {true}
+\smalltestexpandable{\MRTifStringsMatchXXTF{}{a}{true}{false}}         {false}
+\smalltestexpandable{\MRTifStringsMatchXXT{}{}{true}{false}}          {true{false}}
+\smalltestexpandable{\MRTifStringsMatchXXT{a}{a}{true}{false}}        {true{false}}
+\smalltestexpandable{\MRTifStringsMatchXXT{\empty a}{a}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifStringsMatchXXT{}{a}{true}{false}}         {{false}}
+\smalltestexpandable{\MRTifStringsMatchXXF{}{}{true}{false}}          {{false}}
+\smalltestexpandable{\MRTifStringsMatchXXF{a}{a}{true}{false}}        {{false}}
+\smalltestexpandable{\MRTifStringsMatchXXF{\empty a}{a}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifStringsMatchXXF{}{a}{true}{false}}         {true{false}}
+
+\begin{document}
+\end{document}

@@ -1,0 +1,32 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifOneTokenNoGroupTF{a}{true}{false}}     {true}
+\smalltestexpandable{\MRTifOneTokenNoGroupTF{.}{true}{false}}     {true}
+\smalltestexpandable{\MRTifOneTokenNoGroupTF{{.}}{true}{false}}   {false}
+\smalltestexpandable{\MRTifOneTokenNoGroupTF{{a.b}}{true}{false}} {false}
+\smalltestexpandable{\MRTifOneTokenNoGroupTF{}{true}{false}}      {false}
+\smalltestexpandable{\MRTifOneTokenNoGroupTF{..}{true}{false}}    {false}
+\smalltestexpandable{\MRTifOneTokenNoGroupTF{{.}.}{true}{false}}  {false}
+\smalltestexpandable{\MRTifOneTokenNoGroupTF{{}.}{true}{false}}   {false}
+\smalltestexpandable{\MRTifOneTokenNoGroupT{a}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupT{.}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupT{{.}}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupT{{a.b}}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupT{}{true}{false}}      {{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupT{..}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupT{{.}.}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupT{{}.}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupF{a}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupF{.}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupF{{.}}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupF{{a.b}}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupF{}{true}{false}}      {true{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupF{..}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupF{{.}.}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifOneTokenNoGroupF{{}.}{true}{false}}   {true{false}}
+
+\begin{document}
+\end{document}

@@ -1,0 +1,13 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{../MRTif/MRTif}
+
+\begin{document}
+$\smalltestexpandable{\MRTifMathModeTF{true}{false}} {true}$
+$\smalltestexpandable{\MRTifMathModeT{true}{false}}  {true{false}}$
+$\smalltestexpandable{\MRTifMathModeF{true}{false}}  {{false}}$
+\smalltestexpandable{\MRTifMathModeTF{true}{false}} {false}
+\smalltestexpandable{\MRTifMathModeT{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifMathModeF{true}{false}}  {true{false}}
+\end{document}

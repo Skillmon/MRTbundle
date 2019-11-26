@@ -1,0 +1,88 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifFloatNoSignTF{0}{true}{false}}        {true}
+\smalltestexpandable{\MRTifFloatNoSignTF{145}{true}{false}}      {true}
+\smalltestexpandable{\MRTifFloatNoSignTF{-145}{true}{false}}     {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{+145}{true}{false}}     {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{145.}{true}{false}}     {true}
+\smalltestexpandable{\MRTifFloatNoSignTF{145.123}{true}{false}}  {true}
+\smalltestexpandable{\MRTifFloatNoSignTF{.123}{true}{false}}     {true}
+\smalltestexpandable{\MRTifFloatNoSignTF{.}{true}{false}}        {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{+.}{true}{false}}       {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{-.}{true}{false}}       {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{+145.}{true}{false}}    {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{+145.123}{true}{false}} {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{+.123}{true}{false}}    {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{-145.}{true}{false}}    {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{-145.123}{true}{false}} {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{-.123}{true}{false}}    {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{ 12.3}{true}{false}}    {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{12.3 }{true}{false}}    {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{12. 3}{true}{false}}    {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{12.a3}{true}{false}}    {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{12.3a}{true}{false}}    {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{ 123}{true}{false}}     {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{123 }{true}{false}}     {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{12 3}{true}{false}}     {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{12a3}{true}{false}}     {false}
+\smalltestexpandable{\MRTifFloatNoSignTF{123a}{true}{false}}     {false}
+
+\smalltestexpandable{\MRTifFloatNoSignT{0}{true}{false}}        {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{145}{true}{false}}      {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{-145}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{+145}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{145.}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{145.123}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{.123}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{.}{true}{false}}        {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{+.}{true}{false}}       {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{-.}{true}{false}}       {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{+145.}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{+145.123}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{+.123}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{-145.}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{-145.123}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{-.123}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{ 12.3}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{12.3 }{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{12. 3}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{12.a3}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{12.3a}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{ 123}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{123 }{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{12 3}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{12a3}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifFloatNoSignT{123a}{true}{false}}     {{false}}
+
+\smalltestexpandable{\MRTifFloatNoSignF{0}{true}{false}}        {{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{145}{true}{false}}      {{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{-145}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{+145}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{145.}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{145.123}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{.123}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{.}{true}{false}}        {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{+.}{true}{false}}       {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{-.}{true}{false}}       {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{+145.}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{+145.123}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{+.123}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{-145.}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{-145.123}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{-.123}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{ 12.3}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{12.3 }{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{12. 3}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{12.a3}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{12.3a}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{ 123}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{123 }{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{12 3}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{12a3}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifFloatNoSignF{123a}{true}{false}}     {true{false}}
+
+\begin{document}
+\end{document}

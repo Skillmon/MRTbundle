@@ -1,0 +1,37 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifContainsSpaceTF{ a}{true}{false}}   {true}
+\smalltestexpandable{\MRTifContainsSpaceTF{a a}{true}{false}}  {true}
+\smalltestexpandable{\MRTifContainsSpaceTF{a }{true}{false}}   {true}
+\smalltestexpandable{\MRTifContainsSpaceTF{{a} }{true}{false}} {true}
+\smalltestexpandable{\MRTifContainsSpaceTF{ {a}}{true}{false}} {true}
+\smalltestexpandable{\MRTifContainsSpaceTF{{a}}{true}{false}}  {false}
+\smalltestexpandable{\MRTifContainsSpaceTF{a}{true}{false}}    {false}
+\smalltestexpandable{\MRTifContainsSpaceTF{{ }}{true}{false}}  {false}
+\smalltestexpandable{\MRTifContainsSpaceTF{}{true}{false}}     {false}
+
+\smalltestexpandable{\MRTifContainsSpaceT{ a}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifContainsSpaceT{a a}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifContainsSpaceT{a }{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifContainsSpaceT{{a} }{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifContainsSpaceT{ {a}}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifContainsSpaceT{{a}}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifContainsSpaceT{a}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifContainsSpaceT{{ }}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifContainsSpaceT{}{true}{false}}     {{false}}
+
+\smalltestexpandable{\MRTifContainsSpaceF{ a}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifContainsSpaceF{a a}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifContainsSpaceF{a }{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifContainsSpaceF{{a} }{true}{false}} {{false}}
+\smalltestexpandable{\MRTifContainsSpaceF{ {a}}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifContainsSpaceF{{a}}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifContainsSpaceF{a}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifContainsSpaceF{{ }}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifContainsSpaceF{}{true}{false}}     {true{false}}
+
+\begin{document}
+\end{document}

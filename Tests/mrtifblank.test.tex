@@ -1,0 +1,17 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{../MRTif/MRTif}
+
+\smalltestexpandable{\MRTifBlankTF{}{true}{false}}  {true}
+\smalltestexpandable{\MRTifBlankTF{ }{true}{false}} {true}
+\smalltestexpandable{\MRTifBlankTF{a}{true}{false}} {false}
+\smalltestexpandable{\MRTifBlankT{}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifBlankT{ }{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifBlankT{a}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifBlankF{}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifBlankF{ }{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifBlankF{a}{true}{false}}  {true{false}}
+
+\begin{document}
+\end{document}

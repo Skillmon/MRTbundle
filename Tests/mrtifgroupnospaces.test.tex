@@ -1,0 +1,26 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifGroupNoSpacesTF{}{true}{false}}      {false}
+\smalltestexpandable{\MRTifGroupNoSpacesTF{a}{true}{false}}     {false}
+\smalltestexpandable{\MRTifGroupNoSpacesTF{{a}}{true}{false}}   {true}
+\smalltestexpandable{\MRTifGroupNoSpacesTF{ {a}}{true}{false}}  {false}
+\smalltestexpandable{\MRTifGroupNoSpacesTF{{a} }{true}{false}}  {false}
+\smalltestexpandable{\MRTifGroupNoSpacesTF{ {a} }{true}{false}} {false}
+\smalltestexpandable{\MRTifGroupNoSpacesT{}{true}{false}}       {{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesT{a}{true}{false}}      {{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesT{{a}}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesT{ {a}}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesT{{a} }{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesT{ {a} }{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesF{}{true}{false}}       {true{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesF{a}{true}{false}}      {true{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesF{{a}}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesF{ {a}}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesF{{a} }{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifGroupNoSpacesF{ {a} }{true}{false}}  {true{false}}
+
+\begin{document}
+\end{document}

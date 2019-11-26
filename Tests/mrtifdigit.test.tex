@@ -1,0 +1,72 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\let\myletdigit0
+\def\mydefdigit{0}
+\newcount\mydigitcount\mydigitcount=9
+\newdimen\mydigitdimen\mydigitdimen=1pt
+
+\smalltestexpandable{\MRTifDigitTF{0}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{1}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{2}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{3}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{4}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{5}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{6}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{7}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{8}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{9}{true}{false}}             {true}
+\smalltestexpandable{\MRTifDigitTF{{9}}{true}{false}}           {false}
+\smalltestexpandable{\MRTifDigitTF{\myletdigit}{true}{false}}   {false}
+\smalltestexpandable{\MRTifDigitTF{\mydefdigit}{true}{false}}   {false}
+\smalltestexpandable{\MRTifDigitTF{\mydigitcount}{true}{false}} {false}
+\smalltestexpandable{\MRTifDigitTF{\mydigitdimen}{true}{false}} {false}
+\smalltestexpandable{\MRTifDigitTF{ 9}{true}{false}}            {false}
+\smalltestexpandable{\MRTifDigitTF{a}{true}{false}}             {false}
+\smalltestexpandable{\MRTifDigitTF{`a}{true}{false}}            {false}
+\smalltestexpandable{\MRTifDigitTF{}{true}{false}}              {false}
+
+\smalltestexpandable{\MRTifDigitT{0}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{1}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{2}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{3}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{4}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{5}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{6}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{7}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{8}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{9}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitT{{9}}{true}{false}}           {{false}}
+\smalltestexpandable{\MRTifDigitT{\myletdigit}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifDigitT{\mydefdigit}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifDigitT{\mydigitcount}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifDigitT{\mydigitdimen}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifDigitT{ 9}{true}{false}}            {{false}}
+\smalltestexpandable{\MRTifDigitT{a}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitT{`a}{true}{false}}            {{false}}
+\smalltestexpandable{\MRTifDigitT{}{true}{false}}              {{false}}
+
+\smalltestexpandable{\MRTifDigitF{0}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{1}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{2}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{3}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{4}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{5}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{6}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{7}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{8}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{9}{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifDigitF{{9}}{true}{false}}           {true{false}}
+\smalltestexpandable{\MRTifDigitF{\myletdigit}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifDigitF{\mydefdigit}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifDigitF{\mydigitcount}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifDigitF{\mydigitdimen}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifDigitF{ 9}{true}{false}}            {true{false}}
+\smalltestexpandable{\MRTifDigitF{a}{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifDigitF{`a}{true}{false}}            {true{false}}
+\smalltestexpandable{\MRTifDigitF{}{true}{false}}              {true{false}}
+
+\begin{document}
+\end{document}

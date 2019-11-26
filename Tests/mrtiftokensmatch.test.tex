@@ -1,0 +1,33 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\makeatletter
+\let\lettokena a
+\smalltestexpandable{\MRTifTokensMatchTF{a}{a}{true}{false}}            {true}
+\smalltestexpandable{\MRTifTokensMatchTF{\empty}{\@empty}{true}{false}} {true}
+\smalltestexpandable{\MRTifTokensMatchTF{\lettokena}{a}{true}{false}}   {true}
+\smalltestexpandable{\MRTifTokensMatchTF{ }{ }{true}{false}}            {true}
+\smalltestexpandable{\MRTifTokensMatchTF{}{}{true}{false}}              {false}
+\smalltestexpandable{\MRTifTokensMatchTF{a}{b}{true}{false}}            {false}
+
+\smalltestexpandable{\MRTifTokensMatchT{a}{a}{true}{false}}            {true{false}}
+\smalltestexpandable{\MRTifTokensMatchT{\empty}{\@empty}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifTokensMatchT{\lettokena}{a}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifTokensMatchT{ }{ }{true}{false}}            {true{false}}
+\smalltestexpandable{\MRTifTokensMatchT{}{}{true}{false}}              {{false}}
+\smalltestexpandable{\MRTifTokensMatchT{a}{b}{true}{false}}            {{false}}
+
+\smalltestexpandable{\MRTifTokensMatchF{a}{a}{true}{false}}            {{false}}
+\smalltestexpandable{\MRTifTokensMatchF{\empty}{\@empty}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifTokensMatchF{\lettokena}{a}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifTokensMatchF{ }{ }{true}{false}}            {{false}}
+\smalltestexpandable{\MRTifTokensMatchF{}{}{true}{false}}
+{true{false}}
+\smalltestexpandable{\MRTifTokensMatchF{a}{b}{true}{false}}
+{true{false}}
+\makeatother
+
+\begin{document}
+\end{document}

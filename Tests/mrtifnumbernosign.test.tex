@@ -1,0 +1,64 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifNumberNoSignTF{0}{true}{false}}        {true}
+\smalltestexpandable{\MRTifNumberNoSignTF{145}{true}{false}}      {true}
+\smalltestexpandable{\MRTifNumberNoSignTF{-145}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{+145}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{145.}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{145.123}{true}{false}}  {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{.123}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{+145.}{true}{false}}    {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{+145.123}{true}{false}} {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{+.123}{true}{false}}    {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{-145.}{true}{false}}    {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{-145.123}{true}{false}} {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{-.123}{true}{false}}    {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{ 123}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{123 }{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{12 3}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{12a3}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberNoSignTF{123a}{true}{false}}     {false}
+
+\smalltestexpandable{\MRTifNumberNoSignT{0}{true}{false}}        {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{145}{true}{false}}      {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{-145}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{+145}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{145.}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{145.123}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{.123}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{+145.}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{+145.123}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{+.123}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{-145.}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{-145.123}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{-.123}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{ 123}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{123 }{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{12 3}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{12a3}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberNoSignT{123a}{true}{false}}     {{false}}
+
+\smalltestexpandable{\MRTifNumberNoSignF{0}{true}{false}}        {{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{145}{true}{false}}      {{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{-145}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{+145}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{145.}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{145.123}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{.123}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{+145.}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{+145.123}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{+.123}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{-145.}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{-145.123}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{-.123}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{ 123}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{123 }{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{12 3}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{12a3}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberNoSignF{123a}{true}{false}}     {true{false}}
+
+\begin{document}
+\end{document}

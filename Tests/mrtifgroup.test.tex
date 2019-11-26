@@ -1,0 +1,26 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifGroupTF{}{true}{false}}      {false}
+\smalltestexpandable{\MRTifGroupTF{a}{true}{false}}     {false}
+\smalltestexpandable{\MRTifGroupTF{{a}}{true}{false}}   {true}
+\smalltestexpandable{\MRTifGroupTF{ {a}}{true}{false}}  {true}
+\smalltestexpandable{\MRTifGroupTF{{a} }{true}{false}}  {true}
+\smalltestexpandable{\MRTifGroupTF{ {a} }{true}{false}} {true}
+\smalltestexpandable{\MRTifGroupT{}{true}{false}}       {{false}}
+\smalltestexpandable{\MRTifGroupT{a}{true}{false}}      {{false}}
+\smalltestexpandable{\MRTifGroupT{{a}}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifGroupT{ {a}}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifGroupT{{a} }{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifGroupT{ {a} }{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifGroupF{}{true}{false}}       {true{false}}
+\smalltestexpandable{\MRTifGroupF{a}{true}{false}}      {true{false}}
+\smalltestexpandable{\MRTifGroupF{{a}}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifGroupF{ {a}}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifGroupF{{a} }{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifGroupF{ {a} }{true}{false}}  {{false}}
+
+\begin{document}
+\end{document}

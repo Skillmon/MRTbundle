@@ -1,0 +1,32 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifOneTokenTF{a}{true}{false}}     {true}
+\smalltestexpandable{\MRTifOneTokenTF{.}{true}{false}}     {true}
+\smalltestexpandable{\MRTifOneTokenTF{{.}}{true}{false}}   {true}
+\smalltestexpandable{\MRTifOneTokenTF{{a.b}}{true}{false}} {true}
+\smalltestexpandable{\MRTifOneTokenTF{}{true}{false}}      {false}
+\smalltestexpandable{\MRTifOneTokenTF{..}{true}{false}}    {false}
+\smalltestexpandable{\MRTifOneTokenTF{{.}.}{true}{false}}  {false}
+\smalltestexpandable{\MRTifOneTokenTF{{}.}{true}{false}}   {false}
+\smalltestexpandable{\MRTifOneTokenT{a}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifOneTokenT{.}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifOneTokenT{{.}}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifOneTokenT{{a.b}}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifOneTokenT{}{true}{false}}      {{false}}
+\smalltestexpandable{\MRTifOneTokenT{..}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifOneTokenT{{.}.}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifOneTokenT{{}.}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifOneTokenF{a}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifOneTokenF{.}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifOneTokenF{{.}}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifOneTokenF{{a.b}}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifOneTokenF{}{true}{false}}      {true{false}}
+\smalltestexpandable{\MRTifOneTokenF{..}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifOneTokenF{{.}.}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifOneTokenF{{}.}{true}{false}}   {true{false}}
+
+\begin{document}
+\end{document}

@@ -1,0 +1,64 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifNumberTF{0}{true}{false}}        {true}
+\smalltestexpandable{\MRTifNumberTF{145}{true}{false}}      {true}
+\smalltestexpandable{\MRTifNumberTF{-145}{true}{false}}     {true}
+\smalltestexpandable{\MRTifNumberTF{+145}{true}{false}}     {true}
+\smalltestexpandable{\MRTifNumberTF{145.}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberTF{145.123}{true}{false}}  {false}
+\smalltestexpandable{\MRTifNumberTF{.123}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberTF{+145.}{true}{false}}    {false}
+\smalltestexpandable{\MRTifNumberTF{+145.123}{true}{false}} {false}
+\smalltestexpandable{\MRTifNumberTF{+.123}{true}{false}}    {false}
+\smalltestexpandable{\MRTifNumberTF{-145.}{true}{false}}    {false}
+\smalltestexpandable{\MRTifNumberTF{-145.123}{true}{false}} {false}
+\smalltestexpandable{\MRTifNumberTF{-.123}{true}{false}}    {false}
+\smalltestexpandable{\MRTifNumberTF{ 123}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberTF{123 }{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberTF{12 3}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberTF{12a3}{true}{false}}     {false}
+\smalltestexpandable{\MRTifNumberTF{123a}{true}{false}}     {false}
+
+\smalltestexpandable{\MRTifNumberT{0}{true}{false}}        {true{false}}
+\smalltestexpandable{\MRTifNumberT{145}{true}{false}}      {true{false}}
+\smalltestexpandable{\MRTifNumberT{-145}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberT{+145}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberT{145.}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberT{145.123}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifNumberT{.123}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberT{+145.}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifNumberT{+145.123}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifNumberT{+.123}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifNumberT{-145.}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifNumberT{-145.123}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifNumberT{-.123}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifNumberT{ 123}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberT{123 }{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberT{12 3}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberT{12a3}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberT{123a}{true}{false}}     {{false}}
+
+\smalltestexpandable{\MRTifNumberF{0}{true}{false}}        {{false}}
+\smalltestexpandable{\MRTifNumberF{145}{true}{false}}      {{false}}
+\smalltestexpandable{\MRTifNumberF{-145}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberF{+145}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifNumberF{145.}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberF{145.123}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifNumberF{.123}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberF{+145.}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifNumberF{+145.123}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifNumberF{+.123}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifNumberF{-145.}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifNumberF{-145.123}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifNumberF{-.123}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifNumberF{ 123}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberF{123 }{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberF{12 3}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberF{12a3}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifNumberF{123a}{true}{false}}     {true{false}}
+
+\begin{document}
+\end{document}

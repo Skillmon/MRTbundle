@@ -1,0 +1,52 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifNumTokenSTF{0}{}{true}{false}}            {true}
+\smalltestexpandable{\MRTifNumTokenSTF{1}{.}{true}{false}}           {true}
+\smalltestexpandable{\MRTifNumTokenSTF{1}{{.}}{true}{false}}         {true}
+\smalltestexpandable{\MRTifNumTokenSTF{2}{..}{true}{false}}          {true}
+\smalltestexpandable{\MRTifNumTokenSTF{2}{{.}{.}}{true}{false}}      {true}
+\smalltestexpandable{\MRTifNumTokenSTF{3}{...}{true}{false}}         {true}
+\smalltestexpandable{\MRTifNumTokenSTF{3}{{.}{.}{.}}{true}{false}}   {true}
+\smalltestexpandable{\MRTifNumTokenSTF{4}{{..} {.}{.}}{true}{false}} {true}
+\smalltestexpandable{\MRTifNumTokenSTF{3}{. .}{true}{false}}         {true}
+\smalltestexpandable{\MRTifNumTokenSTF{2}{. .}{true}{false}}         {false}
+\smalltestexpandable{\MRTifNumTokenSTF{3}{{..} {.}{.}}{true}{false}} {false}
+\smalltestexpandable{\MRTifNumTokenSTF{0}{.}{true}{false}}           {false}
+\smalltestexpandable{\MRTifNumTokenSTF{1}{..}{true}{false}}          {false}
+\smalltestexpandable{\MRTifNumTokenSTF{1}{}{true}{false}}            {false}
+
+\smalltestexpandable{\MRTifNumTokenST{0}{}{true}{false}}            {true{false}}
+\smalltestexpandable{\MRTifNumTokenST{1}{.}{true}{false}}           {true{false}}
+\smalltestexpandable{\MRTifNumTokenST{1}{{.}}{true}{false}}         {true{false}}
+\smalltestexpandable{\MRTifNumTokenST{2}{..}{true}{false}}          {true{false}}
+\smalltestexpandable{\MRTifNumTokenST{2}{{.}{.}}{true}{false}}      {true{false}}
+\smalltestexpandable{\MRTifNumTokenST{3}{...}{true}{false}}         {true{false}}
+\smalltestexpandable{\MRTifNumTokenST{3}{{.}{.}{.}}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifNumTokenST{4}{{..} {.}{.}}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifNumTokenST{3}{. .}{true}{false}}         {true{false}}
+\smalltestexpandable{\MRTifNumTokenST{2}{. .}{true}{false}}         {{false}}
+\smalltestexpandable{\MRTifNumTokenST{3}{{..} {.}{.}}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifNumTokenST{0}{.}{true}{false}}           {{false}}
+\smalltestexpandable{\MRTifNumTokenST{1}{..}{true}{false}}          {{false}}
+\smalltestexpandable{\MRTifNumTokenST{1}{}{true}{false}}            {{false}}
+
+\smalltestexpandable{\MRTifNumTokenSF{0}{}{true}{false}}            {{false}}
+\smalltestexpandable{\MRTifNumTokenSF{1}{.}{true}{false}}           {{false}}
+\smalltestexpandable{\MRTifNumTokenSF{1}{{.}}{true}{false}}         {{false}}
+\smalltestexpandable{\MRTifNumTokenSF{2}{..}{true}{false}}          {{false}}
+\smalltestexpandable{\MRTifNumTokenSF{2}{{.}{.}}{true}{false}}      {{false}}
+\smalltestexpandable{\MRTifNumTokenSF{3}{...}{true}{false}}         {{false}}
+\smalltestexpandable{\MRTifNumTokenSF{3}{{.}{.}{.}}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifNumTokenSF{4}{{..} {.}{.}}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifNumTokenSF{3}{. .}{true}{false}}         {{false}}
+\smalltestexpandable{\MRTifNumTokenSF{2}{. .}{true}{false}}         {true{false}}
+\smalltestexpandable{\MRTifNumTokenSF{3}{{..} {.}{.}}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifNumTokenSF{0}{.}{true}{false}}           {true{false}}
+\smalltestexpandable{\MRTifNumTokenSF{1}{..}{true}{false}}          {true{false}}
+\smalltestexpandable{\MRTifNumTokenSF{1}{}{true}{false}}            {true{false}}
+
+\begin{document}
+\end{document}

@@ -1,0 +1,75 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\def\myexp#1#2#3%
+  {%
+    \unexpanded\expandafter\expandafter\expandafter{\MRTifFexp{#1}{#2}{#3}}%
+  }
+\def\myexpII#1#2#3%
+  {%
+    \unexpanded\expandafter\expandafter\expandafter{\MRTifFexpII{#1}{#2}{#3}}%
+  }
+\def\myexpI#1#2#3%
+  {%
+    \unexpanded\expandafter\expandafter\expandafter{\MRTifFexpI{#1}{#2}{#3}}%
+  }
+
+\smalltestexpandable{\myexp{\MRTifTokenInTF{}{token list}}{true}{false}}     {true}
+\smalltestexpandable{\myexp{\MRTifTokenInTF{o}{token list}}{true}{false}}    {true}
+\smalltestexpandable{\myexp{\MRTifTokenInTF{ }{token list}}{true}{false}}    {true}
+\smalltestexpandable{\myexp{\MRTifTokenInTF{n}{t{o}ken list}}{true}{false}}  {true}
+\smalltestexpandable{\myexp{\MRTifTokenInTF{{o}}{token list}}{true}{false}}  {false}
+\smalltestexpandable{\myexp{\MRTifTokenInTF{{oa}}{token list}}{true}{false}} {false}
+\smalltestexpandable{\myexp{\MRTifTokenInTF{oa}{token list}}{true}{false}}   {false}
+\smalltestexpandable{\myexp{\MRTifTokenInTF{o}{t{o}ken list}}{true}{false}}  {false}
+
+\smalltestexpandable{\myexp{\MRTifTokenInT{}{token list}}{true}{false}}     {true{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInT{o}{token list}}{true}{false}}    {true{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInT{ }{token list}}{true}{false}}    {true{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInT{n}{t{o}ken list}}{true}{false}}  {true{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInT{{o}}{token list}}{true}{false}}  {{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInT{{oa}}{token list}}{true}{false}} {{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInT{oa}{token list}}{true}{false}}   {{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInT{o}{t{o}ken list}}{true}{false}}  {{false}}
+
+\smalltestexpandable{\myexp{\MRTifTokenInF{}{token list}}{true}{false}}     {{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInF{o}{token list}}{true}{false}}    {{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInF{ }{token list}}{true}{false}}    {{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInF{n}{t{o}ken list}}{true}{false}}  {{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInF{{o}}{token list}}{true}{false}}  {true{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInF{{oa}}{token list}}{true}{false}} {true{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInF{oa}{token list}}{true}{false}}   {true{false}}
+\smalltestexpandable{\myexp{\MRTifTokenInF{o}{t{o}ken list}}{true}{false}}  {true{false}}
+
+
+\smalltestexpandable{\myexpII{\MRTifTokenInTF{}{token list}}{true}{false}}     {true}
+\smalltestexpandable{\myexpII{\MRTifTokenInTF{o}{token list}}{true}{false}}    {true}
+\smalltestexpandable{\myexpII{\MRTifTokenInTF{ }{token list}}{true}{false}}    {true}
+\smalltestexpandable{\myexpII{\MRTifTokenInTF{n}{t{o}ken list}}{true}{false}}  {true}
+\smalltestexpandable{\myexpII{\MRTifTokenInTF{{o}}{token list}}{true}{false}}  {false}
+\smalltestexpandable{\myexpII{\MRTifTokenInTF{{oa}}{token list}}{true}{false}} {false}
+\smalltestexpandable{\myexpII{\MRTifTokenInTF{oa}{token list}}{true}{false}}   {false}
+\smalltestexpandable{\myexpII{\MRTifTokenInTF{o}{t{o}ken list}}{true}{false}}  {false}
+
+\smalltestexpandable{\myexpI{\MRTifTokenInT{}{token list}}{true}{false}}     {true{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInT{o}{token list}}{true}{false}}    {true{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInT{ }{token list}}{true}{false}}    {true{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInT{n}{t{o}ken list}}{true}{false}}  {true{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInT{{o}}{token list}}{true}{false}}  {{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInT{{oa}}{token list}}{true}{false}} {{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInT{oa}{token list}}{true}{false}}   {{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInT{o}{t{o}ken list}}{true}{false}}  {{false}}
+
+\smalltestexpandable{\myexpI{\MRTifTokenInF{}{token list}}{true}{false}}     {{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInF{o}{token list}}{true}{false}}    {{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInF{ }{token list}}{true}{false}}    {{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInF{n}{t{o}ken list}}{true}{false}}  {{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInF{{o}}{token list}}{true}{false}}  {true{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInF{{oa}}{token list}}{true}{false}} {true{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInF{oa}{token list}}{true}{false}}   {true{false}}
+\smalltestexpandable{\myexpI{\MRTifTokenInF{o}{t{o}ken list}}{true}{false}}  {true{false}}
+
+\begin{document}
+\end{document}
