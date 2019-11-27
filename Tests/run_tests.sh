@@ -1,17 +1,19 @@
 #!/bin/zsh
 
+tmp_files=/tmp/$$_result_
+
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 NOCOLOR="\033[0m"
 # test_passed function >>=
 function test_passed () {
-  echo 1 > test_result_$2
+  echo 1 > $tmp_files$2
   echo -e "${GREEN}passed:${NOCOLOR} $(echo $1|cut -d. -f1)"
 }
 #=<<
 # test_failed function >>=
 function test_failed () {
-  echo 0 > test_result_$3
+  echo 0 > $tmp_files$3
   echo -e "${RED}failed:${NOCOLOR} $(echo $2|cut -d. -f1) ($1)" 
 }
 #=<<
@@ -74,9 +76,9 @@ for i (*.test.tex); do
     tests_run=0
     wait
     for (( n=0; n<$tests_batch; n++ )); do
-      if [[ -f test_result_$n ]]; then
-        tests_passed=$(($tests_passed + $(cat test_result_$n)))
-        rm test_result_$n
+      if [[ -f $tmp_files$n ]]; then
+        tests_passed=$(($tests_passed + $(cat $tmp_files$n)))
+        rm $tmp_files$n
       fi
     done
   fi
@@ -87,9 +89,9 @@ done
 # if the last batch wasn't completed, complete it here>>=
 wait
 for (( n=0; n<$tests_batch; n++ )); do
-  if [[ -f test_result_$n ]]; then
-    tests_passed=$(($tests_passed + $(cat test_result_$n)))
-    rm test_result_$n
+  if [[ -f $tmp_files$n ]]; then
+    tests_passed=$(($tests_passed + $(cat $tmp_files$n)))
+    rm $tmp_files$n
   fi
 done
 #=<<
@@ -97,3 +99,5 @@ done
 echo -e "\nSummary:"
 echo -e "\t${GREEN}passed:${NOCOLOR} ${tests_passed}"
 echo -e "\t${RED}failed:${NOCOLOR} $(($tests_sum - $tests_passed))"
+
+# vim: fdm=marker fmr=>>=,=<< tw=2 sw=2

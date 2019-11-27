@@ -1,0 +1,43 @@
+\documentclass[minimal]{MRTthesis}
+
+\input{smalltests.tex}
+\smalltestrobust
+  {\ifNoWidthTF{}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {true}
+\smalltestrobust
+  {\nullfont\ifNoWidthTF{}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {true}
+\smalltestrobust
+  {\ifNoWidthTF{\empty}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {true}
+\smalltestrobust
+  {\nullfont\ifNoWidthTF{\empty}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {true}
+\smalltestrobust
+  {\ifNoWidthTF{a}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {false}
+\smalltestrobust
+  {\nullfont\ifNoWidthTF{a}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {false}
+
+\smalltestrobust
+  {\ifNoWidthTF*{}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {true}
+\smalltestrobust
+  {\nullfont\ifNoWidthTF*{}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {true}
+\smalltestrobust
+  {\ifNoWidthTF*{\empty}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {true}
+\smalltestrobust
+  {\nullfont\ifNoWidthTF*{\empty}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {true}
+\smalltestrobust
+  {\ifNoWidthTF*{a}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {false}
+\smalltestrobust
+  {\nullfont\ifNoWidthTF*{a}{\def\smalltesttoken{true}}{\def\smalltesttoken{false}}}
+  {true}
+
+\begin{document}
+\end{document}

@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.19}
-\newcommand*\MRTthesis@date{2019-11-21}
+\newcommand*\MRTthesis@version{0.0.20}
+\newcommand*\MRTthesis@date{2019-11-27}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -415,17 +415,16 @@
 \long\def\@firstofthree#1#2#3{#1}
 \long\def\@secondofthree#1#2#3{#2}
 \long\def\@thirdofthree#1#2#3{#3}
-\NewDocumentCommand \ifNoWidthTF { +m }% >>=
+\font\MRTthesis@testfont=cmr10
+\NewDocumentCommand \ifNoWidthTF { s +m }% >>=
   {%
-    \bgroup
-    \setbox\MRTthesis@TestBoxA\hbox{#1}%
-    \ifdim\wd\MRTthesis@TestBoxA=0pt
-      \egroup
-      \expandafter\@firstoftwo
-    \else
-      \egroup
-      \expandafter\@secondoftwo
+    \begingroup
+      \setbox\MRTthesis@TestBoxA\hbox{\IfBooleanF{#1}{\MRTthesis@testfont}#2}%
+    \expandafter\endgroup
+    \ifdim\wd\MRTthesis@TestBoxA=\z@
+      \MRTif@fi@firstoftwo
     \fi
+    \@secondoftwo
   }% =<<
 \NewExpandableDocumentCommand \vfillmult { m }% >>=
   {%

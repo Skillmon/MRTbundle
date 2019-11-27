@@ -343,10 +343,13 @@ resolve around automatically added contents.
 
 \section{Macros}\label{sec:thesis:mac}%>>=
 The following macros are provided:
-\begin{describemacroTF}{ifNoWidth}[\marg{arg}]
+\begin{describemacroTF}{ifNoWidth}[\meta{*}\marg{arg}]
   Typesets the argument in a box (so the code is actually executed). If the
   produced box has a width of 0pt the \meta{true} branch is executed, else the
-  \meta{false} branch.
+  \meta{false} branch. If the \meta{*} is given the surrounding font settings
+  are used, if it is not given Computer Modern Roman at 10pt (\texttt{cmr10}) is
+  used. This is done so that the macro gives its intended result in environments
+  where the font has no width (\TeX\ has a special \cs{nullfont}).
 \end{describemacroTF}
 \begin{describemacro}{vfillmult}[\marg{num}]
   Same as if you'd use \meta{num} instances of \cs{vfill}.

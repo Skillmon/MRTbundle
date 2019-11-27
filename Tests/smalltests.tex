@@ -10,4 +10,15 @@
           { \exp_not:n { #1 } } { #1 } { #2 }
       }
   }
+\cs_new_protected:Npn \smalltestrobust #1 #2
+  {
+    \group_begin:
+    #1
+    \str_if_eq:eeF { \smalltesttoken } { #2 }
+      {
+        \msg_error:nnxxx { smalltests } { test~failed }
+          { \exp_not:n { #1 } } { \smalltesttoken } { #2 }
+      }
+    \group_end:
+  }
 \ExplSyntaxOff

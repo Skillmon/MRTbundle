@@ -13,7 +13,11 @@ really minor, though).
       forms, with the default being to automatically decide which one to use
       based on the given \opt{author}. You can deactivate this using
       \opt{affidavit plural=false} in \cs{MRTthesisSetup}. (See
-      \autoref{sec:thesis:setup})
+      \autoref{sec:thesis:setup}) \\
+  2019-11-17 & v0.0.20 & \cs{ifNoWidthTF}
+    & From this version on the macro specifies a font in the box so that
+      \cs{nullfont} doesn't break its purpose. You can use the starred form for
+      its previous behaviour. \\
 \end{incompatibilities}
 
 \begin{incompatibilities}{\pkg{MRTtab}}
