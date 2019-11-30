@@ -121,7 +121,8 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
 \end{describemacroTF}
 
 \begin{describemacroTF}[G,N,GN]{MRTifOneToken}[\marg{arg}]
-  Tests if \meta{arg} is only a single token or group.
+  Tests if \meta{arg} is only a single token or group, leading spaces are
+  ignored.
 \end{describemacroTF}
 \dscremaininglines{2}
 
@@ -131,9 +132,10 @@ sequence errors containing \texttt{MRTif} in the control sequence's name.
 \end{describemacroTF}
 
 \begin{describemacroTF}[G,N,GN]{MRTifTwoToken}[\marg{arg}]
-  Tests if \meta{arg} is exactly two tokens or groups.
+  Tests if \meta{arg} is exactly two tokens or groups, leading spaces and spaces
+  between the first two tokens are ignored.
 \end{describemacroTF}
-\dscremaininglines{2}
+\dscremaininglines{1}
 
 \begin{describemacroTF}[G,N,GN]{MRTifNumToken}[\marg{num}\marg{arg}]
   Tests if \meta{arg} is exactly \meta{num} tokens long. It uses

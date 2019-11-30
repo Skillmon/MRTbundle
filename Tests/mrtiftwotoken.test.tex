@@ -31,5 +31,34 @@
 \smalltestexpandable{\MRTifTwoTokenF{...}{true}{false}}          {true{false}}
 \smalltestexpandable{\MRTifTwoTokenF{{ab}{ab}{ab}}{true}{false}} {true{false}}
 
+% leading and spaces in between are ignored
+\smalltestexpandable{\MRTifTwoTokenTF{ a a}{true}{false}}           {true}
+\smalltestexpandable{\MRTifTwoTokenTF{ {a} a}{true}{false}}         {true}
+\smalltestexpandable{\MRTifTwoTokenTF{ {a} {a}}{true}{false}}       {true}
+\smalltestexpandable{\MRTifTwoTokenTF{ {a.b} {a.b}}{true}{false}}   {true}
+\smalltestexpandable{\MRTifTwoTokenTF{ }{true}{false}}             {false}
+\smalltestexpandable{\MRTifTwoTokenTF{ . }{true}{false}}            {false}
+\smalltestexpandable{\MRTifTwoTokenTF{ {ab} }{true}{false}}         {false}
+\smalltestexpandable{\MRTifTwoTokenTF{ . ..}{true}{false}}          {false}
+\smalltestexpandable{\MRTifTwoTokenTF{ {ab} {ab}{ab}}{true}{false}} {false}
+\smalltestexpandable{\MRTifTwoTokenT{ a a}{true}{false}}           {true{false}}
+\smalltestexpandable{\MRTifTwoTokenT{ {a} a}{true}{false}}         {true{false}}
+\smalltestexpandable{\MRTifTwoTokenT{ {a} {a}}{true}{false}}       {true{false}}
+\smalltestexpandable{\MRTifTwoTokenT{ {a.b} {a.b}}{true}{false}}   {true{false}}
+\smalltestexpandable{\MRTifTwoTokenT{ }{true}{false}}             {{false}}
+\smalltestexpandable{\MRTifTwoTokenT{ . }{true}{false}}            {{false}}
+\smalltestexpandable{\MRTifTwoTokenT{ {ab} }{true}{false}}         {{false}}
+\smalltestexpandable{\MRTifTwoTokenT{ . ..}{true}{false}}          {{false}}
+\smalltestexpandable{\MRTifTwoTokenT{ {ab} {ab}{ab}}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifTwoTokenF{ a a}{true}{false}}           {{false}}
+\smalltestexpandable{\MRTifTwoTokenF{ {a} a}{true}{false}}         {{false}}
+\smalltestexpandable{\MRTifTwoTokenF{ {a} {a}}{true}{false}}       {{false}}
+\smalltestexpandable{\MRTifTwoTokenF{ {a.b} {a.b}}{true}{false}}   {{false}}
+\smalltestexpandable{\MRTifTwoTokenF{ }{true}{false}}             {true{false}}
+\smalltestexpandable{\MRTifTwoTokenF{ . }{true}{false}}            {true{false}}
+\smalltestexpandable{\MRTifTwoTokenF{ {ab} }{true}{false}}         {true{false}}
+\smalltestexpandable{\MRTifTwoTokenF{ . ..}{true}{false}}          {true{false}}
+\smalltestexpandable{\MRTifTwoTokenF{ {ab} {ab}{ab}}{true}{false}} {true{false}}
+
 \begin{document}
 \end{document}
