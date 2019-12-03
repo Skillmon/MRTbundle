@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.12}
-\newcommand*\MRTif@date{2019-11-30}
+\newcommand*\MRTif@version{0.0.13}
+\newcommand*\MRTif@date{2019-12-03}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -57,6 +57,24 @@
     \fi
     \@secondoftwo
   }% =<<
+
+% switch to catcode and lccode regime of ifEmpty >>=
+% Since the routine of MRTifEmpty is pretty performant, it is a good idea to
+% reuse parts of it in other macros which can be reduced to an ifEmpty test with
+% one or two expansions, hence we use this macro to unify the regimes of those
+% tests.
+\MRTutil@def[\protected]\MRTif@specialLowercase%>>=
+  {%
+    \begingroup
+    \lccode`\Q=127
+    \lccode`\*=127
+    \MRTif@specialLowercase@
+  }%=<<
+\MRTutil@def[\protected\long]\MRTif@specialLowercase@#1%>>=
+  {%
+    \lowercase{\endgroup#1}%
+  }%=<<
+%=<<
 
 % CreateBranchingIfs >>=
 \MRTutil@def[\protected\long]\MRTifCreateBranchingIfs#1#2#3#4%>>=
@@ -216,10 +234,7 @@
 % =<<
 % MRTifEmpty >>=
 % obfuscated but *fast* ifempty, slightly less robust
-\begingroup
-\lccode`\Q=127
-\lccode`\*=127
-\lowercase{\endgroup
+\MRTif@specialLowercase{%
 \MRTutil@def[\long]\MRTifEmpty@true@T*Q\@gobble#1{#1}
 \MRTutil@def[\long]\MRTifEmpty@true@F*Q\@firstofone#1{}
 \MRTutil@def[\long]\MRTifEmpty@true@TF*Q\@secondoftwo#1#2{#1}
@@ -247,11 +262,8 @@
 \MRTif@create@TandF@N@TandF{EmptyG}
 % =<<
 % MRTifBlank >>=
-% obfuscated but *fast* ifblank, reuses internal of ifEmpty
-\begingroup
-\lccode`\Q=127
-\lccode`\*=127
-\lowercase{\endgroup
+% obfuscated but *fast* ifblank, reuses internals of ifEmpty
+\MRTif@specialLowercase{%
 \MRTutil@def[\long]\MRTifBlank@#1{\MRTifEmpty@*}
 % standard version >>=
 \MRTutil@def[\long]\MRTifBlankTF#1%
@@ -335,11 +347,8 @@
 \MRTif@create@TandF@twoargs{StringsMatchXXG}
 % =<<
 % MRTifOneToken >>=
-% obfuscated but *fast* ifonetoken, reuses internal of ifEmpty and ifBlank
-\begingroup
-\lccode`\Q=127
-\lccode`\*=127
-\lowercase{\endgroup
+% obfuscated but *fast* ifonetoken, reuses internals of ifEmpty and ifBlank
+\MRTif@specialLowercase{%
 % this is actually a bit ingenious. If it's one token that token is gobbled by
 % \MRTifBlank@ and the remains will be empty, if it's no token then \MRTifBlank@
 % gobbles the 'Q' and the \MRTifEmpty internals will execute the false branch,
@@ -375,11 +384,8 @@
 \MRTif@create@TandF@N@TandF{OneTokenNoGroup}
 % =<<
 % MRTifTwoToken >>=
-% obfuscated but *fast* iftwotoken, reuses internal of ifEmpty
-\begingroup
-\lccode`\Q=127
-\lccode`\*=127
-\lowercase{\endgroup
+% obfuscated but *fast* iftwotoken, reuses internals of ifEmpty
+\MRTif@specialLowercase{%
 % same idea as for MRTifOneToken, but this time we gobble two tokens before
 % giving control to the ifEmpty internals, only notably different scenario: if
 % the argument is blank not only Q but also \MRTifEmpty@true@.. will be gobbled,
@@ -443,7 +449,7 @@
 \MRTutil@def[\long]\MRTifLetterTF#1% >>=
   {%
     \MRTifOneTokenNoGroupTF{#1}
-      {\MRTifLetter@core{#1}}
+      {\MRTifLetter@core #1}
       {\@secondoftwo}%
   }% =<<
 %\MRTif@groupify@TF{Letter}% possible but results in unnecessary group test
@@ -663,38 +669,49 @@
 \MRTif@create@TandF@N@TandF{FloatNoSignG}
 % =<<
 % MRTifContainsGroup >>=
-\MRTutil@def[\long]\MRTifContainsGroupTF#1% >>=
-  {%
-    \MRTifContainsGroup@eat#1{}\MRTifContainsGroup@endargument
-  }% =<<
-\long\def\MRTifContainsGroup@eat#1#{\MRTifContainsGroup@a}
-\long\def\MRTifContainsGroup@a#1\MRTifContainsGroup@endargument% >>=
-  {%
-    \MRTifEmptyT{#1}\@thirdofthree\@firstoftwo
-  }% =<<
+% obfuscated but *fast* ifContainsGroup, reuses internals of ifEmpty and ifBlank
+\MRTif@specialLowercase{%
+\MRTutil@def[\long]\MRTifContainsGroup@#1#{\MRTifBlank@}
+% normal version >>=
+\MRTutil@def[\long]\MRTifContainsGroupTF#1%
+  {\MRTifContainsGroup@#1{}Q\MRTifEmpty@true@FT*Q\@firstoftwo}
+\MRTutil@def[\long]\MRTifContainsGroupT#1%
+  {\MRTifContainsGroup@#1{}Q\MRTifEmpty@true@F*Q\@firstofone}
+\MRTutil@def[\long]\MRTifContainsGroupF#1%
+  {\MRTifContainsGroup@#1{}Q\MRTifEmpty@true@T*Q\@gobble}
+% =<<
+% N-version >>=
+\MRTutil@def[\long]\MRTifContainsGroupNTF#1%
+  {\expandafter\MRTifContainsGroup@#1{}Q\MRTifEmpty@true@FT*Q\@firstoftwo}
+\MRTutil@def[\long]\MRTifContainsGroupNT#1%
+  {\expandafter\MRTifContainsGroup@#1{}Q\MRTifEmpty@true@F*Q\@firstofone}
+\MRTutil@def[\long]\MRTifContainsGroupNF#1%
+  {\expandafter\MRTifContainsGroup@#1{}Q\MRTifEmpty@true@T*Q\@gobble}
+% =<<
+}
 \MRTif@groupify@TF{ContainsGroup}
-\MRTif@create@TandF@N@TandF{ContainsGroup}
 \MRTif@create@TandF@N@TandF{ContainsGroupG}
 % =<<
 % MRTifContainsSpace >>=
-% obfuscated but *fast* ifContainsSpace, reuses internal of ifEmpty
-\begingroup
-\lccode`\Q=127
-\lccode`\*=127
-\lowercase{\endgroup
+% obfuscated but *fast* ifContainsSpace, reuses internals of ifEmpty
+\MRTif@specialLowercase{%
+\MRTutil@def[\long]\MRTifContainsSpace@#1 {\MRTifEmpty@*}
+% standard version >>=
 \MRTutil@def[\long]\MRTifContainsSpaceTF#1%
   {\MRTifContainsSpace@#1 Q\MRTifEmpty@true@FT*Q\@firstoftwo}
 \MRTutil@def[\long]\MRTifContainsSpaceT#1%
   {\MRTifContainsSpace@#1 Q\MRTifEmpty@true@F*Q\@firstofone}
 \MRTutil@def[\long]\MRTifContainsSpaceF#1%
   {\MRTifContainsSpace@#1 Q\MRTifEmpty@true@T*Q\@gobble}
+% =<<
+% N-version >>=
 \MRTutil@def[\long]\MRTifContainsSpaceNTF#1%
   {\expandafter\MRTifContainsSpace@#1 Q\MRTifEmpty@true@FT*Q\@firstoftwo}
 \MRTutil@def[\long]\MRTifContainsSpaceNT#1%
   {\expandafter\MRTifContainsSpace@#1 Q\MRTifEmpty@true@F*Q\@firstofone}
 \MRTutil@def[\long]\MRTifContainsSpaceNF#1%
   {\expandafter\MRTifContainsSpace@#1 Q\MRTifEmpty@true@T*Q\@gobble}
-\MRTutil@def[\long]\MRTifContainsSpace@#1 {\MRTifEmpty@*}
+% =<<
 }
 \MRTif@groupify@TF{ContainsSpace}
 \MRTif@create@TandF@N@TandF{ContainsSpaceG}
@@ -716,7 +733,7 @@
   }% =<<
 \MRTutil@def[\long]\MRTifTokenIn@a#1#2%>>=
   {%
-    \MRTifTokenIn@b{#1}{#2}%
+    \MRTifTokenIn@b #1{#2}%
     \end@MRTifTokenIn
   }%=<<
 \MRTutil@def[\long]\MRTifTokenIn@b#1#2%>>=
