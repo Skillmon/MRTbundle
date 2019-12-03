@@ -288,32 +288,53 @@
 % MRTifGroup >>=
 \MRTutil@def[\long]\MRTifGroupTF#1% >>=
   {%
-    \expandafter\MRTifGroup@a\romannumeral-`\.#1.{}\MRTifGroup@endargument
+    \MRTifGroup@a#1.{}\MRTifGroup@endargument
   }% =<<
 \long\def\MRTifGroup@a#1#% >>=
   {%
-    \MRTifEmptyTF{#1}{\MRTifGroup@b}{\MRTifGroup@c}%
+    \MRTifBlankTF{#1}{\MRTifGroup@b}{\MRTifGroup@c}%
   }% =<<
 \long\def\MRTifGroup@b#1#2#3\MRTifGroup@endargument% >>=
   {%
     \MRTifEmptyTF{#3}%
   }% =<<
-\long\def\MRTifGroup@c#1\MRTifGroup@endargument% >>=
+\long\def\MRTifGroup@c#1\MRTifGroup@endargument#2#3% >>=
   {%
-    \@secondoftwo
+    #3%
   }% =<<
-\MRTif@create@TandF@N@TandF{Group}
+\MRTutil@def[\long]\MRTifGroupNTF#1% >>=
+  {%
+    \expandafter\MRTifGroup@a#1.{}\MRTifGroup@endargument
+  }% =<<
+\MRTif@create@TandF{Group}
+\MRTif@create@TandF{GroupN}
 % =<<
 % MRTifGroupNoSpaces >>=
-\MRTutil@def[\long]\MRTifGroupNoSpacesTF#1% >>=
+% reuses internals of ifGroup
+\MRTutil@def[\long]\MRTifGroupNoSpacesTF#1%>>=
   {%
-    \MRTifStringsMatchXXT
-      {\MRTifGroupNoSpaces@a#1\end@MRTifGroupNoSpaces@a}{#1}
-      \@thirdofthree
-      \@firstoftwo
-  }% =<<
-\long\def\MRTifGroupNoSpaces@a#1\end@MRTifGroupNoSpaces@a{#1}
-\MRTif@create@TandF@N@TandF{GroupNoSpaces}
+    \MRTifGroupNoSpaces@a
+      #1\MRTifGroupNoSpaces@endargument{}\MRTifGroup@endargument
+  }%=<<
+\MRTutil@def[\long]\MRTifGroupNoSpaces@a#1#%>>=
+  {%
+    \MRTifEmptyTF{#1}\MRTifGroupNoSpaces@b\MRTifGroup@c
+  }%=<<
+\MRTutil@def[\long]\MRTifGroupNoSpaces@b%>>=
+  #1#2\MRTifGroupNoSpaces@endargument#3\MRTifGroup@endargument
+  {%
+    \MRTifEmptyTF{#2}%
+  }%=<<
+\MRTutil@def[\long]\MRTifGroupNoSpacesNTF#1%>>=
+  {%
+    \expandafter\MRTifGroupNoSpaces@a
+      #1\MRTifGroupNoSpaces@endargument{}\MRTifGroup@endargument
+  }%=<<
+\MRTutil@def\MRTifGroupNoSpaces@endargument%>>=
+  % have to define this because it might get expanded by \expandafter
+  {\MRTifGroupNoSpaces@endargument}%=<<
+\MRTif@create@TandF{GroupNoSpaces}
+\MRTif@create@TandF{GroupNoSpacesN}
 % =<<
 % MRTifStringsMatch >>=
 \MRTifCreateBranchingIfs{MRTifStringsMatch}{TF=ab,T=yn,F=ny}{2}
