@@ -398,9 +398,9 @@
 % MRTifOneTokenNoGroup>>=
 \MRTutil@def[\long]\MRTifOneTokenNoGroupTF#1% >>=
   {%
-    \MRTifContainsGroupTF{#1}
-      {\@secondoftwo}
-      {\MRTifOneTokenTF{#1}}
+    \MRTifOneTokenTF{#1}
+      {\MRTifContainsGroupF{#1}\@secondofthree\@secondoftwo}%
+      {\@secondoftwo}%
   }% =<<
 \MRTif@create@TandF@N@TandF{OneTokenNoGroup}
 % =<<
@@ -847,8 +847,8 @@
 \MRTutil@def[\long]\MRTif@endfexp@secondoftwo#1#2{ #2}
 \MRTutil@def[\long]\MRTifFexp#1% >>=
   {%
-    \romannumeral-`\0\expandafter\MRTifFexp@a
-    \romannumeral-`\0#1{\MRTifFexp@b} \MRTifFexp@c
+    \romannumeral`\^^@\expandafter\MRTifFexp@a
+    \romannumeral`\^^@#1{\MRTifFexp@b} \MRTifFexp@c
   }% =<<
 \MRTutil@def[\long]\MRTifFexp@a#1% >>=
   {%
@@ -878,11 +878,11 @@
   }% =<<
 \MRTutil@def[\long]\MRTifFexpII#1% >>=
   {%
-    \romannumeral-`\0#1\MRTif@endfexp@firstoftwo\MRTif@endfexp@secondoftwo
+    \romannumeral`\^^@#1\MRTif@endfexp@firstoftwo\MRTif@endfexp@secondoftwo
   }% =<<
 \MRTutil@def[\long]\MRTifFexpI#1% >>=
   {%
-    \romannumeral-`\0#1\MRTif@endfexp@secondoftwo\MRTif@endfexp@gobble
+    \romannumeral`\^^@#1\MRTif@endfexp@secondoftwo\MRTif@endfexp@gobble
   }% =<<
 % =<<
 \endinput
