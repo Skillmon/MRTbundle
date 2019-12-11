@@ -36,7 +36,7 @@ quick: img $(FMT)
 quiet: img $(FMT)# {{{
 	$(TEXFOT) $(FLAGS) -fmt="$(NAME)" $(FILE)
 # }}}
-all: $(OUT) #bib
+all: img $(OUT) #bib
 $(OUT): $(FILE) $(SFILES) $(PREAMB)# {{{
 	$(TEX) $(FLAGS) $(FILE);
 	$(TEX) $(FLAGS) $(NAME).tex > /dev/null;
