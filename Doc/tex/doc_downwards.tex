@@ -5,15 +5,19 @@ worth it or to fix bugs. Where possible I'll try to provide means to switch back
 to something close to the old behaviour.
 
 This chapter should list all those ground breaking changes (which might be
-really minor, though).
+really minor, though). Bugfixes which only correct behaviour to match the
+documentation will not be listed here. For example there was a long standing bug
+in \cs{MRTifGroupTF} that expanded leading tokens until it hit an unexpandable
+one which was fixed in v0.0.13, clearly a behaviour change, but only to get the
+originally intended behaviour.
 
 \begin{incompatibilities}{\cls{MRTthesis}}
   2019-11-20 & v0.0.18 & \cs{affidavit}
     & From this version on the affidavit is available using singular and plural
       forms, with the default being to automatically decide which one to use
       based on the given \opt{author}. You can deactivate this using
-      \opt{affidavit plural=false} in \cs{MRTthesisSetup}. (See
-      \autoref{sec:thesis:setup}) \\
+      \opt{affidavit plural=false} in \cs{MRTthesisSetup} (see
+      \autoref{sec:thesis:setup}). \\
   2019-11-17 & v0.0.20 & \cs{ifNoWidthTF}
     & From this version on the macro specifies a font in the box so that
       \cs{nullfont} doesn't break its purpose. You can use the starred form for
@@ -33,7 +37,7 @@ really minor, though).
     & The entire macro got removed and will not come back. \\
   2019-05-02 & v0.0.3 & \cs{scalemath}
     & The macro is only available if the \opt{scale macro} option got used (see
-    \autoref{sec:fonts:options}) \\
+    \autoref{sec:fonts:options}). \\
   2019-05-02 & v0.0.3 & \opt{new maths}
     & The \pkg{bm} package is no longer automatically loaded if you use the
     \opt{new maths} option. Additionally \pkg{MRTlmscale} and the maths fonts of
@@ -42,5 +46,5 @@ really minor, though).
     & By default the \opt{alt l} option will be used replacing the letter |l| in
     maths by a letter distinct from an upper case |I|. You can revert to the
     previous behaviour using the \opt{std l} option (see
-    \autoref{sec:fonts:options}) \\
+    \autoref{sec:fonts:options}). \\
 \end{incompatibilities}

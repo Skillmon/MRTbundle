@@ -544,7 +544,8 @@
     \hbox_set:Nn \l_tmpa_box { 0000-00-00 }
     \dim_set:Nn \l_tmpa_dim
       {
-        \linewidth - \box_wd:N \l_tmpa_box - \box_wd:N \l_tmpb_box - 8\tabcolsep
+        \linewidth - \box_wd:N \l_tmpa_box - \box_wd:N \l_tmpb_box - 7\tabcolsep
+        - .5\linewidth
       }
     \begin{MRTtable}
       [
@@ -554,8 +555,8 @@
         ,col=
           W { l } { \box_wd:N \l_tmpa_box }
           W { c } { \box_wd:N \l_tmpb_box }
-          >{ \raggedright \setstretch { 1 } } p { .3 \l_tmpa_dim }
-          >{ \setstretch { 1 } } p { .7 \l_tmpa_dim }
+          >{ \raggedright \setstretch { 1 } } p { \l_tmpa_dim }
+          >{ \setstretch { 1 } } p { \dim_eval:n { .5\linewidth - \tabcolsep } }
       ]
     Date & Version & Affected & Description \\
   }%=<<
