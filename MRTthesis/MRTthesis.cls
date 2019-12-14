@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.20}
-\newcommand*\MRTthesis@date{2019-11-27}
+\newcommand*\MRTthesis@version{0.0.21}
+\newcommand*\MRTthesis@date{2019-12-14}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -773,7 +773,8 @@
   {% false >>=
     \MRTbibliographytrue
     \MRTthesisSetup { bib = true }
-    \renewcommand*{\newunitpunct}{,~}% between each unit in one bib-entry
+    % put comma instead of period between each unit in one bib-entry
+    \renewcommand*{\newunitpunct}{\addcomma\space}
     \DefineBibliographyStrings{ngerman}
       {%
         ,bibliography={Literaturverzeichnis}%
