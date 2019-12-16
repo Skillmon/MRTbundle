@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.21}
-\newcommand*\MRTthesis@date{2019-12-14}
+\newcommand*\MRTthesis@version{0.0.22}
+\newcommand*\MRTthesis@date{2019-12-16}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -974,8 +974,8 @@
 \MRTutil@def[\protected]\affidavit% >>=
   {
     \cleardoubleoddpage
-    \chapter*{Eidesstattliche~Erkl\"arung}
-    \sethead{Eidesstattliche~Erkl\"arung}
+    \chapter*{\affidavittitle}
+    \sethead{\affidavittitle}
     \strut
     \noindent\affidavittext
     \par
