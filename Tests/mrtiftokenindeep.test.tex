@@ -1,0 +1,52 @@
+\documentclass[]{article}
+
+\input{smalltests.tex}
+\usepackage{MRTif}
+
+\smalltestexpandable{\MRTifTokenInDeepTF{}{token list}{true}{false}}        {true}
+\smalltestexpandable{\MRTifTokenInDeepTF{o}{token list}{true}{false}}       {true}
+\smalltestexpandable{\MRTifTokenInDeepTF{ }{token list}{true}{false}}       {true}
+\smalltestexpandable{\MRTifTokenInDeepTF{ }{ tokenlist}{true}{false}}       {true}
+\smalltestexpandable{\MRTifTokenInDeepTF{t}{t{o}ken list}{true}{false}}     {true}
+\smalltestexpandable{\MRTifTokenInDeepTF{n}{t{o}ken list}{true}{false}}     {true}
+\smalltestexpandable{\MRTifTokenInDeepTF{o}{t{o}ken list}{true}{false}}     {true}
+\smalltestexpandable{\MRTifTokenInDeepTF{o}{t{{{o}ke}n list}}{true}{false}} {true}
+\smalltestexpandable{\MRTifTokenInDeepTF{ }{t{{{ }ke}nlist}}{true}{false}}  {true}
+\smalltestexpandable{\MRTifTokenInDeepTF{{o}}{token list}{true}{false}}     {false}
+\smalltestexpandable{\MRTifTokenInDeepTF{{oa}}{token list}{true}{false}}    {false}
+\smalltestexpandable{\MRTifTokenInDeepTF{oa}{token list}{true}{false}}      {false}
+\smalltestexpandable{\MRTifTokenInDeepTF{y}{t{o}ken list}{true}{false}}     {false}
+\smalltestexpandable{\MRTifTokenInDeepTF{ }{t{o}kenlist}{true}{false}}      {false}
+
+\smalltestexpandable{\MRTifTokenInDeepT{}{token list}{true}{false}}        {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{o}{token list}{true}{false}}       {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{ }{token list}{true}{false}}       {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{ }{ tokenlist}{true}{false}}       {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{t}{t{o}ken list}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{n}{t{o}ken list}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{o}{t{o}ken list}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{o}{t{{{o}ke}n list}}{true}{false}} {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{ }{t{{{ }ke}nlist}}{true}{false}}  {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{{o}}{token list}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{{oa}}{token list}{true}{false}}    {{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{oa}{token list}{true}{false}}      {{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{y}{t{o}ken list}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifTokenInDeepT{ }{t{o}kenlist}{true}{false}}      {{false}}
+
+\smalltestexpandable{\MRTifTokenInDeepF{}{token list}{true}{false}}        {{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{o}{token list}{true}{false}}       {{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{ }{token list}{true}{false}}       {{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{ }{ tokenlist}{true}{false}}       {{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{t}{t{o}ken list}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{n}{t{o}ken list}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{o}{t{o}ken list}{true}{false}}     {{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{o}{t{{{o}ke}n list}}{true}{false}} {{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{ }{t{{{ }ke}nlist}}{true}{false}}  {{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{{o}}{token list}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{{oa}}{token list}{true}{false}}    {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{oa}{token list}{true}{false}}      {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{y}{t{o}ken list}{true}{false}}     {true{false}}
+\smalltestexpandable{\MRTifTokenInDeepF{ }{t{o}kenlist}{true}{false}}      {true{false}}
+
+\begin{document}
+\end{document}

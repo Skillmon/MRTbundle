@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.13}
-\newcommand*\MRTif@date{2019-12-03}
+\newcommand*\MRTif@version{0.0.14}
+\newcommand*\MRTif@date{2019-12-23}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -738,67 +738,52 @@
 \MRTif@create@TandF@N@TandF{ContainsSpaceG}
 % =<<
 % MRTifTokenIn >>=
-\MRTutil@def[\long]\MRTifTokenInTF#1#2% >>=
+\MRTutil@def[\long]\MRTifTokenInTF#1%>>=
   {%
     \MRTifBlankTF{#1}
       {%
         \MRTifEmptyTF{#1}
-          {\@firstoftwo}
-          {\MRTifContainsSpaceTF{#2}}%
+          {\@secondofthree}
+          {\MRTifContainsSpaceTF}%
       }
       {%
         \MRTifOneTokenNoGroupTF{#1}
-          {\MRTifTokenIn@a#1{#2\endMRTif@argument}}
-          {\@secondoftwo}%
+          {\MRTifTokenIn@a#1}
+          {\@thirdofthree}%
       }%
-  }% =<<
+  }%=<<
 \MRTutil@def[\long]\MRTifTokenIn@a#1#2%>>=
   {%
-    \MRTifTokenIn@b #1{#2}%
-    \end@MRTifTokenIn
+    \MRTifTokenIn@b#1#2{\endMRTif@argument}\MRTifTokenIn@false
   }%=<<
-\MRTutil@def[\long]\MRTifTokenIn@b#1#2%>>=
+\MRTutil@def[\long]\MRTifTokenIn@b#1#2#%>>=
   {%
-    \MRTifContainsGroupTF{#2}
-      {\MRTifTokenIn@Group#1#2\end@MRTifTokenIn@Group}
-      {\MRTifTokenIn@searchin#1\MRTifTokenIn@finalfalse#2\endMRTif@argument}%
+    \MRTifTokenIn@c#1#2\endMRTif@argument
   }%=<<
-\MRTutil@def[\long]\MRTifTokenIn@searchin#1#2#3%>>=
+\MRTutil@def[\long]\MRTifTokenIn@c#1#2%>>=
   {%
-    \ifx#1#3%
-      \MRTifTokenIn@finaltrue
-    \fi
-    \@firstofone
-    {%
-      \ifx\endMRTif@argument#3%
-        \MRTif@fi@firstoftwo
-      \fi
-      \@secondoftwo
-      {#2}
-      {\MRTifTokenIn@searchin#1{#2}}%
-    }%
+    \MRTif@endMRTif@argument#2%
+      {\MRTifTokenIn@d}
+      {%
+        \ifx#1#2%
+          \MRTifTokenIn@true
+        \fi
+        \MRTifTokenIn@c
+      }%
+    #1%
   }%=<<
-\MRTutil@def[\long]\MRTifTokenIn@Group#1#2#%>>=
+\MRTutil@def[\long]\MRTifTokenIn@d#1#2%>>=
   {%
-    \MRTifTokenIn@Group@a#1{#2}%
+    \MRTif@endMRTif@argument{#2}
+      {}
+      {\MRTifTokenIn@b#1}%
   }%=<<
-\MRTutil@def[\long]\MRTifTokenIn@Group@a#1#2#3%>>=
+\MRTutil@def[\long]\MRTifTokenIn@true\fi%>>=
+  \MRTifTokenIn@c#1\MRTifTokenIn@false#2#3%
   {%
-    \MRTifTokenIn@searchin#1{\MRTifTokenIn@Group@next#1}#2\endMRTif@argument
+    \fi#2%
   }%=<<
-\MRTutil@def[\long]\MRTifTokenIn@Group@next#1#2\end@MRTifTokenIn@Group%>>=
-  {%
-    \MRTifTokenIn@b#1{#2}%
-  }%=<<
-\MRTutil@def[\long]\MRTifTokenIn@finaltrue\fi\@firstofone#1\end@MRTifTokenIn#2#3%>>=
-  {%
-    \fi
-    #2%
-  }%=<<
-\MRTutil@def[\long]\MRTifTokenIn@finalfalse#1\end@MRTifTokenIn#2#3%>>=
-  {%
-    #3%
-  }%=<<
+\let\MRTifTokenIn@false\@secondoftwo
 \MRTutil@def[\long]\MRTifTokenInGTF#1#2%>>=
   {%
     \MRTifGroupTF{#2}
@@ -807,6 +792,74 @@
   }%=<<
 \MRTif@create@TandF@N@TandF@twoargs{TokenIn}
 \MRTif@create@TandF@N@TandF@twoargs{TokenInG}
+% =<<
+% MRTifTokenInDeep >>=
+\MRTutil@def[\long]\MRTifTokenInDeepTF#1%>>=
+  {%
+    \MRTifBlankTF{#1}
+      {%
+        \MRTifEmptyTF{#1}
+          {\@secondofthree}
+          {\MRTifTokenInDeep@space}%
+      }
+      {%
+        \MRTifOneTokenNoGroupTF{#1}
+          {\MRTifTokenInDeep@a#1}
+          {\@thirdofthree}%
+      }%
+  }%=<<
+\MRTutil@def[\long]\MRTifTokenInDeep@a#1#2%>>=
+  {%
+    \MRTifTokenInDeep@b#1#2{\endMRTif@argument}\MRTifTokenIn@false
+  }%=<<
+\MRTutil@def[\long]\MRTifTokenInDeep@b#1#2#%>>=
+  {%
+    \MRTifTokenInDeep@c#1#2\endMRTif@argument
+  }%=<<
+\MRTutil@def[\long]\MRTifTokenInDeep@c#1#2%>>=
+  {%
+    \MRTif@endMRTif@argument#2%
+      {\MRTifTokenInDeep@d}
+      {%
+        \ifx#1#2%
+          \MRTifTokenInDeep@true
+        \fi
+        \MRTifTokenInDeep@c
+      }%
+    #1%
+  }%=<<
+\MRTutil@def[\long]\MRTifTokenInDeep@d#1#2%>>=
+  {%
+    \MRTif@endMRTif@argument{#2}
+      {}
+      {\MRTifTokenInDeep@b#1#2}%
+  }%=<<
+\MRTutil@def[\long]\MRTifTokenInDeep@true\fi%>>=
+  \MRTifTokenInDeep@c#1\MRTifTokenIn@false#2#3%
+  {%
+    \fi#2%
+  }%=<<
+\MRTutil@def[\long]\MRTifTokenInDeep@space#1%>>=
+  {%
+    \MRTifTokenInDeep@space@a#1{\endMRTif@argument}\MRTifTokenIn@false
+  }%=<<
+\MRTutil@def[\long]\MRTifTokenInDeep@space@a#1#%>>=
+  {%
+    \MRTifContainsSpaceTF{#1}
+      {\MRTifTokenInDeep@space@true}
+      {\MRTifTokenInDeep@space@b}%
+  }%=<<
+\MRTutil@def[\long]\MRTifTokenInDeep@space@b#1%>>=
+  {%
+    \MRTif@endMRTif@argument{#1}
+      {}
+      {\MRTifTokenInDeep@space@a#1}%
+  }%=<<
+\MRTutil@def[\long]\MRTifTokenInDeep@space@true#1\MRTifTokenIn@false#2#3%>>=
+  {%
+    #2%
+  }%=<<
+\MRTif@create@TandF@N@TandF@twoargs{TokenInDeep}
 % =<<
 %
 % MRTtllength >>=
