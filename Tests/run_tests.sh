@@ -30,6 +30,7 @@ function rm_tmp_files () {
   rm_tmp_files_ "$name.test.log"
   rm_tmp_files_ "$name.test.aux"
   rm_tmp_files_ "$name.test.pdf"
+  rm_tmp_files_ "$name.test.out"
 }
 #=<<
 # run_test_ function >>=
