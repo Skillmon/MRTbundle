@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.14}
-\newcommand*\MRTif@date{2019-12-23}
+\newcommand*\MRTif@version{0.0.15}
+\newcommand*\MRTif@date{2019-12-29}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -894,49 +894,59 @@
 % =<<
 
 % MRTifFexp >>=
-\MRTutil@def[\long]\MRTif@endfexp@gobble#1{ }
-\MRTutil@def[\long]\MRTif@endfexp@firstofone#1{ #1}
-\MRTutil@def[\long]\MRTif@endfexp@firstoftwo#1#2{ #1}
-\MRTutil@def[\long]\MRTif@endfexp@secondoftwo#1#2{ #2}
-\MRTutil@def[\long]\MRTifFexp#1% >>=
+\@ifdefinable\MRTifFexp@endFexp{\chardef\MRTif@endFexp0}
+\MRTutil@def[\long]\MRTif@endFexp@gobble#1{\MRTif@endFexp}
+\MRTutil@def[\long]\MRTif@endFexp@firstofone#1{\MRTif@endFexp#1}
+\MRTutil@def[\long]\MRTif@endFexp@firstoftwo #1#2{\MRTif@endFexp#1}
+\MRTutil@def[\long]\MRTif@endFexp@secondoftwo#1#2{\MRTif@endFexp#2}
+\MRTutil@def[\long]\MRTif@FexpI@true\MRTif@endFexp@gobble#1%>>=
   {%
-    \romannumeral`\^^@\expandafter\MRTifFexp@a
-    \romannumeral`\^^@#1{\MRTifFexp@b} \MRTifFexp@c
-  }% =<<
-\MRTutil@def[\long]\MRTifFexp@a#1% >>=
+    \MRTif@endFexp#1%
+  }%=<<
+% some parts of \MRTifFexp reuse internals of \MRTifEmpty
+\MRTif@specialLowercase{%
+% define macros which need spaces in places >>=
+\MRTutil@def\MRTifFexp#1% 
   {%
-    \ifx\MRTifFexp@c#1%
-      \MRTif@fi@firstoftwo
-    \fi
-    \@secondoftwo
-    {\MRTif@endfexp@gobble}
-    {#1}%
-  }% =<<
-\MRTutil@def[\long]\MRTifFexp@b#1% >>=
+    \long\def\MRTifFexp##1%>>=
+      {%
+        \romannumeral\expandafter\MRTifFexp@a
+        \romannumeral`\^^@##1\MRTifFexp@b#1%
+        \MRTifFexp@false@two\MRTifFexp@tokA#1%
+        \MRTifFexp@tokB
+        \MRTif@endFexp@gobble
+      }%=<<
+    \MRTutil@def\MRTifFexp@true@one%>>=
+      *Q\MRTifFexp@true@two\MRTifFexp@false@two
+      \MRTifFexp@tokA#1\MRTifFexp@tokB\MRTif@endFexp@gobble
+      { % ending the inner \romannumeral
+        \MRTifFexp@tokB\MRTif@endFexp@firstofone
+      }%=<<
+    \MRTutil@def\MRTifFexp@false@two%>>=
+      \MRTifFexp@tokA#1\MRTifFexp@tokB\MRTif@endFexp@gobble
+      { % ending the inner \romannumeral
+        \MRTifFexp@tokB\MRTif@endFexp@secondoftwo
+      }%=<<
+  }%=<<
+\MRTifFexp{ }
+\MRTutil@def\MRTifFexp@b#1 % the space here is important >>=
   {%
-    \ifx\MRTifFexp@c#1%
-      \MRTif@fi@firstoftwo
-    \fi
-    \@secondoftwo
-    { % space ending the inner \romannumeral
-      \MRTif@endfexp@firstofone
-    }
-    { % space ending the inner \romannumeral
-      \MRTif@endfexp@firstoftwo{#1}%
-    }%
-  }% =<<
-\MRTutil@def\MRTifFexp@c% >>=
-  { % space ending the inner \romannumeral
-    \MRTif@endfexp@secondoftwo
-  }% =<<
-\MRTutil@def[\long]\MRTifFexpII#1% >>=
+    \MRTifEmpty@*#1Q\MRTifFexp@true@one*Q\MRTifFexp@true@two
+  }%=<<
+}
+\MRTutil@def\MRTifFexp@a#1\MRTifFexp@tokB{}
+\MRTutil@def\MRTifFexp@true@two\MRTifFexp@tokB\MRTif@endFexp@gobble%>>=
+  { % ending the inner \romannumeral
+    \MRTifFexp@tokB\MRTif@endFexp@firstoftwo
+  }%=<<
+\MRTutil@def[\long]\MRTifFexpII#1%>>=
   {%
-    \romannumeral`\^^@#1\MRTif@endfexp@firstoftwo\MRTif@endfexp@secondoftwo
-  }% =<<
-\MRTutil@def[\long]\MRTifFexpI#1% >>=
+    \romannumeral#1\MRTif@endFexp@firstoftwo\MRTif@endFexp@secondoftwo
+  }%=<<
+\MRTutil@def[\long]\MRTifFexpI#1%>>=
   {%
-    \romannumeral`\^^@#1\MRTif@endfexp@secondoftwo\MRTif@endfexp@gobble
-  }% =<<
+    \romannumeral#1\MRTif@FexpI@true\MRTif@endFexp@gobble
+  }%=<<
 % =<<
 \endinput
 
