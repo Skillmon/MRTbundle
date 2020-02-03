@@ -353,13 +353,14 @@ The term footnotes relates to the special MRT footnotes in this subsection.
 \end{describemacro}
 
 \begin{describemacro}{bibliographyframe}%
-  [\meta{*}\oarg{bibfont}\marg{title}\marg{subtitle}]
+  [\meta{*}\meta{!}\oarg{bibfont}\marg{title}\marg{subtitle}]
   Prints the bibliography. The starred variant uses \cs{whiteframestrue}. The
   \meta{bibfont} defaults to \cs{small}, you might give any font related
   commands here. Both \meta{title} and \meta{subtitle} are optional though
   delimited by curly braces. \meta{title} defaults to \enquote{Quellen},
   \meta{subtitle} is initially empty. The \cs{bibliographyframe} is printed
-  using \texttt{allowframebreaks}.
+  using \texttt{allowframebreaks} by default, if you give the optional
+  \texttt{!} it will be printed without \texttt{allowframebreaks}.
 \end{describemacro}
 
 \begin{describemacro}{inlinecite}[\oarg{opt1}\oarg{opt2}\marg{key}]
