@@ -1,5 +1,47 @@
 \mode<presentation>
 
+\let\MRTbeam@orig@listi   \@listi
+\let\MRTbeam@orig@listii  \@listii
+\let\MRTbeam@orig@listiii \@listiii
+\NewDocumentCommand\ResetLists{}%>>=
+  {%
+    \let\@listi   \MRTbeam@orig@listi
+    \let\@listI   \@listi
+    \let\@listii  \MRTbeam@orig@listii
+    \let\@listiii \MRTbeam@orig@listiii
+  }%=<<
+\newcommand\MRTbeam@StretchyLists[1]%>>=
+  {%
+    \def\@listi
+      {%
+        \leftmargin\leftmargini
+        \topsep  3\p@ \@plus2\p@ \@minus2.5\p@
+        \parsep  0\p@
+        \itemsep 3\p@ \@plus#1   \@minus3\p@
+      }%
+    \let\@listI\@listi
+    \def\@listii
+      {%
+        \leftmargin\leftmarginii
+        \topsep  2\p@ \@plus#1  \@minus2\p@
+        \parsep  0\p@ \@plus\p@
+        \itemsep 0\p@ \@plus#1
+      }%
+    \def\@listiii
+      {%
+        \leftmargin\leftmarginiii
+        \topsep  2\p@ \@plus#1  \@minus2\p@
+        \parsep  0\p@ \@plus\p@
+        \itemsep 0\p@ \@plus#1
+      }%
+  }%=<<
+\NewDocumentCommand\StretchyLists{s O{0.3}}%>>=
+  {%
+    \IfBooleanTF{#1}
+      {\MRTbeam@StretchyLists{#2fil}}
+      {\MRTbeam@StretchyLists{#2fill}}%
+  }%=<<
+
 % itemize symbols >>=
 \defbeamertemplate{itemize item}{small circle}{%
   \scalebox{0.69}{$\bullet$}}

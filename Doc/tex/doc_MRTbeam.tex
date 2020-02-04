@@ -188,6 +188,20 @@ described in \autoref{sec:beam:macros}.
   use |\ProgressBarColors[gray]{0.85}{red!50!green}|.
 \end{describemacro}
 
+\begin{describemacro}{StretchyLists}[\meta{*}\oarg{factor}]
+  Redefines the internals \cs{@listi}, \cs{@listii}, and \cs{@listiii}, such
+  that lists (\env{itemize}, \env{enumerate}, \env{description}) are stretchy.
+  Inside a \pkg{beamer} \env{frame} that has vertically centred contents the
+  used order of infinity must be |fill|, but inside of constructs such as
+  \env{minipage}s you need |fil|. By default |fill| is used by
+  \cs{StretchyLists}, but if you use the starred version |fil| will be used. In
+  addition you can specify the stretch \meta{factor}, which defaults to |0.3|.
+\end{describemacro}
+
+\begin{describemacro}{ResetLists}
+  Reset the list internals set by \cs{StretchyLists} to their default values.
+\end{describemacro}
+
 \subsection{Footnote related}
 \begin{describemacro}{ifTabularNotes,TabularNotestrue,TabularNotesfalse}
   If set true the MRT footnotes will be displayed in a tabular manner with two
