@@ -7,7 +7,7 @@ template are less strict today, but at least I'll still use this template.
 Many of the features described here are also available if one uses
 \cs{usetheme{MRTbeam}} within a document using the \cls{beamer} class. There
 however is no dedicated documentation for that possibility provided. You're
-encouraged to also use the corresponding \cls{MRTbeam} class if your using the
+encouraged to also use the corresponding \cls{MRTbeam} class if you're using the
 eponymous theme.
 
 If there is a new institution template which should be matched that doesn't
@@ -43,7 +43,7 @@ You can specify the used logos using \cs{uselogo}. The default is the UBT logo
 on the left, no logo in the centre, and the MRT logo on the right side.
 
 If you specify no or an empty frame title the current section is used (with its
-numbering). If you don't want any frame title pass in \cs{relax} is the title.
+numbering). If you don't want any frame title pass in \cs{relax} as the title.
 The frame's subtitle can be prepended with the current subsection (with its
 numbering) followed by a colon. This depends on the current value of
 \cs{ifPrependSubsections}.
@@ -106,6 +106,13 @@ described in \autoref{sec:beam:macros}.
   \file{MRTresources_logo_UBT2.pdf} is used for the left logo and
   \file{MRTresources_logo_MRT2.pdf} for the right one by default. The centre
   logo is initially empty.
+\end{describemacro}
+
+\begin{describemacro}{setlogobox}[\marg{pos}\marg{contents}]
+  The logos are actually only typeset once inside a horizontal box and
+  afterwards that box is used. While \cs{uselogo} only allows to place graphics
+  files, you can use arbitrary \meta{contents} (in horizontal mode) with this
+  macro. The \meta{pos} argument is the same as for \cs{uselogo}.
 \end{describemacro}
 
 \begin{describemacro}{ShowGrid}[\oarg{options}]
@@ -342,6 +349,16 @@ The term footnotes relates to the special MRT footnotes in this subsection.
 \begin{describemacro}{ClearRightFoot}[\meta{*}]
   Clears the footnotes. If the \texttt{*} is given only the volatile footnotes
   are cleared, else all of them.
+\end{describemacro}
+
+\begin{describemacro}{SetLeftFoot}[\marg{contents}]
+  Sets the \meta{contents} of the left footer locally.
+\end{describemacro}
+
+\begin{describemacro}{ClearLeftFoot}
+  Clears the left footer locally. This might be handy to clear the footers on
+  the title page, you could use it with
+  \bverb|\begingroup\ClearLeftFoot\maketitle\endgroup|.
 \end{describemacro}
 
 \subsection{Bibliography related}

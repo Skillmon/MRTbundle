@@ -43,9 +43,12 @@
 \newif\if@MRTbeam@StarredSection@
 \newif\if@MRTbeam@StarredSubsection@
 %=<<
-\newbox\MRTbeam@box
+\newsavebox\MRTbeam@box
+\newsavebox\MRTbeam@llogo@box
+\newsavebox\MRTbeam@clogo@box
+\newsavebox\MRTbeam@rlogo@box
 % Footnotes related >>=
-\NewDocumentCommand{\MRT@process@visibility}{+m}{%
+\NewDocumentCommand\MRT@process@visibility{+m}{%
   \if\relax\detokenize{#1}\relax%
     \def\ProcessedArgument{}%
   \else%
@@ -88,21 +91,7 @@
 }%=<<
 \MRTutil@def\MRTbeam@putlogo#1%>>=
   {%
-    \expandafter\MRTbeam@putlogo@a
-      \csname MRTbeam@#1logo@options\expandafter\endcsname
-      \csname MRTbeam@#1logo\endcsname
-  }%=<<
-\MRTutil@def\MRTbeam@putlogo@a#1#2%>>=
-  {%
-    % #1 options (macro)
-    % #2 file (macro)
-    \expandafter\MRTbeam@putlogo@b\expandafter{#2}{#1}%
-  }%=<<
-\MRTutil@def\MRTbeam@putlogo@b#1#2%>>=
-  {%
-    % #1 file (string)
-    % #2 options (macro)
-    \smash{\expandafter\includegraphics\expandafter[#2]{#1}}%
+    \copy\csname MRTbeam@#1logo@box\endcsname
   }%=<<
 \MRTutil@def\MRT@tabularT{\begin{tabular}[t]}
 \let\footnoterule\relax
@@ -148,7 +137,7 @@
 
 %% Macros >>=
 %\RenewDocumentCommand{\footnote}{o m}{%
-\NewDocumentCommand{\UseAndIfEmptyTF}{O{} m}{%>>=
+\NewDocumentCommand\UseAndIfEmptyTF{O{} m}{%>>=
   \setbox\MRTbeam@box\hbox{#2}%
   \ifdim\wd\MRTbeam@box=0pt\relax
     \expandafter\@firstoftwo
@@ -157,7 +146,7 @@
     \expandafter\@secondoftwo
   \fi}%
 %=<<
-\NewDocumentCommand{\cursec}{s}{%>>=
+\NewDocumentCommand\cursec{s}{%>>=
   \IfBooleanF{#1}%
     {%
       \if@MRTbeam@StarredSection@%
@@ -167,7 +156,7 @@
     }%
   \insertsection}
 %=<<
-\NewDocumentCommand{\curssec}{s}{%>>=
+\NewDocumentCommand\curssec{s}{%>>=
   \IfBooleanF{#1}%
     {%
       \if@MRTbeam@StarredSubsection@%
@@ -185,7 +174,7 @@
 %=<<
 \MRTutil@def\ColumnsTabularNotes#1{\gdef\MRT@ColTabNotes{#1}}
 \newenvironment*{whiteframes}{\whiteframestrue}{\whiteframesfalse}
-\NewDocumentCommand{\advisor}{s o m}{%>>=
+\NewDocumentCommand\advisor{s o m}{%>>=
   \IfNoValueTF{#2}%
     {%
       \def\@advisor{Betreuer}%
@@ -197,7 +186,7 @@
     }%
   \xdef\@advisor{\UseAndIfEmptyTF{\@advisor}{}{ }#3}%
   \gdef\advisor{#3}}%=<<
-\NewDocumentCommand{\occasion}{m}{\gdef\@occasion{#1}}
+\NewDocumentCommand\occasion{m}{\gdef\@occasion{#1}}
 \gdef\@occasion{}
 % Footnotes related >>=
 \MRTutil@def\MRT@ftn@add#1#2%>>=
@@ -208,7 +197,7 @@
           {\unexpanded\expandafter{\MRTbeam@temp}}\noexpand\\%
       }%
   }%=<<
-\NewDocumentCommand{\AddToRightFoot}{s t+ >{\MRT@process@visibility}D<>{} o m}{%>>=
+\NewDocumentCommand\AddToRightFoot{s t+ >{\MRT@process@visibility}D<>{} o m}{%>>=
   \bgroup
   \ifTabularNotes
     \IfNoValueTF{#4}%
@@ -236,46 +225,64 @@
   \fi
   \egroup
 }%=<<
-\NewDocumentCommand{\ClearRightFoot}{s}{%>>=
+\NewDocumentCommand\ClearRightFoot{s}{%>>=
   \IfBooleanF{#1}{\gdef\MRT@ftn@p{}}%
   \gdef\MRT@ftn{}%
   \gdef\MRT@ftn@c{}}
 %=<<
-%=<<
-\NewDocumentCommand{\uselogo}{m O{height=0.080864\paperheight} m}%>>=
+\MRTutil@def\ClearLeftFoot%>>=
   {%
-    \def\MRTbeam@tempa{#1}%
-    \def\MRTbeam@tempb{l}%
-    \ifx\MRTbeam@tempa\MRTbeam@tempb
-      \gdef\MRTbeam@llogo@options{#2}%
-      \gdef\MRTbeam@llogo{#3}%
-    \else
-      \def\MRTbeam@tempb{c}%
-      \ifx\MRTbeam@tempa\MRTbeam@tempb
-        \gdef\MRTbeam@clogo@options{#2}%
-        \gdef\MRTbeam@clogo{#3}%
-      \else
-        \def\MRTbeam@tempb{r}%
-        \ifx\MRTbeam@tempa\MRTbeam@tempb
-          \gdef\MRTbeam@rlogo@options{#2}%
-          \gdef\MRTbeam@rlogo{#3}%
-        \else
-          \PackageError{MRTbeam}{'#1' is not an accepted argument}
-            {%
-              \protect\uselogo\space accepts one of 'l', 'c', and 'r' as first
-              argument.%
-            }%
-    \fi\fi\fi
+    \let\@leftfooter\@empty
+  }%=<<
+\MRTutil@def[\long]\SetLeftFoot#1%>>=
+  {%
+    \def\@leftfooter{#1}%
+  }%=<<
+%=<<
+\newcommand\MRTbeam@checkvalidlogo[2]%>>=
+  {%
+    \@ifundefined{MRTbeam@#2logo@box}
+      {%
+        \PackageError{MRTbeam}{'#2' is not an accepted argument}
+          {%
+            \protect#1\space accepts one of 'l', 'c', and 'r' as first
+            argument.%
+          }%
+      }%
+  }%=<<
+\NewDocumentCommand\setlogobox{m m}%>>=
+  {%
+    \MRTbeam@checkvalidlogo\setlogobox{#1}%
+      {%
+        \sbox{\csname MRTbeam@#1logo@box\endcsname}{#2}%
+        \ht\csname MRTbeam@#1logo@box\endcsname\z@
+        \dp\csname MRTbeam@#1logo@box\endcsname\z@
+      }%
+  }%=<<
+\NewDocumentCommand\uselogo{m O{height=0.080864\paperheight} m}%>>=
+  {%
+    \MRTbeam@checkvalidlogo\uselogo{#1}%
+      {%
+        \MRTifEmptyTF{#3}
+          {\sbox{\csname MRTbeam@#1logo@box\endcsname}{}}
+          {%
+            \sbox
+              {\csname MRTbeam@#1logo@box\endcsname}
+              {\includegraphics[#2]{#3}}%
+            \ht\csname MRTbeam@#1logo@box\endcsname\z@
+            \dp\csname MRTbeam@#1logo@box\endcsname\z@
+          }%
+      }%
   }%=<<
 \uselogo{l}{MRTresources_logo_UBT2.pdf}
 \uselogo{c}{}
 \uselogo{r}{MRTresources_logo_MRT2.pdf}
-\NewDocumentCommand{\ShowGrid}{>{\MRT@expandonce}O{\MRTbeam@Grid@defaults}}{%>>=
+\NewDocumentCommand\ShowGrid{>{\MRT@expandonce}O{\MRTbeam@Grid@defaults}}{%>>=
   \global\@MRTbeam@Grid@true%
   \tikzset{MRTbeam@Grid@options/.style={#1}}
 }
 %=<<
-\NewDocumentCommand{\HideGrid}{s}{%>>=
+\NewDocumentCommand\HideGrid{s}{%>>=
   \IfBooleanF{#1}{\ShowGrid}% restores defaults
   \global\@MRTbeam@Grid@false%
 }
@@ -283,7 +290,7 @@
 % Progressbar >>=
 \definecolor{noprogress}{gray}{0.85}
 \definecolor{progressed}{gray}{0.65}
-\NewDocumentCommand{\ProgressBar}%>>=
+\NewDocumentCommand\ProgressBar%>>=
   { O{\MRT@pbar@o} D<>{\MRT@pbar@l} O{\MRT@pbar@h} O{\MRT@pbar@k} }{%
   \bgroup%
   \makebox[0pt][#1]{\parbox[t][0pt][t]{#2}{%
@@ -304,7 +311,7 @@
   }}%
   \egroup%
 }%=<<
-\NewDocumentCommand{\SetProgressBar}{ s m m m m }{%>>=
+\NewDocumentCommand\SetProgressBar{ s m m m m }{%>>=
   \IfBooleanTF{#1}{\let\MRT@temp\def}{\let\MRT@temp\gdef}%
   \def\MRT@tempb{*}%
   \def\MRT@tempa{#2}%
@@ -344,16 +351,16 @@
 }%=<<
 \SetProgressBar{c}{30pt}{\f@size pt}{-1.65ex}% default
 %=<<
-\NewDocumentCommand{\PlaceAt}{ s r() O{} +m }{%>>=
+\NewDocumentCommand\PlaceAt{ s r() O{} +m }{%>>=
   \IfBooleanTF{#1}%
     {\MRTbeam@PlaceAt@s{#2}{#3}{#4}}%
     {\MRTbeam@PlaceAt{#2}{#3}{#4}}%
 }%=<<
-\NewDocumentCommand{\MRTbeam@PlaceAt@s}{ >{\SplitArgument{1}{,}}m m +m }%>>=
+\NewDocumentCommand\MRTbeam@PlaceAt@s{ >{\SplitArgument{1}{,}}m m +m }%>>=
   {%
     \MRTbeam@PlaceAt@s@b#1{#2}{#3}%
   }%=<<
-\NewDocumentCommand{\MRTbeam@PlaceAt@s@b}{ m m m +m }%>>=
+\NewDocumentCommand\MRTbeam@PlaceAt@s@b{ m m m +m }%>>=
   {%
     \smash{\makebox[0pt]{%
       \begin{tikzpicture}[overlay,remember picture]%
@@ -361,11 +368,11 @@
           at (current page.south west) {#4};%
       \end{tikzpicture}}}%
   }%=<<
-\NewDocumentCommand{\MRTbeam@PlaceAt}{ m m +m }%>>=
+\NewDocumentCommand\MRTbeam@PlaceAt{ m m +m }%>>=
   {%
     \AddToPlaced{\node[#2] at (#1) {#3};}%
   }%=<<
-\NewDocumentCommand{\AddToPlaced}{ +m }%>>=
+\NewDocumentCommand\AddToPlaced{ +m }%>>=
   {%
     \xdef\MRT@PlacedStuff{\unexpanded\expandafter{\MRT@PlacedStuff #1}}%
   }%=<<
@@ -509,7 +516,7 @@
     \expandafter\@secondoftwo%
   \fi}
 %=<<
-\NewDocumentCommand{\citefieldIfExistent}{m m}{%>>=
+\NewDocumentCommand\citefieldIfExistent{m m}{%>>=
   \IfFileExists{\jobname.bbl}{% \blx@getdata@cite doesn't work without
     \expandafter\let\csname abx@field@#2\endcsname\relax%
       \blx@getdata@cite{#1}%
@@ -520,7 +527,7 @@
   }{}%
 }
 %=<<
-\NewDocumentCommand{\framecite}{s >{\MRT@process@visibility}D<>{} o m o}{%>>=
+\NewDocumentCommand\framecite{s >{\MRT@process@visibility}D<>{} o m o}{%>>=
   \MRTbeam@ifentryseen{#4}%
     {%
       \IfBooleanTF{#1}{\AddToRightFoot*}{\AddToRightFoot}#2{%
@@ -540,12 +547,12 @@
     {\MRTbeam@ifentryseen{#5}{}{\AddToRightFoot+#1{\insertcite{#5}}}}%
   \textcolor{gray}{\inlinecite[#3][#4]{#5}}}
 %=<<
-\NewDocumentCommand{\bibliographyframe}{s t! O{\small} G{Quellen} G{}}{%>>=
+\NewDocumentCommand\bibliographyframe{s t! O{\small} G{Quellen} G{}}{%>>=
   \bgroup%
   \PrependSubsectionsfalse%
   \if\relax\detokenize{#3}\relax%
   \else%
-    \renewcommand*{\bibfont}{#3}%
+    \renewcommand*\bibfont{#3}%
   \fi%
   \IfBooleanT{#1}{\whiteframestrue}%
   \@MRTbeam@bibliography@true%
