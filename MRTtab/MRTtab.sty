@@ -997,7 +997,19 @@
             \global\@colroom\@colht
             \global\vsize\@colht     
             \vbox
-              {\unvbox\z@\box\ifvoid\LT@lastfoot\LT@foot\else\LT@lastfoot\fi}%
+              {%
+                \unvbox\z@
+                \box
+                  \ifvoid\LT@lastfoot
+                    \ifvoid\LT@firstfoot
+                      \LT@foot
+                    \else
+                      \LT@firstfoot
+                    \fi
+                  \else
+                    \LT@lastfoot
+                  \fi
+              }%
           \fi
         \else
           \ifvoid\LT@firstfoot
