@@ -35,11 +35,15 @@
         \itemsep 0\p@ \@plus#1
       }%
   }%=<<
-\NewDocumentCommand\StretchyLists{s O{0.3}}%>>=
+\NewDocumentCommand\StretchyLists{t! s O{0.3}}%>>=
   {%
     \IfBooleanTF{#1}
-      {\MRTbeam@StretchyLists{#2fil}}
-      {\MRTbeam@StretchyLists{#2fill}}%
+      {\MRTbeam@StretchyLists{#3}}
+      {%
+        \IfBooleanTF{#2}
+          {\MRTbeam@StretchyLists{#3fil}}
+          {\MRTbeam@StretchyLists{#4fill}}%
+      }%
   }%=<<
 
 % itemize symbols >>=

@@ -195,7 +195,7 @@ described in \autoref{sec:beam:macros}.
   use |\ProgressBarColors[gray]{0.85}{red!50!green}|.
 \end{describemacro}
 
-\begin{describemacro}{StretchyLists}[\meta{*}\oarg{factor}]
+\begin{describemacro}{StretchyLists}[\meta{!}\meta{*}\oarg{factor}]
   Redefines the internals \cs{@listi}, \cs{@listii}, and \cs{@listiii}, such
   that lists (\env{itemize}, \env{enumerate}, \env{description}) are stretchy.
   Inside a \pkg{beamer} \env{frame} that has vertically centred contents the
@@ -203,6 +203,9 @@ described in \autoref{sec:beam:macros}.
   \env{minipage}s you need |fil|. By default |fill| is used by
   \cs{StretchyLists}, but if you use the starred version |fil| will be used. In
   addition you can specify the stretch \meta{factor}, which defaults to |0.3|.
+  If the |!| is used, instead of appending |fill| or |fil| to \meta{factor}
+  nothing will be appended, such that one might specify another unit, e.g., with
+  \bverb|\StretchyLists![5pt]|.
 \end{describemacro}
 
 \begin{describemacro}{ResetLists}

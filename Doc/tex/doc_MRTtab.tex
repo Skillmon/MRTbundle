@@ -204,14 +204,6 @@ use another inner \env{tabular}-like environment via the \opt{env} keys.
   All available \meta{key}s are listed in \autoref{sec:tab:options:setup}. An
   example can be seen in \autoref{sec:tab:example}.
 \end{describeenv}
-
-\subsection{Known Bugs}
-If you use the \opt{long} option together with \opt{caption below} and the table
-only needs one page (so ends on the same page it started on), the caption will
-be the one which would be placed on the continued pages, not the one actually
-belonging on the first page. That's a limitation of the used method to place a
-different foot on the first page which is not supported by \pkg{longtable}. The
-method is taken from \url{https://tex.stackexchange.com/a/68448/117050}.
 %=<<
 
 \section{Explicit head rows}\label{sec:tab:explicit}%>>=
