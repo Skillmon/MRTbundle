@@ -1,5 +1,5 @@
-\newcommand*\MRTtab@version{0.0.13}
-\newcommand*\MRTtab@date{2019-10-16}
+\newcommand*\MRTtab@version{0.0.14}
+\newcommand*\MRTtab@date{2020-02-08}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -88,6 +88,7 @@
       {
         { 2014/10/28~v4.11~Multi-page~Table~package~(DPC)+~FMi~change } {}
         { 2019/02/06~v4.12~Multi-page~Table~package~(DPC) }             {}
+        { 2020/01/07~v4.13~Multi-page~Table~package~(DPC) }             {}
       }
       {
         \msg_new:nnn { MRTtab } { wrong~longtable~version }
@@ -939,7 +940,7 @@
       {%
         \let\LT@start\endgraf
         \endgraf\penalty\z@
-        \vskip\LTpre
+        \vskip\LTpre\endgraf
         \LT@footdiff-\ht\LT@foot
         \advance\LT@footdiff\ht\LT@firstfoot
         \dimen@\pagetotal

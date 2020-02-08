@@ -6,7 +6,6 @@
 \newcommand*\TikZ{\pkg{Ti\textit{k}Z}}
 \newcommand*\env[1]{\texttt{#1}}
 \newcommand*\opt[1]{\texttt{#1}}
-\newcommand*\file[1]{\texttt{\detokenize{#1}}}
 \long\def\eatspace#1 #2{#1#2}
 \newcommand*\cs{\texorpdfstring{\cs@TeXString}{\cs@PDFString}}
 \protected\def\cs@TeXString#1%>>=
@@ -66,6 +65,16 @@
 \clist_new:N \l_docMRTbundle_bverb_both_points_clist
 \clist_new:N \l_docMRTbundle_bverb_pre_points_clist
 \clist_new:N \l_docMRTbundle_bverb_post_points_clist
+\clist_new:N \l_docMRTbundle_file_post_clist
+\clist_new:N \l_docMRTbundle_file_pre_clist
+\clist_set:Nx \l_docMRTbundle_file_post_clist%>>=
+  {
+    \char_generate:nn { `\_ } { 12 }
+  }%=<<
+\clist_set:Nx \l_docMRTbundle_file_pre_clist%>>=
+  {
+    \char_generate:nn { `\. } { 12 }
+  }%=<<
 \clist_set:Nx \l_docMRTbundle_bverb_both_points_clist%>>=
   {
     =
@@ -434,6 +443,21 @@
     \@noligs
     \frenchspacing
     \l_docMRTbundle_tmp_tl
+    \group_end:
+  }%=<<
+\NewDocumentCommand \file { v }%>>=
+  {
+    \group_begin:
+    \tl_set:Nn \l_docMRTbundle_tmp_tl { #1 }
+    \clist_map_inline:Nn \l_docMRTbundle_file_pre_clist
+      {
+        \tl_replace_all:Nnn \l_docMRTbundle_tmp_tl { ##1 } { \textrm{\-} ##1 }
+      }
+    \clist_map_inline:Nn \l_docMRTbundle_file_post_clist
+      {
+        \tl_replace_all:Nnn \l_docMRTbundle_tmp_tl { ##1 } { ##1 \textrm{\-} }
+      }
+    \texttt { \l_docMRTbundle_tmp_tl }
     \group_end:
   }%=<<
 \NewDocumentEnvironment { fakeitemize } {}%>>=
