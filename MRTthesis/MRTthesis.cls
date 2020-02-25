@@ -525,9 +525,9 @@
 \MRTutil@def\MRTthesis@setautorefnames%>>=
   {%
     \addto\extrasbritish
-      {\gdef\equationautorefname~##1\null{\MRTthesis@eqname.\@~(##1)\null}}%
+      {\def\equationautorefname~##1\null{\MRTthesis@eqname.\@~(##1)\null}}%
     \addto\extrasngerman
-      {\gdef\equationautorefname~##1\null{\MRTthesis@eqname.\@~(##1)\null}}%
+      {\def\equationautorefname~##1\null{\MRTthesis@eqname.\@~(##1)\null}}%
     \MRTthesis@setautorefnames@language
   }%=<<
 \ExplSyntaxOn
@@ -535,15 +535,15 @@
   {%
     \addto\extrasbritish
       {
-        \gdef\MRTthesis@eqname{Eq}
-        \gdef\figureautorefname{Figure}
-        \gdef\appendixautorefname{Appendix}
+        \def\MRTthesis@eqname{Eq}
+        \def\figureautorefname{Figure}
+        \def\appendixautorefname{Appendix}
       }
     \addto\extrasngerman
       {
-        \gdef\MRTthesis@eqname{Gl}
-        \gdef\figureautorefname{Bild}
-        \gdef\appendixautorefname{Anhang}
+        \def\MRTthesis@eqname{Gl}
+        \def\figureautorefname{Bild}
+        \def\appendixautorefname{Anhang}
       }
     \patchcmd\@setref{\Hy@setref@link}{\MRTthesis@hyper@eq@patch}{}
       {
