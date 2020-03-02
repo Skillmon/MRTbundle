@@ -1,5 +1,5 @@
-\newcommand*\MRTalone@version{0.0.9}
-\newcommand*\MRTalone@date{2018-08-16}
+\newcommand*\MRTalone@version{0.0.10}
+\newcommand*\MRTalone@date{2020-03-02}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -181,7 +181,7 @@
 %%=============================================================================
 \setlength{\arrayrulewidth}{0.6pt}
 \setlength{\parindent}{13pt} % default 15pt
-\setlength{\parskip}{6pt plus 6pt minus 1pt}
+\setlength{\parskip}{6pt plus .3pt minus .15pt}
 \setlength{\mathindent}{10.45mm}
 \AtBeginDocument
   {
@@ -192,6 +192,42 @@
   }
 \setlist[itemize]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
 \setlist[enumerate]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
+% we need to fix an issue that setspace introduces, making the display skips
+% unstretchable. Code from https://tex.stackexchange.com/a/523552/117050
+\MRTutil@def\MRTalone@addstretchshrink#1%
+  {%
+    \if\relax\displayskipstretch\relax
+      % there is no factor, don't add plus and minus
+    \else
+      plus \displayskipstretch\gluestretch#1
+      minus \displayskipstretch\glueshrink#1
+    \fi
+  }
+\AtBeginDocument
+  {%
+    \begingroup
+    \def\fix#1\abovedisplayskip#2\displayskipstretch\belowdisplayshortskip#3\fix
+      {%
+        \endgroup
+        \everydisplay
+          {%
+            #1#3%
+            \abovedisplayskip=%
+              \displayskipstretch       \abovedisplayskip
+              \MRTalone@addstretchshrink\abovedisplayskip
+            \belowdisplayskip=%
+              \displayskipstretch       \belowdisplayskip
+              \MRTalone@addstretchshrink\belowdisplayskip
+            \abovedisplayshortskip=%
+              \displayskipstretch       \abovedisplayshortskip
+              \MRTalone@addstretchshrink\abovedisplayshortskip
+            \belowdisplayshortskip=%
+              \displayskipstretch       \belowdisplayshortskip
+              \MRTalone@addstretchshrink\belowdisplayshortskip
+          }%
+      }%
+    \expandafter\fix\the\everydisplay\fix
+  }
 %%===========================================================================<<
 
 %% set page dimensions >>=

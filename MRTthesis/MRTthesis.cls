@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.22}
-\newcommand*\MRTthesis@date{2019-12-16}
+\newcommand*\MRTthesis@version{0.0.23}
+\newcommand*\MRTthesis@date{2020-03-02}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -593,7 +593,7 @@
 %%=============================================================================
 \setlength{\arrayrulewidth}{0.6pt}
 \setlength{\parindent}{13pt} % default 15pt
-\setlength{\parskip}{6pt plus 6pt minus 1pt}
+\setlength{\parskip}{6pt plus .3pt minus .15pt}
 \setlength{\mathindent}{10.45mm}
 \AtBeginDocument
   {
@@ -604,6 +604,42 @@
   }
 \setlist[itemize]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
 \setlist[enumerate]{itemsep=-0pt, parsep=2pt plus .2pt minus .1pt}
+% we need to fix an issue that setspace introduces, making the display skips
+% unstretchable. Code from https://tex.stackexchange.com/a/523552/117050
+\MRTutil@def\MRTthesis@addstretchshrink#1%
+  {%
+    \if\relax\displayskipstretch\relax
+      % there is no factor, don't add plus and minus
+    \else
+      plus \displayskipstretch\gluestretch#1
+      minus \displayskipstretch\glueshrink#1
+    \fi
+  }
+\AtBeginDocument
+  {%
+    \begingroup
+    \def\fix#1\abovedisplayskip#2\displayskipstretch\belowdisplayshortskip#3\fix
+      {%
+        \endgroup
+        \everydisplay
+          {%
+            #1#3%
+            \abovedisplayskip=%
+              \displayskipstretch        \abovedisplayskip
+              \MRTthesis@addstretchshrink\abovedisplayskip
+            \belowdisplayskip=%
+              \displayskipstretch        \belowdisplayskip
+              \MRTthesis@addstretchshrink\belowdisplayskip
+            \abovedisplayshortskip=%
+              \displayskipstretch        \abovedisplayshortskip
+              \MRTthesis@addstretchshrink\abovedisplayshortskip
+            \belowdisplayshortskip=%
+              \displayskipstretch        \belowdisplayshortskip
+              \MRTthesis@addstretchshrink\belowdisplayshortskip
+          }%
+      }%
+    \expandafter\fix\the\everydisplay\fix
+  }
 %%===========================================================================<<
 
 %% sectioning commands >>=
