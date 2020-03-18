@@ -645,7 +645,7 @@
 %% sectioning commands >>=
 %%=============================================================================
 \RedeclareSectionCommand[% chapter >>=
-    ,beforeskip=-1.2em plus -1pt minus -1pt%
+    ,beforeskip=-1.2em%
     ,afterskip=0.1em plus 1pt minus 1pt%
 ]{chapter}% =<<
 \RedeclareSectionCommand[% section >>=
