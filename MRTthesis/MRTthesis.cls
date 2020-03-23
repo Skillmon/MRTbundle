@@ -373,7 +373,7 @@
 \keys_set:nn { MRTthesis/setup }% >>=
   {
     ,advisor = {\textcolor{blue}{Mein~Betreuer}}
-    ,examiner = {Univ.-Professor~Dr.-Ing.~Gerhard~Fischerauer}
+    ,examiner = {Univ.-Prof.\ Dr.-Ing.\ Gerhard~Fischerauer}
     ,caption~below
     ,citation~width = .5\textwidth
     ,logoL = {MRTresources_logo_UBT2.pdf}
