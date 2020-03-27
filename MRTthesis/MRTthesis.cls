@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.23}
-\newcommand*\MRTthesis@date{2020-03-02}
+\newcommand*\MRTthesis@version{0.0.24}
+\newcommand*\MRTthesis@date{2020-03-27}
 
 \NeedsTeXFormat{LaTeX2e}
 
