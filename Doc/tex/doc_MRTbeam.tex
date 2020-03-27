@@ -212,6 +212,18 @@ described in \autoref{sec:beam:macros}.
   Reset the list internals set by \cs{StretchyLists} to their default values.
 \end{describemacro}
 
+\begin{describemacro}{FixedColumnHeight}%
+  [\meta{!\marg{skip}}\meta{*}\oarg{height}]
+  If you want to use \cs{StretchyLists} inside of a \pkg{beamer} \env{column},
+  you'll note that they don't stretch. That's because those columns have no
+  fixed height. With this macro you can locally redefine \env{column} to use a
+  fixed \meta{height}, defaulting to \cs{contentheight}. Depending on the
+  column's vertical alignment \cs{vfill}s will be added on top and below. If you
+  use the starred form \cs{vfil} will be used instead of \cs{vfill}. If you
+  provide the \meta{!} you have to give another argument specifying the
+  \meta{skip} which should be used.
+\end{describemacro}
+
 \subsection{Footnote related}
 \begin{describemacro}{ifTabularNotes,TabularNotestrue,TabularNotesfalse}
   If set true the MRT footnotes will be displayed in a tabular manner with two

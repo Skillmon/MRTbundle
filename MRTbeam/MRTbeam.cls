@@ -1,5 +1,5 @@
-\newcommand*\MRTbeam@version{0.0.11}
-\newcommand*\MRTbeam@date{2020-02-07}
+\newcommand*\MRTbeam@version{0.0.12}
+\newcommand*\MRTbeam@date{2020-03-27}
 
 \NeedsTeXFormat{LaTeX2e}
 

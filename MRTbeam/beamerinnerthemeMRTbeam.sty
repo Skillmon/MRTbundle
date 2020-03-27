@@ -45,6 +45,42 @@
           {\MRTbeam@StretchyLists{#3fill}}%
       }%
   }%=<<
+\newcommand\MRTbeam@FixedColumnHeight[2]%>>=
+  {%
+    \renewenvironment<>{beamer@columnenv}[2][\beamer@colmode]
+      {%
+        \beamer@colclose\def\beamer@colclose{}%
+        \begin{actionenv}##3%
+          \setkeys{beamer@col}{##1}%
+          \begin{minipage}[\beamer@colalign][#2]{##2}%
+            \leavevmode\raggedright\beamer@colheadskip
+            \if c\beamer@colalign\relax#1\fi
+            \if b\beamer@colalign\relax#1#1\fi
+            \ignorespaces
+      }
+      {%
+            \if c\beamer@colalign\relax#1\fi
+            \if t\beamer@colalign\relax#1#1\fi
+            \null
+          \end{minipage}%
+        \hfill
+        \end{actionenv}%
+        \@ignoretrue
+      }%
+    \let\endcolumn\endbeamer@columnenv
+  }%=<<
+\NewDocumentCommand\FixedColumnHeight{e! s O{\contentheight}}%>>=
+  {%
+    \IfValueTF{#1}
+      {\MRTbeam@FixedColumnHeight{#1}}
+      {%
+        \IfBooleanTF{#2}
+          {\MRTbeam@FixedColumnHeight{\vfil}}
+          {\MRTbeam@FixedColumnHeight{\vfill}}%
+      }%
+      {#3}%
+  }%=<<
+
 
 % itemize symbols >>=
 \defbeamertemplate{itemize item}{small circle}{%
