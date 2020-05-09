@@ -1167,9 +1167,7 @@
                   {
                     \clist_set:NV \l_MRTthesis_tmpa_clist \l_MRTthesis_tmpa_tl
                     \tl_set:Nx \l_MRTthesis_tmpb_tl
-                      {
-                        \clist_item:Nn \l_MRTthesis_tmpa_clist { \c_two }
-                      }
+                      { \clist_item:Nn \l_MRTthesis_tmpa_clist { 2 } }
                     \seq_set_split:NnV \l_MRTthesis_tmpb_seq
                       { ~ } \l_MRTthesis_tmpb_tl
                     \bool_while_do:nn
@@ -1202,13 +1200,13 @@
                             \seq_if_empty:NTF \l_MRTthesis_tmpb_seq { ~ } { \, }
                           }
                       }
-                    \clist_item:Nn \l_MRTthesis_tmpa_clist { \c_one }
+                    \clist_item:Nn \l_MRTthesis_tmpa_clist { \c_one_int }
                   }
                   {
                     \seq_set_split:NnV \l_MRTthesis_tmpb_seq
                       { ~ } \l_MRTthesis_tmpa_tl
                     \int_step_inline:nn
-                      { \seq_count:N \l_MRTthesis_tmpb_seq - \c_one }
+                      { \seq_count:N \l_MRTthesis_tmpb_seq - \c_one_int }
                       {
                         \tl_set:Nx \l_MRTthesis_tmpb_tl
                           { \seq_item:Nn \l_MRTthesis_tmpb_seq { ##1 } }
@@ -1226,7 +1224,7 @@
                                 \seq_if_empty:NTF \l_MRTthesis_tmpc_seq
                                   {
                                     \int_compare:nNnTF
-                                      { ##1 + \c_one } <
+                                      { ##1 + \c_one_int } <
                                       { \seq_count:N \l_MRTthesis_tmpb_seq }
                                       { \, } { ~ }
                                   }
@@ -1237,7 +1235,7 @@
                             \exp_after:wN \MRTthesis_only_first_token:w
                               \l_MRTthesis_tmpb_tl \q_nil.\@
                             \int_compare:nNnTF
-                              { ##1 + \c_one } <
+                              { ##1 + \c_one_int } <
                               { \seq_count:N \l_MRTthesis_tmpb_seq }
                               { \, } { ~ }
                           }

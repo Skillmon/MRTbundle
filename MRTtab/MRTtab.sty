@@ -330,7 +330,7 @@
   }% =<<
 \cs_new_protected:Npn \MRTtab@@arraystarthook% >>=
   {
-    \int_gset:Nn \g__MRTtab_current_row_int { \c_zero }
+    \int_gzero:N \g__MRTtab_current_row_int
   }% =<<
 \cs_new_protected:Npn \MRTtab_step_row:% >>=
   {
@@ -420,7 +420,7 @@
   }% =<<
 \cs_new:Npn \MRTtab_head_start_inner:% >>=
   {
-    \int_compare:nNnF \g__MRTtab_current_row_int = \c_one
+    \int_compare:nNnF \g__MRTtab_current_row_int = \c_one_int
       { \MRTtab_surround_lines: }
     \headR
   }% =<<
@@ -432,7 +432,7 @@
         \noalign
           {
             \int_gset:Nn \g__MRTtab_color_upto_int
-              { \g__MRTtab_current_row_int + ##1 - \c_one }
+              { \g__MRTtab_current_row_int + ##1 - \c_one_int }
           }
       }
     \MRTtab_declare_head_macrosSRE:
@@ -465,7 +465,8 @@
     \int_compare:nNnTF \g__MRTtab_current_row_int > \g__MRTtab_color_upto_int
       {
         \int_compare:nNnT
-          { \g__MRTtab_color_upto_int + \c_one } = \g__MRTtab_current_row_int
+          { \g__MRTtab_color_upto_int + \c_one_int }
+          = \g__MRTtab_current_row_int
           { \headE\hline }
       }
       {
@@ -1133,7 +1134,7 @@
           \g__MRTtab_current_row_int > \g__MRTtab_color_upto_int
           {
             \int_compare:nNnT
-              { \g__MRTtab_color_upto_int + \c_one }
+              { \g__MRTtab_color_upto_int + \c_one_int }
               = \g__MRTtab_current_row_int
               { \headE\MRTtab_endhead: }
           }
@@ -1201,7 +1202,7 @@
               \endfoot
               \__MRTtab_show_rowcolors:
             }
-          \int_compare:nNnTF \g__MRTtab_color_upto_int > \c_zero
+          \int_compare:nNnTF \g__MRTtab_color_upto_int > \c_zero_int
             {
               \noalign { \int_gset:Nn \g__MRTtab_current_row_int { 1 } }
               \bool_if:NT \l_MRTtab_table_striped_bool

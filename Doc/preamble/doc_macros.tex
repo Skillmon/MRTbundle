@@ -49,7 +49,7 @@
 \ExplSyntaxOn
 \int_new:N \g_docMRTbundle_dsctable_lines_int
 \int_new:N \l_docMRTbundle_fakeit_level_int
-\int_set:Nn \l_docMRTbundle_fakeit_level_int { -\c_one }
+\int_set:Nn \l_docMRTbundle_fakeit_level_int { -\c_one_int }
 \dim_new:N \l_docMRTbundle_dscmac_widest_dim
 \dim_new:N \l_docMRTbundle_dscmac_indent_dim
 \dim_new:N \l_docMRTbundle_fakeit_indent_dim
@@ -464,7 +464,7 @@
   {% begin >>=
     \dim_set:Nn \l_docMRTbundle_fakeit_indent_dim { 2em }
     \int_incr:N \l_docMRTbundle_fakeit_level_int
-    \int_compare:nNnT { \l_docMRTbundle_fakeit_level_int } = { \c_zero }
+    \int_compare:nNnT { \l_docMRTbundle_fakeit_level_int } = { \c_zero_int }
       { \null\\[\dimexpr.9ex-\baselineskip\relax] }
     \cs_set_protected:Npn \item
       {
@@ -474,12 +474,12 @@
         \makebox[2em][c]
           {
             \clist_item:Nn \l_docMRTbundle_fakeit_symbols_clist
-              { \l_docMRTbundle_fakeit_level_int + \c_one }
+              { \l_docMRTbundle_fakeit_level_int + \c_one_int }
           }
       }
   }%=<<
   {% end >>=
-    \int_compare:nNnTF { \l_docMRTbundle_fakeit_level_int } = { \c_zero }
+    \int_compare:nNnTF { \l_docMRTbundle_fakeit_level_int } = { \c_zero_int }
       { \null\\[1ex] }
       { \null\\[\dimexpr.1ex-\baselineskip\relax] }
   }%=<<
