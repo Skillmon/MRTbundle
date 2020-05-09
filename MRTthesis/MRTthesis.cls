@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.24}
-\newcommand*\MRTthesis@date{2020-03-27}
+\newcommand*\MRTthesis@version{0.0.25}
+\newcommand*\MRTthesis@date{2020-05-09}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -43,6 +43,7 @@
 \bool_new:N \l_MRTthesis_lot_front_bool
 \bool_new:N \l_MRTthesis_toc_front_bool
 \bool_new:N \l_MRTthesis_hyperref_code_executed_bool
+\bool_new:N \g_MRTthesis_authors_parsed_bool
 % =<<
 % box >>=
 \box_new:N \l_MRTthesis_tmpa_box
@@ -1010,6 +1011,7 @@
 \MRTutil@def[\protected]\affidavit% >>=
   {
     \cleardoubleoddpage
+    \bool_if:NF \g_MRTthesis_authors_parsed_bool { \MRTthesis_parse_authors: }
     \chapter*{\affidavittitle}
     \sethead{\affidavittitle}
     \strut
@@ -1083,7 +1085,7 @@
   {%
     \thispagestyle{empty}
     \newgeometry{left=25mm,right=25mm,top=9mm,bottom=23.4mm}
-    \MRTthesis_parse_authors:
+    \bool_if:NF \g_MRTthesis_authors_parsed_bool { \MRTthesis_parse_authors: }
     \setbox\MRTthesis@TestBoxA\vbox
       {% >>=
         \setstretch{1}
@@ -1153,6 +1155,7 @@
   }% =<<
 \cs_new_protected_nopar:Npn \MRTthesis_parse_authors:% >>=
   {
+    \bool_gset_true:N \g_MRTthesis_authors_parsed_bool
     \seq_gset_split:NnV \g_MRTthesis_authors_seq
       { \and } \l_MRTthesis_authors_tl
     \tl_if_empty:NTF \l_MRTthesis_s_author_tl
