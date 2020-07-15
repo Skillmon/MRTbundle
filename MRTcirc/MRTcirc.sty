@@ -1,0 +1,146 @@
+\ProvidesPackage{MRTcirc}
+
+\PassOptionsToPackage{european,straightvoltages}{circuitikz}
+\RequirePackage{circuitikz}
+\RequirePackage{etoolbox}
+
+% set circuitikz options
+\ctikzset
+  {%
+     bipoles/length=1cm
+    ,bipoles/thickness=1
+    ,nodes width=0.06
+    ,voltage=straight
+    ,tripoles/european not symbol=ieee circle
+  }
+
+
+%% add a comparator
+%% settings for the comparator
+\tikzset{comp port/.style={shape=european comp port}}
+\ctikzset{tripoles/european comp port/origin/.initial=0}%
+\ctikzset{tripoles/european comp port/width/.initial=1.4}
+\ctikzset{tripoles/european comp port/not height/.initial=.3}
+\ctikzset{tripoles/european comp port/not width/.initial=.8}
+\ctikzset{tripoles/european comp port/height/.initial=.65}
+\ctikzset{tripoles/european comp port/reserved/.initial=.6}
+\ctikzset{tripoles/european comp port/input height/.initial=0}
+\ctikzset{tripoles/european comp port/inputs/.initial=1}%
+
+%% shape definition
+\let\MRTcirc@pgfcircdeclareeurologicport\pgfcircdeclareeurologicport
+\patchcmd\MRTcirc@pgfcircdeclareeurologicport
+  {\pgfpathmoveto{\pgfpointorigin} \pgftext{#2}}
+  {#2}
+  {\PackageInfo{MRTcirc}{Adding european comparator}}
+  {\PackageError{MRTcirc}{Incompatible circuitikz version (eurologic)}{}}
+\MRTcirc@pgfcircdeclareeurologicport{comp}
+  {%
+    \pgfscope
+    \pgfpathmoveto{\pgfpoint{0.25*\pgf@circ@res@left}{-0.55*\pgf@circ@res@up}}
+    \pgfpathlineto{\pgfpoint{0}{-0.55*\pgf@circ@res@up}}
+    \pgfpathlineto{\pgfpoint{0}{0.55*\pgf@circ@res@up}}
+    \pgfpathlineto{\pgfpoint{-0.25*\pgf@circ@res@left}{0.55*\pgf@circ@res@up}}
+    \pgfpathmoveto{\pgfpoint{0.1*\pgf@circ@res@left}{0}}
+    \pgfpathlineto{\pgfpoint{-0.1*\pgf@circ@res@left}{0}}
+    \pgfusepath{draw}
+    \endpgfscope
+    %\pgfpathmoveto{\pgfpointorigin}
+  }
+  {1}% number of ports
+  {} % not a 'not'
+\let\MRTcirc@pgfcircdeclareeurologicport\MRTcirc@undefined
+%% inline version of comparator
+\pgfcirc@port@node@to@path{comp port}{inline comp}
+
+%% new flipflop options
+\newif\ifpgfcirc@flipflop@dashed\pgfcirc@flipflop@dashedtrue
+\newif\ifpgfcirc@flipflop@wedge@stretch\pgfcirc@flipflop@wedge@stretchtrue
+\ctikzset{multipoles/flipflop/dashed/.is if=pgfcirc@flipflop@dashed}
+\ctikzset{multipoles/flipflop/clock wedge stretch/.is if=pgfcirc@flipflop@wedge@stretch}
+
+%% stretch the wedges on flipflops
+\patchcmd\pgf@circ@do@wedge@left
+  {\fi}
+  {\ifpgfcirc@flipflop@wedge@stretch\pgf@circ@res@temp=2\pgf@circ@res@temp\fi\fi}
+  {\PackageInfo{MRTcirc}{applying wedge left patch A}}
+  {\PackageError{MRTcirc}{Incompatible circuitikz version (wedge left)}{}}
+\patchcmd\pgf@circ@do@wedge@left
+  {\pgf@circ@res@left+\wedge}
+  {\pgf@circ@res@left+\wedge\ifpgfcirc@flipflop@wedge@stretch+\wedge\fi}
+  {\PackageInfo{MRTcirc}{applying wedge left patch B}}
+  {\PackageError{MRTcirc}{Incompatible circuitikz version (wedge left)}{}}
+\patchcmd\pgf@circ@do@wedge@right
+  {\fi}
+  {\ifpgfcirc@flipflop@wedge@stretch\pgf@circ@res@temp=2\pgf@circ@res@temp\fi\fi}
+  {\PackageInfo{MRTcirc}{applying wedge right patch A}}
+  {\PackageError{MRTcirc}{Incompatible circuitikz version (wedge right)}{}}
+\patchcmd\pgf@circ@do@wedge@right
+  {\pgf@circ@res@right-\wedge}
+  {\pgf@circ@res@right-\wedge\ifpgfcirc@flipflop@wedge@stretch-\wedge\fi}
+  {\PackageInfo{MRTcirc}{applying wedge right patch B}}
+  {\PackageError{MRTcirc}{Incompatible circuitikz version (wedge right)}{}}
+
+%% patch the dashed line into flipflops
+\patchcmd\pgf@sh@bg@flipflop{\pgfscope\ifpgf@circuit@ieeelogicport}
+  {%
+    \ifpgfcirc@flipflop@dashed
+      \pgfscope
+      \def\wedge
+        {\ctikzvalof{multipoles/flipflop/clock wedge size}\pgf@circ@res@step}
+      \ifnum\ctikzvalof{multipoles/flipflop/c2}>0
+        \let\dashes\pgfutil@firstoftwo
+        \def\dashstart{\dash}%
+        \ifpgfcirc@flipflop@wedge@stretch
+          \def\lwedge{+\wedge+\wedge}%
+        \else
+          \def\lwedge{+\wedge}%
+        \fi
+      \else
+        \let\dashes\pgfutil@secondoftwo
+        \def\dashstart{0}%
+        \def\lwedge{}%
+      \fi
+      \ifnum\ctikzvalof{multipoles/flipflop/c5}>0
+        \edef\dashes{\dashes{7}{8}}%
+        \ifpgfcirc@flipflop@wedge@stretch
+          \def\rwedge{-\wedge-\wedge}%
+        \else
+          \def\rwedge{-\wedge}%
+        \fi
+      \else
+        \edef\dashes{\dashes{8}{9}}%
+        \def\rwedge{}%
+      \fi
+      \def\dash
+        {(\pgf@circ@res@right\rwedge-(\pgf@circ@res@left\lwedge))/\dashes}%
+      \pgfsetdash{\dash\dash}\dashstart
+      \pgfpathmoveto
+        {%
+          \pgfpoint
+            {\pgf@circ@res@left\lwedge}%
+            {\pgf@circ@res@up+(\pgf@circ@dip@pin@shift-2)*\pgf@circ@res@step}%
+        }%
+      \pgfpathlineto
+        {%
+          \pgfpoint
+            {\pgf@circ@res@right\rwedge}%
+            {\pgf@circ@res@up+(\pgf@circ@dip@pin@shift-2)*\pgf@circ@res@step}%
+        }%
+      \pgfusepath{stroke}%
+      \endpgfscope
+    \fi
+    \pgfscope\ifpgf@circuit@ieeelogicport
+  }
+  {\PackageInfo{MRTcirc}{circuitikz flipflops patched}}
+  {\PackageError{MRTcirc}{Incompatible circuitikz version (flipflop)}{}}
+
+%% restyle base flipflops
+\protected\def\MRTcirc@flipflop#1#2%
+  {%
+    \tikzset{flipflop #1/.style={flipflop,flipflop def={#2,##1}}}%
+  }
+\MRTcirc@flipflop{SR}{t1=S,t3=R,c2=1,t4=\relax,t6=\relax}
+\MRTcirc@flipflop{D}{t1=D,c2=1,t4=\relax,t6=\relax}
+\MRTcirc@flipflop{JK}{t1=J,t3=K,c2=1,t4=\relax,t6=\relax}
+\MRTcirc@flipflop{T}{t1=T,c2=1,t4=\relax,t6=\relax}
