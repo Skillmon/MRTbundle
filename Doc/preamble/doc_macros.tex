@@ -385,7 +385,8 @@
     % defined. So we have to read the first two lines containing those
     % definitions.
     \ior_new:N \l_docMRTbundle_unloaded_ior
-    \clist_map_inline:nn { MRTbeam.cls, MRTalone.cls, MRTlmscale.sty }
+    \clist_map_inline:nn
+      { MRTbeam.cls, MRTalone.cls, MRTlmscale.sty, MRTcirc.sty }
       {
         \ior_open:Nn \l_docMRTbundle_unloaded_ior { ##1 }
         \ior_get:NN \l_docMRTbundle_unloaded_ior \l_tmpa_tl
@@ -419,6 +420,7 @@
       \versionline{tab}
       \versionline{fonts}
       \versionline{if}
+      \versionline{circ}
       \versionline{wuline}
       \versionline{sfacc}
       \versionline{lmscale}

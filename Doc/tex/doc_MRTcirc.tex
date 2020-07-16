@@ -1,0 +1,166 @@
+\chapter{The \pkg{MRTcirc} package}
+The package \pkg{MRTcirc} loads the \pkg{circuitikz} package and sets some of
+its options so that the results resemble the circuits in the scripts of the MRT
+better.
+
+Additionally to those changes it adds a few options and elements to
+\pkg{circuitikz}.
+
+The version numbers of \pkg{MRTcirc} mimic the numbers of \pkg{circuitikz} to
+indicate with which version it is compatible. The first version it was
+compatible with was v1.2.1 released on 2020-07-06. The only guaranteed version
+it works with is the one indicated by \pkg{MRTcirc}'s current version number,
+but it might also work with older versions starting with v1.2.1, however a
+warning will be thrown in that case.
+
+The current compatible \pkg{circuitikz} version is
+\begingroup
+\ExplSyntaxOn
+\cs_set:Npn \docMRTbundle_qd_show_version:n #1
+  {
+    %\tl_analysis_show:n { #1 }
+    v
+    \tl_if_in:nnTF { #1 } { - }
+      { \docMRTbundle_qd_show_version_tl:w #1 \q_stop }
+      { #1 }
+    .
+  }
+\cs_generate_variant:Nn \docMRTbundle_qd_show_version:n { v }
+\cs_set:Npn \docMRTbundle_qd_show_version_tl:w #1 - #2 \q_stop
+  {
+    \docMRTbundle_qd_show_version_aux:nn { #1 } { #2 }
+  }
+\cs_set:Npn \docMRTbundle_qd_show_version_aux:nn #1 #2
+  {
+    #1~(\pkg{MRTcirc}~release~#2~for~this~version)
+  }
+\docMRTbundle_qd_show_version:v { MRTcirc@version }
+\ExplSyntaxOff
+\endgroup
+
+\section{Added Elements}%>>=
+The elements are listed in the style of the \pkg{circuitikz} manual. They behave
+just like the elements of the section from \pkg{circuitikz}'s documentation, so,
+e.g., since the |european comp port| is a European logic gate, it has the same
+anchors as the other European logic gates defined by \pkg{circuitikz}. Note
+however that if no American or IEEE variant is listed in the following, it means
+that it isn't provided, still you should be able to drop the |european| from the
+name if the |european|-option of \pkg{circuitikz} is used (which it is if you're
+not altering how \pkg{MRTcirc} loads \pkg{circuitikz}).
+
+\begingroup
+\def\arraystretch{1.408}%
+\newcommand\ctikzman[2]{\multicolumn{2}{l}{\textrm{\textbf{#1\quad#2}}}\\}%
+\settowidth{\dimen0}{\includegraphics{img/circ_comp-alone.pdf}}%
+\edef\tmp{\the\dimexpr\linewidth-4\tabcolsep-\dimen0}%
+\adjustboxset{valign=t}%
+\begin{longtable}{rp{\tmp}}
+  \ctikzman{3.24.3}{European Logic gates}
+  \adjincludegraphics{img/circ_comp-alone.pdf}
+    & European comparator port, type: node, fillable
+      (\texttt{node[european comp port]\{\}}). Class: \texttt{logic ports}. \\
+  \adjincludegraphics{img/circ_clock-alone.pdf}
+    & European clock port, type: node, fillable
+      (\texttt{node[european clock port]\{\}}). Class: \texttt{logic ports}. \\
+  \ctikzman{3.24.4}{Path-style logic ports}
+  \adjincludegraphics{img/circ_comp-alone.pdf}
+    & \texttt{inline comp}: ``comp'' logic port, \texttt{type: path-style,
+    fillable, nodename: comp port}. Class: \texttt{logic ports}.
+\end{longtable}
+\endgroup
+%=<<
+
+\section{Altered Elements}%>>=
+While \pkg{circuitikz} provides many customization options, not everything can
+be customized so much that it fits. For this reason \pkg{MRTcirc} alters some of
+the definitions made by \pkg{circuitikz} to get greater flexibility.
+
+\subsection{Flip-flops}%>>=
+The flip-flops are changed a lot from the basic definition. You can still use
+everything from the manual, but additionally two new keys were added which you
+can use in |flipflop def| (or in |\ctikzset{multipoles/flipflop/|\meta{key}|}|):
+
+\begin{describeopt}{clock wedge stretch}[\meta{bool}]
+  If |true| the wedges are stretched so that they look pointier, just like in
+  the scripts of the MRT. If |false| the default of \pkg{circuitikz} is used.
+  Initially this is |true|.
+\end{describeopt}
+\begin{describeopt}{dashed}[\meta{bool}]
+  If |true| the flip-flops get a dashed horizontal line at their vertical
+  centre, just like they are depicted in the MRT scripts. Initially this is
+  |true|.
+\end{describeopt}
+
+A display of the altered flip-flops:
+
+\begingroup
+\def\arraystretch{1.408}%
+\newcommand\ctikzman[2]{\multicolumn{2}{l}{\textrm{\textbf{#1\quad#2}}}\\}%
+\settowidth{\dimen0}{\includegraphics{img/circ_flipflop_asr-alone.pdf}}%
+\edef\tmp{\the\dimexpr\linewidth-4\tabcolsep-\dimen0}%
+\newcommand\flfl[3]
+  {%
+    \adjincludegraphics{img/circ_flipflop_#1-alone.pdf}
+      & \texttt{\string\node[flipflop #2]\{\};} (#3)
+      \\
+  }%
+\adjustboxset{valign=c}%
+\begin{longtable}{cp{\tmp}}
+  \flfl{asr}{aSR}{asynchronous SR-flip-flop}
+  \flfl{sr}{SR}{synchronous SR-flip-flop}
+  \flfl{d}{D}{synchronous D-flip-flop}
+  \flfl{t}{T}{synchronous T-flip-flop}
+  \flfl{jk}{JK}{synchronous JK-flip-flop}
+\end{longtable}
+\endgroup
+
+In addition each of the flip-flops listed above now accepts an optional argument
+such as |\node[flipflop SR={|\meta{flipflop def}|}]{};|, with
+\meta{flipflop def} being any of the allowed customizations for the base
+|flipflop| style of \pkg{circuitikz}. This way you can alter them more easily.
+
+As you might see, none of the flip-flops have outputs, you can use the anchor
+|.bpin 4| for the output $\overline{\mathrm{Q}}$ and |.bpin 6| for the output
+$\mathrm{Q}$. This way you don't have to always specify which of the outputs is
+actually used and which isn't. If you're a perfectionist and want identical
+lengths you can show one of the pins, e.g., you can show the negated output by
+using |flipflop |\meta{type}|={t4=\relax}| and then use the anchor |.pin 4|
+instead.
+
+An example of a small circuit using a flip-flop with a reset, a standard clock
+wedge and without the dashed line:\par
+\noindent
+\begingroup
+\settowidth{\dimen0}{\includegraphics{img/circ_flipflop_example-alone.pdf}}%
+\edef\tmp{\the\linewidth-\dimen0-1cm}%
+\adjincludegraphics[valign=c]{img/circ_flipflop_example-alone.pdf}\hfill
+\begin{minipage}[c]{\tmp}
+  \scriptsize
+\begin{verbatim}
+\begin{circuitikz}
+  \draw
+    node[flipflop T={td=R,dashed=false,clock wedge stretch=false}](T){}
+    (T.pin 1) to[short,-o] ++(-.5,0)node[left]{T}
+    (T.pin 2) to[short,-o] ++(-.5,0)node[left]{CLK}
+    (T.bpin 4) to[short,-o] ++(.5,0)node[right]{\ctikztextnot{Q}}
+    (T.bpin 6) to[short,-o] ++(.5,0)node[right]{Q}
+    (T.down) to[short,-o] ++(0,-.5)node[below]{R}
+    ;
+\end{circuitikz}
+\end{verbatim}
+\end{minipage}
+\endgroup
+%=<<
+%=<<
+
+\section{Dependencies}%>>=
+Since it builds upon and alters the behaviour of \pkg{circuitikz} the first
+dependency might not be hard to guess.
+
+\begin{multicols}{2}%>>=
+  \begin{itemize}[leftmargin=10pt]
+    \item \pkg{circuitikz} [european, straightvoltages]
+    \item \pkg{etoolbox}
+  \end{itemize}
+\end{multicols}%=<<
+%=<<
