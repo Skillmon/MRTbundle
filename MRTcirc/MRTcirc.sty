@@ -88,24 +88,26 @@
 \patchcmd\MRTcirc@pgfcircdeclareeurologicport
   {%
     \ifnum#3=1\relax
-        \anchor{in}{\southwest\pgfpoint{\pgf@x}{0pt}}% or \step
-        \anchor{in 1}{\southwest\pgfpoint{\pgf@x}{0pt}}% or \step
-        \anchor{bin}{\left\pgfpoint{\pgf@x}{0pt}}% or \step
-        \anchor{bin 1}{\left\pgfpoint{\pgf@x}{0pt}}% or \step
+        \anchor{in}{\southwest\pgfpoint{\pgf@x}{0pt}}%
+        \anchor{in 1}{\southwest\pgfpoint{\pgf@x}{0pt}}%
+        \anchor{bin}{\left\pgfpoint{\pgf@x}{0pt}}%
+        \anchor{bin 1}{\left\pgfpoint{\pgf@x}{0pt}}%
     \else
-        \expandafter\pgfutil@g@addto@macro\csname pgf@sh@s@european #1 port\endcsname{%
-            \pgfmathloop%
+        \expandafter\pgfutil@g@addto@macro
+        \csname pgf@sh@s@european #1 port\endcsname{%
+            \pgfmathloop
             \ifnum\pgfmathcounter>#3%
-        \else%
-            %\pgfutil@ifundefined{pgf@anchor@european #1 port@in \pgfmathcounter}{% redundant
-            \expandafter\xdef\csname pgf@anchor@european #1 port@in \pgfmathcounter\endcsname{%
-                \noexpand\pgf@circ@logicport@input{\pgfmathcounter}% defined above
+        \else
+            \expandafter\xdef
+            \csname pgf@anchor@european #1 port@in \pgfmathcounter\endcsname{%
+                \noexpand\pgf@circ@logicport@input{\pgfmathcounter}%
             }%
-            \expandafter\xdef\csname pgf@anchor@european #1 port@bin \pgfmathcounter\endcsname{%
-                \noexpand\pgf@circ@logicport@baseinput{\pgfmathcounter}{4}{#1}% defined above
+            \expandafter\xdef
+            \csname pgf@anchor@european #1 port@bin \pgfmathcounter\endcsname{%
+                \noexpand\pgf@circ@logicport@baseinput{\pgfmathcounter}{4}{#1}%
             }%
             %}{}%
-            \repeatpgfmathloop%
+            \repeatpgfmathloop
         }
     \fi
   }
@@ -165,11 +167,23 @@
 % new flip-flop options >>=
 \newif\ifpgfcirc@flipflop@dashed\pgfcirc@flipflop@dashedtrue
 \newif\ifpgfcirc@flipflop@wedge@stretch\pgfcirc@flipflop@wedge@stretchtrue
+\let\MRTcirc@flipflop@notsymbol\pgf@circuit@ieeelogicporttrue
 \ctikzset{multipoles/flipflop/dashed/.is if=pgfcirc@flipflop@dashed}
 \ctikzset
   {%
     multipoles/flipflop/%
       clock wedge stretch/.is if=pgfcirc@flipflop@wedge@stretch
+  }
+\ctikzset
+  {%
+    multipoles/flipflop/.cd
+    ,not symbol/.is choice
+    ,not symbol/circle/.code=%
+      \let\MRTcirc@flipflop@notsymbol\pgf@circuit@ieeelogicportfalse
+    ,not symbol/ieee circle/.code=%
+      \let\MRTcirc@flipflop@notsymbol\pgf@circuit@ieeelogicporttrue
+    ,not symbol aux/.code=%
+      \MRTcirc@flipflop@notsymbol
   }
 % =<<
 % stretch the wedges on flip-flops>>=
@@ -256,9 +270,7 @@
 % =<<
 % restyle base flip-flops >>=
 \protected\def\MRTcirc@flipflop#1#2%
-  {%
-    \tikzset{flipflop #1/.style={flipflop,flipflop def={#2,##1}}}%
-  }
+  {\tikzset{flipflop #1/.style={flipflop,flipflop def={#2,##1,not symbol aux}}}}
 \MRTcirc@flipflop{aSR}{t1=S,t3=R}
 \MRTcirc@flipflop{SR}{t1=S,t3=R,c2=1}
 \MRTcirc@flipflop{D}{t1=D,c2=1}
