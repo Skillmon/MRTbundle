@@ -1,5 +1,5 @@
-\newcommand*\MRTfonts@version{0.0.7}
-\newcommand*\MRTfonts@date{2020-05-03}
+\newcommand*\MRTfonts@version{0.0.8}
+\newcommand*\MRTfonts@date{2020-08-01}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -20,11 +20,6 @@
 \bool_new:N \l_MRTfonts_scalemath_bool
 \bool_new:N \l_MRTfonts_pmb_bool
 % =<<
-% tl >>=
-\tl_new:N \l_MRTfonts_font_tl
-\tl_new:N \l_MRTfonts_serif_font_tl
-\tl_new:N \l_MRTfonts_mono_font_tl
-% =<<
 % fp >>=
 \fp_new:N \l_MRTfonts_new_math_scale_fp
 % =<<
@@ -42,6 +37,11 @@
   {
     The ~ used ~ #1 ~ is ~ not ~ available ~ under ~ \c_sys_engine_str. ~ You ~
     have ~ to ~ use ~ #2.
+  }%=<<
+\msg_new:nnn { MRTfonts } { deprecated }%>>=
+  {
+    The ~ usage ~ of ~ #1 ~ is ~ deprecated. ~ Please ~ take ~ a ~ look ~ at ~
+    the ~ documentation.
   }%=<<
 \msg_new:nnn { MRTfonts } { no~float }%>>=
   {
@@ -85,28 +85,8 @@
               }
           }
       }
-    \keys_define:nn { MRTfonts }
-      {
-         font        .tl_set:N = \l_MRTfonts_font_tl
-        ,font        .initial:n = { texgyreheros-regular.otf }
-        ,serif font  .tl_set:N = \l_MRTfonts_serif_font_tl
-        ,serif font  .initial:n = { lmroman10-regular.otf }
-        ,mono font   .tl_set:N = \l_MRTfonts_mono_font_tl
-        ,mono font   .initial:n = { lmmono10-regular.otf }
-      }
   }%=<<
   {%>>=
-    \clist_map_inline:nn { font, serif font, mono font }
-      {
-        \keys_define:nn { MRTfonts }
-          {
-            #1 .code:n =
-              {
-                \msg_error:nnnn { MRTfonts } { wrong~engine } { key ~ `#1` }
-                  { xetex ~ or ~ luatex }
-              }
-          }
-      }
     \keys_define:nn { MRTfonts }
       {
         scale maths .code:n =%>>=
@@ -157,6 +137,16 @@
         ,new maths .initial:n = { 1.05 }
       }
   }%=<<
+\clist_map_inline:nn { font, serif font, mono font }%>>=
+  {
+    \keys_define:nn { MRTfonts }
+      {
+        #1 .code:n =
+          {
+            \msg_error:nnn { MRTfonts } { deprecated } { the ~ key ~ `#1` }
+          }
+      }
+  }%=<<
 \DeclareOption* { \keys_set:nV { MRTfonts } \CurrentOption }
 \ExecuteOptions{mathsizes, alt l}
 \ProcessOptions\relax
@@ -168,52 +158,42 @@
   {% true >>=
     \RequirePackage[no-math]{fontspec}
     \defaultfontfeatures{Ligatures=TeX}
-    \tl_if_empty:NTF \l_MRTfonts_font_tl
-      {
-        \msg_new:nnn { MRTfonts } { no~font }
-          {
-            You ~ did ~ not ~ specify ~ any ~ sans ~ font ~ using ~ the ~
-            `font` ~ key. ~ I'll ~ use ~ the ~ default ~ font ~ but ~ you ~
-            should ~ use ~ a ~ system ~ font ~ looking ~ like ~ Helvetica ~ or ~
-            Arial.
-          }
-        \msg_warning:nn { MRTfonts } { no~font }
-      }
-      { \exp_args:NV \setsansfont \l_MRTfonts_font_tl }
-    \tl_if_empty:NF \l_MRTfonts_serif_font_tl
-      { \exp_args:NV \setmainfont \l_MRTfonts_serif_font_tl }
-    \tl_if_empty:NF \l_MRTfonts_mono_font_tl
-      { \exp_args:NV \setmonofont \l_MRTfonts_mono_font_tl }
+    \setsansfont{texgyreheros-regular.otf}
+      [
+         BoldFont = texgyreheros-bold.otf
+        ,ItalicFont = texgyreheros-italic.otf
+        ,BoldItalicFont = texgyreheros-bolditalic.otf
+      ]
   }% =<<
   {% false >>=
     \RequirePackage[T1]{fontenc}
+    \bool_if:NTF \l_MRTfonts_new_math_bool
+      {%>>=
+        \RequirePackage[nomath]{lmodern}
+        % mathptmx letters font
+        \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
+        \DeclareFontFamily{OML}{ztmcm}{\skewchar \font =127}
+        \DeclareFontShape{OML}{ztmcm}{m}{it}
+          { <-> s*[ \fp_use:N \l_MRTfonts_new_math_scale_fp ] zptmcm7m }{}
+        \DeclareFontShape{OML}{ztmcm}{m}{sl}{<->ssub * ztmcm/m/it}{}
+        \RequirePackage[upint,smallerops,nosymbolsc,noamssymbols]{newpxmath}
+        % no, newpxmath, you don't get the letters
+        \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
+        % fixing newpxmath symbols
+        \str_if_eq:eeT { \use:c { ver@newpxmath.sty } } { 2019/10/02~v1.401 }
+          {
+            \DeclareMathSymbol{\forall}{\mathord}{symbols}{56}
+            \DeclareMathSymbol{\exists}{\mathord}{symbols}{57}
+          }
+      }%=<<
+      {%>>=
+        \RequirePackage{lmodern}
+        \bool_if:NT \l_MRTfonts_lmscale_bool { \RequirePackage { MRTlmscale } }
+      }%=<<
+    \RequirePackage{helvet}
   }%=<<
 \renewcommand\familydefault{\sfdefault}
 % bad math fonts 
-\bool_if:NTF \l_MRTfonts_new_math_bool
-  {%>>=
-    \RequirePackage[nomath]{lmodern}
-    % mathptmx letters font
-    \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
-    \DeclareFontFamily{OML}{ztmcm}{\skewchar \font =127}
-    \DeclareFontShape{OML}{ztmcm}{m}{it}
-      { <-> s*[ \fp_use:N \l_MRTfonts_new_math_scale_fp ] zptmcm7m }{}
-    \DeclareFontShape{OML}{ztmcm}{m}{sl}{<->ssub * ztmcm/m/it}{}
-    \RequirePackage[upint,smallerops,nosymbolsc,noamssymbols]{newpxmath}
-    % no, newpxmath, you don't get the letters
-    \DeclareSymbolFont{letters}{OML}{ztmcm}{m}{it}
-    % fixing newpxmath symbols
-    \str_if_eq:eeT { \use:c { ver@newpxmath.sty } } { 2019/10/02~v1.401 }
-      {
-        \DeclareMathSymbol{\forall}{\mathord}{symbols}{56}
-        \DeclareMathSymbol{\exists}{\mathord}{symbols}{57}
-      }
-  }%=<<
-  {%>>=
-    \RequirePackage{lmodern}
-    \bool_if:NT \l_MRTfonts_lmscale_bool { \RequirePackage { MRTlmscale } }
-  }%=<<
-\RequirePackage{helvet}
 \RequirePackage[italic,defaultmathsizes]{mathastext}
 \RequirePackage{isomath}
 \bool_if:NTF \l_MRTfonts_sfacc_height_bool
@@ -232,36 +212,39 @@
 
 %% alternative lower case l for maths >>=
 %%=============================================================================
-\DeclareSymbolFont{AREVletters}{OML}{zavm}{m}{it}
-\DeclareSymbolFontAlphabet{\arev}{AREVletters}
-\DeclareFontFamily{OML}{zavm}{\skewchar\font=127}
-\DeclareFontShape{OML}{zavm}{m}{it}{<->s*[.96]zavmri7m}{}
-\AtBeginDocument{\DeclareMathSymbol{\altl}{\mathalpha}{AREVletters}{`l}}
-\MRTutil@def\stdl{}
-\group_begin:
-\char_set_lccode:nn { `\~ } { `\l }
-\char_set_catcode_active:N \~
-\tex_lowercase:D
+\bool_if:NF \c_MRTfonts_xetex_or_luatex_bool
   {
-    \group_end:
-    \AtBeginDocument
-      {
-        \mst@do@az \expandafter { \the\mst@do@az \let \stdl ~ }
-        % if MRTsfacc is loaded and uses list define a shift width for the two
-        \cs_if_exist:NT \MRTsfaccShift
-          {
-            \MRTsfaccShift \altl { 1.6mu }
-            \MRTsfaccShiftLet \stdl l
-          }
-      }
-    \bool_if:NT \l_MRTfonts_alt_l_bool
-      {
-        \AtBeginDocument
-          {
-            \mst@do@az \expandafter { \the\mst@do@az \let ~ \altl }
-            \cs_if_exist:NT \MRTsfaccShift { \MRTsfaccShiftLet l \altl }
-          }
-      }
+    \DeclareSymbolFont{AREVletters}{OML}{zavm}{m}{it}
+    \DeclareSymbolFontAlphabet{\arev}{AREVletters}
+    \DeclareFontFamily{OML}{zavm}{\skewchar\font=127}
+    \DeclareFontShape{OML}{zavm}{m}{it}{<->s*[.96]zavmri7m}{}
+    \AtBeginDocument{\DeclareMathSymbol{\altl}{\mathalpha}{AREVletters}{`l}}
+    \MRTutil@def\stdl{}
+    \group_begin:
+      \cs_set:Npn \__MRTfonts_tmp:n #1
+        {
+          \group_end:
+          \AtBeginDocument
+            {
+              \mst@do@az \expandafter { \the\mst@do@az \let \stdl #1 }
+              % if MRTsfacc is loaded and uses list define a shift width for them
+              \cs_if_exist:NT \MRTsfaccShift
+                {
+                  \MRTsfaccShift \altl { 1.6mu }
+                  \MRTsfaccShiftLet \stdl l
+                }
+            }
+          \bool_if:NT \l_MRTfonts_alt_l_bool
+            {
+              \AtBeginDocument
+                {
+                  \mst@do@az \expandafter { \the\mst@do@az \let #1 \altl }
+                  \cs_if_exist:NT \MRTsfaccShift { \MRTsfaccShiftLet l \altl }
+                }
+            }
+        }
+    \exp_args:NNo \exp_args:No \__MRTfonts_tmp:n
+      { \char_generate:nn { `\l } { 13 } }
   }
 %%===========================================================================<<
 
