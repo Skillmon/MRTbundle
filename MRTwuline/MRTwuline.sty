@@ -10,25 +10,90 @@
   {MRTwuline}          {\MRTwuline@date}
   {\MRTwuline@version} {MS Word like underline using ulem or stackengine}
 
-\newif\if@MRTwuline@tikzuline@
-\DeclareOption{tikzunderline}{\@MRTwuline@tikzuline@true}
+\keys_define:nn { MRTwuline }
+  {
+    ,rule~ht .tl_set:N = \l__MRTwuline_rule_thickness_tl
+    ,ruleht  .meta:n   = { rule~ht = { #1 } }
+    ,math~dp .tl_set:N = \l__MRTwuline_math_depth_tl
+    ,mathdp  .meta:n   = { math~dp = { #1 } }
+    ,text~dp .tl_set:N = \l__MRTwuline_text_depth_tl
+    ,textdp  .meta:n   = { text~dp = { #1 } }
+  }
+
+\cs_generate_variant:Nn \keys_set:nn { nV }
+
+\tl_set:Nn \l__MRTwuline_rule_thickness_tl { 0.185ex }
+\tl_set:Nn \l__MRTwuline_math_depth_tl { 0.21ex }
+\tl_set:Nn \l__MRTwuline_text_depth_tl { 0.42ex }
+
+\bool_new:N \l__MRTwuline_luaul_bool
+
+\let\if@MRTwuline@tikzuline\iffalse
+\DeclareOption{tikzunderline}{\let\if@MRTwuline@tikzuline\iftrue}
 \DeclareOption{tUline}{\ExecuteOptions{tikzunderline}}
+\DeclareOption*{ \keys_set:nV { MRTwuline } \CurrentOption }
 \ProcessOptions\relax
+
+\NewDocumentCommand \MRTwulineSetup { +m }
+  {
+    \keys_set:nn { MRTwuline } { #1 }
+  }
+
+% support lua-ul if available >>=
+\sys_if_engine_luatex:TF
+  {
+    \file_if_exist:nTF { lua-ul.sty }
+      { \bool_set_true:N }
+      { \bool_set_false:N }
+  }
+  { \bool_set_false:N }
+  \l__MRTwuline_luaul_bool 
+\bool_if:NTF \l__MRTwuline_luaul_bool
+  {
+    \dim_new:N \l__MRTwuline_luaul_dp_dim
+    \dim_new:N \l__MRTwuline_luaul_wd_dim
+    \dim_set:Nn \l__MRTwuline_luaul_dp_dim { \l__MRTwuline_text_depth_tl }
+    \dim_set:Nn \l__MRTwuline_luaul_wd_dim { \l__MRTwuline_rule_thickness_tl }
+    \keys_define:nn { MRTwuline }
+      { luaul .bool_set:N = \l__MRTwuline_luaul_bool }
+    \bool_set_true:N \l__MRTwuline_luaul_bool
+    \PassOptionsToPackage{minimal}{lua-ul}
+    \RequirePackage{lua-ul}
+    \newunderlinetype \__MRTwuline_luaul_on:
+      [
+        \luaul@defaultcontext
+        wd: \dim_use:N \l__MRTwuline_luaul_wd_dim
+        dp: \dim_use:N \l__MRTwuline_luaul_dp_dim
+      ]
+      { \leaders \MRTwuline_text_rule:n \l__MRTwuline_luaul_dp_dim }
+  }
+  {
+    \msg_new:nnn { MRTwuline } { key~needs~lua-ul }
+      {
+        The ~ used ~ key ~ `\l_keys_key_str' ~ is ~ only ~ available ~ if ~
+        LuaTeX ~ is ~ used.
+      }
+    \keys_define:nn { MRTwuline }
+      { luaul .code:n = { \msg_error:nn { MRTwuline } { key~needs~lua-ul } } }
+  }
+\keys_define:nn { MRTwuline } { lua-ul .meta:n = { luaul = { #1 } } }
+% =<<
 
 % \WUline >>=
 \NewDocumentCommand \WUline { o m }
   {
     \mode_if_math:TF
-      { \MRTwuline_math:nn { #1 } { #2 } }
-      { \MRTwuline_text:nn { #1 } { #2 } }
+      \MRTwuline_math:nn
+      \MRTwuline_text:nn
+      { #1 } { #2 }
   }
-\cs_new:Npn \MRTwuline_math:nn #1 #2
+\cs_new_protected:Npn \MRTwuline_math:nn #1
   {
     \IfNoValueTF { #1 }
-      { \MRTwuline_math_out:nn { \MRTwuline@mathheight } { #2 } }
-      { \MRTwuline_math_out:nn { #1 } { #2 } }
+      { \MRTwuline_math_out:nn \l__MRTwuline_math_depth_tl }
+      { \MRTwuline_math_out:nn { #1 } }
   }
-\cs_new:Npn \MRTwuline_math_out:nn #1 #2
+\cs_new_protected:Npn \MRTwuline_math_out:nn #1 #2
   {
     \ThisStyle
       {
@@ -36,33 +101,61 @@
         \stackengine
           { #1 }
           { $ { \SavedStyle #2 } $ }
-          { \rule { \wd0 } { 0.185ex } }
+          { \rule { \wd0 } { \l__MRTwuline_rule_thickness_tl } }
           { U } { c } { F } { F } { S }
       }
     \underline { \vphantom { #2 } }
   }
-\cs_new:Npn \MRTwuline_text:nn #1 #2
+\cs_new_protected:Npn \MRTwuline_text:nn #1
   {
-    \bgroup
     \IfNoValueTF { #1 }
-      {
-        \markoverwith
-          { \rule [ \MRTwuline@textheight ] { 0.25ex } { 0.185ex} } 
-      }
-      { \markoverwith { \rule [ #1 ] { 0.25ex } { 0.185ex } } }
-    \ULon{#2}
+      { \MRTwuline_text_out:nn \l__MRTwuline_text_depth_tl }
+      { \MRTwuline_text_out:nn { #1 } }
   }
-\MRTutil@def\MRTwuline@mathheight{0.21ex}%
-\MRTutil@def\MRTwuline@textheight{-0.42ex}%
+\bool_if:NTF \l__MRTwuline_luaul_bool
+  {
+    \cs_new_protected:Npn \MRTwuline_text_out:nn #1 #2
+      {
+        \bool_if:NTF \l__MRTwuline_luaul_bool
+          {
+            \group_begin:
+              \dim_set:Nn \l__MRTwuline_luaul_dp_dim { #1 }
+              \dim_set:Nn \l__MRTwuline_luaul_wd_dim
+                { \l__MRTwuline_rule_thickness_tl }
+              \__MRTwuline_luaul_on:
+              #2
+            \group_end:
+          }
+          {
+            \bgroup
+            \markoverwith { \MRTwuline_text_rule:n { #1 } }
+            \ULon { #2 }
+          }
+      }
+  }
+  {
+    \cs_new_protected:Npn \MRTwuline_text_out:nn #1
+      {
+        \bgroup
+        \markoverwith { \MRTwuline_text_rule:n { #1 } }
+        \ULon
+      }
+  }
+\cs_new_protected:Npn \MRTwuline_text_rule:n #1
+  {
+    \vrule
+      \@height \dim_eval:n { \l__MRTwuline_rule_thickness_tl - #1 }
+      \@depth \dim_eval:n { #1 }
+    \scan_stop:
+  }
 % =<<
 
 % \tUline >>=
-\if@MRTwuline@tikzuline@
-  \ExplSyntaxOff
+\if@MRTwuline@tikzuline
+  \MRTutil@def\MRTwuline@tUline@width{\l__MRTwuline_rule_thickness_tl}
   \RequirePackage{tikz}
   \usetikzlibrary{calc}
   \RequirePackage{tikzpagenodes}
-  \MRTutil@def\MRTwuline@tUline@width{0.185ex}
   \newlength\MRTwuline@tUline@length
   \newcount\MRTwuline@tUline@count
   \MRTutil@def\MRTwuline@gettikzxy#1#2#3% >>=
@@ -72,7 +165,7 @@
       \xdef#2{\the\pgf@x}%
       \xdef#3{\the\pgf@y}%
     }% =<<
-  \tikzset{MRTwuline@tUline/.style={line width=\MRTwuline@tUline@width}}
+  \tikzset{MRTwuline@tUline/.style={line~width=\MRTwuline@tUline@width}}
   \MRTutil@def\MRTwuline@EmptyOProcessor#1#2% >>=
     {%
       \MRTifEmptyTF{#2}%
@@ -83,27 +176,27 @@
     {
       >{\MRTwuline@EmptyOProcessor{-0.35ex}}O{} % height
       >{\MRTwuline@EmptyOProcessor{0pt}}O{}     % overhang
-      >{\MRTwuline@EmptyOProcessor{0.185ex}}O{} % line width
+      >{\MRTwuline@EmptyOProcessor{\l__MRTwuline_rule_thickness_tl}}O{}
       +m
     }
     {%
       \def\MRTwuline@tUline@width{#3}%
-      \tikz[remember picture,overlay, baseline=(Begin.base)]
+      \tikz[remember~picture, overlay, baseline=(Begin.base)]
         {%
-          \node[anchor=base,inner sep=0pt,outer sep=0pt,xshift=-#2]
+          \node[anchor=base,inner~sep=0pt,outer~sep=0pt,xshift=-#2]
             (Begin) {\strut};
-          \MRTwuline@gettikzxy{($(Begin.base)-(current page.south west)$)}
+          \MRTwuline@gettikzxy{($(Begin.base)-(current~page.south~west)$)}
             {\tUline@bx}{\tUline@by}%
         }%
       #4%
-      \tikz[remember picture,overlay, baseline=(End.base)]
+      \tikz[remember~picture,overlay, baseline=(End.base)]
         {%
-          \node[anchor=base,inner sep=0pt,outer sep=0pt,xshift=+#2]
+          \node[anchor=base,inner~sep=0pt,outer~sep=0pt,xshift=+#2]
             (End) {\strut};%
-          \MRTwuline@gettikzxy{($(End.base)-(current page.south west)$)}
+          \MRTwuline@gettikzxy{($(End.base)-(current~page.south~west)$)}
             {\tUline@ex}{\tUline@ey}%
         }%
-      \begin{tikzpicture}[overlay,remember picture]
+      \begin{tikzpicture}[overlay,remember~picture]
         \ifdim\dimexpr\tUline@ey-\tUline@by = 0pt
           % one line
           \draw[MRTwuline@tUline] ($(Begin.base)+(0,#1)$)
@@ -111,9 +204,9 @@
         \else
           % multiple lines
           \draw
-            ($(current page text area.west)-(#2,0)$) node(WestLine){};
+            ($(current~page~text~area.west)-(#2,0)$) node(WestLine){};
           \draw
-            ($(current page text area.east)+(#2,0)$) node(EastLine){};
+            ($(current~page~text~area.east)+(#2,0)$) node(EastLine){};
           \tUline@drawBtoE{#1}
           \ifdim\dimexpr\tUline@by-\tUline@ey>\baselineskip
             % more than two lines
@@ -147,7 +240,6 @@
         ($(Begin.base)+(0,#1)$) -- ($(Begin.base -| EastLine)+(0,#1)$)
         ($(End.base)+(0,#1)$) -- ($(End.base -| WestLine)+(0,#1)$);%
     }% =<<
-  \ExplSyntaxOn
 \fi
 % =<<
 

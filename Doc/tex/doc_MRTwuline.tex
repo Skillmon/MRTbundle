@@ -2,11 +2,42 @@
 The package provides a MS Word like looking line breakable underlining. It does
 so by using \pkg{ulem} or \pkg{stackengine}.
 
-\section{Options}\label{sec:wuline:options}%>>=
+\section{Options}
+\subsection{Load time options}\label{sec:wuline:options:loadtime}%>>=
 \begin{describeopt}{tUline,tikzunderline}
   If this option is passed \TikZ\ will be added as a required package and an
   alternative underlining macro defined called \cs{tUline}, see its description
   in \autoref{sec:wuline:mac}.
+\end{describeopt}
+%=<<
+
+\subsection{Setup options}%>>=
+\begin{describeopt}{rule~ht,ruleht}[\meta{dimen}]
+  With this setting you can decide how thick the rule is, the initial value is
+  \texttt{\csname l__MRTwuline_rule_thickness_tl\endcsname}, the value is
+  evaluated at use time, so that a smaller font gets a thinner line.
+\end{describeopt}
+
+\begin{describeopt}{math~dp,mathdp}[\meta{dimen}]
+  With this setting you can decide the height of the rule below the symbol in
+  maths mode. The initial value is
+  \texttt{\csname l__MRTwuline_math_depth_tl\endcsname}, the value is evaluated
+  at use time.
+\end{describeopt}
+
+\begin{describeopt}{text~dp,textdp}[\meta{dimen}]
+  With this setting you can decide the height of the rule below the symbol in
+  text mode. The initial value is
+  \texttt{\csname l__MRTwuline_text_depth_tl\endcsname}, the value is evaluated
+  at use time.
+\end{describeopt}
+
+\begin{describeopt}{luaul,lua-ul}[\meta{bool}]
+  If you're using \hologo{LuaLaTeX}, the \pkg{lua-ul} package is loaded. With it
+  \cs{WUline} behaves much better, giving the typesetting results you'd get
+  without it in text, just with underlining (this includes automatic
+  hyphenation). With this key you can decide whether \cs{WUline} uses
+  \pkg{lua-ul} or not, if available it is initially set to |true|.
 \end{describeopt}
 %=<<
 
@@ -29,7 +60,8 @@ so by using \pkg{ulem} or \pkg{stackengine}.
   [\oarg{height}\oarg{overhang}\oarg{thickness}\marg{text}]
   This macro can be used to underline bigger portions of text. You should never
   need it, I guess. Just use \cs{WUline} instead. If you need it, you'll have to
-  use the package option \opt{tUline}.\\[\parskip]
+  use the package option \opt{tUline} (see
+  \autoref{sec:wuline:options:loadtime}).\\[\parskip]
   If you think you can use this one instead: It underlines \meta{text} at the
   given \meta{height} (default \texttt{-0.35ex}) with the given \meta{thickness}
   (default \texttt{0.185ex}). You can specify \meta{overhang} (default
