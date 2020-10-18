@@ -1,5 +1,5 @@
-\newcommand*\MRTfonts@version{0.0.8}
-\newcommand*\MRTfonts@date{2020-08-01}
+\newcommand*\MRTfonts@version{0.0.9}
+\newcommand*\MRTfonts@date{2020-10-18}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -212,7 +212,35 @@
 
 %% alternative lower case l for maths >>=
 %%=============================================================================
-\bool_if:NF \c_MRTfonts_xetex_or_luatex_bool
+\bool_if:NTF \c_MRTfonts_xetex_or_luatex_bool
+  {
+    \MRTutil@def[\long]\arev#1
+      {
+        \msg_error:nnnn { MRTfonts } { wrong~engine }
+          { macro ~ `\arev' } { pdftex }
+        #1
+      }
+    \MRTutil@def\stdl
+      {
+        \msg_expandable_error:nnnn { MRTfonts } { wrong~engine }
+          { macro ~ `\stdl' } { pdftex }
+        l
+      }
+    \MRTutil@def\altl
+      {
+        \msg_expandable_error:nnnn { MRTfonts } { wrong~engine }
+          { macro ~ `\altl' } { pdftex }
+        l
+      }
+    \AtBeginDocument
+      {
+        \cs_if_exist:NT \MRTsfaccShift
+          {
+            \MRTsfaccShiftLet \stdl l
+            \MRTsfaccShiftLet \altl l
+          }
+      }
+  }
   {
     \DeclareSymbolFont{AREVletters}{OML}{zavm}{m}{it}
     \DeclareSymbolFontAlphabet{\arev}{AREVletters}
