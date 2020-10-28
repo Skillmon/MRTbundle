@@ -1,5 +1,5 @@
-\newcommand*\MRTif@version{0.0.15}
-\newcommand*\MRTif@date{2019-12-29}
+\newcommand*\MRTif@version{0.0.16}
+\newcommand*\MRTif@date{2020-10-28}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -894,7 +894,7 @@
 % =<<
 
 % MRTifFexp >>=
-\@ifdefinable\MRTifFexp@endFexp{\chardef\MRTif@endFexp0}
+\@ifdefinable\MRTifFexp@endFexp{\let\MRTif@endFexp\z@}
 \MRTutil@def[\long]\MRTif@endFexp@gobble#1{\MRTif@endFexp}
 \MRTutil@def[\long]\MRTif@endFexp@firstofone#1{\MRTif@endFexp#1}
 \MRTutil@def[\long]\MRTif@endFexp@firstoftwo #1#2{\MRTif@endFexp#1}
