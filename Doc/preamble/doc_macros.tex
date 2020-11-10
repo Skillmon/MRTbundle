@@ -6,13 +6,12 @@
 \newcommand*\TikZ{\pkg{Ti\textit{k}Z}}
 \newcommand*\env[1]{\texttt{#1}}
 \newcommand*\opt[1]{\texttt{#1}}
-\long\def\eatspace#1 #2{#1#2}
 \newcommand*\cs{\texorpdfstring{\cs@TeXString}{\cs@PDFString}}
 \protected\def\cs@TeXString#1%>>=
   {%
     \texttt{\cs@PDFString{#1}}%
   }%=<<
-\edef\cs@PDFString#1{\expandafter\eatspace\string\ \noexpand\detokenize{#1}}
+\edef\cs@PDFString#1{\@backslashchar\noexpand\detokenize{#1}}
 \protected\def\meta#1{\texttt{$\langle${\itshape\meta@a{#1}}\kern.05em$\rangle$}}
 \ExplSyntaxOn
 \newcommand\meta@a[1]%>>=
