@@ -205,6 +205,7 @@
         \mode_if_math:TF { \text { ~#1~ } } { ~#1~ }
       }
     \RequirePackage{siunitx}
+    \DeclareSIUnit\ohm{\text{$\upOmega$}}
     \sisetup{% set options of the siunitx package
         ,detect-all%
         ,per-mode=reciprocal-positive-first%
