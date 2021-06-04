@@ -1,5 +1,5 @@
-\newcommand*\MRTthesis@version{0.0.25}
-\newcommand*\MRTthesis@date{2020-05-09}
+\newcommand*\MRTthesis@version{0.0.26}
+\newcommand*\MRTthesis@date{2021-06-04}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -129,7 +129,8 @@
   {
      languages .tl_set:N = \l_MRTthesis_add_languages_tl
     ,langs   .meta:n = { languages = { #1 } }
-    ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { scrreprt } }
+    ,unknown .code:n =
+      { \exp_args:No \PassOptionsToClass \CurrentOption { scrreprt } }
   }
 \DeclareOption* { \keys_set:nV { MRTthesis / loadtime } \CurrentOption }
 \ExecuteOptions{hidelinks}

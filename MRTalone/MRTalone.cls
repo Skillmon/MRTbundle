@@ -1,5 +1,5 @@
-\newcommand*\MRTalone@version{0.0.10}
-\newcommand*\MRTalone@date{2020-03-02}
+\newcommand*\MRTalone@version{0.0.11}
+\newcommand*\MRTalone@date{2021-06-04}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -83,7 +83,8 @@
   {
      languages .tl_set:N = \l_MRTalone_add_languages_tl
     ,langs   .meta:n = { languages = { #1 } }
-    ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { standalone } }
+    ,unknown .code:n =
+      { \exp_args:No \PassOptionsToClass \CurrentOption { standalone } }
   }%=<<
 \DeclareOption* { \keys_set:nV { MRTalone / loadtime } \CurrentOption }
 \PassOptionsToClass{11pt}{standalone}

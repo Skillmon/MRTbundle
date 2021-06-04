@@ -1,5 +1,5 @@
-\newcommand*\MRTbeam@version{0.0.12}
-\newcommand*\MRTbeam@date{2020-03-27}
+\newcommand*\MRTbeam@version{0.0.13}
+\newcommand*\MRTbeam@date{2021-06-04}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -62,7 +62,8 @@
 \keys_define:nn { MRTbeam / loadtime }%>>=
   {
     ,aspect  .code:n = { \@MRTbeam@aspect@true \MRTbeam_handle_aspect:n { #1 } }
-    ,unknown .code:n = { \PassOptionsToClass { \CurrentOption } { beamer } }
+    ,unknown .code:n =
+      { \exp_args:No \PassOptionsToClass \CurrentOption { beamer } }
   }%=<<
 \DeclareOption* { \keys_set:nV { MRTbeam / loadtime } \CurrentOption }
 \ProcessOptions\relax
