@@ -1,6 +1,8 @@
 \chapter{The \pkg{MRTwuline} package}
 The package provides a MS Word like looking line breakable underlining. It does
-so by using \pkg{ulem} or \pkg{stackengine}.
+so by using \pkg{ulem} or \pkg{stackengine}, and if \pkg{lua-ul} is available we
+use that (so this package gives best results with \hologo{LuaLaTeX}), but see
+the |luaul| option in \autoref{sec:wuline:options:setup}.
 
 \section{Options}
 \subsection{Load time options}\label{sec:wuline:options:loadtime}%>>=
@@ -11,18 +13,18 @@ so by using \pkg{ulem} or \pkg{stackengine}.
 \end{describeopt}
 %=<<
 
-\subsection{Setup options}%>>=
+\subsection{Setup options}\label{sec:wuline:options:setup}%>>=
 \begin{describeopt}{rule~ht,ruleht}[\meta{dimen}]
   With this setting you can decide how thick the rule is, the initial value is
-  \texttt{\csname l__MRTwuline_rule_thickness_tl\endcsname}, the value is
-  evaluated at use time, so that a smaller font gets a thinner line.
+  \texttt{\csuse{l__MRTwuline_rule_thickness_tl}}, the value is evaluated at use
+  time, so that a smaller font gets a thinner line.
 \end{describeopt}
 
 \begin{describeopt}{math~dp,mathdp}[\meta{dimen}]
   With this setting you can decide the height of the rule below the symbol in
   maths mode. The initial value is
-  \texttt{\csname l__MRTwuline_math_depth_tl\endcsname}, the value is evaluated
-  at use time.
+  \texttt{\csuse{l__MRTwuline_math_depth_tl}}, the value is evaluated at use
+  time.
 \end{describeopt}
 
 \begin{describeopt}{text~dp,textdp}[\meta{dimen}]
@@ -45,16 +47,18 @@ so by using \pkg{ulem} or \pkg{stackengine}.
 \begin{describemacro}{WUline}[\oarg{height}\marg{text}]%>>=
   This sets \meta{text} and underlines it in a way that looks like MS Word
   underlining -- at least in the headings. It is usable both in math mode and in
-  text mode. Though in math mode you should use \cs{underline}.\\[\parskip]
-  In text mode the \pkg{ulem} package is used for the underline. In math mode
-  \pkg{stackengine} is employed. In both cases you can use \meta{height} to
-  change the default height of the underlining. In text mode and math mode the
-  needed \meta{height} to achieve the same height of the line differs quite a
-  lot. By default in math mode \texttt{\csuse{MRTwuline@mathheight}} is
-  used, in text mode \texttt{\csuse{MRTwuline@textheight}}.\\[\parskip]
-  While the text mode version is line breakable it disables automatic
-  hyphenation in its argument, you can still use \cs{-} to set hyphenation
-  points.
+  text mode. Though in math mode you should probably use
+  \cs{underline}.\\[\parskip]
+  In text mode the \pkg{ulem} package (or \pkg{lua-ul}) is used for the
+  underline. In math mode \pkg{stackengine} is employed. In both cases you can
+  use \meta{height} to change the default height of the underlining. In text
+  mode and math mode the needed \meta{height} to achieve the same height of the
+  line differs quite a lot. By default in math mode the value given to the
+  |mathdp| option is used, in text mode the value of |textdp| (see
+  \autoref{sec:wuline:options:setup}).\\[\parskip]
+  While the text mode version using \pkg{ulem} is line breakable it disables
+  automatic hyphenation in its argument, you can still use \cs{-} to set
+  hyphenation points manually.
 \end{describemacro}%=<<
 \begin{describemacro}{tUline}%>>=
   [\oarg{height}\oarg{overhang}\oarg{thickness}\marg{text}]
@@ -89,6 +93,7 @@ so by using \pkg{ulem} or \pkg{stackengine}.
         \item \pkg{tikzpagenodes}
         \item The \TikZ\ library \pkg{calc}
       \end{itemize}
+    \item \pkg{lua-ul} if \hologo{LuaLaTeX} is used
   \end{itemize}
 \end{multicols}
 %=<<
