@@ -1034,7 +1034,7 @@
             - \l_MRTthesis_sign_separation_dim
           }
       }
-    \hbox_unpack_clear:N \l_MRTthesis_tmpa_box
+    \hbox_unpack_drop:N \l_MRTthesis_tmpa_box
     \MRTthesis_affidavit_get_sign_width:
     \seq_map_function:NN \g_MRTthesis_authors_seq
       \MRTthesis_affidavit_sign_authors:n
