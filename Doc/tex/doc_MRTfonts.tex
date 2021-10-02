@@ -61,9 +61,10 @@ giving a uniform look to the documents.
   \emph{Deprecated.}
 \end{describeopt}
 \begin{describeopt}{new maths}[\meta{choice}]
-  This is only available if you're using \hologo{pdfTeX}. With this you can
-  specify whether some special maths fonts are loaded. The result looks closer
-  to the MS Word template for Greek letters and operators.\\
+  \onlyengine{pdf}\\
+  With this you can specify whether some special maths fonts are loaded. The
+  result looks closer to the MS Word template for Greek letters and
+  operators.\\
   Available \meta{choice}s are |off| or |false| to turn this off, |on| or |true|
   to turn this on, and a valid float, to set the scale of the Greek letters and
   activate the feature.  By default |1.05| will be used.\\
@@ -79,27 +80,27 @@ giving a uniform look to the documents.
   other affected symbols, too, \pkg{MRTfonts} fixes these two for you.
 \end{describeopt}
 \begin{describeopt}{scale maths}[\meta{choice}]
-  This is only available if you're using \hologo{pdfTeX}. With this you can
-  specify whether the \pkg{MRTlmscale} package should be loaded. Available
-  \meta{choice}s are no argument, resulting in \pkg{MRTlmscale} being used with
-  its default, |on| or |true| resulting in the same, |off| or |false| resulting
-  in \pkg{MRTlmscale} not being used, and any valid float, resulting in
-  \pkg{MRTlmscale} being used with the specified float as its scale factor. See
-  \autoref{sec:lmscale} for more about \pkg{MRTlmscale}. By default,
-  \pkg{MRTlmscale} will be used with its default scale factor if \pkg{lmodern}
-  is loaded with its maths fonts.
+  \onlyengine{pdf}\\
+  With this you can specify whether the \pkg{MRTlmscale} package should be
+  loaded. Available \meta{choice}s are no argument, resulting in
+  \pkg{MRTlmscale} being used with its default, |on| or |true| resulting in the
+  same, |off| or |false| resulting in \pkg{MRTlmscale} not being used, and any
+  valid float, resulting in \pkg{MRTlmscale} being used with the specified float
+  as its scale factor. See \autoref{sec:lmscale} for more about
+  \pkg{MRTlmscale}. By default, \pkg{MRTlmscale} will be used with its default
+  scale factor if \pkg{lmodern} is loaded with its maths fonts.
 \end{describeopt}
 %=<<
 
 \section{Macros}\label{sec:fonts:macros}
 %>>=
 \begin{describemacro}{stdl}
-  \emph{Only available in \hologo{pdfTeX}.}\\
+  \onlyengine{pdf}\\
   \cs{stdl} will result in the lower case |l| from the \pkg{helvet} font in
   maths (\bverb|$\stdl$| results in $\stdl$).
 \end{describemacro}
 \begin{describemacro}{altl}
-  \emph{Only available in \hologo{pdfTeX}.}\\
+  \onlyengine{pdf}\\
   \cs{altl} provides an alternative lower case |l| for use in maths which is
   distinct from an upper case |I|. Compare: $\stdl I$ (that is |$\stdl I$|) and
   $\altl I$ (that is |$\altl I$|). There is no bold version of \cs{altl}
@@ -107,7 +108,7 @@ giving a uniform look to the documents.
   standard fonts will be the ones used there.
 \end{describemacro}
 \begin{describemacro}{arev}[\marg{symbols}]
-  \emph{Only available in \hologo{pdfTeX}.}\\
+  \onlyengine{pdf}\\
   This is another maths font (similar to \cs{mathbf} or \cs{mathcal}), that will
   use the maths font of \pkg{arevmath}, from which \cs{altl} is taken. Take a
   look at the following (the first group uses the standard maths fonts, the
