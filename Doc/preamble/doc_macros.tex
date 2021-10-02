@@ -611,12 +611,10 @@
       \l__docMRTbundle_doandprint_tl { ~ }
     \group_begin:
       \__docMRTbundle_everyeof:w { \exp_not:N }
-      \exp_after:wN
-      \exp_after:wN
+      \exp_args:NNNo
       \exp_after:wN
     \group_end:
-    \exp_after:wN \__docMRTbundle_scantokens:w
-      \exp_after:wN { \l__docMRTbundle_doandprint_tl }
+    \__docMRTbundle_scantokens:w { \l__docMRTbundle_doandprint_tl }
     \tl_set:Nn \l__docMRTbundle_doandprint_tl { #1 }
     \__docMRTbundle_replace_verb_newline:Nn
       \l__docMRTbundle_doandprint_tl { \\\mbox{} }
