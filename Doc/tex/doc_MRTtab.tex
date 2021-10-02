@@ -187,6 +187,20 @@ is not possible with the standard \cs{cline} as far as I know.
   j & k & l\\
 \end{MRTtabular}}}
 \end{multicols}%=<<
+
+Another example using the strange syntax a bit more exhaustively, as you can see
+the |[blue]| for column 2 doesn't show in the output, as the colour is only used
+on the fills of |<>|. Also the order of the columns doesn't matter, you can go
+back. Latter entries in the list will overprint earliers.
+
+\DoAndPrint{\begin{MRTtabular}{*6l}[2]
+  A & B & C & D & E & F \\
+  \MRTcline[yellow]{[blue]2-2,<>4,[red]<>[5pt]5-5,*[green]{2-3,6}}
+  A & B & C & D & E & F \\
+  1 & 2 & 3 & 4 & 5 & 6 \\
+  \MRTcline![green]{<[10pt]1-2, {4, 6},*3}
+  1 & 2 & 3 & 4 & 5 & 6 \\
+\end{MRTtabular}}
 %=<<
 
 \section{The \env{MRTtable} environment}\label{sec:tab:table}%>>=
