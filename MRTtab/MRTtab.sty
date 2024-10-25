@@ -1,5 +1,5 @@
-\newcommand*\MRTtab@version{0.0.15}
-\newcommand*\MRTtab@date{2021-06-04}
+\newcommand*\MRTtab@version{0.0.16}
+\newcommand*\MRTtab@date{2024-10-25}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -90,6 +90,7 @@
         { 2019/02/06~v4.12~Multi-page~Table~package~(DPC) }             {}
         { 2020/01/07~v4.13~Multi-page~Table~package~(DPC) }             {}
         { 2021-05-07~v4.16~Multi-page~Table~package~(DPC) }             {}
+        { 2024-04-26~v4.20~Multi-page~Table~package~(DPC) }             {}
       }
       {
         \msg_new:nnn { MRTtab } { wrong~longtable~version }
@@ -369,6 +370,25 @@
   {
     \tl_clear:N \l__MRTtab_eol_hook_public_tl
   }% =<<
+\cs_new_protected:Npn \__MRTtab_patch_alter_catcodes:
+  {
+    \char_set_catcode_letter:n { 95 } % _
+    \char_set_catcode_letter:n { 58 } % :
+  }
+\cs_new:Npn \__MRTtab_patch_restore_catcodes:
+  {
+    \char_set_catcode:nn { 95 } { \char_value_catcode:n { 95 } } % _
+    \char_set_catcode:nn { 58 } { \char_value_catcode:n { 58 } } % :
+  }
+\cs_new_protected:Npn \__MRTtab_patch_wrapper:n #1
+  {
+    \use:e
+      {
+        \__MRTtab_patch_alter_catcodes:
+        \exp_not:n {#1}
+        \__MRTtab_patch_restore_catcodes:
+      }
+  }
 \cs_new_protected:Npn \MRTtab_patchcmd:Nnn #1 #2 #3% >>=
   {
     \patchcmd #1 { #2 } { #3 } {} 
@@ -409,15 +429,18 @@
 \cs_new_protected:Npn \MRTtab_patch_array:% >>=
   {
     \MRTtab_backup_array:
-    \MRTtab_pretocmd:Nn  \tabular      { \MRTtab@unpatcharray }
-    \MRTtab_pretocmd:Nn  \array        { \MRTtab@unpatcharray }
-    \MRTtab_pretocmd:Nn  \@@array      { \MRTtab@@arraystarthook }
-    \MRTtab_pretocmd:Nn  \@arraycr     { \MRTtab@EoLHook }
-    \MRTtab_apptocmd:Nn  \@yargarraycr { \MRTtab@BoLHook }
-    \MRTtab_patchcmd:Nnn \@xarraycr    { \cr } { \cr \MRTtab@BoLHook }
-    \MRTtab_patchcmd:Nnn \@xargarraycr { \cr } { \cr \MRTtab@BoLHook }
-    \MRTtab_patchcmd:Nnn \@@array      { \cr }
-      { \cr \noexpand \MRTtab@BoLHook@private }
+    \__MRTtab_patch_wrapper:n
+      {
+        \MRTtab_pretocmd:Nn  \tabular      { \MRTtab@unpatcharray }
+        \MRTtab_pretocmd:Nn  \array        { \MRTtab@unpatcharray }
+        \MRTtab_pretocmd:Nn  \@@array      { \MRTtab@@arraystarthook }
+        \MRTtab_pretocmd:Nn  \@arraycr     { \MRTtab@EoLHook }
+        \MRTtab_apptocmd:Nn  \@yargarraycr { \MRTtab@BoLHook }
+        \MRTtab_apptocmd:Nn  \@xargarraycr { \MRTtab@BoLHook }
+        \MRTtab_patchcmd:Nnn \@xarraycr    { \cr } { \cr \MRTtab@BoLHook }
+        \MRTtab_patchcmd:Nnn \@@array      { \cr }
+          { \cr \noexpand \MRTtab@BoLHook@private }
+      }
   }% =<<
 \cs_new:Npn \MRTtab_head_start_inner:% >>=
   {
@@ -1047,12 +1070,16 @@
     \cs_new_protected:Npn \MRTtab_patch_array_long:% >>=
       {
         \MRTtab_backup_array:
-        \MRTtab_pretocmd:Nn  \tabular         { \MRTtab@unpatcharray }
-        \MRTtab_pretocmd:Nn  \array           { \MRTtab@unpatcharray }
-        \MRTtab_pretocmd:Nn  \LT@tabularcr    { \MRTtab@EoLHook }
-        \MRTtab_apptocmd:Nn  \LT@ntabularcr   { \MRTtab@long@BoLHook }
-        \MRTtab_apptocmd:Nn  \LT@argtabularcr { \MRTtab@long@BoLHook }
-        \MRTtab_patchcmd:Nnn \LT@t@bularcr    { \LT@LL@FM@cr } { \MRTtab@FM@cr }
+        \__MRTtab_patch_wrapper:n
+          {
+            \MRTtab_pretocmd:Nn  \tabular         { \MRTtab@unpatcharray }
+            \MRTtab_pretocmd:Nn  \array           { \MRTtab@unpatcharray }
+            \MRTtab_pretocmd:Nn  \LT@tabularcr    { \MRTtab@EoLHook }
+            \MRTtab_apptocmd:Nn  \LT@ntabularcr   { \MRTtab@long@BoLHook }
+            \MRTtab_apptocmd:Nn  \LT@argtabularcr { \MRTtab@long@BoLHook }
+            \MRTtab_patchcmd:Nnn \LT@t@bularcr    { \LT@LL@FM@cr }
+              { \MRTtab@FM@cr }
+          }
       }% =<<
     \cs_new_protected:Npn \MRTtab@FM@cr%>>=
       {
