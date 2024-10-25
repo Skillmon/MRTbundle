@@ -86,10 +86,6 @@
     \RequirePackage{longtable}
     \str_case_e:nnF { \use:c { ver@longtable.sty } }
       {
-        { 2014/10/28~v4.11~Multi-page~Table~package~(DPC)+~FMi~change } {}
-        { 2019/02/06~v4.12~Multi-page~Table~package~(DPC) }             {}
-        { 2020/01/07~v4.13~Multi-page~Table~package~(DPC) }             {}
-        { 2021-05-07~v4.16~Multi-page~Table~package~(DPC) }             {}
         { 2024-04-26~v4.20~Multi-page~Table~package~(DPC) }             {}
       }
       {
@@ -959,32 +955,26 @@
 \bool_if:NT \l_MRTtab_longtable_bool
   {
     \newbox\LT@firstfoot
+     \seq_new:N \g__tbl_LT@firstfoot_rows_seq
     \def\endfirstfoot{\LT@end@hd@ft\LT@firstfoot}
+    % footdiff is needed to change the pagegoal on consecutive pages (only the
+    % first page will use the firstfoot, the others will use the normal footer)
     \newdimen\LT@footdiff
-    \def\LT@start
-      {%
-        \let\LT@start\endgraf
-        \endgraf\penalty\z@
-        \vskip\LTpre\endgraf
-        \LT@footdiff-\ht\LT@foot
-        \advance\LT@footdiff\ht\LT@firstfoot
-        \dimen@\pagetotal
-        \advance\dimen@ \ht\ifvoid\LT@firsthead\LT@head\else\LT@firsthead\fi
-        \advance\dimen@ \dp\ifvoid\LT@firsthead\LT@head\else\LT@firsthead\fi
-        \advance\dimen@ \ht\ifvoid\LT@firstfoot\LT@foot\else\LT@firstfoot\fi
-        \dimen@ii\vfuzz
-        \vfuzz\maxdimen
-        \setbox\tw@\copy\z@
-        \setbox\tw@\vsplit\tw@ to \ht\@arstrutbox
-        \setbox\tw@\vbox{\unvbox\tw@}%
-        \vfuzz\dimen@ii
-        \advance\dimen@ \ht
-          \ifdim\ht\@arstrutbox>\ht\tw@\@arstrutbox\else\tw@\fi
-        \advance\dimen@\dp
-          \ifdim\dp\@arstrutbox>\dp\tw@\@arstrutbox\else\tw@\fi
-        \advance\dimen@ -\pagegoal
-        \ifdim \dimen@>\z@\vfil\break\fi
-        \global\@colroom\@colht
+    \MRTtab_pretocmd:Nn \LT@start
+      { \LT@footdiff=\dimexpr\ht\LT@firstfoot-\ht\LT@foot\relax }
+    \MRTtab_patchcmd:Nnn \LT@start
+      { \advance\dimen@ \ht\LT@foot }
+      { \advance\dimen@ \ht\ifvoid\LT@firstfoot\LT@foot\else\LT@firstfoot\fi }
+    \MRTtab_patchcmd:Nnn \LT@start
+      {
+        \ifvoid\LT@foot\else
+          \global\advance\vsize-\ht\LT@foot
+          \global\advance\@colroom-\ht\LT@foot
+          \dimen@\pagegoal\advance\dimen@-\ht\LT@foot\pagegoal\dimen@
+          \maxdepth\z@
+        \fi
+      }
+      {
         \ifvoid\LT@firstfoot
           \ifvoid\LT@foot
           \else
@@ -999,58 +989,48 @@
           \dimen@\pagegoal\advance\dimen@-\ht\LT@firstfoot\pagegoal\dimen@
           \maxdepth\z@
         \fi
-        \ifvoid\LT@firsthead\copy\LT@head\else\box\LT@firsthead\fi\nobreak
-        \output{\LT@output}%
       }
-    \def\LT@output
-      {%
-        \ifnum\outputpenalty <-\@Mi
-          \ifnum\outputpenalty > -\LT@end@pen
-            \LT@err{floats~and~marginpars~not~allowed~in~a~longtable}\@ehc
-          \else
-            \setbox\z@\vbox{\unvbox\@cclv}%
-            \ifdim \ht\LT@lastfoot>\ht\LT@foot
-              \dimen@\pagegoal
-              \advance\dimen@-\ht\LT@lastfoot
-              \ifdim\dimen@<\ht\z@
-                \setbox\@cclv\vbox{\unvbox\z@\copy\LT@foot\vss}%
+    \use:e
+      {
+        \char_set_catcode_space:n { 32 } % space
+        \exp_not:n
+          {
+            \MRTtab_patchcmd:Nnn \LT@output
+              { \ifvoid\LT@lastfoot\LT@foot\else\LT@lastfoot\fi }
+              {
+                \ifvoid\LT@lastfoot
+                  \ifvoid\LT@firstfoot
+                    \LT@foot
+                  \else
+                    \LT@firstfoot
+                  \fi
+                \else
+                  \LT@lastfoot
+                \fi
+              }
+            \MRTtab_patchcmd:Nnn \LT@output
+              {
+                \setbox\@cclv\vbox{\unvbox\@cclv\copy\LT@foot\vss}
+                \UseTaggingSocket{tbl/longtable/foot}
                 \@makecol
                 \@outputpage
-                \setbox\z@\vbox{\box\LT@head}%
-              \fi
-            \fi    
-            \global\@colroom\@colht
-            \global\vsize\@colht     
-            \vbox
-              {%
-                \unvbox\z@
-                \box
-                  \ifvoid\LT@lastfoot
-                    \ifvoid\LT@firstfoot
-                      \LT@foot
-                    \else
-                      \LT@firstfoot
-                    \fi
-                  \else
-                    \LT@lastfoot
-                  \fi
-              }%
-          \fi
-        \else
-          \ifvoid\LT@firstfoot
-            \setbox\@cclv\vbox{\unvbox\@cclv\copy\LT@foot\vss}%
-            \@makecol
-            \@outputpage
-            \global\vsize\@colroom
-          \else
-            \setbox\@cclv\vbox{\unvbox\@cclv\box\LT@firstfoot\vss}%
-            \@makecol
-            \@outputpage
-            \global\advance\@colroom\LT@footdiff
-            \global\vsize\@colroom
-          \fi
-          \copy\LT@head\nobreak
-        \fi
+              }
+              {
+                \ifvoid\LT@firstfoot
+                  \setbox\@cclv\vbox{\unvbox\@cclv\copy\LT@foot\vss}
+                  \UseTaggingSocket{tbl/longtable/foot}
+                  \@makecol
+                  \@outputpage
+                \else
+                  \setbox\@cclv\vbox{\unvbox\@cclv\box\LT@firstfoot\vss}
+                  \UseTaggingSocket{tbl/longtable/foot}
+                  \@makecol
+                  \@outputpage
+                  \global\advance\@colroom\LT@footdiff
+                \fi
+              }
+          }
+        \char_set_catcode:nn { 32 } { \char_value_catcode:n { 32 } } % space
       }
   }
 %%===========================================================================<<
@@ -1209,9 +1189,7 @@
         \setstretch { \l_MRTtab_stretch_tl }
         \MRTtab_patch_array_long:
         \tl_if_in:NnT \l_MRTtab_table_col_tl { \MRTtabRepeatCols }
-          {
-            \msg_error:nn { MRTtab } { auto~cols~in~long }
-          }
+          { \msg_error:nn { MRTtab } { auto~cols~in~long } }
         \int_gset:Nn \g__MRTtab_current_row_int { 1 }
         \l__MRTtab_table_pre_hook_tl
         \exp_args:NnV \begin { longtable } \l_MRTtab_table_col_tl
