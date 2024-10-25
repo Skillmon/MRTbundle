@@ -588,17 +588,9 @@
   }%=<<
   { \end { MRTtable } }%=<<
 \cs_new_protected:Npx \__docMRTbundle_replace_verb_newline:Nn #1 #2%>>=
-  {
-    \tl_replace_all:Nnn #1
-      { \char_generate:nn { 13 } { 12 } }
-      { #2 }
-  }%=<<
-\cs_new_protected:Npx \__docMRTbundle_replace_verb_newline_newline:Nn #1 #2%>>=
-  {
-    \tl_replace_all:Nnn #1
-      { \char_generate:nn { 13 } { 12 } \char_generate:nn { 13 } { 12 } }
-      { #2 }
-  }%=<<
+  { \tl_replace_all:Nnn #1 { \obeyedline } { #2 } }%=<<
+\cs_new_protected:Npn \__docMRTbundle_replace_verb_newline_newline:Nn #1 #2%>>=
+  { \tl_replace_all:Nnn #1 { \obeyedline \obeyedline } { #2 } }%=<<
 \tl_new:N \l__docMRTbundle_doandprint_tl
 \cs_set_eq:NN \__docMRTbundle_everyeof:w \tex_everyeof:D
 \cs_set_eq:NN \__docMRTbundle_scantokens:w \tex_scantokens:D
