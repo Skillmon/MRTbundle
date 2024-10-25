@@ -1,5 +1,5 @@
-\newcommand*\MRTfonts@version{0.0.9}
-\newcommand*\MRTfonts@date{2020-10-18}
+\newcommand*\MRTfonts@version{0.0.10}
+\newcommand*\MRTfonts@date{2024-10-25}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -254,7 +254,7 @@
           \group_end:
           \AtBeginDocument
             {
-              \mst@do@az \expandafter { \the\mst@do@az \let \stdl #1 }
+              \let \stdl \MTcommandletterl
               % if MRTsfacc is loaded and uses list define a shift width for them
               \cs_if_exist:NT \MRTsfaccShift
                 {
@@ -266,7 +266,7 @@
             {
               \AtBeginDocument
                 {
-                  \mst@do@az \expandafter { \the\mst@do@az \let #1 \altl }
+                  \let \MTcommandletterl \altl
                   \cs_if_exist:NT \MRTsfaccShift { \MRTsfaccShiftLet l \altl }
                 }
             }
