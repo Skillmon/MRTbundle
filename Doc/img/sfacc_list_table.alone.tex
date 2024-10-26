@@ -1,6 +1,21 @@
 \documentclass[british,sfacc=list]{MRTalone}
 \usepackage{collcell}
 
+\ExplSyntaxOn
+\makeatletter
+\NewDocumentCommand\rmtextonlyshift{mm}
+  {
+    \tl_set:Nn \l_tmpa_tl { #2 \q_stop }
+    \tl_remove_once:Nn \l_tmpa_tl { \textonly@unskip \q_stop }
+    \tl_remove_once:Nn \l_tmpa_tl { \q_stop }
+    \tl_remove_once:Nn \l_tmpa_tl { \ifhmode \fi }
+    \tl_trim_spaces:N \l_tmpa_tl
+    \exp_args:NnV \use:n {#1} \l_tmpa_tl
+    \tl_if_in:nnT {#2} { \textonly@unskip } { \textonly@unskip }
+  }
+\makeatother
+\ExplSyntaxOff
+
 \begin{document}
 \begin{MRTtable}
   [
@@ -15,7 +30,7 @@
     ,pre=
       {%
         \newcommand\hatex[1]{$\hat[0mu]{#1}$}%
-        \newcommand\hatst[1]{$\hat{#1}$}%
+        \newcommand\hatst[1]{$\rmtextonlyshift\hat{#1}$}%
       }
   ]
   \multicolumn{2}{c}{original} & \multicolumn{2}{c}{shifted} &&
