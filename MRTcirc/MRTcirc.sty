@@ -1,5 +1,5 @@
-\newcommand*\MRTcirc@version{1.2.2-1}
-\newcommand*\MRTcirc@date{2020-07-16}
+\newcommand*\MRTcirc@version{1.7.0-1}
+\newcommand*\MRTcirc@date{2024-10-26}
 
 \NeedsTeXFormat{LaTeX2e}
 
@@ -10,17 +10,17 @@
   ]
 
 \PassOptionsToPackage{european,straightvoltages}{circuitikz}
-\RequirePackage{circuitikz}[2020/07/06]
+\RequirePackage{circuitikz}
 \RequirePackage{etoolbox}
 
 \begingroup
-\def\MRTcirc@tmp{2020/07/15}
+\def\MRTcirc@tmp{2024/08/03}
 \unless\ifx\MRTcirc@tmp\pgfcircversiondate
   \PackageWarning{MRTcirc}
     {%
       Possibly unsupported version \pgfcircversiondate\space of circuitikz%
       \MessageBreak
-      encountered, proceed with caution.%
+      encountered, proceed with caution. (Expected version: \MRTcirc@tmp)%
     }
 \fi
 \endgroup
@@ -44,7 +44,7 @@
 % one input >>=
 % patch the macro >>=
 \patchcmd\MRTcirc@pgfcircdeclareeurologicport
-  {\pgfpathmoveto{\pgfpointorigin} \pgftext{#2}}
+  {\pgftext{\ctikzvalof{european ports font}#2}}
   {#2}
   {\PackageInfo{MRTcirc}{Adding european ports}}
   {\PackageError{MRTcirc}{Incompatible circuitikz version (eurologic)}{}}
@@ -88,16 +88,16 @@
 \patchcmd\MRTcirc@pgfcircdeclareeurologicport
   {%
     \ifnum#3=1\relax
-        \anchor{in}{\southwest\pgfpoint{\pgf@x}{0pt}}%
-        \anchor{in 1}{\southwest\pgfpoint{\pgf@x}{0pt}}%
-        \anchor{bin}{\left\pgfpoint{\pgf@x}{0pt}}%
-        \anchor{bin 1}{\left\pgfpoint{\pgf@x}{0pt}}%
+        \anchor{in}{\southwest\pgfpoint{\pgf@x}{0pt}}% or \step
+        \anchor{in 1}{\southwest\pgfpoint{\pgf@x}{0pt}}% or \step
+        \anchor{bin}{\left\pgfpoint{\pgf@x}{0pt}}% or \step
+        \anchor{bin 1}{\left\pgfpoint{\pgf@x}{0pt}}% or \step
     \else
         \expandafter\pgfutil@g@addto@macro
         \csname pgf@sh@s@european #1 port\endcsname{%
-            \pgfmathloop
-            \ifnum\pgfmathcounter>#3%
-        \else
+            \pgfmathloop%
+            \ifnum\pgfmathcounter>#3
+        \else%
             \expandafter\xdef
             \csname pgf@anchor@european #1 port@in \pgfmathcounter\endcsname{%
                 \noexpand\pgf@circ@logicport@input{\pgfmathcounter}%
@@ -107,7 +107,7 @@
                 \noexpand\pgf@circ@logicport@baseinput{\pgfmathcounter}{4}{#1}%
             }%
             %}{}%
-            \repeatpgfmathloop
+            \repeatpgfmathloop%
         }
     \fi
   }
@@ -215,7 +215,7 @@
   {\PackageError{MRTcirc}{Incompatible circuitikz version (wedge right)}{}}
 % =<<
 % patch the dashed line into flip-flops >>=
-\patchcmd\pgf@sh@bg@flipflop{\pgfscope\ifpgf@circuit@ieeelogicport}
+\patchcmd\pgf@sh@bbg@flipflop{\pgfscope\ifpgf@circuit@ieeelogicport}
   {%
     \ifpgfcirc@flipflop@dashed
       \pgfscope
