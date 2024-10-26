@@ -27,10 +27,10 @@ unclean folder structure of your project *and* has to be redone for any future
 project.
 
 The perhaps best way would be local user wide install. This is done by placing
-the bundle's folders `MRTalone`, `MRTbeam`, `MRTif`, `MRTlmscale`,
-`MRTresources`, `MRTsfacc`, `MRTtab`, `MRTthesis`, `MRTutil` and `MRTwuline` in
-your local TeX-tree. For TeX Live on Unix this would by default be
-`/home/<user>/texmf/` therein the packages should belong in
+the bundle's folders `MRTalone`, `MRTbeam`, `MRTcirc`, `MRTfonts`, `MRTif`,
+`MRTlmscale`, `MRTresources`, `MRTsfacc`, `MRTtab`, `MRTthesis`, `MRTutil`, and
+`MRTwuline` in your local TeX-tree. For TeX Live on Unix this would by default
+be `/home/<user>/texmf/` therein the packages should belong in
 `tex/latex/MRTbundle`. For other OSes and TeX distributions the paths may vary.
 You can get the correct path to your user specific folder by running `kpsewhich
 -var TEXMFHOME` in your terminal (at least if you're running TeX Live).
@@ -45,11 +45,11 @@ running `mktexlsr` as root. The correct installation can be checked by running
 `kpsewhich MRTthesis.cls` or for any other provided package or class.
 
 Installing the documentation in the respective `doc` folder can be done but
-there is no benefit to it, so why bothering.
+there is no benefit to it, so why bother.
 
 ### Licensing ###
 
-Copyright (C) 2018-2019 Jonathan P. Spratte
+Copyright (C) 2018-2021, 2024 Jonathan P. Spratte
 
 These files are distributed in the hope that they will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
